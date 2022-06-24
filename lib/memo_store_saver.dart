@@ -51,6 +51,5 @@ class MemoStoreSaver {
     final memos = _memoStore!.getMemos();
     string = jsonEncode(memos);
     await file.writeAsString(string);
-
   }
 }
