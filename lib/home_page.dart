@@ -30,11 +30,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _counter = 0;
+  final _memos = <String>[];
 
-  void _incrementCounter() {
+  void _addMemo() {
     setState(() {
-      _counter++;
+      _memos.add('Hello, World!');
     });
   }
 
@@ -42,25 +42,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Tsukimisou"),
+        title: Text('Tsukimisou'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: ListView.builder(
+        itemCount: _memos.length,
+        itemBuilder: (context, i) {
+          return Card(
+            child: Text(_memos[i]),
+          );
+        }
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
+        onPressed: _addMemo,
+        tooltip: 'Add a memo',
         child: const Icon(Icons.add),
       ),
     );
