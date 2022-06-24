@@ -22,54 +22,40 @@
 
 import 'package:flutter/material.dart';
 
-import 'editing_page.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class EditingPage extends StatefulWidget {
+  const EditingPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<EditingPage> createState() => _EditingPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final _memos = <String>[];
-
-  void _addMemo() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
-          return EditingPage();
-        },
-      )
-    );
-
-
-    /*
-    setState(() {
-      _memos.add('Hello, World!');
-    });
-    */
+class _EditingPageState extends State<EditingPage> {
+  void _save() {
+    // TODO: Implement this
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tsukimisou'),
+        title: Text("Add a new memo"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: _save,
+            tooltip: 'Save',
+          ),
+        ],
       ),
-      body: ListView.builder(
-        itemCount: _memos.length,
-        itemBuilder: (context, i) {
-          return Card(
-            child: Text(_memos[i]),
-          );
-        }
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: 'Add a memo',
-        child: const Icon(Icons.add),
+      body: SingleChildScrollView(
+        child: Card(
+          child: SizedBox(
+            width: double.infinity,
+            child: Text('Hello, World!'),
+          ),
+        ),
       ),
     );
   }
 }
+
