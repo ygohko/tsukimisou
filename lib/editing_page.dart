@@ -23,6 +23,7 @@
 import 'package:flutter/material.dart';
 
 import 'memo_store.dart';
+import 'memo_store_saver.dart';
 
 class EditingPage extends StatefulWidget {
   const EditingPage({Key? key}) : super(key: key);
@@ -34,9 +35,11 @@ class EditingPage extends StatefulWidget {
 class _EditingPageState extends State<EditingPage> {
   final _controller = TextEditingController();
 
-  void _save() {
+  void _save() async {
     final memo_store = MemoStore.getInstance();
     memo_store.addMemo(_controller.text);
+    final memo_store_saver = MemoStoreSaver(memo_store, 'TsukimisouMemoStore.json');
+    memo_store_saver.execute();
     Navigator.of(context).pop();
   }
 

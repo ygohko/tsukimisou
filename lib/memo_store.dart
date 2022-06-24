@@ -29,6 +29,10 @@ class MemoStore {
     _memos.add(memo);
   }
 
+  void clear() {
+    _memos.clear();
+  }
+
   List getMemos() {
     return _memos;
   }

@@ -20,19 +20,36 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter/material.dart';
+import "dart:convert";
+import 'dart:io';
 
-import 'app.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'memo_store.dart';
-import 'memo_store_loader.dart';
 
-void main() async {
-  // TODO: Load after UI is initialized?
-  final memoStore = MemoStore.getInstance();
-  final memoStoreLoader = MemoStoreLoader(memoStore, 'TsukimisouMemoStore.json');
-  memoStoreLoader.execute();
-  final memos = memoStore.getMemos();
-  print('memos: ${memos}\n');
+class MemoStoreSaver {
+  MemoStore? _memoStore = null;
+  var _fileName = '';
 
-  runApp(const App());
+  MemoStoreSaver(MemoStore memoStore, String fileName) {
+    _memoStore = memoStore;
+    _fileName = fileName;
+  }
+
+  void execute() async {
+    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
+    var path = applicationDocumentsDirectory.path;
+    print('path: ${path}\n');
+    path = path + Platform.pathSeparator + _fileName;
+    print('path: ${path}\n');
+    final file = File(path);
+    if (_memoStore == null) {
+        return;
+    }
+    var string = '';
+    /// TODO: Investigate for accessing non-nullable variables
+    final memos = _memoStore!.getMemos();
+    string = jsonEncode(memos);
+    await file.writeAsString(string);
+  }
 }
