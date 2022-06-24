@@ -45,12 +45,6 @@ class _HomePageState extends State<HomePage> {
     );
     setState(() {
     });
-
-    /*
-    setState(() {
-      _memos.add('Hello, World!');
-    });
-    */
   }
 
   @override

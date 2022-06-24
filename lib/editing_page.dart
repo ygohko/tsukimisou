@@ -35,6 +35,7 @@ class _EditingPageState extends State<EditingPage> {
   void _save() {
     final memo_store = MemoStore.getInstance();
     memo_store.addMemo('Hello, World!');
+    Navigator.of(context).pop();
   }
 
   @override
