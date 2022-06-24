@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import "dart:convert";
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
@@ -55,10 +56,13 @@ class MemoStoreSaver {
     }
     var string = '';
     final memos = _memoStore!.getMemos();
+    string = jsonEncode(memos);
+    /*
     for (final memo in memos) {
       print('memo: ${memo}\n');
       string += memo + '\n';
     }
+    */
     await file.writeAsString(string);
 
   }
