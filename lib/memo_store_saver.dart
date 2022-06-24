@@ -32,37 +32,24 @@ class MemoStoreSaver {
   var _fileName = '';
 
   MemoStoreSaver(MemoStore memoStore, String fileName) {
-    // TODO: Implement this
     _memoStore = memoStore;
     _fileName = fileName;
   }
 
   void execute() async {
-    // TODO: Implement this
-
-
-
     final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
     print('path: ${path}\n');
-    // final platform = Platform();
     path = path + Platform.pathSeparator + _fileName;
     print('path: ${path}\n');
     final file = File(path);
-
-
     if (_memoStore == null) {
         return;
     }
     var string = '';
+    /// TODO: Investigate for accessing non-nullable variables
     final memos = _memoStore!.getMemos();
     string = jsonEncode(memos);
-    /*
-    for (final memo in memos) {
-      print('memo: ${memo}\n');
-      string += memo + '\n';
-    }
-    */
     await file.writeAsString(string);
 
   }
