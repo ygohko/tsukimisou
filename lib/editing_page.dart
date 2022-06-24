@@ -32,9 +32,11 @@ class EditingPage extends StatefulWidget {
 }
 
 class _EditingPageState extends State<EditingPage> {
+  final _controller = TextEditingController();
+
   void _save() {
     final memo_store = MemoStore.getInstance();
-    memo_store.addMemo('Hello, World!');
+    memo_store.addMemo(_controller.text);
     Navigator.of(context).pop();
   }
 
@@ -55,7 +57,10 @@ class _EditingPageState extends State<EditingPage> {
         child: Card(
           child: SizedBox(
             width: double.infinity,
-            child: Text('Hello, World!'),
+            child: TextField(
+              controller: _controller,
+              maxLines: null,
+            ),
           ),
         ),
       ),
