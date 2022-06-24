@@ -22,8 +22,41 @@
 
 import 'package:flutter/material.dart';
 
-import "app.dart";
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-void main() {
-  runApp(const App());
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _memos = <String>[];
+
+  void _addMemo() {
+    setState(() {
+      _memos.add('Hello, World!');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tsukimisou'),
+      ),
+      body: ListView.builder(
+        itemCount: _memos.length,
+        itemBuilder: (context, i) {
+          return Card(
+            child: Text(_memos[i]),
+          );
+        }
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addMemo,
+        tooltip: 'Add a memo',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 }
