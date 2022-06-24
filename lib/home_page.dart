@@ -33,9 +33,32 @@ class _HomePageState extends State<HomePage> {
   final _memos = <String>[];
 
   void _addMemo() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("Add a new memo"),
+            ),
+            body: SingleChildScrollView(
+              child: Card(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text('Hello, World!'),
+                ),
+              ),
+            ),
+          );
+        },
+      )
+    );
+
+
+    /*
     setState(() {
       _memos.add('Hello, World!');
     });
+    */
   }
 
   @override
