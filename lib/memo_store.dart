@@ -20,45 +20,24 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter/material.dart';
+class MemoStore {
+  final _memos = <String>[];
 
-import 'memo_store.dart';
+  static MemoStore? _instance = null;
 
-class EditingPage extends StatefulWidget {
-  const EditingPage({Key? key}) : super(key: key);
-
-  @override
-  State<EditingPage> createState() => _EditingPageState();
-}
-
-class _EditingPageState extends State<EditingPage> {
-  void _save() {
-    final memo_store = MemoStore.getInstance();
-    memo_store.addMemo('Hello, World!');
+  void addMemo(String memo) {
+    _memos.add(memo);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Add a new memo"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done),
-            onPressed: _save,
-            tooltip: 'Save',
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Card(
-          child: SizedBox(
-            width: double.infinity,
-            child: Text('Hello, World!'),
-          ),
-        ),
-      ),
-    );
+  List getMemos() {
+    return _memos;
+  }
+
+  static MemoStore getInstance() {
+    if (_instance == null) {
+      _instance = MemoStore();
+    }
+
+    return _instance!;
   }
 }
-

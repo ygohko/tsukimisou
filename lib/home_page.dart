@@ -23,6 +23,7 @@
 import 'package:flutter/material.dart';
 
 import 'editing_page.dart';
+import 'memo_store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,17 +33,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _memos = <String>[];
+  final _memoStore = MemoStore.getInstance();
 
-  void _addMemo() {
-    Navigator.of(context).push(
+  void _addMemo() async {
+    await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) {
           return EditingPage();
         },
       )
     );
-
+    setState(() {
+    });
 
     /*
     setState(() {
@@ -58,10 +60,10 @@ class _HomePageState extends State<HomePage> {
         title: Text('Tsukimisou'),
       ),
       body: ListView.builder(
-        itemCount: _memos.length,
+        itemCount: _memoStore.getMemos().length,
         itemBuilder: (context, i) {
           return Card(
-            child: Text(_memos[i]),
+            child: Text(_memoStore.getMemos()[i]),
           );
         }
       ),
