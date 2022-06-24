@@ -22,50 +22,44 @@
 
 import 'package:flutter/material.dart';
 
-import 'editing_page.dart';
 import 'memo_store.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class EditingPage extends StatefulWidget {
+  const EditingPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<EditingPage> createState() => _EditingPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final _memoStore = MemoStore.getInstance();
-
-  void _addMemo() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
-          return EditingPage();
-        },
-      )
-    );
-    setState(() {
-    });
+class _EditingPageState extends State<EditingPage> {
+  void _save() {
+    final memo_store = MemoStore.getInstance();
+    memo_store.addMemo('Hello, World!');
+    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tsukimisou'),
+        title: Text("Add a new memo"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: _save,
+            tooltip: 'Save',
+          ),
+        ],
       ),
-      body: ListView.builder(
-        itemCount: _memoStore.getMemos().length,
-        itemBuilder: (context, i) {
-          return Card(
-            child: Text(_memoStore.getMemos()[i]),
-          );
-        }
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: 'Add a memo',
-        child: const Icon(Icons.add),
+      body: SingleChildScrollView(
+        child: Card(
+          child: SizedBox(
+            width: double.infinity,
+            child: Text('Hello, World!'),
+          ),
+        ),
       ),
     );
   }
 }
+

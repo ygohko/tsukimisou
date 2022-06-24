@@ -20,52 +20,24 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter/material.dart';
+class MemoStore {
+  final _memos = <String>[];
 
-import 'editing_page.dart';
-import 'memo_store.dart';
+  static MemoStore? _instance = null;
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _memoStore = MemoStore.getInstance();
-
-  void _addMemo() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
-          return EditingPage();
-        },
-      )
-    );
-    setState(() {
-    });
+  void addMemo(String memo) {
+    _memos.add(memo);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tsukimisou'),
-      ),
-      body: ListView.builder(
-        itemCount: _memoStore.getMemos().length,
-        itemBuilder: (context, i) {
-          return Card(
-            child: Text(_memoStore.getMemos()[i]),
-          );
-        }
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: 'Add a memo',
-        child: const Icon(Icons.add),
-      ),
-    );
+  List getMemos() {
+    return _memos;
+  }
+
+  static MemoStore getInstance() {
+    if (_instance == null) {
+      _instance = MemoStore();
+    }
+
+    return _instance!;
   }
 }
