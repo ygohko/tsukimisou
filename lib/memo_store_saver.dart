@@ -37,19 +37,17 @@ class MemoStoreSaver {
   }
 
   void execute() async {
+    if (_memoStore == null) {
+      return;
+    }
     final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
     print('path: ${path}\n');
     path = path + Platform.pathSeparator + _fileName;
     print('path: ${path}\n');
     final file = File(path);
-    if (_memoStore == null) {
-        return;
-    }
-    var string = '';
-    /// TODO: Investigate for accessing non-nullable variables
-    final memos = _memoStore!.getMemos();
-    string = jsonEncode(memos);
+    final memos = _memoStore?.getMemos();
+    final string = jsonEncode(memos);
     await file.writeAsString(string);
   }
 }
