@@ -36,23 +36,22 @@ class MemoStoreLoader {
     _fileName = fileName;
   }
 
-  void execute() async {
+  Future<void> execute() async {
+    if (_memoStore == null) {
+        return;
+    }
     final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
     print('path: ${path}\n');
     path = path + Platform.pathSeparator + _fileName;
     print('path: ${path}\n');
     final file = File(path);
-    if (_memoStore == null) {
-        return;
-    }
     // TODO: Synced version will be needed
-    var string = await file.readAsStringSync();
+    var string = await file.readAsString();
     final decoded = jsonDecode(string);
-    // TODO: Investigate for accessing non-nullable variables
-    _memoStore!.clear();
+    _memoStore?.clear();
     for (var i = 0; i < decoded.length; i++) {
-      _memoStore!.addMemo(decoded[i]);
+      _memoStore?.addMemo(decoded[i]);
     }
   }
 }
