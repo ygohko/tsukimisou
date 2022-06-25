@@ -30,9 +30,7 @@ void main() async {
   // TODO: Load after UI is initialized?
   final memoStore = MemoStore.getInstance();
   final memoStoreLoader = MemoStoreLoader(memoStore, 'TsukimisouMemoStore.json');
-  memoStoreLoader.execute();
-  final memos = memoStore.getMemos();
-  print('memos: ${memos}\n');
+  await memoStoreLoader.execute();
 
   runApp(const App());
 }

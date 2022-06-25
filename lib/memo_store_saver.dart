@@ -36,7 +36,7 @@ class MemoStoreSaver {
     _fileName = fileName;
   }
 
-  void execute() async {
+  Future<void> execute() async {
     if (_memoStore == null) {
       return;
     }

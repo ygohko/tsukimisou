@@ -36,7 +36,7 @@ class MemoStoreLoader {
     _fileName = fileName;
   }
 
-  void execute() async {
+  Future<void> execute() async {
     if (_memoStore == null) {
         return;
     }
@@ -47,7 +47,7 @@ class MemoStoreLoader {
     print('path: ${path}\n');
     final file = File(path);
     // TODO: Synced version will be needed
-    var string = await file.readAsStringSync();
+    var string = await file.readAsString();
     final decoded = jsonDecode(string);
     _memoStore?.clear();
     for (var i = 0; i < decoded.length; i++) {
