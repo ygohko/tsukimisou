@@ -20,25 +20,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 import 'app.dart';
-import 'memo_store.dart';
-import 'memo_store_loader.dart';
 
 void main() async {
-  // TODO: Load after UI is initialized?
-  final memoStore = MemoStore.getInstance();
-  final memoStoreLoader = await MemoStoreLoader.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
-  try {
-    await memoStoreLoader.execute();
-  }
-  on FileSystemException catch (exception) {
-    // Load error
-    // Do nothing for now
-  }
-
   runApp(const App());
 }
