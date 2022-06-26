@@ -1,5 +1,5 @@
-import 'package:tsukimisou/memo_store.dart';
 import 'package:test/test.dart';
+import 'package:tsukimisou/memo_store.dart';
 
 void main() {
   group('MemoStore', () {

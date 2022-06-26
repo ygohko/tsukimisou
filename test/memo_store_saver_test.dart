@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:test/test.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_saver.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('MemoStoreSaver', () {
