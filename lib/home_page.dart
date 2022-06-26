@@ -56,9 +56,12 @@ class _HomePageState extends State<HomePage> {
 
   void _addMemo() async {
     await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
           return EditingPage();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return OpenUpwardsPageTransitionsBuilder().buildTransitions(null, context, animation, secondaryAnimation, child);
         },
       )
     );
