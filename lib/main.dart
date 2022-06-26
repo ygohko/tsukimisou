@@ -29,7 +29,7 @@ import 'memo_store_loader.dart';
 void main() async {
   // TODO: Load after UI is initialized?
   final memoStore = MemoStore.getInstance();
-  final memoStoreLoader = MemoStoreLoader(memoStore, 'TsukimisouMemoStore.json');
+  final memoStoreLoader = await MemoStoreLoader.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
   await memoStoreLoader.execute();
 
   runApp(const App());

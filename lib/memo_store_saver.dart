@@ -29,25 +29,30 @@ import 'memo_store.dart';
 
 class MemoStoreSaver {
   MemoStore? _memoStore = null;
-  var _fileName = '';
+  var _path = '';
 
-  MemoStoreSaver(MemoStore memoStore, String fileName) {
+  MemoStoreSaver(MemoStore memoStore, String path) {
     _memoStore = memoStore;
-    _fileName = fileName;
+    _path = path;
   }
 
   Future<void> execute() async {
     if (_memoStore == null) {
       return;
     }
-    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
-    var path = applicationDocumentsDirectory.path;
-    print('path: ${path}\n');
-    path = path + Platform.pathSeparator + _fileName;
-    print('path: ${path}\n');
-    final file = File(path);
+    final file = File(_path);
     final memos = _memoStore?.getMemos();
     final string = jsonEncode(memos);
     await file.writeAsString(string);
+  }
+
+  static Future<MemoStoreSaver> getFromFileName(MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
+    var path = applicationDocumentsDirectory.path;
+    print('path: ${path}\n');
+    path = path + Platform.pathSeparator + fileName;
+    print('path: ${path}\n');
+
+    return MemoStoreSaver(memoStore, path);
   }
 }
