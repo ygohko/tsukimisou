@@ -64,14 +64,15 @@ class _EditingPageState extends State<EditingPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Card(
-          child: SizedBox(
-            width: double.infinity,
-            child: TextField(
-              controller: _controller,
-              maxLines: null,
-            ),
+      body: Container(
+        child: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: TextField(
+            controller: _controller,
+            autofocus: true,
+            expands: true,
+            maxLines: null,
+            minLines: null,
           ),
         ),
       ),

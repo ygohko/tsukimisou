@@ -56,9 +56,12 @@ class _HomePageState extends State<HomePage> {
 
   void _addMemo() async {
     await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) {
           return EditingPage();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return OpenUpwardsPageTransitionsBuilder().buildTransitions(null, context, animation, secondaryAnimation, child);
         },
       )
     );
@@ -83,8 +86,12 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
         itemCount: _memoStore.getMemos().length,
         itemBuilder: (context, i) {
+          final memos = _memoStore.getMemos();
           return Card(
-            child: Text(_memoStore.getMemos()[i]),
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Text(memos[(memos.length - 1) - i]),
+            ),
           );
         }
       ),
