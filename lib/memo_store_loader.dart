@@ -29,23 +29,18 @@ import 'memo_store.dart';
 
 class MemoStoreLoader {
   MemoStore? _memoStore = null;
-  var _fileName = '';
+  var _path = '';
 
-  MemoStoreLoader(MemoStore memoStore, String fileName) {
+  MemoStoreLoader(MemoStore memoStore, String path) {
     _memoStore = memoStore;
-    _fileName = fileName;
+    _path = path;
   }
 
   Future<void> execute() async {
     if (_memoStore == null) {
         return;
     }
-    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
-    var path = applicationDocumentsDirectory.path;
-    print('path: ${path}\n');
-    path = path + Platform.pathSeparator + _fileName;
-    print('path: ${path}\n');
-    final file = File(path);
+    final file = File(_path);
     // TODO: Synced version will be needed
     var string = await file.readAsString();
     final decoded = jsonDecode(string);
@@ -53,5 +48,15 @@ class MemoStoreLoader {
     for (var i = 0; i < decoded.length; i++) {
       _memoStore?.addMemo(decoded[i]);
     }
+  }
+
+static Future<MemoStoreLoader> getFromFileName(MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
+    var path = applicationDocumentsDirectory.path;
+    print('path: ${path}\n');
+    path = path + Platform.pathSeparator + fileName;
+    print('path: ${path}\n');
+
+    return MemoStoreLoader(memoStore, path);
   }
 }

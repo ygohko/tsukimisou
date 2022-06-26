@@ -38,7 +38,7 @@ class _EditingPageState extends State<EditingPage> {
   void _save() async {
     final memo_store = MemoStore.getInstance();
     memo_store.addMemo(_controller.text);
-    final memo_store_saver = MemoStoreSaver(memo_store, 'TsukimisouMemoStore.json');
+    final memo_store_saver = await MemoStoreSaver.getFromFileName(memo_store, 'TsukimisouMemoStore.json');
     memo_store_saver.execute();
     Navigator.of(context).pop();
   }
