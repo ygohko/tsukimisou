@@ -20,10 +20,13 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'editing_page.dart';
 import 'memo_store.dart';
+import 'memo_store_loader.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -34,6 +37,22 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _memoStore = MemoStore.getInstance();
+  var _initialized = false;
+
+  Future<void> _initialize() async {
+    final memoStore = MemoStore.getInstance();
+    final memoStoreLoader = await MemoStoreLoader.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
+    try {
+      await memoStoreLoader.execute();
+    }
+    on FileSystemException catch (exception) {
+      // Load error
+      // Do nothing for now
+    }
+    setState(() {
+    });
+    _initialized = true;
+  }
 
   void _addMemo() async {
     await Navigator.of(context).push(
@@ -45,6 +64,14 @@ class _HomePageState extends State<HomePage> {
     );
     setState(() {
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (!_initialized) {
+      _initialize();
+    }
   }
 
   @override
