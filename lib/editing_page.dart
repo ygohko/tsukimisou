@@ -20,6 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'memo_store.dart';
@@ -39,7 +41,13 @@ class _EditingPageState extends State<EditingPage> {
     final memoStore = MemoStore.getInstance();
     memoStore.addMemo(_controller.text);
     final memoStoreSaver = await MemoStoreSaver.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
-    memoStoreSaver.execute();
+    try {
+      memoStoreSaver.execute();
+    }
+    on FileSystemException catch (exception) {
+      // Save error
+      // Do nothing for now
+    }
     Navigator.of(context).pop();
   }
 
