@@ -69,6 +69,7 @@ class _EditingPageState extends State<EditingPage> {
           padding: EdgeInsets.all(12.0),
           child: TextField(
             controller: _controller,
+            autofocus: true,
             expands: true,
             maxLines: null,
             minLines: null,
