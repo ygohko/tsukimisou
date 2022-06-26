@@ -33,6 +33,10 @@ class App extends StatelessWidget {
       title: 'Tsukimisou',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xFF00003F),
+          foregroundColor: Colors.white,
+        ),
       ),
       home: const HomePage(),
     );
