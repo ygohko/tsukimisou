@@ -41,7 +41,7 @@ class MemoStoreLoader {
         return;
     }
     // Old format
-    final file = File(_path);
+    final file = File(_path + '.old');
     var string = await file.readAsString();
     final decoded = jsonDecode(string);
     /*
@@ -53,7 +53,7 @@ class MemoStoreLoader {
 
     // New format
     // TODO: Deserialize parameters
-    final aFile = File(_path + '.new');
+    final aFile = File(_path);
     final aString = await aFile.readAsString();
     final aDecoded = jsonDecode(aString);
     print('aDecoded: ${aDecoded}');

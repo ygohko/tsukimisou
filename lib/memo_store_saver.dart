@@ -41,13 +41,13 @@ class MemoStoreSaver {
       return;
     }
     // Old format
-    final file = File(_path);
+    final file = File(_path + 'old');
     final memos = _memoStore?.getMemos();
     final string = jsonEncode(memos);
     await file.writeAsString(string);
 
     // New format
-    final aFile = File(_path + '.new');
+    final aFile = File(_path);
     final aMemos = _memoStore!.getMemos();
     final serializableMemos = [];
     for (var i = 0; i  < aMemos.length; i++) {
