@@ -40,13 +40,30 @@ class MemoStoreLoader {
     if (_memoStore == null) {
         return;
     }
+    // Old format
     final file = File(_path);
-    // TODO: Synced version will be needed
     var string = await file.readAsString();
     final decoded = jsonDecode(string);
+    /*
     _memoStore?.clear();
     for (var i = 0; i < decoded.length; i++) {
       _memoStore?.addMemo(decoded[i]);
+    }
+    */
+
+    // New format
+    // TODO: Deserialize parameters
+    final aFile = File(_path + '.new');
+    final aString = await aFile.readAsString();
+    final aDecoded = jsonDecode(aString);
+    print('aDecoded: ${aDecoded}');
+    final version = aDecoded['version'];
+    _memoStore?.clear();
+    final serializableMemos = aDecoded['memos'];
+    for (var memo in serializableMemos) {
+      final text = memo['text'];
+      print('text: ${text}');
+      _memoStore?.addMemo(text);
     }
   }
 
