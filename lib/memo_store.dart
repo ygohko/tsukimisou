@@ -33,7 +33,7 @@ class MemoStore {
     _memos.clear();
   }
 
-  List getMemos() {
+  List<String> getMemos() {
     return _memos;
   }
 

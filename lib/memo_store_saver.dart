@@ -40,10 +40,26 @@ class MemoStoreSaver {
     if (_memoStore == null) {
       return;
     }
+    // Old format
     final file = File(_path);
     final memos = _memoStore?.getMemos();
     final string = jsonEncode(memos);
     await file.writeAsString(string);
+
+    // New format
+    final aFile = File(_path + '.new');
+    final aMemos = _memoStore!.getMemos();
+    final serializableMemos = [];
+    for (var i = 0; i  < aMemos.length; i++) {
+      final text = aMemos[i];
+      // TODO: Set proper values
+      final serializableMemo = {'id': 123, 'lastModified': DateTime.now().millisecondsSinceEpoch, 'text': text, 'revision': 1, 'lastMergedRevision': 0};
+      serializableMemos.add(serializableMemo);
+    }
+    // TODO: Set proper values
+    final serializable = {'version': 1, 'memos': serializableMemos, 'lastMerged': DateTime.now().millisecondsSinceEpoch};
+    final aString = jsonEncode(serializable);
+    await aFile.writeAsString(aString);
   }
 
   static Future<MemoStoreSaver> getFromFileName(MemoStore memoStore, String fileName) async {
