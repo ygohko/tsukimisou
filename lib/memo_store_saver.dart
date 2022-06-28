@@ -53,7 +53,7 @@ class MemoStoreSaver {
     for (var i = 0; i  < aMemos.length; i++) {
       final text = aMemos[i];
       // TODO: Set proper values
-      final serializableMemo = {'id': 123, 'lastModified': DateTime.now().millisecondsSinceEpoch, 'text': text, 'revision': 1, 'lastMergedRevision': 0};
+      final serializableMemo = {'id': 123, 'lastModified': DateTime.now().millisecondsSinceEpoch, 'text': text, 'tags': [], 'revision': 1, 'lastMergedRevision': 0};
       serializableMemos.add(serializableMemo);
     }
     // TODO: Set proper values
