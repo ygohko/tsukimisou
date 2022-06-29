@@ -41,10 +41,10 @@ class MemoStoreLoader {
         return;
     }
     // Old format
+    /*
     final file = File(_path + '.old');
     var string = await file.readAsString();
     final decoded = jsonDecode(string);
-    /*
     _memoStore?.clear();
     for (var i = 0; i < decoded.length; i++) {
       _memoStore?.addMemo(decoded[i]);

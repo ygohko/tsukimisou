@@ -40,11 +40,13 @@ class MemoStoreSaver {
     if (_memoStore == null) {
       return;
     }
+    /*
     // Old format
-    final file = File(_path + 'old');
+    final file = File(_path + '.old');
     final memos = _memoStore?.getMemos();
     final string = jsonEncode(memos);
     await file.writeAsString(string);
+    */
 
     // New format
     final aFile = File(_path);
@@ -53,11 +55,18 @@ class MemoStoreSaver {
     for (var i = 0; i  < aMemos.length; i++) {
       final text = aMemos[i];
       // TODO: Set proper values
-      final serializableMemo = {'id': 123, 'lastModified': DateTime.now().millisecondsSinceEpoch, 'text': text, 'tags': [], 'revision': 1, 'lastMergedRevision': 0};
+      final id = 123;
+      final lastModified = DateTime.now().millisecondsSinceEpoch;
+      final tags = [];
+      final revision = 1;
+      final lastMergedRevision = 0;
+      final serializableMemo = {'id': id, 'lastModified': lastModified, 'text': text, 'tags': tags, 'revision': revision, 'lastMergedRevision': lastMergedRevision};
       serializableMemos.add(serializableMemo);
     }
     // TODO: Set proper values
-    final serializable = {'version': 1, 'memos': serializableMemos, 'lastMerged': DateTime.now().millisecondsSinceEpoch};
+    final version = 1;
+    final lastMerged = DateTime.now().millisecondsSinceEpoch;
+    final serializable = {'version': version, 'memos': serializableMemos, 'lastMerged': lastMerged};
     final aString = jsonEncode(serializable);
     await aFile.writeAsString(aString);
   }
