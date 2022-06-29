@@ -1,3 +1,4 @@
+import "dart:convert";
 import 'dart:io';
 
 import 'package:test/test.dart';
@@ -19,7 +20,8 @@ void main() {
           final exists = await file.exists();
           expect(exists, true);
           final string = await file.readAsString();
-          expect(string, '["This is a test."]');
+          final deserialized = jsonDecode(string);
+          expect(deserialized['memos'][0]['text'], 'This is a test.');
           await file.delete();
       });
 

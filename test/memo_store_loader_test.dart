@@ -10,9 +10,9 @@ void main() {
           expect(MemoStoreLoader(MemoStore(), './test.json'), isNotNull);
       });
 
-      test('MemoStoreSaver should save memos as JSON.', () async {
+      test('MemoStoreLoader should load memos from JSON.', () async {
           var file = File('./test.json');
-          await file.writeAsString('["This is a test."]');
+          await file.writeAsString('{"version":1,"memos":[{"id":123,"lastModified":1656491551473,"text":"This is a test.","tags":[],"revision":1,"lastMergedRevision":0}],"lastMerged":1656491551473}');
           final memoStore = MemoStore();
           final memoStoreLoader = MemoStoreLoader(memoStore, './test.json');
           await memoStoreLoader.execute();
