@@ -23,11 +23,11 @@
 import 'memo.dart';
 
 class MemoStore {
-  final _memos = <String>[];
+  final _memos = <Memo>[];
 
   static MemoStore? _instance = null;
 
-  void addMemo(String memo) {
+  void addMemo(Memo memo) {
     _memos.add(memo);
   }
 
@@ -35,7 +35,7 @@ class MemoStore {
     _memos.clear();
   }
 
-  List<String> getMemos() {
+  List<Memo> getMemos() {
     return _memos;
   }
 

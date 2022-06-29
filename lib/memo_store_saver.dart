@@ -44,7 +44,7 @@ class MemoStoreSaver {
     final memos = _memoStore!.getMemos();
     final serializableMemos = [];
     for (var i = 0; i  < memos.length; i++) {
-      final text = memos[i];
+      final text = memos[i].text;
       // TODO: Set proper values
       final id = 123;
       final lastModified = DateTime.now().millisecondsSinceEpoch;

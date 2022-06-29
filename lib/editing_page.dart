@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
@@ -39,7 +40,9 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final memoStore = MemoStore.getInstance();
-    memoStore.addMemo(_controller.text);
+    final memo = Memo();
+    memo.text = _controller.text;
+    memoStore.addMemo(memo);
     final memoStoreSaver = await MemoStoreSaver.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();

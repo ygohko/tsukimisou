@@ -36,6 +36,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // TODO: Remove this
   final _memoStore = MemoStore.getInstance();
   var _initialized = false;
 
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
           return Card(
             child: Padding(
               padding: EdgeInsets.all(12.0),
-              child: Text(memos[(memos.length - 1) - i]),
+              child: Text(memos[(memos.length - 1) - i].text),
             ),
           );
         }
