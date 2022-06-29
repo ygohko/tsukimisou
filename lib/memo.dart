@@ -24,7 +24,7 @@ class Memo {
   var _id = 0;
   var _lastModified = 0;
   var _text = '';
-  var _tags = [];
+  var _tags = <String>[];
   var _revision = 0;
   var _lastMergedRevision = 0;
 
@@ -49,11 +49,19 @@ class Memo {
   }
 
   String get text {
-    return text;
+    return _text;
   }
 
   void set text(String text) {
     _text = text;
+  }
+
+  List<String> get tags {
+    return _tags;
+  }
+
+  void set tags(List<String> tags) {
+    _tags = tags;
   }
 
   int get revision {
