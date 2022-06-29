@@ -41,8 +41,24 @@ class MemoStoreSaver {
       return;
     }
     final file = File(_path);
-    final memos = _memoStore?.getMemos();
-    final string = jsonEncode(memos);
+    final memos = _memoStore!.getMemos();
+    final serializableMemos = [];
+    for (var i = 0; i  < memos.length; i++) {
+      final text = memos[i];
+      // TODO: Set proper values
+      final id = 123;
+      final lastModified = DateTime.now().millisecondsSinceEpoch;
+      final tags = [];
+      final revision = 1;
+      final lastMergedRevision = 0;
+      final serializableMemo = {'id': id, 'lastModified': lastModified, 'text': text, 'tags': tags, 'revision': revision, 'lastMergedRevision': lastMergedRevision};
+      serializableMemos.add(serializableMemo);
+    }
+    // TODO: Set proper values
+    final version = 1;
+    final lastMerged = DateTime.now().millisecondsSinceEpoch;
+    final serializable = {'version': version, 'memos': serializableMemos, 'lastMerged': lastMerged};
+    final string = jsonEncode(serializable);
     await file.writeAsString(string);
   }
 
