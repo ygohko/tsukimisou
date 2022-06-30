@@ -2,6 +2,7 @@ import "dart:convert";
 import 'dart:io';
 
 import 'package:test/test.dart';
+import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_saver.dart';
 
@@ -13,7 +14,9 @@ void main() {
 
       test('MemoStoreSaver should save memos as JSON.', () async {
           final memoStore = MemoStore();
-          memoStore.addMemo('This is a test.');
+          final memo = Memo();
+          memo.text = 'This is a test.';
+          memoStore.addMemo(memo);
           final memoStoreSaver = MemoStoreSaver(memoStore, './test.json');
           await memoStoreSaver.execute();
           final file = File('./test.json');

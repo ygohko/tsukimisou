@@ -20,30 +20,63 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'memo.dart';
+class Memo {
+  var _id = 0;
+  var _lastModified = 0;
+  var _text = '';
+  var _tags = <String>[];
+  var _revision = 0;
+  var _lastMergedRevision = 0;
 
-class MemoStore {
-  final _memos = <Memo>[];
-
-  static MemoStore? _instance = null;
-
-  void addMemo(Memo memo) {
-    _memos.add(memo);
+  Memo() {
+    // Do nothing
   }
 
-  void clear() {
-    _memos.clear();
+  int get id {
+    return _id;
   }
 
-  List<Memo> getMemos() {
-    return _memos;
+  void set id(int id) {
+    _id = id;
   }
 
-  static MemoStore getInstance() {
-    if (_instance == null) {
-      _instance = MemoStore();
-    }
+  int get lastModified {
+    return _lastModified;
+  }
 
-    return _instance!;
+  void set lastModified(int lastModified) {
+    _lastModified = lastModified;
+  }
+
+  String get text {
+    return _text;
+  }
+
+  void set text(String text) {
+    _text = text;
+  }
+
+  List<String> get tags {
+    return _tags;
+  }
+
+  void set tags(List<String> tags) {
+    _tags = tags;
+  }
+
+  int get revision {
+    return _revision;
+  }
+
+  void set revision(int revision) {
+    _revision = revision;
+  }
+
+  int get lastMergedRevition {
+    return _lastMergedRevision;
+  }
+
+  void set lastMergedRevition(int lastMergedRevition) {
+    _lastMergedRevision = lastMergedRevition;
   }
 }

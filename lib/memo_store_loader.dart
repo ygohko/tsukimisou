@@ -25,6 +25,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 
+import 'memo.dart';
 import 'memo_store.dart';
 
 class MemoStoreLoader {
@@ -47,11 +48,13 @@ class MemoStoreLoader {
     print('aDecoded: ${decoded}');
     final version = decoded['version'];
     _memoStore?.clear();
-    final serializableMemos = decoded['memos'];
-    for (var memo in serializableMemos) {
-      final text = memo['text'];
+    final deserializedMemos = decoded['memos'];
+    for (var deserializedMemo in deserializedMemos) {
+      final text = deserializedMemo['text'];
       print('text: ${text}');
-      _memoStore?.addMemo(text);
+      final memo = Memo();
+      memo.text = text;
+      _memoStore?.addMemo(memo);
     }
   }
 
