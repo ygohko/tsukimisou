@@ -18,7 +18,7 @@ void main() {
           await memoStoreLoader.execute();
           final memos = memoStore.getMemos();
           expect(memos.length, 1);
-          expect(memos[0], 'This is a test.');
+          expect(memos[0].text, 'This is a test.');
           file = File('./test.json');
           await file.delete();
       });
