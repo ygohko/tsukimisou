@@ -24,6 +24,7 @@ import 'memo.dart';
 
 class MemoStore {
   final _memos = <Memo>[];
+  var _lastMerged = 0;
 
   static MemoStore? _instance = null;
 
@@ -37,6 +38,14 @@ class MemoStore {
 
   List<Memo> getMemos() {
     return _memos;
+  }
+
+  int get lastMerged {
+    return _lastMerged;
+  }
+
+  void set lastMerged(int lastMerged) {
+    _lastMerged = lastMerged;
   }
 
   static MemoStore getInstance() {
