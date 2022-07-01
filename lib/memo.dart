@@ -20,8 +20,10 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:uuid/uuid.dart';
+
 class Memo {
-  var _id = 0;
+  var _id = '';
   var _lastModified = 0;
   var _text = '';
   var _tags = <String>[];
@@ -29,14 +31,19 @@ class Memo {
   var _lastMergedRevision = 0;
 
   Memo() {
-    // Do nothing
+    final uuid = Uuid();
+    _id = uuid.v4();
   }
 
-  int get id {
+  dynamic toSerializable() {
+    return {'id': _id, 'lastModified': _lastModified, 'text': _text, 'tags': _tags, 'revision': _revision, '_lastMergedRevision': _lastMergedRevision};
+  }
+
+  String get id {
     return _id;
   }
 
-  void set id(int id) {
+  void set id(String id) {
     _id = id;
   }
 
@@ -54,6 +61,8 @@ class Memo {
 
   void set text(String text) {
     _text = text;
+    _lastModified = DateTime.now().millisecondsSinceEpoch;
+    _revision++;
   }
 
   List<String> get tags {
