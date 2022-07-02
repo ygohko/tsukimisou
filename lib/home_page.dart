@@ -28,6 +28,7 @@ import 'editing_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
+import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -111,19 +112,7 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text('Test'),
-            ),
-            body: SingleChildScrollView(
-              child: Card(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Text(memo.text),
-                ),
-              ),
-            ),
-          );
+          return ViewingPage(memo: memo);
         },
       ),
     );
