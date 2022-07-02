@@ -36,7 +36,14 @@ class Memo {
   }
 
   dynamic toSerializable() {
-    return {'id': _id, 'lastModified': _lastModified, 'text': _text, 'tags': _tags, 'revision': _revision, 'lastMergedRevision': _lastMergedRevision};
+    return {
+      'id': _id,
+      'lastModified': _lastModified,
+      'text': _text,
+      'tags': _tags,
+      'revision': _revision,
+      'lastMergedRevision': _lastMergedRevision
+    };
   }
 
   String get id {

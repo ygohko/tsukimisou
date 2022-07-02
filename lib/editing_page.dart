@@ -43,11 +43,11 @@ class _EditingPageState extends State<EditingPage> {
     final memo = Memo();
     memo.text = _controller.text;
     memoStore.addMemo(memo);
-    final memoStoreSaver = await MemoStoreSaver.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
+    final memoStoreSaver = await MemoStoreSaver.getFromFileName(
+        memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    }
-    on FileSystemException catch (exception) {
+    } on FileSystemException catch (exception) {
       // Save error
       // Do nothing for now
     }
@@ -82,4 +82,3 @@ class _EditingPageState extends State<EditingPage> {
     );
   }
 }
-
