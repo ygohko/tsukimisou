@@ -10,9 +10,9 @@ void main() {
 
     test('Memo.id should get and set id.', () {
       final memo = Memo();
-      expect(memo.id, 0);
-      memo.id = 1;
-      expect(memo.id, 1);
+      expect(memo.id, isNot(''));
+      memo.id = '12345';
+      expect(memo.id, '12345');
     });
 
     test('Memo.lastModified should get and set lastModified.', () {
