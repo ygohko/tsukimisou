@@ -38,22 +38,6 @@ class EditingPage extends StatefulWidget {
 class _EditingPageState extends State<EditingPage> {
   final _controller = TextEditingController();
 
-  void _save() async {
-    final memoStore = MemoStore.getInstance();
-    final memo = Memo();
-    memo.text = _controller.text;
-    memoStore.addMemo(memo);
-    final memoStoreSaver = await MemoStoreSaver.getFromFileName(
-        memoStore, 'TsukimisouMemoStore.json');
-    try {
-      memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
-      // Save error
-      // Do nothing for now
-    }
-    Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,5 +64,21 @@ class _EditingPageState extends State<EditingPage> {
         ),
       ),
     );
+  }
+
+  void _save() async {
+    final memoStore = MemoStore.getInstance();
+    final memo = Memo();
+    memo.text = _controller.text;
+    memoStore.addMemo(memo);
+    final memoStoreSaver = await MemoStoreSaver.getFromFileName(
+        memoStore, 'TsukimisouMemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on FileSystemException catch (exception) {
+      // Save error
+      // Do nothing for now
+    }
+    Navigator.of(context).pop();
   }
 }

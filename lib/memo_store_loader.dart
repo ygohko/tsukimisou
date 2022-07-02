@@ -42,7 +42,6 @@ class MemoStoreLoader {
       return;
     }
     final memoStore = _memoStore!;
-    // TODO: Deserialize parameters
     final file = File(_path);
     final string = await file.readAsString();
     final decoded = jsonDecode(string);

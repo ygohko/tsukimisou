@@ -36,9 +36,41 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // TODO: Remove this
-  final _memoStore = MemoStore.getInstance();
   var _initialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!_initialized) {
+      _initialize();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final memoStore = MemoStore.getInstance();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tsukimisou'),
+      ),
+      body: ListView.builder(
+          itemCount: memoStore.getMemos().length,
+          itemBuilder: (context, i) {
+            final memos = memoStore.getMemos();
+            return Card(
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(memos[(memos.length - 1) - i].text),
+              ),
+            );
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addMemo,
+        tooltip: 'Add a memo',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 
   Future<void> _initialize() async {
     final memoStore = MemoStore.getInstance();
@@ -65,38 +97,5 @@ class _HomePageState extends State<HomePage> {
       },
     ));
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (!_initialized) {
-      _initialize();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Tsukimisou'),
-      ),
-      body: ListView.builder(
-          itemCount: _memoStore.getMemos().length,
-          itemBuilder: (context, i) {
-            final memos = _memoStore.getMemos();
-            return Card(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(memos[(memos.length - 1) - i].text),
-              ),
-            );
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: 'Add a memo',
-        child: const Icon(Icons.add),
-      ),
-    );
   }
 }
