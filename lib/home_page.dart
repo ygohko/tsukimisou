@@ -36,39 +36,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // TODO: Remove this
-  final _memoStore = MemoStore.getInstance();
   var _initialized = false;
-
-  Future<void> _initialize() async {
-    final memoStore = MemoStore.getInstance();
-    final memoStoreLoader = await MemoStoreLoader.getFromFileName(memoStore, 'TsukimisouMemoStore.json');
-    try {
-      await memoStoreLoader.execute();
-    }
-    on FileSystemException catch (exception) {
-      // Load error
-      // Do nothing for now
-    }
-    setState(() {
-    });
-    _initialized = true;
-  }
-
-  void _addMemo() async {
-    await Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return EditingPage();
-        },
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(null, context, animation, secondaryAnimation, child);
-        },
-      )
-    );
-    setState(() {
-    });
-  }
 
   @override
   void initState() {
@@ -80,27 +48,54 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final memoStore = MemoStore.getInstance();
     return Scaffold(
       appBar: AppBar(
         title: Text('Tsukimisou'),
       ),
       body: ListView.builder(
-        itemCount: _memoStore.getMemos().length,
-        itemBuilder: (context, i) {
-          final memos = _memoStore.getMemos();
-          return Card(
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Text(memos[(memos.length - 1) - i].text),
-            ),
-          );
-        }
-      ),
+          itemCount: memoStore.getMemos().length,
+          itemBuilder: (context, i) {
+            final memos = memoStore.getMemos();
+            return Card(
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(memos[(memos.length - 1) - i].text),
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
         tooltip: 'Add a memo',
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> _initialize() async {
+    final memoStore = MemoStore.getInstance();
+    final memoStoreLoader = await MemoStoreLoader.getFromFileName(
+        memoStore, 'TsukimisouMemoStore.json');
+    try {
+      await memoStoreLoader.execute();
+    } on FileSystemException catch (exception) {
+      // Load error
+      // Do nothing for now
+    }
+    setState(() {});
+    _initialized = true;
+  }
+
+  void _addMemo() async {
+    await Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return EditingPage();
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+            null, context, animation, secondaryAnimation, child);
+      },
+    ));
+    setState(() {});
   }
 }

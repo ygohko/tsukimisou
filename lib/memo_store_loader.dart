@@ -39,10 +39,9 @@ class MemoStoreLoader {
 
   Future<void> execute() async {
     if (_memoStore == null) {
-        return;
+      return;
     }
     final memoStore = _memoStore!;
-    // TODO: Deserialize parameters
     final file = File(_path);
     final string = await file.readAsString();
     final decoded = jsonDecode(string);
@@ -70,8 +69,10 @@ class MemoStoreLoader {
     }
   }
 
-static Future<MemoStoreLoader> getFromFileName(MemoStore memoStore, String fileName) async {
-    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
+  static Future<MemoStoreLoader> getFromFileName(
+      MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory =
+        await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
     print('path: ${path}\n');
     path = path + Platform.pathSeparator + fileName;

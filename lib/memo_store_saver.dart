@@ -43,17 +43,23 @@ class MemoStoreSaver {
     final file = File(_path);
     final memos = _memoStore!.getMemos();
     final serializableMemos = [];
-    for (var i = 0; i  < memos.length; i++) {
+    for (var i = 0; i < memos.length; i++) {
       serializableMemos.add(memos[i].toSerializable());
     }
     final version = 1;
-    final serializable = {'version': version, 'memos': serializableMemos, 'lastMerged': _memoStore!.lastMerged};
+    final serializable = {
+      'version': version,
+      'memos': serializableMemos,
+      'lastMerged': _memoStore!.lastMerged
+    };
     final string = jsonEncode(serializable);
     await file.writeAsString(string);
   }
 
-  static Future<MemoStoreSaver> getFromFileName(MemoStore memoStore, String fileName) async {
-    final applicationDocumentsDirectory = await getApplicationDocumentsDirectory();
+  static Future<MemoStoreSaver> getFromFileName(
+      MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory =
+        await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
     print('path: ${path}\n');
     path = path + Platform.pathSeparator + fileName;
