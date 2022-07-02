@@ -22,6 +22,7 @@
 
 import 'package:flutter/material.dart';
 
+import 'editing_page.dart';
 import 'memo.dart';
 
 class ViewingPage extends StatefulWidget {
@@ -41,6 +42,13 @@ class _ViewingPageState extends State<ViewingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Memo at ${dateTime.toString()}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: _edit,
+            tooltip: 'Edit',
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Card(
@@ -54,5 +62,18 @@ class _ViewingPageState extends State<ViewingPage> {
         ),
       ),
     );
+  }
+
+  void _edit() async {
+    await Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return EditingPage(memo: widget.memo);
+      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+            null, context, animation, secondaryAnimation, child);
+      },
+    ));
+    setState(() {});
   }
 }

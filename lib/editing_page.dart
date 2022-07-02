@@ -29,7 +29,9 @@ import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
 class EditingPage extends StatefulWidget {
-  const EditingPage({Key? key}) : super(key: key);
+  final Memo? memo;
+
+  const EditingPage({Key? key, this.memo}) : super(key: key);
 
   @override
   State<EditingPage> createState() => _EditingPageState();
@@ -39,10 +41,21 @@ class _EditingPageState extends State<EditingPage> {
   final _controller = TextEditingController();
 
   @override
+  void initState() {
+    if (widget.memo != null) {
+      _controller.text = widget.memo!.text;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var title = 'Add a new memo';
+    if (widget.memo != null) {
+      title = 'Edit a memo';
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Add a new memo"),
+        title: Text(title),
         actions: [
           IconButton(
             icon: const Icon(Icons.done),
@@ -68,11 +81,18 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final memoStore = MemoStore.getInstance();
-    final memo = Memo();
-    memo.text = _controller.text;
-    memoStore.addMemo(memo);
+    if (widget.memo == null) {
+      // Add a new memo
+      final memo = Memo();
+      memo.text = _controller.text;
+      memoStore.addMemo(memo);
+    }
+    else {
+      // Update a memo
+      widget.memo!.text = _controller.text;
+    }
     final memoStoreSaver = await MemoStoreSaver.getFromFileName(
-        memoStore, 'TsukimisouMemoStore.json');
+      memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
     } on FileSystemException catch (exception) {
