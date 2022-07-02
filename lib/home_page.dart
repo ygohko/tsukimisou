@@ -61,17 +61,16 @@ class _HomePageState extends State<HomePage> {
             final memos = memoStore.getMemos();
             final memo = memos[(memos.length - 1) - i];
             return Card(
-              child: InkWell(
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(memo.text),
-                ),
-                onTap: () {
-                  print('tapped ${memo.text}');
-                  _viewMemo(memo);
-                },
-              )
-            );
+                child: InkWell(
+              child: Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(memo.text),
+              ),
+              onTap: () {
+                print('tapped ${memo.text}');
+                _viewMemo(memo);
+              },
+            ));
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,

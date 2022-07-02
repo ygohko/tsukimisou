@@ -5,12 +5,11 @@ import 'package:tsukimisou/viewing_page.dart';
 
 void main() {
   testWidgets('ViewingPage widget smoke test', (WidgetTester tester) async {
-      final memo = Memo();
-      memo.text = 'This is a test.';
-      await tester.pumpWidget(MaterialApp(
-        home: ViewingPage(memo: memo),
-      )
-    );
+    final memo = Memo();
+    memo.text = 'This is a test.';
+    await tester.pumpWidget(MaterialApp(
+      home: ViewingPage(memo: memo),
+    ));
     expect(find.text('This is a test.'), findsOneWidget);
   });
 }

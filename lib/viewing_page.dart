@@ -36,7 +36,8 @@ class ViewingPage extends StatefulWidget {
 class _ViewingPageState extends State<ViewingPage> {
   @override
   Widget build(BuildContext context) {
-    final dateTime = DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
+    final dateTime =
+        DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
     return Scaffold(
       appBar: AppBar(
         title: Text('Memo at ${dateTime.toString()}'),
