@@ -41,20 +41,32 @@ class MemoStoreLoader {
     if (_memoStore == null) {
         return;
     }
+    final memoStore = _memoStore!;
     // TODO: Deserialize parameters
     final file = File(_path);
     final string = await file.readAsString();
     final decoded = jsonDecode(string);
     print('aDecoded: ${decoded}');
     final version = decoded['version'];
-    _memoStore?.clear();
+    memoStore.clear();
+    memoStore.lastMerged = decoded['lastMerged'];
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {
-      final text = deserializedMemo['text'];
-      print('text: ${text}');
       final memo = Memo();
-      memo.text = text;
-      _memoStore?.addMemo(memo);
+      memo.id = deserializedMemo['id'];
+      memo.lastModified = deserializedMemo['lastModified'];
+      memo.text = deserializedMemo['text'];
+      final deserializedTags = deserializedMemo['tags'];
+      final tags = <String>[];
+      for (var tag in deserializedTags) {
+        if (tag is String) {
+          tags.add(tag);
+        }
+      }
+      memo.tags = tags;
+      memo.revision = deserializedMemo['revision'];
+      memo.lastMergedRevition = deserializedMemo['lastMergedRevision'];
+      memoStore.addMemo(memo);
     }
   }
 
