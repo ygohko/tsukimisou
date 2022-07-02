@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'editing_page.dart';
+import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
@@ -57,11 +58,18 @@ class _HomePageState extends State<HomePage> {
           itemCount: memoStore.getMemos().length,
           itemBuilder: (context, i) {
             final memos = memoStore.getMemos();
+            final memo = memos[(memos.length - 1) - i];
             return Card(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(memos[(memos.length - 1) - i].text),
-              ),
+              child: InkWell(
+                child: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(memo.text),
+                ),
+                onTap: () {
+                  print('tapped ${memo.text}');
+                  _viewMemo(memo);
+                },
+              )
             );
           }),
       floatingActionButton: FloatingActionButton(
@@ -97,5 +105,27 @@ class _HomePageState extends State<HomePage> {
       },
     ));
     setState(() {});
+  }
+
+  void _viewMemo(Memo memo) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Test'),
+            ),
+            body: SingleChildScrollView(
+              child: Card(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(memo.text),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
