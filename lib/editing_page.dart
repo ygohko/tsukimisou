@@ -42,6 +42,7 @@ class _EditingPageState extends State<EditingPage> {
 
   @override
   void initState() {
+    super.initState();
     if (widget.memo != null) {
       _controller.text = widget.memo!.text;
     }

@@ -38,14 +38,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _initialized = false;
+  var _shownMemos = <Memo>[];
 
   @override
   void initState() {
     super.initState();
-    if (!_initialized) {
-      _initialize();
-    }
+    _load();
   }
 
   @override
@@ -58,8 +56,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
           itemCount: memoStore.getMemos().length,
           itemBuilder: (context, i) {
-            final memos = memoStore.getMemos();
-            final memo = memos[(memos.length - 1) - i];
+            final memo = _shownMemos[(_shownMemos.length - 1) - i];
             return Card(
                 child: InkWell(
               child: Padding(
@@ -80,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _initialize() async {
+  Future<void> _load() async {
     final memoStore = MemoStore.getInstance();
     final memoStoreLoader = await MemoStoreLoader.getFromFileName(
         memoStore, 'TsukimisouMemoStore.json');
@@ -90,8 +87,9 @@ class _HomePageState extends State<HomePage> {
       // Load error
       // Do nothing for now
     }
-    setState(() {});
-    _initialized = true;
+    setState(() {
+      updateShownMemos();
+    });
   }
 
   void _addMemo() async {
@@ -104,7 +102,9 @@ class _HomePageState extends State<HomePage> {
             null, context, animation, secondaryAnimation, child);
       },
     ));
-    setState(() {});
+    setState(() {
+      updateShownMemos();
+    });
   }
 
   void _viewMemo(Memo memo) async {
@@ -115,6 +115,15 @@ class _HomePageState extends State<HomePage> {
         },
       ),
     );
-    setState(() {});
+    setState(() {
+      updateShownMemos();
+    });
+  }
+
+  void updateShownMemos() {
+    final memoStore = MemoStore.getInstance();
+    final memos = memoStore.getMemos();
+    _shownMemos = [...memos];
+    _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
   }
 }
