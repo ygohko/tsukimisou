@@ -32,6 +32,10 @@ class MemoStore {
     _memos.add(memo);
   }
 
+  void removeMemo(Memo memo) {
+    _memos.remove(memo);
+  }
+
   void clear() {
     _memos.clear();
   }
