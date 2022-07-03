@@ -69,7 +69,7 @@ class MemoStoreLoader {
     }
   }
 
-  static Future<MemoStoreLoader> getFromFileName(
+  static Future<MemoStoreLoader> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();

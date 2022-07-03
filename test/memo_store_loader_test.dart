@@ -24,10 +24,10 @@ void main() {
       await file.delete();
     });
 
-    test('MemoStoreLoader.getFromFile() should return memo store loader.',
+    test('MemoStoreLoader.fromFile() should return memo store loader.',
         () async {
       expect(
-          MemoStoreLoader.getFromFileName(MemoStore(), 'test.json'), isNotNull);
+          MemoStoreLoader.fromFileName(MemoStore(), 'test.json'), isNotNull);
     });
   });
 }

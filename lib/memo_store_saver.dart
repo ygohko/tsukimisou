@@ -57,7 +57,7 @@ class MemoStoreSaver {
     await file.writeAsString(string);
   }
 
-  static Future<MemoStoreSaver> getFromFileName(
+  static Future<MemoStoreSaver> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();

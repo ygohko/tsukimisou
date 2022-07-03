@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _load() async {
     final memoStore = MemoStore.getInstance();
-    final memoStoreLoader = await MemoStoreLoader.getFromFileName(
+    final memoStoreLoader = await MemoStoreLoader.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       await memoStoreLoader.execute();
