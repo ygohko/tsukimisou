@@ -17,7 +17,7 @@ void main() {
       final memoStore = MemoStore();
       final memoStoreLoader = MemoStoreLoader(memoStore, './test.json');
       await memoStoreLoader.execute();
-      final memos = memoStore.getMemos();
+      final memos = memoStore.memos;
       expect(memos.length, 1);
       expect(memos[0].text, 'This is a test.');
       file = File('./test.json');

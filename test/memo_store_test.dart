@@ -5,16 +5,16 @@ import 'package:tsukimisou/memo_store.dart';
 void main() {
   group('MemoStore', () {
     test('MemoStore should have zero memos when created.', () {
-      expect(MemoStore().getMemos().length, 0);
+      expect(MemoStore().memos.length, 0);
     });
 
     test('MemoStore should have a memo when memo is added.', () {
       final memoStore = MemoStore();
-      expect(memoStore.getMemos().length, 0);
+      expect(memoStore.memos.length, 0);
       final memo = Memo();
       memo.text = 'This is a memo.';
       memoStore.addMemo(memo);
-      expect(memoStore.getMemos().length, 1);
+      expect(memoStore.memos.length, 1);
     });
 
     test('MemoStore should have zero memos when memo is removed.', () {
@@ -23,7 +23,7 @@ void main() {
       memo.text = 'This is a memo.';
       memoStore.addMemo(memo);
       memoStore.removeMemo(memo);
-      expect(memoStore.getMemos().length, 0);
+      expect(memoStore.memos.length, 0);
     });
 
     test('MemoStore should store removed memo IDs when memo is removed.', () {
@@ -42,17 +42,17 @@ void main() {
       memo.text = 'This is a memo.';
       memoStore.addMemo(memo);
       memoStore.clearMemos();
-      expect(memoStore.getMemos().length, 0);
+      expect(memoStore.memos.length, 0);
     });
 
     test(
-        'MemoStore.getMemos() should return memos that is stored by memo store.',
+        'MemoStore.memos should return memos that is stored by memo store.',
         () {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.text = 'This is a memo.';
       memoStore.addMemo(memo);
-      final memos = memoStore.getMemos();
+      final memos = memoStore.memos;
       expect(memos.length, 1);
       expect(memos[0].text, 'This is a memo.');
     });

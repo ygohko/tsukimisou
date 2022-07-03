@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Tsukimisou'),
       ),
       body: ListView.builder(
-          itemCount: memoStore.getMemos().length,
+          itemCount: memoStore.memos.length,
           itemBuilder: (context, i) {
             final memo = _shownMemos[(_shownMemos.length - 1) - i];
             return Card(
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
 
   void updateShownMemos() {
     final memoStore = MemoStore.getInstance();
-    final memos = memoStore.getMemos();
+    final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
   }

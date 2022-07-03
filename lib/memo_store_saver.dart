@@ -37,11 +37,12 @@ class MemoStoreSaver {
   }
 
   Future<void> execute() async {
-    if (_memoStore == null) {
+    final memoStore = _memoStore;
+    if (memoStore == null) {
       return;
     }
     final file = File(_path);
-    final memos = _memoStore!.getMemos();
+    final memos = memoStore.memos;
     final serializableMemos = [];
     for (var i = 0; i < memos.length; i++) {
       serializableMemos.add(memos[i].toSerializable());
@@ -50,7 +51,7 @@ class MemoStoreSaver {
     final serializable = {
       'version': version,
       'memos': serializableMemos,
-      'lastMerged': _memoStore!.lastMerged
+      'lastMerged': memoStore.lastMerged
     };
     final string = jsonEncode(serializable);
     await file.writeAsString(string);

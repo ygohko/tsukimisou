@@ -45,10 +45,7 @@ class MemoStore {
     _memos.clear();
   }
 
-  List<Memo> getMemos() {
-    // TODO: Change to getter?
-    return _memos;
-  }
+  List<Memo> get memos => _memos;
 
   List<String> get removedMemoIds => _removedMemoIds;
 
