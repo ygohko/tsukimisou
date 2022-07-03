@@ -31,6 +31,7 @@ import 'memo_store_saver.dart';
 class EditingPage extends StatefulWidget {
   final Memo? memo;
 
+  /// Creates a editing page.
   const EditingPage({Key? key, this.memo}) : super(key: key);
 
   @override

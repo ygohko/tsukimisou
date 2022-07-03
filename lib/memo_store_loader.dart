@@ -32,11 +32,13 @@ class MemoStoreLoader {
   MemoStore? _memoStore = null;
   var _path = '';
 
+  /// Creates a memo store loader.
   MemoStoreLoader(MemoStore memoStore, String path) {
     _memoStore = memoStore;
     _path = path;
   }
 
+  /// Executes this memo store loader.
   Future<void> execute() async {
     if (_memoStore == null) {
       return;
@@ -69,6 +71,7 @@ class MemoStoreLoader {
     }
   }
 
+  /// Creates a memo store loader from file name.
   static Future<MemoStoreLoader> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =

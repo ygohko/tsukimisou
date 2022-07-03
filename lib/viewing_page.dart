@@ -32,6 +32,7 @@ import 'memo_store_saver.dart';
 class ViewingPage extends StatefulWidget {
   final Memo memo;
 
+  /// Creates a viewing page.
   const ViewingPage({Key? key, required this.memo}) : super(key: key);
 
   @override

@@ -31,6 +31,7 @@ import 'memo_store_loader.dart';
 import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
+  /// Creates a home page.
   const HomePage({Key? key}) : super(key: key);
 
   @override

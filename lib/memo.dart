@@ -30,11 +30,13 @@ class Memo {
   var _revision = 0;
   var _lastMergedRevision = 0;
 
+  /// Creates a memo.
   Memo() {
     final uuid = Uuid();
     _id = uuid.v4();
   }
 
+  /// Returns a JSON serializable object.
   dynamic toSerializable() {
     return {
       'id': _id,
@@ -46,40 +48,52 @@ class Memo {
     };
   }
 
+  /// A ID of this memo.
   String get id => _id;
 
+  /// A ID of this memo.
   void set id(String id) {
     _id = id;
   }
 
+  /// Epoch milliseconds from last modified.
   int get lastModified => _lastModified;
 
+  /// Epoch milliseconds from last modified.
   void set lastModified(int lastModified) {
     _lastModified = lastModified;
   }
 
+  /// Text of this memo.
   String get text => _text;
 
+  /// Text of this memo.
   void set text(String text) {
     _text = text;
     _lastModified = DateTime.now().millisecondsSinceEpoch;
     _revision++;
   }
 
+  /// Tags added to this memo.
   List<String> get tags => _tags;
 
+  /// Tags added to this memo.
   void set tags(List<String> tags) {
     _tags = tags;
   }
 
+  /// Revision of this memo.
   int get revision => _revision;
 
+  /// Revision of this memo.
   void set revision(int revision) {
     _revision = revision;
   }
 
+  /// Revision when last merged.
   int get lastMergedRevition => _lastMergedRevision;
 
+  /// Revision when last merged.
   void set lastMergedRevition(int lastMergedRevition) {
     _lastMergedRevision = lastMergedRevition;
   }

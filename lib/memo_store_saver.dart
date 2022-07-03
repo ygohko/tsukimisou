@@ -31,11 +31,13 @@ class MemoStoreSaver {
   MemoStore? _memoStore = null;
   var _path = '';
 
+  /// Creates a memo store saver.
   MemoStoreSaver(MemoStore memoStore, String path) {
     _memoStore = memoStore;
     _path = path;
   }
 
+  /// Executes this memo store saver.
   Future<void> execute() async {
     final memoStore = _memoStore;
     if (memoStore == null) {
@@ -57,6 +59,7 @@ class MemoStoreSaver {
     await file.writeAsString(string);
   }
 
+  /// Creates a memo store saver from file name.
   static Future<MemoStoreSaver> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =
