@@ -46,25 +46,19 @@ class Memo {
     };
   }
 
-  String get id {
-    return _id;
-  }
+  String get id => _id;
 
   void set id(String id) {
     _id = id;
   }
 
-  int get lastModified {
-    return _lastModified;
-  }
+  int get lastModified => _lastModified;
 
   void set lastModified(int lastModified) {
     _lastModified = lastModified;
   }
 
-  String get text {
-    return _text;
-  }
+  String get text => _text;
 
   void set text(String text) {
     _text = text;
@@ -72,25 +66,19 @@ class Memo {
     _revision++;
   }
 
-  List<String> get tags {
-    return _tags;
-  }
+  List<String> get tags => _tags;
 
   void set tags(List<String> tags) {
     _tags = tags;
   }
 
-  int get revision {
-    return _revision;
-  }
+  int get revision => _revision;
 
   void set revision(int revision) {
     _revision = revision;
   }
 
-  int get lastMergedRevition {
-    return _lastMergedRevision;
-  }
+  int get lastMergedRevition => _lastMergedRevision;
 
   void set lastMergedRevition(int lastMergedRevition) {
     _lastMergedRevision = lastMergedRevition;
