@@ -38,7 +38,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _memos = <Memo>[];
+  var _shownMemos = <Memo>[];
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
           itemCount: memoStore.getMemos().length,
           itemBuilder: (context, i) {
-            final memo = _memos[(_memos.length - 1) - i];
+            final memo = _shownMemos[(_shownMemos.length - 1) - i];
             return Card(
                 child: InkWell(
               child: Padding(
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       // Do nothing for now
     }
     setState(() {
-      updateMemos();
+      updateShownMemos();
     });
   }
 
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
       },
     ));
     setState(() {
-      updateMemos();
+      updateShownMemos();
     });
   }
 
@@ -116,14 +116,14 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     setState(() {
-      updateMemos();
+      updateShownMemos();
     });
   }
 
-  void updateMemos() {
+  void updateShownMemos() {
     final memoStore = MemoStore.getInstance();
     final memos = memoStore.getMemos();
-    _memos = [...memos];
-    _memos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+    _shownMemos = [...memos];
+    _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
   }
 }
