@@ -11,5 +11,6 @@ void main() {
       home: ViewingPage(memo: memo),
     ));
     expect(find.text('This is a test.'), findsOneWidget);
+    expect(find.byIcon(Icons.edit), findsOneWidget);
   });
 }
