@@ -47,7 +47,7 @@ class MemoStoreLoader {
     final decoded = jsonDecode(string);
     print('aDecoded: ${decoded}');
     final version = decoded['version'];
-    memoStore.clear();
+    memoStore.clearMemos();
     memoStore.lastMerged = decoded['lastMerged'];
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {

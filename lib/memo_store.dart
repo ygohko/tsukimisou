@@ -24,6 +24,7 @@ import 'memo.dart';
 
 class MemoStore {
   final _memos = <Memo>[];
+  var _removedMemoIds = <String>[];
   var _lastMerged = 0;
 
   static MemoStore? _instance = null;
@@ -33,16 +34,23 @@ class MemoStore {
   }
 
   void removeMemo(Memo memo) {
+    if (_memos.indexOf(memo) < 0) {
+      return;
+    }
+    _removedMemoIds.add(memo.id);
     _memos.remove(memo);
   }
 
-  void clear() {
+  void clearMemos() {
     _memos.clear();
   }
 
   List<Memo> getMemos() {
+    // TODO: Change to getter?
     return _memos;
   }
+
+  List<String> get removedMemoIds => _removedMemoIds;
 
   int get lastMerged {
     return _lastMerged;

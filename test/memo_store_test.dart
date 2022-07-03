@@ -26,12 +26,22 @@ void main() {
       expect(memoStore.getMemos().length, 0);
     });
 
+    test('MemoStore should store removed memo IDs when memo is removed.', () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memo.text = 'This is a memo.';
+      memoStore.addMemo(memo);
+      memoStore.removeMemo(memo);
+      expect(memoStore.removedMemoIds.length, 1);
+      expect(memoStore.removedMemoIds[0], memo.id);
+    });
+
     test('MemoStore should have zero memos when cleared.', () {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.text = 'This is a memo.';
       memoStore.addMemo(memo);
-      memoStore.clear();
+      memoStore.clearMemos();
       expect(memoStore.getMemos().length, 0);
     });
 
