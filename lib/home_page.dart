@@ -107,13 +107,14 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  void _viewMemo(Memo memo) {
-    Navigator.of(context).push(
+  void _viewMemo(Memo memo) async {
+    await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) {
           return ViewingPage(memo: memo);
         },
       ),
     );
+    setState(() {});
   }
 }
