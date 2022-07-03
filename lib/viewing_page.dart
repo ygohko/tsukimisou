@@ -89,29 +89,25 @@ class _ViewingPageState extends State<ViewingPage> {
   void _delete() async {
     var cancelled = false;
     await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Confirm'),
-          content: Text('Do you really want to delete this memo?'),
-          actions: [
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                cancelled = true;
-                Navigator.of(context).pop();
-              }
-            ),
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }
-            ),
-          ]
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text('Confirm'),
+              content: Text('Do you really want to delete this memo?'),
+              actions: [
+                FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      cancelled = true;
+                      Navigator.of(context).pop();
+                    }),
+                FlatButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+              ]);
+        });
     if (cancelled) {
       return;
     }
