@@ -20,10 +20,14 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'editing_page.dart';
 import 'memo.dart';
+import 'memo_store.dart';
+import 'memo_store_saver.dart';
 
 class ViewingPage extends StatefulWidget {
   final Memo memo;
@@ -43,6 +47,11 @@ class _ViewingPageState extends State<ViewingPage> {
       appBar: AppBar(
         title: Text('Memo at ${dateTime.toString()}'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: _delete,
+            tooltip: 'Delete',
+          ),
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: _edit,
@@ -75,5 +84,48 @@ class _ViewingPageState extends State<ViewingPage> {
       },
     ));
     setState(() {});
+  }
+
+  void _delete() async {
+    var cancelled = false;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm'),
+          content: Text('Do you really want to delete this memo?'),
+          actions: [
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                cancelled = true;
+                Navigator.of(context).pop();
+              }
+            ),
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            ),
+          ]
+        );
+      }
+    );
+    if (cancelled) {
+      return;
+    }
+
+    final memoStore = MemoStore.getInstance();
+    memoStore.removeMemo(widget.memo);
+    final memoStoreSaver = await MemoStoreSaver.getFromFileName(
+        memoStore, 'TsukimisouMemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on FileSystemException catch (exception) {
+      // Save error
+      // Do nothing for now
+    }
+    Navigator.of(context).pop();
   }
 }
