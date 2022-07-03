@@ -28,10 +28,10 @@ void main() {
       await file.delete();
     });
 
-    test('MemoStoreSaver.getFromFile() should return memo store saver.',
+    test('MemoStoreSaver.fromFile() should return memo store saver.',
         () async {
       expect(
-          MemoStoreSaver.getFromFileName(MemoStore(), 'test.json'), isNotNull);
+          MemoStoreSaver.fromFileName(MemoStore(), 'test.json'), isNotNull);
     });
   });
 }

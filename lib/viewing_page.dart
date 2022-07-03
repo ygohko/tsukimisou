@@ -32,6 +32,7 @@ import 'memo_store_saver.dart';
 class ViewingPage extends StatefulWidget {
   final Memo memo;
 
+  /// Creates a viewing page.
   const ViewingPage({Key? key, required this.memo}) : super(key: key);
 
   @override
@@ -89,36 +90,32 @@ class _ViewingPageState extends State<ViewingPage> {
   void _delete() async {
     var cancelled = false;
     await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Confirm'),
-          content: Text('Do you really want to delete this memo?'),
-          actions: [
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                cancelled = true;
-                Navigator.of(context).pop();
-              }
-            ),
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }
-            ),
-          ]
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text('Confirm'),
+              content: Text('Do you really want to delete this memo?'),
+              actions: [
+                FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      cancelled = true;
+                      Navigator.of(context).pop();
+                    }),
+                FlatButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+              ]);
+        });
     if (cancelled) {
       return;
     }
 
     final memoStore = MemoStore.getInstance();
     memoStore.removeMemo(widget.memo);
-    final memoStoreSaver = await MemoStoreSaver.getFromFileName(
+    final memoStoreSaver = await MemoStoreSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();

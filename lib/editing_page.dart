@@ -31,6 +31,7 @@ import 'memo_store_saver.dart';
 class EditingPage extends StatefulWidget {
   final Memo? memo;
 
+  /// Creates a editing page.
   const EditingPage({Key? key, this.memo}) : super(key: key);
 
   @override
@@ -91,7 +92,7 @@ class _EditingPageState extends State<EditingPage> {
       // Update a memo
       widget.memo!.text = _controller.text;
     }
-    final memoStoreSaver = await MemoStoreSaver.getFromFileName(
+    final memoStoreSaver = await MemoStoreSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();

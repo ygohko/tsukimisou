@@ -17,17 +17,17 @@ void main() {
       final memoStore = MemoStore();
       final memoStoreLoader = MemoStoreLoader(memoStore, './test.json');
       await memoStoreLoader.execute();
-      final memos = memoStore.getMemos();
+      final memos = memoStore.memos;
       expect(memos.length, 1);
       expect(memos[0].text, 'This is a test.');
       file = File('./test.json');
       await file.delete();
     });
 
-    test('MemoStoreLoader.getFromFile() should return memo store loader.',
+    test('MemoStoreLoader.fromFile() should return memo store loader.',
         () async {
       expect(
-          MemoStoreLoader.getFromFileName(MemoStore(), 'test.json'), isNotNull);
+          MemoStoreLoader.fromFileName(MemoStore(), 'test.json'), isNotNull);
     });
   });
 }

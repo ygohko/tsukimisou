@@ -31,17 +31,20 @@ class MemoStoreSaver {
   MemoStore? _memoStore = null;
   var _path = '';
 
+  /// Creates a memo store saver.
   MemoStoreSaver(MemoStore memoStore, String path) {
     _memoStore = memoStore;
     _path = path;
   }
 
+  /// Executes this memo store saver.
   Future<void> execute() async {
-    if (_memoStore == null) {
+    final memoStore = _memoStore;
+    if (memoStore == null) {
       return;
     }
     final file = File(_path);
-    final memos = _memoStore!.getMemos();
+    final memos = memoStore.memos;
     final serializableMemos = [];
     for (var i = 0; i < memos.length; i++) {
       serializableMemos.add(memos[i].toSerializable());
@@ -50,13 +53,14 @@ class MemoStoreSaver {
     final serializable = {
       'version': version,
       'memos': serializableMemos,
-      'lastMerged': _memoStore!.lastMerged
+      'lastMerged': memoStore.lastMerged
     };
     final string = jsonEncode(serializable);
     await file.writeAsString(string);
   }
 
-  static Future<MemoStoreSaver> getFromFileName(
+  /// Creates a memo store saver from file name.
+  static Future<MemoStoreSaver> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();

@@ -29,10 +29,12 @@ class MemoStore {
 
   static MemoStore? _instance = null;
 
+  /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
     _memos.add(memo);
   }
 
+  /// Removes a memo from this memo store.
   void removeMemo(Memo memo) {
     if (_memos.indexOf(memo) < 0) {
       return;
@@ -41,23 +43,26 @@ class MemoStore {
     _memos.remove(memo);
   }
 
+  /// Clears memos from this memo store.
   void clearMemos() {
     _memos.clear();
   }
 
-  List<Memo> getMemos() {
-    // TODO: Change to getter?
-    return _memos;
-  }
+  /// Memos that are stored in this memo store.
+  List<Memo> get memos => _memos;
 
+  /// Memo IDs that are removed.
   List<String> get removedMemoIds => _removedMemoIds;
 
+  /// Epoch milliseconds from last merged.
   int get lastMerged => _lastMerged;
 
+  /// Epoch milliseconds from last merged.
   void set lastMerged(int lastMerged) {
     _lastMerged = lastMerged;
   }
 
+  /// Gets a singleton instance.
   static MemoStore getInstance() {
     if (_instance == null) {
       _instance = MemoStore();

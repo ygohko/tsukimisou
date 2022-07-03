@@ -31,6 +31,7 @@ import 'memo_store_loader.dart';
 import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
+  /// Creates a home page.
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Tsukimisou'),
       ),
       body: ListView.builder(
-          itemCount: memoStore.getMemos().length,
+          itemCount: memoStore.memos.length,
           itemBuilder: (context, i) {
             final memo = _shownMemos[(_shownMemos.length - 1) - i];
             return Card(
@@ -79,7 +80,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _load() async {
     final memoStore = MemoStore.getInstance();
-    final memoStoreLoader = await MemoStoreLoader.getFromFileName(
+    final memoStoreLoader = await MemoStoreLoader.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       await memoStoreLoader.execute();
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
 
   void updateShownMemos() {
     final memoStore = MemoStore.getInstance();
-    final memos = memoStore.getMemos();
+    final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
   }
