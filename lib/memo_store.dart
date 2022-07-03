@@ -52,9 +52,7 @@ class MemoStore {
 
   List<String> get removedMemoIds => _removedMemoIds;
 
-  int get lastMerged {
-    return _lastMerged;
-  }
+  int get lastMerged => _lastMerged;
 
   void set lastMerged(int lastMerged) {
     _lastMerged = lastMerged;
