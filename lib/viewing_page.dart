@@ -88,7 +88,7 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _delete() async {
-    var cancelled = false;
+    var accepted = false;
     await showDialog(
         context: context,
         builder: (context) {
@@ -99,17 +99,17 @@ class _ViewingPageState extends State<ViewingPage> {
                 FlatButton(
                     child: Text('Cancel'),
                     onPressed: () {
-                      cancelled = true;
                       Navigator.of(context).pop();
                     }),
                 FlatButton(
                     child: Text('OK'),
                     onPressed: () {
+                      accepted = true;
                       Navigator.of(context).pop();
                     }),
               ]);
         });
-    if (cancelled) {
+    if (!accepted) {
       return;
     }
 

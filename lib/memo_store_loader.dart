@@ -40,10 +40,10 @@ class MemoStoreLoader {
 
   /// Executes this memo store loader.
   Future<void> execute() async {
-    if (_memoStore == null) {
+    final memoStore = _memoStore;
+    if (memoStore == null) {
       return;
     }
-    final memoStore = _memoStore!;
     final file = File(_path);
     final string = await file.readAsString();
     final decoded = jsonDecode(string);
@@ -51,6 +51,7 @@ class MemoStoreLoader {
     final version = decoded['version'];
     memoStore.clearMemos();
     memoStore.lastMerged = decoded['lastMerged'];
+    // TODO: Load removed memo IDs.
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {
       final memo = Memo();
