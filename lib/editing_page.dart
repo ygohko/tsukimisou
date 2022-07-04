@@ -44,8 +44,9 @@ class _EditingPageState extends State<EditingPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.memo != null) {
-      _controller.text = widget.memo!.text;
+    final memo = widget.memo;
+    if (memo != null) {
+      _controller.text = memo.text;
     }
   }
 
@@ -83,14 +84,15 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final memoStore = MemoStore.getInstance();
-    if (widget.memo == null) {
+    final memo = widget.memo;
+    if (memo == null) {
       // Add a new memo
-      final memo = Memo();
-      memo.text = _controller.text;
-      memoStore.addMemo(memo);
+      final newMemo = Memo();
+      newMemo.text = _controller.text;
+      memoStore.addMemo(newMemo);
     } else {
       // Update a memo
-      widget.memo!.text = _controller.text;
+      memo.text = _controller.text;
     }
     final memoStoreSaver = await MemoStoreSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');

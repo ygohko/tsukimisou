@@ -54,6 +54,7 @@ class MemoStoreSaver {
       'version': version,
       'memos': serializableMemos,
       'lastMerged': memoStore.lastMerged
+      // TODO: Save removed memo IDs.
     };
     final string = jsonEncode(serializable);
     await file.writeAsString(string);
