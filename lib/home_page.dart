@@ -58,12 +58,21 @@ class _HomePageState extends State<HomePage> {
           itemCount: memoStore.memos.length,
           itemBuilder: (context, i) {
             final memo = _shownMemos[(_shownMemos.length - 1) - i];
+            final updated = DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toString();
             return Card(
-                child: InkWell(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(memo.text),
-              ),
+              child: InkWell(
+                child: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(memo.text),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text('Updated: ${updated}'),
+                      ),
+                  ]),
+                ),
               onTap: () {
                 print('tapped ${memo.text}');
                 _viewMemo(memo);
