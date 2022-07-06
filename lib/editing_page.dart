@@ -56,26 +56,29 @@ class _EditingPageState extends State<EditingPage> {
     if (widget.memo != null) {
       title = 'Edit a memo';
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done),
-            onPressed: _save,
-            tooltip: 'Save',
-          ),
-        ],
-      ),
-      body: Container(
-        child: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: TextField(
-            controller: _controller,
-            autofocus: true,
-            expands: true,
-            maxLines: null,
-            minLines: null,
+    return WillPopScope(
+      onWillPop: _confirm,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: _save,
+              tooltip: 'Save',
+            ),
+          ],
+        ),
+        body: Container(
+          child: Padding(
+            padding: EdgeInsets.all(12.0),
+            child: TextField(
+              controller: _controller,
+              autofocus: true,
+              expands: true,
+              maxLines: null,
+              minLines: null,
+            ),
           ),
         ),
       ),
@@ -103,5 +106,42 @@ class _EditingPageState extends State<EditingPage> {
       // Do nothing for now
     }
     Navigator.of(context).pop();
+  }
+
+  Future<bool> _confirm() async {
+    final memo = widget.memo;
+    if (memo == null) {
+      if (_controller.text == '') {
+        return true;
+      }
+    } else {
+      if (_controller.text == memo.text) {
+        return true;
+      }
+    }
+
+    var accepted = false;
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Confirm'),
+          content: Text('Do you really want to discard the changes?'),
+          actions: [
+            FlatButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+            }),
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                accepted = true;
+                Navigator.of(context).pop();
+            }),
+        ]);
+    });
+
+    return accepted;
   }
 }
