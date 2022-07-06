@@ -122,25 +122,25 @@ class _EditingPageState extends State<EditingPage> {
 
     var accepted = false;
     await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Confirm'),
-          content: Text('Do you really want to discard the changes?'),
-          actions: [
-            FlatButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-            }),
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                accepted = true;
-                Navigator.of(context).pop();
-            }),
-        ]);
-    });
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text('Confirm'),
+              content: Text('Do you really want to discard the changes?'),
+              actions: [
+                FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                FlatButton(
+                    child: Text('OK'),
+                    onPressed: () {
+                      accepted = true;
+                      Navigator.of(context).pop();
+                    }),
+              ]);
+        });
 
     return accepted;
   }
