@@ -86,6 +86,16 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Add a memo',
         child: const Icon(Icons.add),
       ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            ListTile(
+              title: Text('Synchronize'),
+              onTap: _testGoogleDrive,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -100,7 +110,7 @@ class _HomePageState extends State<HomePage> {
       // Do nothing for now
     }
     setState(() {
-      updateShownMemos();
+      _updateShownMemos();
     });
   }
 
@@ -115,7 +125,7 @@ class _HomePageState extends State<HomePage> {
       },
     ));
     setState(() {
-      updateShownMemos();
+      _updateShownMemos();
     });
   }
 
@@ -128,11 +138,15 @@ class _HomePageState extends State<HomePage> {
       ),
     );
     setState(() {
-      updateShownMemos();
+      _updateShownMemos();
     });
   }
 
-  void updateShownMemos() {
+  void _testGoogleDrive() {
+    // TODO: Add test codes for Google Drive.
+  }
+
+  void _updateShownMemos() {
     final memoStore = MemoStore.getInstance();
     final memos = memoStore.memos;
     _shownMemos = [...memos];
