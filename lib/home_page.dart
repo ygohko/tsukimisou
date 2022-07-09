@@ -23,6 +23,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:googleapis/drive/v3.dart';
+import 'package:googleapis_auth/auth_io.dart';
+import 'package:http/http.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'editing_page.dart';
 import 'memo.dart';
@@ -90,7 +94,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: [
             ListTile(
-              title: Text('Synchronize'),
+              title: Text('Test Google Drive'),
               onTap: _testGoogleDrive,
             ),
           ],
@@ -144,6 +148,17 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() {
     // TODO: Add test codes for Google Drive.
+    final id = ClientId('clientID', 'secret');
+    final scopes = ['email', 'https://www.googleapis.com/auth/drive'];
+    final client = Client();
+    obtainAccessCredentialsViaUserConsent(
+      id, scopes, client, (url) {
+        // TODO: Open a URL
+        _prompt(url);
+    }).then((credentials) {
+        final driveApi = DriveApi(client);
+        client.close();
+    });
   }
 
   void _updateShownMemos() {
@@ -151,5 +166,15 @@ class _HomePageState extends State<HomePage> {
     final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+  }
+
+  void _prompt(String url) async {
+    final result = await canLaunch(url);
+    if (result) {
+      await launch(url);
+    } else {
+      // Launch failed
+      throw IOException;
+    }
   }
 }
