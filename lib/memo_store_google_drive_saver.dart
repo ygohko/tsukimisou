@@ -20,27 +20,39 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import 'home_page.dart';
+import 'google_drive_file.dart';
+import 'memo_store.dart';
 
-class App extends StatelessWidget {
-  /// Creates a app.
-  const App({Key? key}) : super(key: key);
+// TODO: Add base class to implement common codes with MemoStoreSaver
+class MemoStoreGoogleDriveSaver {
+  final MemoStore _memoStore;
+  final String _fileName;
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tsukimisou',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          // TODO: Define a constant
-          backgroundColor: Color(0xFF00003F),
-          foregroundColor: Colors.white,
-        ),
-      ),
-      home: const HomePage(),
-    );
+  /// Creates a memo store saver.
+  MemoStoreGoogleDriveSaver(this._memoStore, this._fileName);
+
+  /// Executes this memo store saver.
+  Future<void> execute() async {
+    final memoStore = _memoStore;
+    if (memoStore == null) {
+      return;
+    }
+    final file = GoogleDriveFile(_fileName);
+    final memos = memoStore.memos;
+    final serializableMemos = [];
+    for (var i = 0; i < memos.length; i++) {
+      serializableMemos.add(memos[i].toSerializable());
+    }
+    final version = 1;
+    final serializable = {
+      'version': version,
+      'memos': serializableMemos,
+      'lastMerged': memoStore.lastMerged
+      // TODO: Save removed memo IDs.
+    };
+    final string = jsonEncode(serializable);
+    await file.writeAsString(string);
   }
 }

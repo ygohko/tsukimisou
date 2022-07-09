@@ -28,6 +28,7 @@ import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
 import 'viewing_page.dart';
 
@@ -90,9 +91,47 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xFF00003F),
+              ),
+              child: Text('Tsukimisou', style:TextStyle(color: Colors.white, fontSize: 24)),
+            ),
+            // TODO: Add a helper function
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text('Google Drive tests', style: Theme.of(context).textTheme.caption, textAlign: TextAlign.start),
+                ),
+              ),
             ListTile(
               title: Text('Test Google Drive'),
               onTap: _testGoogleDrive,
+            ),
+            ListTile(
+              title: Text('Save to Google Drive'),
+              onTap: _saveToGoogleDrive,
+            ),
+            Divider(),
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text('Tags', style: Theme.of(context).textTheme.caption, textAlign: TextAlign.start),
+                ),
+              ),
+            ListTile(
+              title: Text('Tags'),
+            ),
+            ListTile(
+              title: Text('Will be'),
+            ),
+            ListTile(
+              title: Text('Listed'),
+            ),
+            ListTile(
+              title: Text('Here'),
             ),
           ],
         ),
@@ -146,6 +185,12 @@ class _HomePageState extends State<HomePage> {
   void _testGoogleDrive() async {
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
+  }
+
+  void _saveToGoogleDrive() async {
+    final memoStore = MemoStore.getInstance();
+    final memoStoreGoogleDriveSaver = MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
+    await memoStoreGoogleDriveSaver.execute();
   }
 
   void _updateShownMemos() {
