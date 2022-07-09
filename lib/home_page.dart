@@ -28,6 +28,7 @@ import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
 import 'viewing_page.dart';
 
@@ -110,7 +111,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               title: Text('Save to Google Drive'),
-              onTap: _testGoogleDrive,
+              onTap: _saveToGoogleDrive,
             ),
             Divider(),
             Container(
@@ -184,6 +185,12 @@ class _HomePageState extends State<HomePage> {
   void _testGoogleDrive() async {
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
+  }
+
+  void _saveToGoogleDrive() async {
+    final memoStore = MemoStore.getInstance();
+    final memoStoreGoogleDriveSaver = MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
+    await memoStoreGoogleDriveSaver.execute();
   }
 
   void _updateShownMemos() {
