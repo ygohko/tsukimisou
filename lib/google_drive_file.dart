@@ -33,7 +33,7 @@ class GoogleDriveFile {
 
   GoogleDriveFile(this._fileName);
 
-  void writeAsString(String contents) async {
+  Future<void> writeAsString(String contents) async {
     final id = ClientId('clientID', 'secret');
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();

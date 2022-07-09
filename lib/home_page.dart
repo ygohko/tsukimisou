@@ -143,9 +143,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _testGoogleDrive() {
+  void _testGoogleDrive() async {
     final file = GoogleDriveFile('test.txt');
-    file.writeAsString('Hello, World!\nこんにちわ、世界!');
+    await file.writeAsString('Hello, World!\nこんにちわ、世界!');
   }
 
   void _updateShownMemos() {
