@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() {
     // TODO: Add test codes for Google Drive.
-    final id = ClientId('clientID', 'secret');
+    final id = ClientId('clientID');
     final scopes = ['email', 'https://www.googleapis.com/auth/drive'];
     final client = Client();
     obtainAccessCredentialsViaUserConsent(
