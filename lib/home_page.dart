@@ -149,14 +149,19 @@ class _HomePageState extends State<HomePage> {
   void _testGoogleDrive() {
     // TODO: Add test codes for Google Drive.
     final id = ClientId('clientID');
-    final scopes = ['email', 'https://www.googleapis.com/auth/drive'];
+    final scopes = [DriveApi.driveFileScope];
     final client = Client();
     obtainAccessCredentialsViaUserConsent(
       id, scopes, client, (url) {
         // TODO: Open a URL
         _prompt(url);
-    }).then((credentials) {
+    }).then((credentials) async {
         final driveApi = DriveApi(client);
+        final stream = Future.value([104, 105]).asStream().asBroadcastStream();
+        final media = new Media(stream, 2);
+        final file = File();
+        file.name = 'test.txt';
+        final result = await driveApi.files.create(file, uploadMedia: media);
         client.close();
     });
   }
