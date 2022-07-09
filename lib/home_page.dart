@@ -150,15 +150,17 @@ class _HomePageState extends State<HomePage> {
     // TODO: Add test codes for Google Drive.
     final id = ClientId('clientID');
     final scopes = [DriveApi.driveFileScope];
-    final client = Client();
+    final client = _GoogleAuthClient();
     obtainAccessCredentialsViaUserConsent(
       id, scopes, client, (url) {
         // TODO: Open a URL
         _prompt(url);
     }).then((credentials) async {
+        // TODO: Add token to client
+        client.headers = {'Authorization': credentials.accessToken.data, 'X-Goog-AuthUser': '0'};
         final driveApi = DriveApi(client);
         final stream = Future.value([104, 105]).asStream().asBroadcastStream();
-        final media = new Media(stream, 2);
+        final media = Media(stream, 2);
         final file = File();
         file.name = 'test.txt';
         final result = await driveApi.files.create(file, uploadMedia: media);
@@ -181,5 +183,37 @@ class _HomePageState extends State<HomePage> {
       // Launch failed
       throw IOException;
     }
+  }
+
+  /*
+  Future _authorizedClient(ClientId clientId, List<String> scopes) {
+    return createImplicitBrowserFlow(clientId, scopes).then((flow) {
+        return flow.clientViaUserConsent(immediate: true).catchError((_) {
+            // Error
+            // Do nothing for now
+          }, test: (error) {
+            return error is UserConsentException;
+        });
+    });
+  }
+  */
+}
+
+class _GoogleAuthClient extends BaseClient {
+  Map<String, String>? _headers = null;
+  final Client _client = Client();
+
+  Future<StreamedResponse> send(BaseRequest request) {
+    // TODO: Investigate about why cascade is needed.
+    final headers = _headers;
+    if (headers != null) {
+      return _client.send(request..headers.addAll(headers));
+    } else {
+      return _client.send(request);
+    }
+  }
+
+  void set headers(Map<String, String> headers) {
+    _headers = headers;
   }
 }
