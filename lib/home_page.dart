@@ -150,18 +150,20 @@ class _HomePageState extends State<HomePage> {
     final id = ClientId('clientID');
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
-    obtainAccessCredentialsViaUserConsent(
-      id, scopes, client, (url) {
-        _prompt(url);
+    obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
+      _prompt(url);
     }).then((credentials) async {
-        client.headers = {'Authorization': 'Bearer ${credentials.accessToken.data}', 'X-Goog-AuthUser': '0'};
-        final driveApi = DriveApi(client);
-        final stream = Future.value([104, 105]).asStream().asBroadcastStream();
-        final media = Media(stream, 2);
-        final file = File();
-        file.name = 'test.txt';
-        final result = await driveApi.files.create(file, uploadMedia: media);
-        client.close();
+      client.headers = {
+        'Authorization': 'Bearer ${credentials.accessToken.data}',
+        'X-Goog-AuthUser': '0'
+      };
+      final driveApi = DriveApi(client);
+      final stream = Future.value([104, 105]).asStream().asBroadcastStream();
+      final media = Media(stream, 2);
+      final file = File();
+      file.name = 'test.txt';
+      final result = await driveApi.files.create(file, uploadMedia: media);
+      client.close();
     });
   }
 
@@ -191,10 +193,9 @@ class _GoogleAuthClient extends BaseClient {
     final headers = _headers;
     if (headers != null) {
       request.headers.addAll(headers);
-      return _client.send(request);
-    } else {
-      return _client.send(request);
     }
+
+    return _client.send(request);
   }
 
   void set headers(Map<String, String> headers) {
