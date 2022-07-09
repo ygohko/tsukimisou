@@ -96,6 +96,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Text('Tsukimisou', style:TextStyle(color: Colors.white, fontSize: 24)),
             ),
+            // TODO: Add a helper function
             Container(
               padding: const EdgeInsets.only(left: 10),
               child: Align(
