@@ -20,14 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:googleapis/drive/v3.dart';
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'editing_page.dart';
 import 'google_drive_file.dart';
@@ -150,31 +145,7 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() {
     final file = GoogleDriveFile('test.txt');
-    final string = 'Hello, World!\nこんにちわ、世界!';
     file.writeAsString('Hello, World!\nこんにちわ、世界!');
-
-    /*
-    final id = ClientId('clientID');
-    final scopes = [DriveApi.driveFileScope];
-    final client = _GoogleAuthClient();
-    obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
-      _prompt(url);
-    }).then((credentials) async {
-      client.headers = {
-        'Authorization': 'Bearer ${credentials.accessToken.data}',
-        'X-Goog-AuthUser': '0'
-      };
-      final driveApi = DriveApi(client);
-      final string = 'Hello, World!\nこんにちわ、世界!';
-      final encoded = utf8.encode(string);
-      final stream = Future.value(encoded).asStream().asBroadcastStream();
-      final media = Media(stream, encoded.length);
-      final file = File();
-      file.name = 'test.txt';
-      final result = await driveApi.files.create(file, uploadMedia: media);
-      client.close();
-    });
-    */
   }
 
   void _updateShownMemos() {
@@ -182,33 +153,5 @@ class _HomePageState extends State<HomePage> {
     final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
-  }
-
-  void _prompt(String url) async {
-    final result = await canLaunch(url);
-    if (result) {
-      await launch(url);
-    } else {
-      // Launch failed
-      throw IOException;
-    }
-  }
-}
-
-class _GoogleAuthClient extends BaseClient {
-  Map<String, String>? _headers = null;
-  final Client _client = Client();
-
-  Future<StreamedResponse> send(BaseRequest request) {
-    final headers = _headers;
-    if (headers != null) {
-      request.headers.addAll(headers);
-    }
-
-    return _client.send(request);
-  }
-
-  void set headers(Map<String, String> headers) {
-    _headers = headers;
   }
 }
