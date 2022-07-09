@@ -30,6 +30,7 @@ import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'editing_page.dart';
+import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
@@ -148,6 +149,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _testGoogleDrive() {
+    final file = GoogleDriveFile('test.txt');
+    final string = 'Hello, World!\nこんにちわ、世界!';
+    file.writeAsString('Hello, World!\nこんにちわ、世界!');
+
+    /*
     final id = ClientId('clientID');
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
@@ -168,6 +174,7 @@ class _HomePageState extends State<HomePage> {
       final result = await driveApi.files.create(file, uploadMedia: media);
       client.close();
     });
+    */
   }
 
   void _updateShownMemos() {
