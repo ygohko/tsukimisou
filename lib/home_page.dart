@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -158,7 +159,8 @@ class _HomePageState extends State<HomePage> {
         'X-Goog-AuthUser': '0'
       };
       final driveApi = DriveApi(client);
-      final stream = Future.value([104, 105]).asStream().asBroadcastStream();
+      final string = 'Hello, World!';
+      final stream = Future.value(utf8.encode(string)).asStream().asBroadcastStream();
       final media = Media(stream, 2);
       final file = File();
       file.name = 'test.txt';
