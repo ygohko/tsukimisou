@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
         _prompt(url);
     }).then((credentials) async {
         // TODO: Add token to client
-        client.headers = {'Authorization': credentials.accessToken.data, 'X-Goog-AuthUser': '0'};
+        client.headers = {'Authorization': 'Bearer ${credentials.accessToken.data}', 'X-Goog-AuthUser': '0'};
         final driveApi = DriveApi(client);
         final stream = Future.value([104, 105]).asStream().asBroadcastStream();
         final media = Media(stream, 2);
