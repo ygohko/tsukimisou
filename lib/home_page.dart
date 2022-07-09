@@ -90,9 +90,46 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xFF00003F),
+              ),
+              child: Text('Tsukimisou', style:TextStyle(color: Colors.white, fontSize: 24)),
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text('Google Drive tests', style: Theme.of(context).textTheme.caption, textAlign: TextAlign.start),
+                ),
+              ),
             ListTile(
               title: Text('Test Google Drive'),
               onTap: _testGoogleDrive,
+            ),
+            ListTile(
+              title: Text('Save to Google Drive'),
+              onTap: _testGoogleDrive,
+            ),
+            Divider(),
+            Container(
+              padding: const EdgeInsets.only(left: 10),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text('Tags', style: Theme.of(context).textTheme.caption, textAlign: TextAlign.start),
+                ),
+              ),
+            ListTile(
+              title: Text('Tags'),
+            ),
+            ListTile(
+              title: Text('Will be'),
+            ),
+            ListTile(
+              title: Text('Listed'),
+            ),
+            ListTile(
+              title: Text('Here'),
             ),
           ],
         ),

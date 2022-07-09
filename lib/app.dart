@@ -35,6 +35,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
+          // TODO: Define a constant
           backgroundColor: Color(0xFF00003F),
           foregroundColor: Colors.white,
         ),
