@@ -160,8 +160,9 @@ class _HomePageState extends State<HomePage> {
       };
       final driveApi = DriveApi(client);
       final string = 'Hello, World!';
-      final stream = Future.value(utf8.encode(string)).asStream().asBroadcastStream();
-      final media = Media(stream, 2);
+      final encoded = utf8.encode(string);
+      final stream = Future.value(encoded).asStream().asBroadcastStream();
+      final media = Media(stream, encoded.length);
       final file = File();
       file.name = 'test.txt';
       final result = await driveApi.files.create(file, uploadMedia: media);
