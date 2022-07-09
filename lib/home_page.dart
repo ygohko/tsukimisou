@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
         'X-Goog-AuthUser': '0'
       };
       final driveApi = DriveApi(client);
-      final string = 'Hello, World!';
+      final string = 'Hello, World!\nこんにちわ、世界!';
       final encoded = utf8.encode(string);
       final stream = Future.value(encoded).asStream().asBroadcastStream();
       final media = Media(stream, encoded.length);
