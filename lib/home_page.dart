@@ -113,6 +113,10 @@ class _HomePageState extends State<HomePage> {
               title: Text('Save to Google Drive'),
               onTap: _saveToGoogleDrive,
             ),
+            ListTile(
+              title: Text('Load from Google Drive'),
+              onTap: _loadFromGoogleDrive,
+            ),
             Divider(),
             Container(
               padding: const EdgeInsets.only(left: 10),
@@ -191,6 +195,11 @@ class _HomePageState extends State<HomePage> {
     final memoStore = MemoStore.getInstance();
     final memoStoreGoogleDriveSaver = MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveSaver.execute();
+  }
+
+  void _loadFromGoogleDrive() async {
+    final file = GoogleDriveFile('TsukimisouMemoStore.json');
+    file.test();
   }
 
   void _updateShownMemos() {
