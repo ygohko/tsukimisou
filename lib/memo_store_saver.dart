@@ -45,8 +45,8 @@ class MemoStoreSaverBase {
     final serializable = {
       'version': version,
       'memos': serializableMemos,
-      'lastMerged': memoStore.lastMerged
-      // TODO: Save removed memo IDs.
+      'lastMerged': memoStore.lastMerged,
+      'removedMemoIds': memoStore.removedMemoIds,
     };
 
     return jsonEncode(serializable);
