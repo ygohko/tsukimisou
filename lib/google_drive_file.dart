@@ -38,20 +38,44 @@ class GoogleDriveFile {
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
     obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
-      _prompt(url);
+        _prompt(url);
     }).then((credentials) async {
-      client.headers = {
-        'Authorization': 'Bearer ${credentials.accessToken.data}',
-        'X-Goog-AuthUser': '0'
-      };
-      final driveApi = DriveApi(client);
-      final encoded = utf8.encode(contents);
-      final stream = Future.value(encoded).asStream().asBroadcastStream();
-      final media = Media(stream, encoded.length);
-      final file = File();
-      file.name = _fileName;
-      final result = await driveApi.files.create(file, uploadMedia: media);
-      client.close();
+        client.headers = {
+          'Authorization': 'Bearer ${credentials.accessToken.data}',
+          'X-Goog-AuthUser': '0'
+        };
+        final driveApi = DriveApi(client);
+        final encoded = utf8.encode(contents);
+        final stream = Future.value(encoded).asStream().asBroadcastStream();
+        final media = Media(stream, encoded.length);
+        final file = File();
+        file.name = _fileName;
+        final result = await driveApi.files.create(file, uploadMedia: media);
+        client.close();
+    });
+  }
+
+  Future<void> test() async {
+    final id = ClientId('clientID', 'secret');
+    final scopes = [DriveApi.driveFileScope];
+    final client = _GoogleAuthClient();
+    obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
+        _prompt(url);
+    }).then((credentials) async {
+        client.headers = {
+          'Authorization': 'Bearer ${credentials.accessToken.data}',
+          'X-Goog-AuthUser': '0'
+        };
+        final driveApi = DriveApi(client);
+        final result = await driveApi.files.list(corpora: 'user', q: 'TsukimisouMemoStore.json');
+        final files = result.files;
+        if (files == null) {
+          return;
+        }
+        for (var file in files) {
+          print('file name: ${file.name}');
+        }
+        client.close();
     });
   }
 
