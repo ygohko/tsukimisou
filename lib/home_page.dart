@@ -28,8 +28,10 @@ import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
+import 'memo_store_saver.dart';
 import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -113,6 +115,10 @@ class _HomePageState extends State<HomePage> {
               title: Text('Save to Google Drive'),
               onTap: _saveToGoogleDrive,
             ),
+            ListTile(
+              title: Text('Load from Google Drive'),
+              onTap: _loadFromGoogleDrive,
+            ),
             Divider(),
             Container(
               padding: const EdgeInsets.only(left: 10),
@@ -191,6 +197,23 @@ class _HomePageState extends State<HomePage> {
     final memoStore = MemoStore.getInstance();
     final memoStoreGoogleDriveSaver = MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveSaver.execute();
+  }
+
+  void _loadFromGoogleDrive() async {
+    final memoStore = MemoStore.getInstance();
+    final memoStoreGoogleDriveLoader = MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
+    await memoStoreGoogleDriveLoader.execute();
+    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+        memoStore, 'TsukimisouMemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on FileSystemException catch (exception) {
+      // Save error
+      // Do nothing for now
+    }
+    setState(() {
+      _updateShownMemos();
+    });
   }
 
   void _updateShownMemos() {
