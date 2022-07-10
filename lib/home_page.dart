@@ -97,16 +97,19 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 color: Color(0xFF00003F),
               ),
-              child: Text('Tsukimisou', style:TextStyle(color: Colors.white, fontSize: 24)),
+              child: Text('Tsukimisou',
+                  style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
             // TODO: Add a helper function
             Container(
               padding: const EdgeInsets.only(left: 10),
               child: Align(
                 alignment: AlignmentDirectional.centerStart,
-                child: Text('Google Drive tests', style: Theme.of(context).textTheme.caption, textAlign: TextAlign.start),
-                ),
+                child: Text('Google Drive tests',
+                    style: Theme.of(context).textTheme.caption,
+                    textAlign: TextAlign.start),
               ),
+            ),
             ListTile(
               title: Text('Test Google Drive'),
               onTap: _testGoogleDrive,
@@ -124,9 +127,11 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(left: 10),
               child: Align(
                 alignment: AlignmentDirectional.centerStart,
-                child: Text('Tags', style: Theme.of(context).textTheme.caption, textAlign: TextAlign.start),
-                ),
+                child: Text('Tags',
+                    style: Theme.of(context).textTheme.caption,
+                    textAlign: TextAlign.start),
               ),
+            ),
             ListTile(
               title: Text('Tags'),
             ),
@@ -195,13 +200,15 @@ class _HomePageState extends State<HomePage> {
 
   void _saveToGoogleDrive() async {
     final memoStore = MemoStore.getInstance();
-    final memoStoreGoogleDriveSaver = MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
+    final memoStoreGoogleDriveSaver =
+        MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveSaver.execute();
   }
 
   void _loadFromGoogleDrive() async {
     final memoStore = MemoStore.getInstance();
-    final memoStoreGoogleDriveLoader = MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
+    final memoStoreGoogleDriveLoader =
+        MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveLoader.execute();
     final memoStoreSaver = await MemoStoreSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');

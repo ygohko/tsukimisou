@@ -45,8 +45,7 @@ void main() {
       expect(memoStore.memos.length, 0);
     });
 
-    test(
-        'MemoStore.memos should return memos that is stored by memo store.',
+    test('MemoStore.memos should return memos that is stored by memo store.',
         () {
       final memoStore = MemoStore();
       final memo = Memo();
