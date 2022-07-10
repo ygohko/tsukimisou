@@ -28,20 +28,13 @@ import 'package:path_provider/path_provider.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 
-class MemoStoreLoader {
+class MemoStoreLoaderBase {
   final MemoStore _memoStore;
-  final String _path;
 
-  /// Creates a memo store loader.
-  MemoStoreLoader(this._memoStore, this._path);
+  /// Creates a memo store loader base.
+  MemoStoreLoaderBase(this._memoStore);
 
-  /// Executes this memo store loader.
-  Future<void> execute() async {
-    final file = File(_path);
-    final string = await file.readAsString();
-    deserialize(string);
-  }
-
+  /// Deserializes memo store.
   void deserialize(String serialized) {
     final decoded = jsonDecode(serialized);
     print('aDecoded: ${decoded}');
@@ -67,6 +60,20 @@ class MemoStoreLoader {
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       _memoStore.addMemo(memo);
     }
+  }
+}
+
+class MemoStoreLoader extends MemoStoreLoaderBase {
+  final String _path;
+
+  /// Creates a memo store loader.
+  MemoStoreLoader(MemoStore memoStore, this._path) : super(memoStore);
+
+  /// Executes this memo store loader.
+  Future<void> execute() async {
+    final file = File(_path);
+    final string = await file.readAsString();
+    deserialize(string);
   }
 
   /// Creates a memo store loader from file name.
