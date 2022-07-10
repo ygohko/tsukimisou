@@ -56,13 +56,7 @@ class GoogleDriveFile {
   }
 
   void _prompt(String url) async {
-    final result = await canLaunch(url);
-    if (result) {
-      await launch(url);
-    } else {
-      // Launch failed
-      throw IOException;
-    }
+    await launch(url);
   }
 }
 
