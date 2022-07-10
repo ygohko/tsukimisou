@@ -26,8 +26,7 @@ void main() {
 
     test('MemoStoreLoader.fromFile() should return memo store loader.',
         () async {
-      expect(
-          MemoStoreLoader.fromFileName(MemoStore(), 'test.json'), isNotNull);
+      expect(MemoStoreLoader.fromFileName(MemoStore(), 'test.json'), isNotNull);
     });
   });
 }

@@ -28,67 +28,71 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'client_id.dart';
+
 class GoogleDriveFile {
   final String _fileName;
 
   GoogleDriveFile(this._fileName);
 
   Future<void> writeAsString(String contents) async {
-    final id = ClientId('clientID', 'secret');
+    final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
     await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
-        _prompt(url);
+      _prompt(url);
     }).then((credentials) async {
-        client.headers = {
-          'Authorization': 'Bearer ${credentials.accessToken.data}',
-          'X-Goog-AuthUser': '0'
-        };
-        final driveApi = DriveApi(client);
-        final encoded = utf8.encode(contents);
-        final stream = Future.value(encoded).asStream().asBroadcastStream();
-        final media = Media(stream, encoded.length);
-        final file = File();
-        file.name = _fileName;
-        final result = await driveApi.files.create(file, uploadMedia: media);
-        client.close();
+      client.headers = {
+        'Authorization': 'Bearer ${credentials.accessToken.data}',
+        'X-Goog-AuthUser': '0'
+      };
+      final driveApi = DriveApi(client);
+      final encoded = utf8.encode(contents);
+      final stream = Future.value(encoded).asStream().asBroadcastStream();
+      final media = Media(stream, encoded.length);
+      final file = File();
+      file.name = _fileName;
+      final result = await driveApi.files.create(file, uploadMedia: media);
+      client.close();
     });
   }
 
   Future<String> readAsString() async {
-    final id = ClientId('clientID', 'secret');
+    final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
     var string = '';
     await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
-        _prompt(url);
+      _prompt(url);
     }).then((credentials) async {
-        client.headers = {
-          'Authorization': 'Bearer ${credentials.accessToken.data}',
-          'X-Goog-AuthUser': '0'
-        };
-        final driveApi = DriveApi(client);
-        final result = await driveApi.files.list(q: 'name = "${_fileName}" and "root" in parents');
-        final files = result.files;
-        if (files == null) {
-          return;
-        }
-        if (files.length == 0) {
-          return;
-        }
-        final fileId = files[0].id;
-        if (fileId == null) {
-          return;
-        }
+      client.headers = {
+        'Authorization': 'Bearer ${credentials.accessToken.data}',
+        'X-Goog-AuthUser': '0'
+      };
+      final driveApi = DriveApi(client);
+      final result = await driveApi.files
+          .list(q: 'name = "${_fileName}" and "root" in parents');
+      final files = result.files;
+      if (files == null) {
+        return;
+      }
+      if (files.length == 0) {
+        return;
+      }
+      final fileId = files[0].id;
+      if (fileId == null) {
+        return;
+      }
 
-        final media = await driveApi.files.get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
-        var values = <int>[];
-        await media.stream.forEach((element) {
-            values += element;
-        });
-        string = utf8.decode(values);
-        print("string: ${string}");
-        client.close();
+      final media = await driveApi.files
+          .get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
+      var values = <int>[];
+      await media.stream.forEach((element) {
+        values += element;
+      });
+      string = utf8.decode(values);
+      print("string: ${string}");
+      client.close();
     });
 
     return string;

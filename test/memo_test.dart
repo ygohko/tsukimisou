@@ -43,11 +43,11 @@ void main() {
       expect(memo.revision, 1);
     });
 
-    test('Memo.lastMergedRevition should get and set lastMergedRevition.', () {
+    test('Memo.lastMergedRevision should get and set lastMergedRevision.', () {
       final memo = Memo();
-      expect(memo.lastMergedRevition, 0);
-      memo.lastMergedRevition = 1;
-      expect(memo.lastMergedRevition, 1);
+      expect(memo.lastMergedRevision, 0);
+      memo.lastMergedRevision = 1;
+      expect(memo.lastMergedRevision, 1);
     });
   });
 }

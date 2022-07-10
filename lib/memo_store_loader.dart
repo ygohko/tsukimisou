@@ -67,7 +67,7 @@ class MemoStoreLoader {
       }
       memo.tags = tags;
       memo.revision = deserializedMemo['revision'];
-      memo.lastMergedRevition = deserializedMemo['lastMergedRevision'];
+      memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       memoStore.addMemo(memo);
     }
   }
