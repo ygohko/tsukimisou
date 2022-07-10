@@ -29,28 +29,25 @@ import 'memo.dart';
 import 'memo_store.dart';
 
 class MemoStoreLoader {
-  MemoStore? _memoStore = null;
-  var _path = '';
+  final MemoStore _memoStore;
+  final String _path;
 
   /// Creates a memo store loader.
-  MemoStoreLoader(MemoStore memoStore, String path) {
-    _memoStore = memoStore;
-    _path = path;
-  }
+  MemoStoreLoader(this._memoStore, this._path);
 
   /// Executes this memo store loader.
   Future<void> execute() async {
-    final memoStore = _memoStore;
-    if (memoStore == null) {
-      return;
-    }
     final file = File(_path);
     final string = await file.readAsString();
-    final decoded = jsonDecode(string);
+    deserialize(string);
+  }
+
+  void deserialize(String serialized) {
+    final decoded = jsonDecode(serialized);
     print('aDecoded: ${decoded}');
     final version = decoded['version'];
-    memoStore.clearMemos();
-    memoStore.lastMerged = decoded['lastMerged'];
+    _memoStore.clearMemos();
+    _memoStore.lastMerged = decoded['lastMerged'];
     // TODO: Load removed memo IDs.
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {
@@ -68,7 +65,7 @@ class MemoStoreLoader {
       memo.tags = tags;
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
-      memoStore.addMemo(memo);
+      _memoStore.addMemo(memo);
     }
   }
 
