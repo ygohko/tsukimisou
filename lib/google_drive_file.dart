@@ -83,7 +83,7 @@ class GoogleDriveFile {
 
         final media = await driveApi.files.get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
         var values = <int>[];
-        media.stream.forEach((element) {
+        await media.stream.forEach((element) {
             values += element;
         });
         string = utf8.decode(values);
