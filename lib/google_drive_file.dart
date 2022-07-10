@@ -28,13 +28,15 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'client_id.dart';
+
 class GoogleDriveFile {
   final String _fileName;
 
   GoogleDriveFile(this._fileName);
 
   Future<void> writeAsString(String contents) async {
-    final id = ClientId('clientID', 'secret');
+    final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
     await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
@@ -56,7 +58,7 @@ class GoogleDriveFile {
   }
 
   Future<String> readAsString() async {
-    final id = ClientId('clientID', 'secret');
+    final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
     var string = '';
