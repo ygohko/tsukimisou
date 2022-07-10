@@ -91,10 +91,10 @@ class Memo {
   }
 
   /// Revision when last merged.
-  int get lastMergedRevition => _lastMergedRevision;
+  int get lastMergedRevision => _lastMergedRevision;
 
   /// Revision when last merged.
-  void set lastMergedRevition(int lastMergedRevition) {
-    _lastMergedRevision = lastMergedRevition;
+  void set lastMergedRevision(int lastMergedRevision) {
+    _lastMergedRevision = lastMergedRevision;
   }
 }

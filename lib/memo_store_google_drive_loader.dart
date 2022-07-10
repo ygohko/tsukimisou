@@ -59,8 +59,7 @@ class MemoStoreGoogleDriveLoader {
       }
       memo.tags = tags;
       memo.revision = deserializedMemo['revision'];
-      // TODO: Correct typo.
-      memo.lastMergedRevition = deserializedMemo['lastMergedRevision'];
+      memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       _memoStore.addMemo(memo);
     }
   }
