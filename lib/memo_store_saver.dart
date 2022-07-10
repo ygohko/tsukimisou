@@ -27,23 +27,15 @@ import 'package:path_provider/path_provider.dart';
 
 import 'memo_store.dart';
 
-class MemoStoreSaver {
-  MemoStore? _memoStore = null;
-  var _path = '';
+class MemoStoreSaverBase {
+  MemoStore _memoStore;
 
-  /// Creates a memo store saver.
-  MemoStoreSaver(MemoStore memoStore, String path) {
-    _memoStore = memoStore;
-    _path = path;
-  }
+  /// Creates a memo store saver base.
+  MemoStoreSaverBase(this._memoStore);
 
-  /// Executes this memo store saver.
-  Future<void> execute() async {
+  /// Serializes a memo store.
+  String serialize() {
     final memoStore = _memoStore;
-    if (memoStore == null) {
-      return;
-    }
-    final file = File(_path);
     final memos = memoStore.memos;
     final serializableMemos = [];
     for (var i = 0; i < memos.length; i++) {
@@ -56,7 +48,21 @@ class MemoStoreSaver {
       'lastMerged': memoStore.lastMerged
       // TODO: Save removed memo IDs.
     };
-    final string = jsonEncode(serializable);
+
+    return jsonEncode(serializable);
+  }
+}
+
+class MemoStoreSaver extends MemoStoreSaverBase {
+  var _path = '';
+
+  /// Creates a memo store saver.
+  MemoStoreSaver(MemoStore memoStore, this._path) : super(memoStore);
+
+  /// Executes this memo store saver.
+  Future<void> execute() async {
+    final string = serialize();
+    final file = File(_path);
     await file.writeAsString(string);
   }
 

@@ -24,35 +24,18 @@ import 'dart:convert';
 
 import 'google_drive_file.dart';
 import 'memo_store.dart';
+import 'memo_store_saver.dart';
 
-// TODO: Add base class to implement common codes with MemoStoreSaver
-class MemoStoreGoogleDriveSaver {
-  final MemoStore _memoStore;
+class MemoStoreGoogleDriveSaver extends MemoStoreSaverBase {
   final String _fileName;
 
   /// Creates a memo store saver.
-  MemoStoreGoogleDriveSaver(this._memoStore, this._fileName);
+  MemoStoreGoogleDriveSaver(MemoStore memoStore, this._fileName) : super(memoStore);
 
   /// Executes this memo store saver.
   Future<void> execute() async {
-    final memoStore = _memoStore;
-    if (memoStore == null) {
-      return;
-    }
+    final string = serialize();
     final file = GoogleDriveFile(_fileName);
-    final memos = memoStore.memos;
-    final serializableMemos = [];
-    for (var i = 0; i < memos.length; i++) {
-      serializableMemos.add(memos[i].toSerializable());
-    }
-    final version = 1;
-    final serializable = {
-      'version': version,
-      'memos': serializableMemos,
-      'lastMerged': memoStore.lastMerged
-      // TODO: Save removed memo IDs.
-    };
-    final string = jsonEncode(serializable);
     await file.writeAsString(string);
   }
 }
