@@ -37,7 +37,7 @@ class GoogleDriveFile {
     final id = ClientId('clientID', 'secret');
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
-    obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
+    await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
         _prompt(url);
     }).then((credentials) async {
         client.headers = {
@@ -60,7 +60,7 @@ class GoogleDriveFile {
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
     var string = '';
-    obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
+    await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
         _prompt(url);
     }).then((credentials) async {
         client.headers = {
