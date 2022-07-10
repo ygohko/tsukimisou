@@ -28,6 +28,7 @@ import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
 import 'viewing_page.dart';
@@ -198,8 +199,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadFromGoogleDrive() async {
-    final file = GoogleDriveFile('TsukimisouMemoStore.json');
-    file.test();
+    final memoStore = MemoStore.getInstance();
+    final memoStoreGoogleDriveLoader = MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
+    await memoStoreGoogleDriveLoader.execute();
+    setState(() {
+      _updateShownMemos();
+    });
   }
 
   void _updateShownMemos() {

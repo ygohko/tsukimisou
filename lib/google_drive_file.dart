@@ -55,7 +55,7 @@ class GoogleDriveFile {
     });
   }
 
-  Future<String> test() async {
+  Future<String> readAsString() async {
     final id = ClientId('clientID', 'secret');
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
