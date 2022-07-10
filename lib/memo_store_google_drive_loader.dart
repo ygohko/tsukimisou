@@ -26,41 +26,18 @@ import 'dart:io';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_loader.dart';
 
-class MemoStoreGoogleDriveLoader {
-  final MemoStore _memoStore;
+class MemoStoreGoogleDriveLoader extends MemoStoreLoaderBase {
   final String _fileName;
 
   /// Creates a memo store loader.
-  MemoStoreGoogleDriveLoader(this._memoStore, this._fileName);
+  MemoStoreGoogleDriveLoader(MemoStore memoStore, this._fileName) : super(memoStore);
 
   /// Executes this memo store loader.
   Future<void> execute() async {
     final file = GoogleDriveFile(_fileName);
     final string = await file.readAsString();
-    final decoded = jsonDecode(string);
-    print('aDecoded: ${decoded}');
-    final version = decoded['version'];
-    _memoStore.clearMemos();
-    _memoStore.lastMerged = decoded['lastMerged'];
-    // TODO: Load removed memo IDs.
-    final deserializedMemos = decoded['memos'];
-    for (var deserializedMemo in deserializedMemos) {
-      final memo = Memo();
-      memo.id = deserializedMemo['id'];
-      memo.lastModified = deserializedMemo['lastModified'];
-      memo.text = deserializedMemo['text'];
-      final deserializedTags = deserializedMemo['tags'];
-      final tags = <String>[];
-      for (var tag in deserializedTags) {
-        if (tag is String) {
-          tags.add(tag);
-        }
-      }
-      memo.tags = tags;
-      memo.revision = deserializedMemo['revision'];
-      memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
-      _memoStore.addMemo(memo);
-    }
+    deserialize(string);
   }
 }
