@@ -55,10 +55,11 @@ class GoogleDriveFile {
     });
   }
 
-  Future<void> test() async {
+  Future<String> test() async {
     final id = ClientId('clientID', 'secret');
     final scopes = [DriveApi.driveFileScope];
     final client = _GoogleAuthClient();
+    var string = '';
     obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
         _prompt(url);
     }).then((credentials) async {
@@ -67,16 +68,27 @@ class GoogleDriveFile {
           'X-Goog-AuthUser': '0'
         };
         final driveApi = DriveApi(client);
-        final result = await driveApi.files.list(corpora: 'user', q: 'TsukimisouMemoStore.json');
+        final result = await driveApi.files.list(q: 'name = "${_fileName}" and "root" in parents');
         final files = result.files;
         if (files == null) {
           return;
         }
-        for (var file in files) {
-          print('file name: ${file.name}');
+        if (files.length == 0) {
+          return;
         }
+        final fileId = files[0].id;
+        if (fileId == null) {
+          return;
+        }
+
+        final media = await driveApi.files.get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
+        final values = await media.stream.first;
+        string = utf8.decode(values);
+        print("string: ${string}");
         client.close();
     });
+
+    return string;
   }
 
   void _prompt(String url) async {
