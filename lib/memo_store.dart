@@ -54,6 +54,11 @@ class MemoStore {
   /// Memo IDs that are removed.
   List<String> get removedMemoIds => _removedMemoIds;
 
+  /// Memo IDs that are removed.
+  void set removedMemoIds(List<String> removedMemoIds) {
+    _removedMemoIds = removedMemoIds;
+  }
+
   /// Epoch milliseconds from last merged.
   int get lastMerged => _lastMerged;
 

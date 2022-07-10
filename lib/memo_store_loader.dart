@@ -28,30 +28,27 @@ import 'package:path_provider/path_provider.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 
-class MemoStoreLoader {
-  MemoStore? _memoStore = null;
-  var _path = '';
+class MemoStoreLoaderBase {
+  final MemoStore _memoStore;
 
-  /// Creates a memo store loader.
-  MemoStoreLoader(MemoStore memoStore, String path) {
-    _memoStore = memoStore;
-    _path = path;
-  }
+  /// Creates a memo store loader base.
+  MemoStoreLoaderBase(this._memoStore);
 
-  /// Executes this memo store loader.
-  Future<void> execute() async {
-    final memoStore = _memoStore;
-    if (memoStore == null) {
-      return;
-    }
-    final file = File(_path);
-    final string = await file.readAsString();
-    final decoded = jsonDecode(string);
+  /// Deserializes memo store.
+  void deserialize(String serialized) {
+    final decoded = jsonDecode(serialized);
     print('aDecoded: ${decoded}');
     final version = decoded['version'];
-    memoStore.clearMemos();
-    memoStore.lastMerged = decoded['lastMerged'];
-    // TODO: Load removed memo IDs.
+    _memoStore.clearMemos();
+    _memoStore.lastMerged = decoded['lastMerged'];
+    final deserializedIds = decoded['removedMemoIds'];
+    final removedMemoIds = <String>[];
+    for (var removedMemoId in deserializedIds) {
+      if (removedMemoIds is String) {
+        removedMemoIds.add(removedMemoId);
+      }
+    }
+    _memoStore.removedMemoIds = removedMemoIds;
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {
       final memo = Memo();
@@ -68,8 +65,22 @@ class MemoStoreLoader {
       memo.tags = tags;
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
-      memoStore.addMemo(memo);
+      _memoStore.addMemo(memo);
     }
+  }
+}
+
+class MemoStoreLoader extends MemoStoreLoaderBase {
+  final String _path;
+
+  /// Creates a memo store loader.
+  MemoStoreLoader(MemoStore memoStore, this._path) : super(memoStore);
+
+  /// Executes this memo store loader.
+  Future<void> execute() async {
+    final file = File(_path);
+    final string = await file.readAsString();
+    deserialize(string);
   }
 
   /// Creates a memo store loader from file name.
