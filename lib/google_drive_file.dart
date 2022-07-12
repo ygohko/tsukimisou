@@ -38,7 +38,7 @@ class GoogleDriveFile {
   Future<void> writeAsString(String contents) async {
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
-    final client = _GoogleAuthClient();
+    final client = _AuthenticatableClient();
     await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
       _prompt(url);
     }).then((credentials) async {
@@ -47,12 +47,24 @@ class GoogleDriveFile {
         'X-Goog-AuthUser': '0'
       };
       final driveApi = DriveApi(client);
+      final result = await driveApi.files
+          .list(q: 'name = "${_fileName}" and "root" in parents');
+      final files = result.files;
+      if (files != null) {
+        for (var file in files) {
+          final fileId = file.id;
+          if (fileId != null) {
+            await driveApi.files.delete(fileId);
+          }
+        }
+      }
+
       final encoded = utf8.encode(contents);
       final stream = Future.value(encoded).asStream().asBroadcastStream();
       final media = Media(stream, encoded.length);
       final file = File();
       file.name = _fileName;
-      final result = await driveApi.files.create(file, uploadMedia: media);
+      await driveApi.files.create(file, uploadMedia: media);
       client.close();
     });
   }
@@ -60,7 +72,7 @@ class GoogleDriveFile {
   Future<String> readAsString() async {
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
-    final client = _GoogleAuthClient();
+    final client = _AuthenticatableClient();
     var string = '';
     await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
       _prompt(url);
@@ -103,7 +115,7 @@ class GoogleDriveFile {
   }
 }
 
-class _GoogleAuthClient extends BaseClient {
+class _AuthenticatableClient extends BaseClient {
   Map<String, String>? _headers = null;
   final Client _client = Client();
 

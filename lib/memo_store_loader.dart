@@ -53,8 +53,8 @@ class MemoStoreLoaderBase {
     for (var deserializedMemo in deserializedMemos) {
       final memo = Memo();
       memo.id = deserializedMemo['id'];
-      memo.lastModified = deserializedMemo['lastModified'];
       memo.text = deserializedMemo['text'];
+      memo.lastModified = deserializedMemo['lastModified'];
       final deserializedTags = deserializedMemo['tags'];
       final tags = <String>[];
       for (var tag in deserializedTags) {
