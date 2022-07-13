@@ -38,37 +38,28 @@ class GoogleDriveFile {
 
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
-    final id = ClientId(getIdentifier(), getSecret());
-    final scopes = [DriveApi.driveFileScope];
     final client = _AuthenticatableClient();
-    await obtainAccessCredentialsViaUserConsent(id, scopes, client, (url) {
-      _prompt(url);
-    }).then((credentials) async {
-      client.headers = {
-        'Authorization': 'Bearer ${credentials.accessToken.data}',
-        'X-Goog-AuthUser': '0'
-      };
-      final driveApi = DriveApi(client);
-      final result = await driveApi.files
-          .list(q: 'name = "${_fileName}" and "root" in parents');
-      final files = result.files;
-      if (files != null) {
-        for (var file in files) {
-          final fileId = file.id;
-          if (fileId != null) {
-            await driveApi.files.delete(fileId);
-          }
+    await client.authenticate();
+    final driveApi = DriveApi(client);
+    final result = await driveApi.files
+    .list(q: 'name = "${_fileName}" and "root" in parents');
+    final files = result.files;
+    if (files != null) {
+      for (var file in files) {
+        final fileId = file.id;
+        if (fileId != null) {
+          await driveApi.files.delete(fileId);
         }
       }
+    }
 
-      final encoded = utf8.encode(contents);
-      final stream = Future.value(encoded).asStream().asBroadcastStream();
-      final media = Media(stream, encoded.length);
-      final file = File();
-      file.name = _fileName;
-      await driveApi.files.create(file, uploadMedia: media);
-      client.close();
-    });
+    final encoded = utf8.encode(contents);
+    final stream = Future.value(encoded).asStream().asBroadcastStream();
+    final media = Media(stream, encoded.length);
+    final file = File();
+    file.name = _fileName;
+    await driveApi.files.create(file, uploadMedia: media);
+    client.close();
   }
 
   /// Reads contents as a string.
