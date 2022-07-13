@@ -33,8 +33,10 @@ import 'client_id.dart';
 class GoogleDriveFile {
   final String _fileName;
 
+  /// Constructs a Google Drive file.
   GoogleDriveFile(this._fileName);
 
+  /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
@@ -69,6 +71,7 @@ class GoogleDriveFile {
     });
   }
 
+  /// Reads contents as a string.
   Future<String> readAsString() async {
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
@@ -116,9 +119,11 @@ class GoogleDriveFile {
 }
 
 class _AuthenticatableClient extends BaseClient {
+  // TODO: Rename to publish.
   Map<String, String>? _headers = null;
   final Client _client = Client();
 
+  /// Send a request.
   Future<StreamedResponse> send(BaseRequest request) {
     final headers = _headers;
     if (headers != null) {
@@ -128,6 +133,21 @@ class _AuthenticatableClient extends BaseClient {
     return _client.send(request);
   }
 
+  /// Authenticate this client.
+  Future<void> authenticate() async {
+    final id = ClientId(getIdentifier(), getSecret());
+    final scopes = [DriveApi.driveFileScope];
+    var string = '';
+    final credentials = await obtainAccessCredentialsViaUserConsent(id, scopes, this, (url) async {
+      await launch(url);
+    });
+    _headers = {
+      'Authorization': 'Bearer ${credentials.accessToken.data}',
+      'X-Goog-AuthUser': '0'
+    };
+  }
+
+  /// Headers that is added when request is sent.
   void set headers(Map<String, String> headers) {
     _headers = headers;
   }
