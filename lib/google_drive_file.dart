@@ -103,6 +103,8 @@ class _AuthenticatableClient extends BaseClient {
   Map<String, String>? _headers = null;
   final Client _client = Client();
 
+  static AccessToken? _accessToken = null;
+
   /// Send a request.
   Future<StreamedResponse> send(BaseRequest request) {
     final headers = _headers;
@@ -115,12 +117,27 @@ class _AuthenticatableClient extends BaseClient {
 
   /// Authenticate this client.
   Future<void> authenticate() async {
+    final accessToken = _accessToken;
+    if (accessToken != null) {
+      final now = DateTime.now().toUtc();
+      if (now.isBefore(accessToken.expiry)) {
+        // Reuse the access token.
+        _headers = {
+          'Authorization': 'Bearer ${accessToken.data}',
+          'X-Goog-AuthUser': '0'
+        };
+
+        return;
+      }
+    }
+
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     var string = '';
     final credentials = await obtainAccessCredentialsViaUserConsent(id, scopes, this, (url) async {
       await launch(url);
     });
+    _accessToken = credentials.accessToken;
     _headers = {
       'Authorization': 'Bearer ${credentials.accessToken.data}',
       'X-Goog-AuthUser': '0'
