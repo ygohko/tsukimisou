@@ -194,11 +194,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _testGoogleDrive() async {
+    Navigator.of(context).pop();
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
   }
 
   void _saveToGoogleDrive() async {
+    Navigator.of(context).pop();
     final memoStore = MemoStore.getInstance();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
@@ -206,6 +208,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _loadFromGoogleDrive() async {
+    Navigator.of(context).pop();
     final memoStore = MemoStore.getInstance();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
