@@ -195,20 +195,25 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() async {
     Navigator.of(context).pop();
+    _showProgressIndicatorDialog();
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
+    Navigator.of(context).pop();
   }
 
   void _saveToGoogleDrive() async {
     Navigator.of(context).pop();
+    _showProgressIndicatorDialog();
     final memoStore = MemoStore.getInstance();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveSaver.execute();
+    Navigator.of(context).pop();
   }
 
   void _loadFromGoogleDrive() async {
     Navigator.of(context).pop();
+    _showProgressIndicatorDialog();
     final memoStore = MemoStore.getInstance();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
@@ -224,6 +229,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
+    Navigator.of(context).pop();
   }
 
   void _updateShownMemos() {
@@ -231,5 +237,17 @@ class _HomePageState extends State<HomePage> {
     final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+  }
+
+  void _showProgressIndicatorDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+      barrierDismissible: false,
+    );
   }
 }
