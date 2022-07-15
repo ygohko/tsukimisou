@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'memo.dart';
 import 'memo_store.dart';
 
 class MemoStoreMerger {
@@ -65,11 +66,11 @@ class MemoStoreMerger {
       memo.lastMergedRevision = memo.revision;
     }
     toMemoStore.removedMemoIds = <String>[];
-    toMemoStore.lastMerged = DateTime.new.millisecondsSinceEpoch;
+    toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
   }
 
   Memo? _getMemoFromId(MemoStore memoStore, String id) {
-    for (var memo in memoStore) {
+    for (var memo in memoStore.memos) {
       if (memo.id == id) {
         return memo;
       }
