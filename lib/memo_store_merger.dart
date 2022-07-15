@@ -1,0 +1,80 @@
+/*
+ * Copyright (c) 2022 Yasuaki Gohko
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE ABOVE LISTED COPYRIGHT HOLDER(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ */
+
+import 'memo_store.dart';
+
+class MemoStoreMerger {
+  final MemoStore toMemoStore;
+  final MemoStore fromMemoStore;
+
+  MemoStoreMerger(this.toMemoStore, this.fromMemoStore);
+
+  void execute() {
+    for (var memo in toMemoStore.memos) {
+      final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
+      if (fromMemo != null) {
+        if (memo.lastMergedRevision >= fromMemo.revision) {
+          // From memo is not modified. Do nothing.
+        } else if (memo.revision <= memo.lastMergedRevision) {
+          // From memo is modified and to memo is not modified.
+          // TODO: Update to memo.
+          memo.text = fromMemo.text;
+        } else {
+          // Both modified.
+          // TODO: Mark as Conflicted.
+
+          var text = 'This memo is conflicted.\nmine --------\n';
+          text += memo.text;
+          text += 'Theirs --------\n';
+          text += fromMemo.text;
+          memo.text = text;
+
+        }
+      }
+    }
+
+    // TODO: Copy memos that are only in from memo store.
+    for (var memo in fromMemoStore.memos) {
+      final toMemo = _getMemoFromId(toMemoStore, memo.id);
+      if (toMemo == null && toMemoStore.removedMemoIds.indexOf(memo.id) == -1) {
+        toMemoStore.addMemo(memo);
+      }
+    }
+
+    // TODO: Update last merged revision and last merged time
+    for (var memo in toMemoStore.memos) {
+      memo.lastMergedRevision = memo.revision;
+    }
+    toMemoStore.removedMemoIds = <String>[];
+    toMemoStore.lastMerged = DateTime.new.millisecondsSinceEpoch;
+  }
+
+  Memo? _getMemoFromId(MemoStore memoStore, String id) {
+    for (var memo in memoStore) {
+      if (memo.id == id) {
+        return memo;
+      }
+    }
+
+    return null;
+  }
+}
