@@ -36,25 +36,21 @@ class MemoStoreMerger {
         if (memo.lastMergedRevision >= fromMemo.revision) {
           // From memo is not modified. Do nothing.
         } else if (memo.revision <= memo.lastMergedRevision) {
-          // From memo is modified and to memo is not modified.
-          // TODO: Update to memo.
+          // From memo is modified and to memo is not modified. Update to memo.
           memo.text = fromMemo.text;
         } else {
-          // Both modified.
-          // TODO: Mark as Conflicted.
-
+          // Both modified. Mark as Conflicted.
           var text = 'This memo is conflicted.\nmine --------\n';
           text += memo.text;
           text += '\n';
           text += 'Theirs --------\n';
           text += fromMemo.text;
           memo.text = text;
-
         }
       }
     }
 
-    // TODO: Copy memos that are only in from memo store.
+    // Copy memos that are only in from memo store.
     for (var memo in fromMemoStore.memos) {
       final toMemo = _getMemoFromId(toMemoStore, memo.id);
       if (toMemo == null && toMemoStore.removedMemoIds.indexOf(memo.id) == -1) {
@@ -62,7 +58,7 @@ class MemoStoreMerger {
       }
     }
 
-    // TODO: Update last merged revision and last merged time
+    // Update information.
     for (var memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
     }
