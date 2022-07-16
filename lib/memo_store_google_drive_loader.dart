@@ -32,7 +32,8 @@ class MemoStoreGoogleDriveLoader extends MemoStoreLoaderBase {
   final String _fileName;
 
   /// Creates a memo store loader.
-  MemoStoreGoogleDriveLoader(MemoStore memoStore, this._fileName) : super(memoStore);
+  MemoStoreGoogleDriveLoader(MemoStore memoStore, this._fileName)
+      : super(memoStore);
 
   /// Executes this memo store loader.
   Future<void> execute() async {
