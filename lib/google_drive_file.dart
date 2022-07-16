@@ -42,7 +42,7 @@ class GoogleDriveFile {
     await client.authenticate();
     final driveApi = DriveApi(client);
     final result = await driveApi.files
-    .list(q: 'name = "${_fileName}" and "root" in parents');
+        .list(q: 'name = "${_fileName}" and "root" in parents');
     final files = result.files;
     if (files != null) {
       for (var file in files) {
@@ -68,7 +68,8 @@ class GoogleDriveFile {
     await client.authenticate();
     var string = '';
     final driveApi = DriveApi(client);
-    final result = await driveApi.files.list(q: 'name = "${_fileName}" and "root" in parents');
+    final result = await driveApi.files
+        .list(q: 'name = "${_fileName}" and "root" in parents');
     final files = result.files;
     if (files == null) {
       throw IOException;
@@ -81,10 +82,11 @@ class GoogleDriveFile {
       throw IOException;
     }
 
-    final media = await driveApi.files.get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
+    final media = await driveApi.files
+        .get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
     var values = <int>[];
     await media.stream.forEach((element) {
-        values += element;
+      values += element;
     });
     string = utf8.decode(values);
     print("string: ${string}");
@@ -134,7 +136,8 @@ class _AuthenticatableClient extends BaseClient {
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     var string = '';
-    final credentials = await obtainAccessCredentialsViaUserConsent(id, scopes, this, (url) async {
+    final credentials = await obtainAccessCredentialsViaUserConsent(
+        id, scopes, this, (url) async {
       await launch(url);
     });
     _accessToken = credentials.accessToken;

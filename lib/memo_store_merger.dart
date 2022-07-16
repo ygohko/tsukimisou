@@ -27,8 +27,10 @@ class MemoStoreMerger {
   final MemoStore toMemoStore;
   final MemoStore fromMemoStore;
 
+  /// Creates a memo store manager.
   MemoStoreMerger(this.toMemoStore, this.fromMemoStore);
 
+  /// Executes this memo store manager.
   void execute() {
     for (var memo in toMemoStore.memos) {
       final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
@@ -42,8 +44,7 @@ class MemoStoreMerger {
           // Both modified. Mark as Conflicted.
           var text = 'This memo is conflicted.\nmine --------\n';
           text += memo.text;
-          text += '\n';
-          text += 'Theirs --------\n';
+          text += '\nTheirs --------\n';
           text += fromMemo.text;
           memo.text = text;
         }

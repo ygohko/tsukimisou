@@ -30,7 +30,8 @@ class MemoStoreGoogleDriveSaver extends MemoStoreSaverBase {
   final String _fileName;
 
   /// Creates a memo store saver.
-  MemoStoreGoogleDriveSaver(MemoStore memoStore, this._fileName) : super(memoStore);
+  MemoStoreGoogleDriveSaver(MemoStore memoStore, this._fileName)
+      : super(memoStore);
 
   /// Executes this memo store saver.
   Future<void> execute() async {
