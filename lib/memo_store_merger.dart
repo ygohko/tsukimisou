@@ -45,6 +45,7 @@ class MemoStoreMerger {
 
           var text = 'This memo is conflicted.\nmine --------\n';
           text += memo.text;
+          text += '\n';
           text += 'Theirs --------\n';
           text += fromMemo.text;
           memo.text = text;

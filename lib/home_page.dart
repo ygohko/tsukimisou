@@ -31,6 +31,7 @@ import 'memo_store.dart';
 import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
+import 'memo_store_merger.dart';
 import 'memo_store_saver.dart';
 import 'viewing_page.dart';
 
@@ -121,6 +122,10 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: Text('Load from Google Drive'),
               onTap: _loadFromGoogleDrive,
+            ),
+            ListTile(
+              title: Text('Merge with Google Drive'),
+              onTap: _mergeWithGoogleDrive,
             ),
             Divider(),
             Container(
@@ -220,6 +225,33 @@ class _HomePageState extends State<HomePage> {
     await memoStoreGoogleDriveLoader.execute();
     final memoStoreSaver = await MemoStoreSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on FileSystemException catch (exception) {
+      // Save error
+      // Do nothing for now
+    }
+    setState(() {
+      _updateShownMemos();
+    });
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _mergeWithGoogleDrive() async {
+    Navigator.of(context).pop();
+    _showProgressIndicatorDialog();
+    final fromMemoStore = MemoStore();
+    final memoStoreGoogleDriveLoader =
+        MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
+    await memoStoreGoogleDriveLoader.execute();
+    final toMemoStore = MemoStore.getInstance();
+    final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    memoStoreMerger.execute();
+    final memoStoreGoogleDriveSaver =
+        MemoStoreGoogleDriveSaver(toMemoStore, 'TsukimisouMemoStore.json');
+    await memoStoreGoogleDriveSaver.execute();
+    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+        toMemoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
     } on FileSystemException catch (exception) {
