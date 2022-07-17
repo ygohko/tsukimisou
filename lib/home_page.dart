@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
               child: Text('Tsukimisou',
                   style: TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
             ),
-            _subtitle('Tags'),
+            subtitle(context, 'Tags'),
             ListTile(
               title: Text('Tags'),
             ),
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
               title: Text('Here'),
             ),
             Divider(),
-            _subtitle('Google Drive integration'),
+            subtitle(context, 'Google Drive integration'),
             ListTile(
               title: Text('Synchronize'),
               onTap: _mergeWithGoogleDrive,
@@ -172,7 +172,7 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog(context);
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
     Navigator.of(context).pop();
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
 
   void _saveToGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog(context);
     final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
 
   void _loadFromGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog(context);
     final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
@@ -211,7 +211,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _mergeWithGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog(context);
     final fromMemoStore = MemoStore();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
@@ -258,29 +258,5 @@ class _HomePageState extends State<HomePage> {
     final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
-  }
-
-  void _showProgressIndicatorDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-      barrierDismissible: false,
-    );
-  }
-
-  Container _subtitle(String text) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Text(text,
-          style: Theme.of(context).textTheme.caption,
-          textAlign: TextAlign.start),
-      ),
-    );
   }
 }
