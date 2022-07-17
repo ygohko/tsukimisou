@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
         memoStore, 'TsukimisouMemoStore.json');
     try {
       await memoStoreLoader.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Load error
       // Do nothing for now
     }
@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Save error
       // Do nothing for now
     }
@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
         toMemoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Save error
       // Do nothing for now
     }

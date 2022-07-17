@@ -101,7 +101,7 @@ class _EditingPageState extends State<EditingPage> {
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Save error
       // Do nothing for now
     }
