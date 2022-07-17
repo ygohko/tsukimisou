@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     return Scaffold(
       appBar: AppBar(
         title: Text('Tsukimisou'),
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memoStoreLoader = await MemoStoreLoader.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
   void _saveToGoogleDrive() async {
     Navigator.of(context).pop();
     _showProgressIndicatorDialog();
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveSaver.execute();
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
   void _loadFromGoogleDrive() async {
     Navigator.of(context).pop();
     _showProgressIndicatorDialog();
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveLoader.execute();
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveLoader.execute();
-    final toMemoStore = MemoStore.getInstance();
+    final toMemoStore = MemoStore.instance();
     final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
     memoStoreMerger.execute();
     final memoStoreGoogleDriveSaver =
@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateShownMemos() {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));

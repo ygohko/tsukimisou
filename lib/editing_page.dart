@@ -86,7 +86,7 @@ class _EditingPageState extends State<EditingPage> {
   }
 
   void _save() async {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memo = widget.memo;
     if (memo == null) {
       // Add a new memo

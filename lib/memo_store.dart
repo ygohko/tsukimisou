@@ -68,7 +68,7 @@ class MemoStore {
   }
 
   /// Gets a singleton instance.
-  static MemoStore getInstance() {
+  static MemoStore instance() {
     if (_instance == null) {
       _instance = MemoStore();
     }

@@ -57,9 +57,9 @@ void main() {
     });
 
     test(
-        'MemoStore should create singleton instance when first time MemoStore.getInstance() called.',
+        'MemoStore should create singleton instance when first time MemoStore.instance() called.',
         () {
-      expect(MemoStore.getInstance(), isNotNull);
+      expect(MemoStore.instance(), isNotNull);
     });
   });
 }
