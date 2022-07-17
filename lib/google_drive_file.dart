@@ -101,7 +101,6 @@ class GoogleDriveFile {
 }
 
 class _AuthenticatableClient extends BaseClient {
-  // TODO: Rename to publish.
   Map<String, String>? _headers = null;
   final Client _client = Client();
 

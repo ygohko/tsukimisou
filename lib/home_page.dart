@@ -97,10 +97,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
-                color: Color(0xFF00003F),
+                color: ThemeColors.primary,
               ),
               child: Text('Tsukimisou',
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
+                  style: TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
             ),
             _subtitle('Tags'),
             ListTile(
