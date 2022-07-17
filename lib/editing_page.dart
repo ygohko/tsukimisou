@@ -72,7 +72,7 @@ class _EditingPageState extends State<EditingPage> {
         ),
         body: Container(
           child: Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _controller,
               autofocus: true,
@@ -126,8 +126,8 @@ class _EditingPageState extends State<EditingPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              title: Text('Confirm'),
-              content: Text('Do you really want to discard the changes?'),
+              title: const Text('Confirm'),
+              content: const Text('Do you really want to discard the changes?'),
               actions: [
                 FlatButton(
                     child: Text('Cancel'),

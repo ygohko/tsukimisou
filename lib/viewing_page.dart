@@ -66,7 +66,7 @@ class _ViewingPageState extends State<ViewingPage> {
           child: SizedBox(
             width: double.infinity,
             child: Padding(
-              padding: EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(12.0),
               child: Text(widget.memo.text),
             ),
           ),
@@ -94,16 +94,16 @@ class _ViewingPageState extends State<ViewingPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              title: Text('Confirm'),
-              content: Text('Do you really want to delete this memo?'),
+              title: const Text('Confirm'),
+              content: const Text('Do you really want to delete this memo?'),
               actions: [
                 FlatButton(
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
                 FlatButton(
-                    child: Text('OK'),
+                    child: const Text('OK'),
                     onPressed: () {
                       accepted = true;
                       Navigator.of(context).pop();

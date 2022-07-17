@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
                 child: InkWell(
               child: Padding(
-                padding: EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -95,30 +95,30 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
+            const DrawerHeader(
+              decoration: const BoxDecoration(
                 color: ThemeColors.primary,
               ),
-              child: Text('Tsukimisou',
-                  style: TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
+              child: const Text('Tsukimisou',
+                  style: const TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
             ),
             subtitle(context, 'Tags'),
-            ListTile(
-              title: Text('Tags'),
+            const ListTile(
+              title: const Text('Tags'),
             ),
-            ListTile(
-              title: Text('Will be'),
+            const ListTile(
+              title: const Text('Will be'),
             ),
-            ListTile(
-              title: Text('Listed'),
+            const ListTile(
+              title: const Text('Listed'),
             ),
-            ListTile(
-              title: Text('Here'),
+            const ListTile(
+              title: const Text('Here'),
             ),
-            Divider(),
+            const Divider(),
             subtitle(context, 'Google Drive integration'),
             ListTile(
-              title: Text('Synchronize'),
+              title: const Text('Synchronize'),
               onTap: _mergeWithGoogleDrive,
             ),
           ],
