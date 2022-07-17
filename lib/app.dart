@@ -21,6 +21,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'home_page.dart';
 
@@ -41,6 +42,15 @@ class App extends StatelessWidget {
         ),
       ),
       home: const HomePage(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        Locale('en', ''),
+        Locale('ja', ''),
+      ]
     );
   }
 }
