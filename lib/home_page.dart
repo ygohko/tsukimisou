@@ -101,42 +101,7 @@ class _HomePageState extends State<HomePage> {
               child: Text('Tsukimisou',
                   style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
-            // TODO: Add a helper function
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text('Google Drive tests',
-                    style: Theme.of(context).textTheme.caption,
-                    textAlign: TextAlign.start),
-              ),
-            ),
-            ListTile(
-              title: Text('Test Google Drive'),
-              onTap: _testGoogleDrive,
-            ),
-            ListTile(
-              title: Text('Save to Google Drive'),
-              onTap: _saveToGoogleDrive,
-            ),
-            ListTile(
-              title: Text('Load from Google Drive'),
-              onTap: _loadFromGoogleDrive,
-            ),
-            ListTile(
-              title: Text('Merge with Google Drive'),
-              onTap: _mergeWithGoogleDrive,
-            ),
-            Divider(),
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text('Tags',
-                    style: Theme.of(context).textTheme.caption,
-                    textAlign: TextAlign.start),
-              ),
-            ),
+            _subtitle('Tags'),
             ListTile(
               title: Text('Tags'),
             ),
@@ -148,6 +113,12 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               title: Text('Here'),
+            ),
+            Divider(),
+            _subtitle('Google Drive integration'),
+            ListTile(
+              title: Text('Synchronize'),
+              onTap: _mergeWithGoogleDrive,
             ),
           ],
         ),
@@ -280,6 +251,18 @@ class _HomePageState extends State<HomePage> {
         );
       },
       barrierDismissible: false,
+    );
+  }
+
+  Container _subtitle(String text) {
+    return Container(
+      padding: const EdgeInsets.only(left: 10),
+      child: Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(text,
+          style: Theme.of(context).textTheme.caption,
+          textAlign: TextAlign.start),
+      ),
     );
   }
 }
