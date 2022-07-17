@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'common_uis.dart';
 import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     return Scaffold(
       appBar: AppBar(
         title: Text('Tsukimisou'),
@@ -69,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             return Card(
                 child: InkWell(
               child: Padding(
-                padding: EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -94,30 +95,30 @@ class _HomePageState extends State<HomePage> {
       drawer: Drawer(
         child: ListView(
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color(0xFF00003F),
+            const DrawerHeader(
+              decoration: const BoxDecoration(
+                color: ThemeColors.primary,
               ),
-              child: Text('Tsukimisou',
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
+              child: const Text('Tsukimisou',
+                  style: const TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
             ),
-            _subtitle('Tags'),
-            ListTile(
-              title: Text('Tags'),
+            subtitle(context, 'Tags'),
+            const ListTile(
+              title: const Text('Tags'),
             ),
-            ListTile(
-              title: Text('Will be'),
+            const ListTile(
+              title: const Text('Will be'),
             ),
-            ListTile(
-              title: Text('Listed'),
+            const ListTile(
+              title: const Text('Listed'),
             ),
-            ListTile(
-              title: Text('Here'),
+            const ListTile(
+              title: const Text('Here'),
             ),
-            Divider(),
-            _subtitle('Google Drive integration'),
+            const Divider(),
+            subtitle(context, 'Google Drive integration'),
             ListTile(
-              title: Text('Synchronize'),
+              title: const Text('Synchronize'),
               onTap: _mergeWithGoogleDrive,
             ),
           ],
@@ -127,12 +128,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memoStoreLoader = await MemoStoreLoader.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       await memoStoreLoader.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Load error
       // Do nothing for now
     }
@@ -171,7 +172,7 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog(context);
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
     Navigator.of(context).pop();
@@ -179,8 +180,8 @@ class _HomePageState extends State<HomePage> {
 
   void _saveToGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
-    final memoStore = MemoStore.getInstance();
+    showProgressIndicatorDialog(context);
+    final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveSaver.execute();
@@ -189,8 +190,8 @@ class _HomePageState extends State<HomePage> {
 
   void _loadFromGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
-    final memoStore = MemoStore.getInstance();
+    showProgressIndicatorDialog(context);
+    final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveLoader.execute();
@@ -198,7 +199,7 @@ class _HomePageState extends State<HomePage> {
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Save error
       // Do nothing for now
     }
@@ -210,24 +211,41 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _mergeWithGoogleDrive() async {
     Navigator.of(context).pop();
-    _showProgressIndicatorDialog();
+    showProgressIndicatorDialog(context);
     final fromMemoStore = MemoStore();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
-    await memoStoreGoogleDriveLoader.execute();
-    final toMemoStore = MemoStore.getInstance();
+    try {
+      await memoStoreGoogleDriveLoader.execute();
+    } on IOException catch (exception) {
+      // Load error
+      await showErrorDialog(context, 'Loading memo store from Google Drive failed.');
+      Navigator.of(context).pop();
+      return;
+    }
+    final toMemoStore = MemoStore.instance();
     final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
     memoStoreMerger.execute();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(toMemoStore, 'TsukimisouMemoStore.json');
-    await memoStoreGoogleDriveSaver.execute();
+    try {
+      await memoStoreGoogleDriveSaver.execute();
+    } on IOException catch (exception) {
+      // Save error
+      await showErrorDialog(context, 'Saving memo store to Google Drive failed.');
+      setState(() {
+          _updateShownMemos();
+      });
+      Navigator.of(context).pop();
+      return;
+    }
     final memoStoreSaver = await MemoStoreSaver.fromFileName(
         toMemoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Save error
-      // Do nothing for now
+      await showErrorDialog(context, 'Saving memo store to local storage failed.');
     }
     setState(() {
       _updateShownMemos();
@@ -236,33 +254,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateShownMemos() {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memos = memoStore.memos;
     _shownMemos = [...memos];
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
-  }
-
-  void _showProgressIndicatorDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-      barrierDismissible: false,
-    );
-  }
-
-  Container _subtitle(String text) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10),
-      child: Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Text(text,
-          style: Theme.of(context).textTheme.caption,
-          textAlign: TextAlign.start),
-      ),
-    );
   }
 }

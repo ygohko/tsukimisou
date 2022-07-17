@@ -72,14 +72,14 @@ class GoogleDriveFile {
         .list(q: 'name = "${_fileName}" and "root" in parents');
     final files = result.files;
     if (files == null) {
-      throw IOException;
+      throw HttpException;
     }
     if (files.length < 1) {
-      throw IOException;
+      throw HttpException;
     }
     final fileId = files[0].id;
     if (fileId == null) {
-      throw IOException;
+      throw HttpException;
     }
 
     final media = await driveApi.files
@@ -101,7 +101,6 @@ class GoogleDriveFile {
 }
 
 class _AuthenticatableClient extends BaseClient {
-  // TODO: Rename to publish.
   Map<String, String>? _headers = null;
   final Client _client = Client();
 

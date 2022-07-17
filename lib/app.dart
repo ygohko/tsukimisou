@@ -23,6 +23,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'common_uis.dart';
 import 'home_page.dart';
 
 class App extends StatelessWidget {
@@ -36,9 +37,8 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
-          // TODO: Define a constant
-          backgroundColor: Color(0xFF00003F),
-          foregroundColor: Colors.white,
+          backgroundColor: ThemeColors.primary,
+          foregroundColor: ThemeColors.onPrimary,
         ),
       ),
       home: const HomePage(),

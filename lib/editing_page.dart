@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'common_uis.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
@@ -71,7 +72,7 @@ class _EditingPageState extends State<EditingPage> {
         ),
         body: Container(
           child: Padding(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _controller,
               autofocus: true,
@@ -86,7 +87,7 @@ class _EditingPageState extends State<EditingPage> {
   }
 
   void _save() async {
-    final memoStore = MemoStore.getInstance();
+    final memoStore = MemoStore.instance();
     final memo = widget.memo;
     if (memo == null) {
       // Add a new memo
@@ -101,9 +102,9 @@ class _EditingPageState extends State<EditingPage> {
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on IOException catch (exception) {
       // Save error
-      // Do nothing for now
+      await showErrorDialog(context, 'Saving memo store to local storage failed.');
     }
     Navigator.of(context).pop();
   }
@@ -125,8 +126,8 @@ class _EditingPageState extends State<EditingPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              title: Text('Confirm'),
-              content: Text('Do you really want to discard the changes?'),
+              title: const Text('Confirm'),
+              content: const Text('Do you really want to discard the changes?'),
               actions: [
                 FlatButton(
                     child: Text('Cancel'),
