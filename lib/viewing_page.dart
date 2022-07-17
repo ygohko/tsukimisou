@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'common_uis.dart';
 import 'editing_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -121,7 +122,7 @@ class _ViewingPageState extends State<ViewingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      // Do nothing for now
+      await showErrorDialog(context, 'Saving memo store to local storage failed.');
     }
     Navigator.of(context).pop();
   }

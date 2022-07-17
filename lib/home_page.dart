@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'common_uis.dart';
 import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
@@ -214,20 +215,37 @@ class _HomePageState extends State<HomePage> {
     final fromMemoStore = MemoStore();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
-    await memoStoreGoogleDriveLoader.execute();
+    try {
+      await memoStoreGoogleDriveLoader.execute();
+    } on IOException catch (exception) {
+      // Load error
+      await showErrorDialog(context, 'Loading memo store from Google Drive failed.');
+      Navigator.of(context).pop();
+      return;
+    }
     final toMemoStore = MemoStore.instance();
     final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
     memoStoreMerger.execute();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(toMemoStore, 'TsukimisouMemoStore.json');
-    await memoStoreGoogleDriveSaver.execute();
+    try {
+      await memoStoreGoogleDriveSaver.execute();
+    } on IOException catch (exception) {
+      // Save error
+      await showErrorDialog(context, 'Saving memo store to Google Drive failed.');
+      setState(() {
+          _updateShownMemos();
+      });
+      Navigator.of(context).pop();
+      return;
+    }
     final memoStoreSaver = await MemoStoreSaver.fromFileName(
         toMemoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      // Do nothing for now
+      await showErrorDialog(context, 'Saving memo store to local storage failed.');
     }
     setState(() {
       _updateShownMemos();
