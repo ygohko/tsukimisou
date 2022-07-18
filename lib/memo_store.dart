@@ -23,7 +23,7 @@
 import 'memo.dart';
 
 class MemoStore {
-  final _memos = <Memo>[];
+  var _memos = <Memo>[];
   var _removedMemoIds = <String>[];
   var _lastMerged = 0;
 
@@ -50,6 +50,11 @@ class MemoStore {
 
   /// Memos that are stored in this memo store.
   List<Memo> get memos => _memos;
+
+  /// Memos that are stored in this memo store.
+  void set memos(List<Memo> memos) {
+    _memos = memos;
+  }
 
   /// Memo IDs that are removed.
   List<String> get removedMemoIds => _removedMemoIds;
