@@ -4,7 +4,7 @@ import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_merger.dart';
 
 void main() {
-  group('Memo', () {
+  group('MemoStoreMerger', () {
     test('MemoStoreMerger can create the instances.', () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -12,15 +12,30 @@ void main() {
       expect(memoStoreMerger, isNotNull);
     });
 
-    test('MemoStoreMerger should keep memos in to memo store.', () {
+    test('MemoStoreMerger should keep memos in to memo store if it is modified after last merged.', () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
+      fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
       final memo = Memo();
+      memo.text = 'This is a to memo.';
       toMemoStore.addMemo(memo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
+    });
+
+    test('MemoStoreMerger should remove memos in to memo store if it is modified before last merged.', () {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+      final memo = Memo();
+      memo.text = 'This is a to memo.';
+      fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
+      toMemoStore.addMemo(memo);
+      expect(toMemoStore.memos.length, 1);
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      memoStoreMerger.execute();
+      expect(toMemoStore.memos.length, 0);
     });
 
     test('MemoStoreMerger should move memos that are only in from memo store.',

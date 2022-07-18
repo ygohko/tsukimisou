@@ -32,14 +32,36 @@ class MemoStoreMerger {
 
   /// Executes this memo store manager.
   void execute() {
+    // Remove memos if it is removed in from memo store.
+    final newMemos = <Memo>[];
     for (var memo in toMemoStore.memos) {
       final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
       if (fromMemo != null) {
-        if (memo.lastMergedRevision >= fromMemo.revision) {
+        // Memo is in from memo store. Do not remove.
+        newMemos.add(memo);
+      } else {
+        final toLastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toUtc();
+        final fromLastMerged = DateTime.fromMillisecondsSinceEpoch(fromMemoStore.lastMerged).toUtc();
+        if (fromLastMerged.isBefore(toLastModified)) {
+          // Memo is updated after last merged. Do not remove.
+          newMemos.add(memo);
+        } else {
+          // Memo is not updated after last merged. Do nothing.
+        }
+      }
+    }
+    toMemoStore.memos = newMemos;
+
+    // Update memos if needed.
+    for (var memo in toMemoStore.memos) {
+      final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
+      if (fromMemo != null) {
+        if (fromMemo.revision <= memo.lastMergedRevision) {
           // From memo is not modified. Do nothing.
         } else if (memo.revision <= memo.lastMergedRevision) {
           // From memo is modified and to memo is not modified. Update to memo.
           memo.text = fromMemo.text;
+          memo.lastModified = fromMemo.lastModified;
         } else {
           // Both modified. Mark as Conflicted.
           var text = 'This memo is conflicted.\nmine --------\n';

@@ -45,7 +45,7 @@ void main() {
       expect(memoStore.memos.length, 0);
     });
 
-    test('MemoStore.memos should return memos that is stored by memo store.',
+    test('MemoStore.memos should receive and accept memos that is stored by memo store.',
         () {
       final memoStore = MemoStore();
       final memo = Memo();
@@ -54,7 +54,10 @@ void main() {
       final memos = memoStore.memos;
       expect(memos.length, 1);
       expect(memos[0].text, 'This is a memo.');
-    });
+      memos.clear();
+      memoStore.memos = memos;
+      expect(memos.length, 0);
+  });
 
     test(
         'MemoStore should create singleton instance when first time MemoStore.instance() called.',
