@@ -61,6 +61,7 @@ class MemoStoreMerger {
         } else if (memo.revision <= memo.lastMergedRevision) {
           // From memo is modified and to memo is not modified. Update to memo.
           memo.text = fromMemo.text;
+          memo.lastModified = fromMemo.lastModified;
         } else {
           // Both modified. Mark as Conflicted.
           var text = 'This memo is conflicted.\nmine --------\n';
