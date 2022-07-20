@@ -23,6 +23,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common_uis.dart';
 import 'editing_page.dart';
@@ -55,10 +56,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tsukimisou'),
+        title: Text(localizations.tsukimisou),
       ),
       body: ListView.builder(
           itemCount: memoStore.memos.length,
@@ -77,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                       Text(memo.text),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('Updated: ${updated}'),
+                        child: Text('${localizations.updated}${updated}'),
                       ),
                     ]),
               ),
@@ -89,20 +91,20 @@ class _HomePageState extends State<HomePage> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
-        tooltip: 'Add a memo',
+        tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
       drawer: Drawer(
         child: ListView(
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: const BoxDecoration(
                 color: ThemeColors.primary,
               ),
-              child: const Text('Tsukimisou',
+              child: Text(localizations.tsukimisou,
                   style: const TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
             ),
-            subtitle(context, 'Tags'),
+            subtitle(context, localizations.tags),
             const ListTile(
               title: const Text('Tags'),
             ),
@@ -116,9 +118,9 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Here'),
             ),
             const Divider(),
-            subtitle(context, 'Google Drive integration'),
+            subtitle(context, localizations.googleDriveIntegration),
             ListTile(
-              title: const Text('Synchronize'),
+              title: Text(localizations.synchronize),
               onTap: _mergeWithGoogleDrive,
             ),
           ],
@@ -212,6 +214,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _mergeWithGoogleDrive() async {
     Navigator.of(context).pop();
     showProgressIndicatorDialog(context);
+    final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
@@ -219,7 +222,7 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveLoader.execute();
     } on IOException catch (exception) {
       // Load error
-      await showErrorDialog(context, 'Loading memo store from Google Drive failed.');
+      await showErrorDialog(context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
       return;
     }
@@ -232,7 +235,7 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, 'Saving memo store to Google Drive failed.');
+      await showErrorDialog(context, localizations.savingMemoStoreToGoogleDriveFailed);
       setState(() {
           _updateShownMemos();
       });
@@ -245,7 +248,7 @@ class _HomePageState extends State<HomePage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, 'Saving memo store to local storage failed.');
+      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     setState(() {
       _updateShownMemos();

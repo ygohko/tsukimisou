@@ -1,0 +1,38 @@
+{
+    "tsukimisou": "Tsukimisou",
+    "@tsukimisou": {
+        "description": "Application title"
+    },
+    "updated": "Updated: ",
+    "@updated": {
+        "description": "Indicattion for update date and time"
+    },
+    "addAMemo": "Add a memo",
+    "@addAMemo": {
+        "description": "Tooltip for add a memo button"
+    },
+    "tags": "Tags",
+    "@tags": {
+        "description": "Subtitle for tags group of drawer"
+    },
+    "googleDriveIntegration": "Google Drive integration",
+    "@googleDriveIntegratio": {
+        "description": "Subtitle for Google Drive integration group of drawer"
+    },
+    "synchronize": "Synchronize",
+    "@synchronize": {
+        "description": "Text for synchronize list tile"
+    },
+    "loadingMemoStoreFromGoogleDriveFailed": "Loading memo store from Google Drive failed.",
+    "@loadingMemoStoreFromGoogleDriveFailed": {
+        "description": "Error text when loading from Google Drive failed"
+    },
+    "savingMemoStoreToGoogleDriveFailed": "Saving memo store to Google Drive failed.",
+    "@savingMemoStoreToGoogleDriveFailed": {
+        "description": "Error text when saving to Google Drive failed"
+    },
+    "savingMemoStoreToLocalStorageFailed": "Saving memo store to local storage failed.",
+    "@savingMemoStoreToGoogleDriveFailed": {
+        "description": "Error text when saving to local storage failed"
+    }
+}
