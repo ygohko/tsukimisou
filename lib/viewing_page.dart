@@ -23,6 +23,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common_uis.dart';
 import 'editing_page.dart';
@@ -43,21 +44,22 @@ class ViewingPage extends StatefulWidget {
 class _ViewingPageState extends State<ViewingPage> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final dateTime =
         DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Memo at ${dateTime.toString()}'),
+        title: Text(localizations.memoAtDateTime(dateTime.toString())),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: _delete,
-            tooltip: 'Delete',
+            tooltip: localizations.delete,
           ),
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: _edit,
-            tooltip: 'Edit',
+            tooltip: localizations.edit,
           ),
         ],
       ),
@@ -89,21 +91,22 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _delete() async {
+    final localizations = AppLocalizations.of(context)!;
     var accepted = false;
     await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-              title: const Text('Confirm'),
-              content: const Text('Do you really want to delete this memo?'),
+              title: Text(localizations.confirm),
+              content: Text(localizations.doYouReallyWantToDeleteThisMemo),
               actions: [
                 FlatButton(
-                    child: const Text('Cancel'),
+                    child: Text(localizations.cancel),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
                 FlatButton(
-                    child: const Text('OK'),
+                    child: Text(localizations.ok),
                     onPressed: () {
                       accepted = true;
                       Navigator.of(context).pop();
@@ -122,7 +125,7 @@ class _ViewingPageState extends State<ViewingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, 'Saving memo store to local storage failed.');
+      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
   }

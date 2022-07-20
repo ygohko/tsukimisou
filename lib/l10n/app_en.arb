@@ -34,5 +34,36 @@
     "savingMemoStoreToLocalStorageFailed": "Saving memo store to local storage failed.",
     "@savingMemoStoreToGoogleDriveFailed": {
         "description": "Error text when saving to local storage failed"
+    },
+    "memoAtDateTime": "Memo at {dateTime}",
+    "@memoAtDateTime": {
+        "description": "Title for viewing page app bar",
+        "placeholders": {
+            "dateTime": {}
+        }
+    },
+    "delete": "Delete",
+    "@delete": {
+        "description": "Tooltip for delete button"
+    },
+    "edit": "Edit",
+    "@edit": {
+        "description": "Tooltip for edit button"
+    },
+    "confirm": "Confirm",
+    "@confirm": {
+        "description": "Title for confirmation dialog"
+    },
+    "doYouReallyWantToDeleteThisMemo": "Do you really want to delete this memo?",
+    "@doYouReallyWantToDeleteThisMemo": {
+        "description": "Text for delete confirmation dialog"
+    },
+    "cancel": "Cancel",
+    "@cancel": {
+        "description": "Text for Cancel button"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "Text for OK button"
     }
 }
