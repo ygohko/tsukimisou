@@ -40,7 +40,6 @@ class App extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      title: 'Tsukimisou'/*AppLocalizations.of(context)!.tsukimisou*/,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
@@ -48,11 +47,12 @@ class App extends StatelessWidget {
           foregroundColor: ThemeColors.onPrimary,
         ),
       ),
-      home: const HomePage(),
       supportedLocales: [
         Locale('en', ''),
         Locale('ja', ''),
-      ]
+      ],
+      title: 'Tsukimisou',
+      home: const HomePage(),
     );
   }
 }
