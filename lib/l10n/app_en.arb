@@ -44,11 +44,11 @@
     },
     "delete": "Delete",
     "@delete": {
-        "description": "Tooltip for delete button"
+        "description": "Tooltip for Delete button"
     },
     "edit": "Edit",
     "@edit": {
-        "description": "Tooltip for edit button"
+        "description": "Tooltip for Edit button"
     },
     "confirm": "Confirm",
     "@confirm": {
@@ -65,5 +65,21 @@
     "ok": "OK",
     "@ok": {
         "description": "Text for OK button"
+    },
+    "addANewMemo": "Add a new memo",
+    "@addANewMemo": {
+        "description": "Title for editing page when editing a new memo"
+    },
+    "editAMemo": "Edit a memo",
+    "@editAMemo": {
+        "description": "Title for editing page when editing a existing memo"
+    },
+    "save": "Save",
+    "@save": {
+        "description": "Tooltip for Save button"
+    },
+    "doYouReallyWantToDiscardTheChanges": "Do you really want to discard the changes?",
+    "@doYouReallyWantToDiscardTheChanges": {
+        "description": "Text for discard confirmation dialog"
     }
 }

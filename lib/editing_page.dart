@@ -23,6 +23,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common_uis.dart';
 import 'memo.dart';
@@ -53,9 +54,10 @@ class _EditingPageState extends State<EditingPage> {
 
   @override
   Widget build(BuildContext context) {
-    var title = 'Add a new memo';
+    final localizations = AppLocalizations.of(context)!;
+    var title = localizations.addANewMemo;
     if (widget.memo != null) {
-      title = 'Edit a memo';
+      title = localizations.editAMemo;
     }
     return WillPopScope(
       onWillPop: _confirm,
@@ -66,7 +68,7 @@ class _EditingPageState extends State<EditingPage> {
             IconButton(
               icon: const Icon(Icons.done),
               onPressed: _save,
-              tooltip: 'Save',
+              tooltip: localizations.save,
             ),
           ],
         ),
@@ -87,6 +89,7 @@ class _EditingPageState extends State<EditingPage> {
   }
 
   void _save() async {
+    final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
     final memo = widget.memo;
     if (memo == null) {
@@ -104,12 +107,13 @@ class _EditingPageState extends State<EditingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, 'Saving memo store to local storage failed.');
+      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
   }
 
   Future<bool> _confirm() async {
+    final localizations = AppLocalizations.of(context)!;
     final memo = widget.memo;
     if (memo == null) {
       if (_controller.text == '') {
@@ -126,16 +130,16 @@ class _EditingPageState extends State<EditingPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              title: const Text('Confirm'),
-              content: const Text('Do you really want to discard the changes?'),
+              title: Text(localizations.confirm),
+              content: Text(localizations.doYouReallyWantToDiscardTheChanges),
               actions: [
                 FlatButton(
-                    child: Text('Cancel'),
+                    child: Text(localizations.cancel),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
                 FlatButton(
-                    child: Text('OK'),
+                    child: Text(localizations.ok),
                     onPressed: () {
                       accepted = true;
                       Navigator.of(context).pop();
