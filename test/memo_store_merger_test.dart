@@ -12,7 +12,9 @@ void main() {
       expect(memoStoreMerger, isNotNull);
     });
 
-    test('MemoStoreMerger should keep memos in to memo store if it is modified after last merged.', () {
+    test(
+        'MemoStoreMerger should keep memos in to memo store if it is modified after last merged.',
+        () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
@@ -25,7 +27,9 @@ void main() {
       expect(toMemoStore.memos.length, 1);
     });
 
-    test('MemoStoreMerger should remove memos in to memo store if it is modified before last merged.', () {
+    test(
+        'MemoStoreMerger should remove memos in to memo store if it is modified before last merged.',
+        () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final memo = Memo();

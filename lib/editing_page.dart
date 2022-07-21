@@ -107,7 +107,8 @@ class _EditingPageState extends State<EditingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
   }

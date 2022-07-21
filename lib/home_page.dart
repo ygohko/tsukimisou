@@ -102,7 +102,8 @@ class _HomePageState extends State<HomePage> {
                 color: ThemeColors.primary,
               ),
               child: Text(localizations.tsukimisou,
-                  style: const TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
+                  style: const TextStyle(
+                      color: ThemeColors.onPrimary, fontSize: 24)),
             ),
             subtitle(context, localizations.tags),
             const ListTile(
@@ -222,7 +223,8 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveLoader.execute();
     } on IOException catch (exception) {
       // Load error
-      await showErrorDialog(context, localizations.loadingMemoStoreFromGoogleDriveFailed);
+      await showErrorDialog(
+          context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
       return;
     }
@@ -235,9 +237,10 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToGoogleDriveFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToGoogleDriveFailed);
       setState(() {
-          _updateShownMemos();
+        _updateShownMemos();
       });
       Navigator.of(context).pop();
       return;
@@ -248,7 +251,8 @@ class _HomePageState extends State<HomePage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     setState(() {
       _updateShownMemos();
