@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/editing_page.dart';
 import 'package:tsukimisou/memo.dart';
@@ -7,6 +8,9 @@ void main() {
   group('Memo', () {
     testWidgets('EditingPage widget smoke test', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+        ],
         home: const EditingPage(),
       ));
       expect(find.text('Add a new memo'), findsOneWidget);
@@ -17,6 +21,9 @@ void main() {
       final memo = Memo();
       memo.text = 'This is a test.';
       await tester.pumpWidget(MaterialApp(
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+        ],
         home: EditingPage(memo: memo),
       ));
       expect(find.text('Edit a memo'), findsOneWidget);
