@@ -22,6 +22,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common_uis.dart';
 import 'home_page.dart';
@@ -33,7 +34,12 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tsukimisou',
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
@@ -41,16 +47,12 @@ class App extends StatelessWidget {
           foregroundColor: ThemeColors.onPrimary,
         ),
       ),
-      home: const HomePage(),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
       supportedLocales: [
         Locale('en', ''),
         Locale('ja', ''),
-      ]
+      ],
+      title: 'Tsukimisou',
+      home: const HomePage(),
     );
   }
 }
