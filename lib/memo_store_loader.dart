@@ -28,11 +28,11 @@ import 'package:path_provider/path_provider.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 
-class MemoStoreLoaderBase {
+class MemoStoreLoader {
   final MemoStore _memoStore;
 
   /// Creates a memo store loader base.
-  MemoStoreLoaderBase(this._memoStore);
+  MemoStoreLoader(this._memoStore);
 
   /// Deserializes memo store.
   void deserialize(String serialized) {
@@ -70,7 +70,7 @@ class MemoStoreLoaderBase {
   }
 }
 
-class MemoStoreLocalLoader extends MemoStoreLoaderBase {
+class MemoStoreLocalLoader extends MemoStoreLoader {
   final String _path;
 
   /// Creates a memo store loader.
