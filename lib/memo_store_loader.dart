@@ -70,11 +70,11 @@ class MemoStoreLoaderBase {
   }
 }
 
-class MemoStoreLoader extends MemoStoreLoaderBase {
+class MemoStoreLocalLoader extends MemoStoreLoaderBase {
   final String _path;
 
   /// Creates a memo store loader.
-  MemoStoreLoader(MemoStore memoStore, this._path) : super(memoStore);
+  MemoStoreLocalLoader(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store loader.
   Future<void> execute() async {
@@ -84,7 +84,7 @@ class MemoStoreLoader extends MemoStoreLoaderBase {
   }
 
   /// Creates a memo store loader from file name.
-  static Future<MemoStoreLoader> fromFileName(
+  static Future<MemoStoreLocalLoader> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
@@ -93,6 +93,6 @@ class MemoStoreLoader extends MemoStoreLoaderBase {
     path = path + Platform.pathSeparator + fileName;
     print('path: ${path}\n');
 
-    return MemoStoreLoader(memoStore, path);
+    return MemoStoreLocalLoader(memoStore, path);
   }
 }
