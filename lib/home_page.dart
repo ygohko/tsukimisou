@@ -198,7 +198,7 @@ class _HomePageState extends State<HomePage> {
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveLoader.execute();
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         toMemoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();

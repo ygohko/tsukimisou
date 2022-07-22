@@ -119,7 +119,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
     final memoStore = MemoStore.instance();
     memoStore.removeMemo(widget.memo);
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
