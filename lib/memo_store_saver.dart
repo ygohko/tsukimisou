@@ -27,11 +27,11 @@ import 'package:path_provider/path_provider.dart';
 
 import 'memo_store.dart';
 
-class MemoStoreSaverBase {
-  MemoStore _memoStore;
+class MemoStoreSaver {
+  final MemoStore _memoStore;
 
   /// Creates a memo store saver base.
-  MemoStoreSaverBase(this._memoStore);
+  MemoStoreSaver(this._memoStore);
 
   /// Serializes a memo store.
   String serialize() {
@@ -53,7 +53,7 @@ class MemoStoreSaverBase {
   }
 }
 
-class MemoStoreLocalSaver extends MemoStoreSaverBase {
+class MemoStoreLocalSaver extends MemoStoreSaver {
   final String _path;
 
   /// Creates a memo store saver.

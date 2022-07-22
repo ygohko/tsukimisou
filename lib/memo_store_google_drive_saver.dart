@@ -26,7 +26,7 @@ import 'google_drive_file.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
-class MemoStoreGoogleDriveSaver extends MemoStoreSaverBase {
+class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
   final String _fileName;
 
   /// Creates a memo store saver.
