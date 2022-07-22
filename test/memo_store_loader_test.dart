@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_loader.dart';
+import 'package:tsukimisou/memo_store_local_loader.dart';
 
 void main() {
   group('MemoStoreLocalLoader', () {

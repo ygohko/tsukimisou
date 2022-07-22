@@ -32,7 +32,7 @@ import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
-import 'memo_store_loader.dart';
+import 'memo_store_local_loader.dart';
 import 'memo_store_merger.dart';
 import 'memo_store_saver.dart';
 import 'viewing_page.dart';
