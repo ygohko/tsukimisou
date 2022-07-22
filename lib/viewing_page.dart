@@ -29,7 +29,7 @@ import 'common_uis.dart';
 import 'editing_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_saver.dart';
+import 'memo_store_local_saver.dart';
 
 class ViewingPage extends StatefulWidget {
   final Memo memo;

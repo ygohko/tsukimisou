@@ -28,7 +28,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'common_uis.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_saver.dart';
+import 'memo_store_local_saver.dart';
 
 class EditingPage extends StatefulWidget {
   final Memo? memo;

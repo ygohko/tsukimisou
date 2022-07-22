@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:test/test.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_saver.dart';
+import 'package:tsukimisou/memo_store_local_saver.dart';
 
 void main() {
   group('MemoStoreLocalSaver', () {

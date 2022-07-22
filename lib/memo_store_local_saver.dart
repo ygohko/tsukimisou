@@ -20,37 +20,13 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import "dart:convert";
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
 
 import 'memo_store.dart';
+import 'memo_store_saver.dart';
 
-class MemoStoreSaver {
-  final MemoStore _memoStore;
-
-  /// Creates a memo store saver base.
-  MemoStoreSaver(this._memoStore);
-
-  /// Serializes a memo store.
-  String serialize() {
-    final memoStore = _memoStore;
-    final memos = memoStore.memos;
-    final serializableMemos = [];
-    for (var i = 0; i < memos.length; i++) {
-      serializableMemos.add(memos[i].toSerializable());
-    }
-    final version = 1;
-    final serializable = {
-      'version': version,
-      'memos': serializableMemos,
-      'lastMerged': memoStore.lastMerged,
-      'removedMemoIds': memoStore.removedMemoIds,
-    };
-
-    return jsonEncode(serializable);
-  }
-}
-
-/*
 class MemoStoreLocalSaver extends MemoStoreSaver {
   final String _path;
 
@@ -77,4 +53,3 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
     return MemoStoreLocalSaver(memoStore, path);
   }
 }
-*/
