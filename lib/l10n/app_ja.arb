@@ -19,5 +19,10 @@
     "addANewMemo": "新しいメモを追加",
     "editAMemo": "メモを編集",
     "save": "保存",
-    "doYouReallyWantToDiscardTheChanges": "この変更を本当に破棄してよいですか?"
+    "doYouReallyWantToDiscardTheChanges": "この変更を本当に破棄してよいですか?",
+    "bindTags": "タグ付け",
+    "addANewTag": "新しいタグを追加...",
+    "addANewTagTitle": "新しいタグを追加",
+    "enterATagName": "タグ名を入力する",
+    "thatTagAlreadyExists": "このタグはすでにあります。"
 }

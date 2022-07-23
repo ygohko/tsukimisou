@@ -50,6 +50,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     final tags = widget.memo.tags;
     final listCount = tags.length + 1;
     final itemCount = listCount * 2;
@@ -57,7 +58,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       onWillPop: _apply,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Binding tags'),
+          title: Text(localizations.bindTags),
         ),
         body: ListView.builder(
           itemCount: itemCount,
@@ -69,7 +70,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             final index = i ~/ 2;
             if (index == listCount - 1) {
               return ListTile(
-                title: Text('Add a new tag...'),
+                title: Text(localizations.addANewTag),
                 onTap: _addTag,
               );
             }
@@ -105,10 +106,10 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add a new tag'),
+          title: Text(localizations.addANewTagTitle),
           content: TextField(
             controller: controller,
-            decoration: InputDecoration(hintText: 'Enter a tag name'),
+            decoration: InputDecoration(hintText: localizations.enterATagName),
           ),
           actions: [
             FlatButton(
@@ -139,7 +140,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       });
       if (!added) {
         final snackBar = SnackBar(
-          content: Text('That tag already exists. do nothing.'),
+          content: Text(localizations.thatTagAlreadyExists),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
