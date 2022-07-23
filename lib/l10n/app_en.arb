@@ -3,9 +3,12 @@
     "@tsukimisou": {
         "description": "Application title"
     },
-    "updated": "Updated: ",
+    "updated": "Updated: {dateTime}",
     "@updated": {
-        "description": "Indicattion for update date and time"
+        "description": "Indicattion for update date and time",
+        "placeholders": {
+            "dateTime": {}
+        }
     },
     "addAMemo": "Add a memo",
     "@addAMemo": {
@@ -40,6 +43,13 @@
         "description": "Title for viewing page app bar",
         "placeholders": {
             "dateTime": {}
+        }
+    },
+    "boundTags": "Tags: {tags}",
+    "@boundTags": {
+        "description": "Text for tags list tile",
+        "placeholders": {
+            "tags": {}
         }
     },
     "delete": "Delete",
@@ -81,5 +91,25 @@
     "doYouReallyWantToDiscardTheChanges": "Do you really want to discard the changes?",
     "@doYouReallyWantToDiscardTheChanges": {
         "description": "Text for discard confirmation dialog"
+    },
+    "bindTags": "Bind tags",
+    "@bindTags": {
+        "description": "Title for binding tags page"
+    },
+    "addANewTag": "Add a new tag...",
+    "@addANewTag": {
+        "description": "Text for list tile to add a new tag"
+    },
+    "addANewTagTitle": "Add a new tag",
+    "@addANewTagTitle": {
+        "description": "Title for tag adding dialig"
+    },
+    "enterATagName": "Enter a tag name",
+    "@enterATagName": {
+        "description": "Decoration for tag text field"
+    },
+    "thatTagAlreadyExists": "That tag already exists.",
+    "@thatTagAlreadyExists": {
+        "description": "Snack bar text when tag already exists"
     }
 }

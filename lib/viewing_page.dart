@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'binding_tags_page.dart';
 import 'common_uis.dart';
 import 'editing_page.dart';
 import 'memo.dart';
@@ -47,6 +48,13 @@ class _ViewingPageState extends State<ViewingPage> {
     final localizations = AppLocalizations.of(context)!;
     final dateTime =
         DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
+    var tagsString = '';
+    for (final tag in widget.memo.tags) {
+      tagsString += tag + ', ';
+    }
+    if (tagsString != '') {
+      tagsString = tagsString.substring(0, tagsString.length - 2);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.memoAtDateTime(dateTime.toString())),
@@ -63,16 +71,27 @@ class _ViewingPageState extends State<ViewingPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Card(
-          child: SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(widget.memo.text),
+      body: ListView(
+        children: [
+          Card(
+            child: SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(widget.memo.text),
+              ),
             ),
           ),
-        ),
+          ListTile(
+            title: Text(localizations.updated(dateTime.toString())),
+          ),
+          const Divider(),
+          ListTile(
+            title: Text(localizations.boundTags(tagsString)),
+            onTap: _bindTags,
+          ),
+          const Divider(),
+        ],
       ),
     );
   }
@@ -129,5 +148,16 @@ class _ViewingPageState extends State<ViewingPage> {
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
+  }
+
+  void _bindTags() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return BindingTagsPage(memo: widget.memo);
+        },
+      )
+    );
+    setState(() {});
   }
 }
