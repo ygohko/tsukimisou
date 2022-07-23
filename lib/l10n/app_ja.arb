@@ -1,6 +1,6 @@
 {
     "tsukimisou": "月見草",
-    "updated": "更新: ",
+    "updated": "更新: {dateTime}",
     "addAMemo": "メモを追加",
     "tags": "タグ",
     "googleDriveIntegration": "Google Drive連携",

@@ -3,9 +3,12 @@
     "@tsukimisou": {
         "description": "Application title"
     },
-    "updated": "Updated: ",
+    "updated": "Updated: {dateTime}",
     "@updated": {
-        "description": "Indicattion for update date and time"
+        "description": "Indicattion for update date and time",
+        "placeholders": {
+            "dateTime": {}
+        }
     },
     "addAMemo": "Add a memo",
     "@addAMemo": {

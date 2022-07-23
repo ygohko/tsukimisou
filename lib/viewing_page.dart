@@ -82,7 +82,7 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
           ),
           ListTile(
-            title: Text(localizations.updated + dateTime.toString()),
+            title: Text(localizations.updated(dateTime.toString())),
           ),
           const Divider(),
           ListTile(

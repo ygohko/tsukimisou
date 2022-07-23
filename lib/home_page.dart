@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                       Text(memo.text),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('${localizations.updated}${updated}'),
+                        child: Text(localizations.updated(updated)),
                       ),
                     ]),
               ),
