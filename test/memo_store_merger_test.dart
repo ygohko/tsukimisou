@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:test/test.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
@@ -18,6 +20,7 @@ void main() {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
+      sleep(const Duration(milliseconds: 1));
       final memo = Memo();
       memo.text = 'This is a to memo.';
       toMemoStore.addMemo(memo);
@@ -34,6 +37,7 @@ void main() {
       final fromMemoStore = MemoStore();
       final memo = Memo();
       memo.text = 'This is a to memo.';
+      sleep(const Duration(milliseconds: 1));
       fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
       toMemoStore.addMemo(memo);
       expect(toMemoStore.memos.length, 1);
