@@ -20,10 +20,15 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'common_uis.dart';
 import 'memo.dart';
+import 'memo_store.dart';
+import 'memo_store_local_saver.dart';
 
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
@@ -48,43 +53,46 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     final tags = widget.memo.tags;
     final listCount = tags.length + 1;
     final itemCount = listCount * 2;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Binding tags'),
-      ),
-      body: ListView.builder(
-        itemCount: itemCount,
-        itemBuilder: (context, i) {
-          if (i.isOdd) {
-            return const Divider();
-          }
-
-          final index = i ~/ 2;
-          if (index == listCount - 1) {
-            return ListTile(
-              title: Text('Add a new tag...'),
-              onTap: _addTag,
-            );
-          }
-          final tag = widget.memo.tags[index];
-          final bound = _boundTags.contains(tag);
-          return ListTile(
-            title: Text(tag),
-            trailing: Icon(
-              bound ? Icons.check : Icons.check,
-              color: bound ? Colors.blue : null,
-            ),
-            onTap: () {
-              setState(() {
-                if (bound) {
-                  _boundTags.remove(tag);
-                } else {
-                  _boundTags.add(tag);
-                }
-              });
+    return WillPopScope(
+      onWillPop: _apply,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Binding tags'),
+        ),
+        body: ListView.builder(
+          itemCount: itemCount,
+          itemBuilder: (context, i) {
+            if (i.isOdd) {
+              return const Divider();
             }
-          );
-        },
+
+            final index = i ~/ 2;
+            if (index == listCount - 1) {
+              return ListTile(
+                title: Text('Add a new tag...'),
+                onTap: _addTag,
+              );
+            }
+            final tag = widget.memo.tags[index];
+            final bound = _boundTags.contains(tag);
+            return ListTile(
+              title: Text(tag),
+              trailing: Icon(
+                bound ? Icons.check : Icons.check,
+                color: bound ? Colors.blue : null,
+              ),
+              onTap: () {
+                setState(() {
+                    if (bound) {
+                      _boundTags.remove(tag);
+                    } else {
+                      _boundTags.add(tag);
+                    }
+                });
+              }
+            );
+          },
+        ),
       ),
     );
   }
@@ -136,5 +144,23 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
+  }
+
+  Future<bool> _apply() async {
+    final localizations = AppLocalizations.of(context)!;
+    final memoStore = MemoStore.instance();
+    final memo = widget.memo;
+    memo.tags = [..._boundTags];
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
+        memoStore, 'TsukimisouMemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on IOException catch (exception) {
+      // Save error
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToLocalStorageFailed);
+    }
+
+    return true;
   }
 }
