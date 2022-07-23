@@ -36,6 +36,13 @@ class BindingTagsPage extends StatefulWidget {
 }
 
 class _BindingTagsPageState extends State<BindingTagsPage> {
+  List<String> _boundTags = [];
+
+  @override
+  void initState() {
+    _boundTags = [...widget.memo.tags];
+  }
+
   @override
   Widget build(BuildContext context) {
     final tags = widget.memo.tags;
@@ -59,8 +66,23 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
               onTap: _addTag,
             );
           }
+          final tag = widget.memo.tags[index];
+          final bound = _boundTags.contains(tag);
           return ListTile(
-            title: Text(widget.memo.tags[index]),
+            title: Text(tag),
+            trailing: Icon(
+              bound ? Icons.check : Icons.check,
+              color: bound ? Colors.blue : null,
+            ),
+            onTap: () {
+              setState(() {
+                if (bound) {
+                  _boundTags.remove(tag);
+                } else {
+                  _boundTags.add(tag);
+                }
+              });
+            }
           );
         },
       ),
@@ -96,8 +118,23 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       },
     );
     if (accepted) {
-      widget.memo.tags.add(controller.text);
-      setState(() {});
+      var added = false;
+      setState(() {
+        final tag = controller.text;
+        if (!widget.memo.tags.contains(tag)) {
+          widget.memo.tags.add(tag);
+          added = true;
+        }
+        if (!_boundTags.contains(tag)) {
+          _boundTags.add(tag);
+        }
+      });
+      if (!added) {
+        final snackBar = SnackBar(
+          content: Text('That tag already exists. do nothing.'),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     }
   }
 }
