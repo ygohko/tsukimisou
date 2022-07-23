@@ -21,18 +21,15 @@
  */
 
 import "dart:convert";
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
 
 import 'memo.dart';
 import 'memo_store.dart';
 
-class MemoStoreLoaderBase {
+class MemoStoreLoader {
   final MemoStore _memoStore;
 
   /// Creates a memo store loader base.
-  MemoStoreLoaderBase(this._memoStore);
+  MemoStoreLoader(this._memoStore);
 
   /// Deserializes memo store.
   void deserialize(String serialized) {
@@ -67,32 +64,5 @@ class MemoStoreLoaderBase {
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       _memoStore.addMemo(memo);
     }
-  }
-}
-
-class MemoStoreLoader extends MemoStoreLoaderBase {
-  final String _path;
-
-  /// Creates a memo store loader.
-  MemoStoreLoader(MemoStore memoStore, this._path) : super(memoStore);
-
-  /// Executes this memo store loader.
-  Future<void> execute() async {
-    final file = File(_path);
-    final string = await file.readAsString();
-    deserialize(string);
-  }
-
-  /// Creates a memo store loader from file name.
-  static Future<MemoStoreLoader> fromFileName(
-      MemoStore memoStore, String fileName) async {
-    final applicationDocumentsDirectory =
-        await getApplicationDocumentsDirectory();
-    var path = applicationDocumentsDirectory.path;
-    print('path: ${path}\n');
-    path = path + Platform.pathSeparator + fileName;
-    print('path: ${path}\n');
-
-    return MemoStoreLoader(memoStore, path);
   }
 }

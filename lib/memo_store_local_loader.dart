@@ -20,23 +20,36 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'dart:convert';
+import 'dart:io';
 
-import 'google_drive_file.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'memo_store.dart';
-import 'memo_store_saver.dart';
+import 'memo_store_loader.dart';
 
-class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
-  final String _fileName;
+class MemoStoreLocalLoader extends MemoStoreLoader {
+  final String _path;
 
-  /// Creates a memo store saver.
-  MemoStoreGoogleDriveSaver(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  /// Creates a memo store loader.
+  MemoStoreLocalLoader(MemoStore memoStore, this._path) : super(memoStore);
 
-  /// Executes this memo store saver.
+  /// Executes this memo store loader.
   Future<void> execute() async {
-    final string = serialize();
-    final file = GoogleDriveFile(_fileName);
-    await file.writeAsString(string);
+    final file = File(_path);
+    final string = await file.readAsString();
+    deserialize(string);
+  }
+
+  /// Creates a memo store loader from file name.
+  static Future<MemoStoreLocalLoader> fromFileName(
+      MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory =
+        await getApplicationDocumentsDirectory();
+    var path = applicationDocumentsDirectory.path;
+    print('path: ${path}\n');
+    path = path + Platform.pathSeparator + fileName;
+    print('path: ${path}\n');
+
+    return MemoStoreLocalLoader(memoStore, path);
   }
 }

@@ -29,7 +29,7 @@ import 'common_uis.dart';
 import 'editing_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_saver.dart';
+import 'memo_store_local_saver.dart';
 
 class ViewingPage extends StatefulWidget {
   final Memo memo;
@@ -119,13 +119,14 @@ class _ViewingPageState extends State<ViewingPage> {
 
     final memoStore = MemoStore.instance();
     memoStore.removeMemo(widget.memo);
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
   }

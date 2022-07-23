@@ -32,9 +32,9 @@ import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
-import 'memo_store_loader.dart';
+import 'memo_store_local_loader.dart';
+import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
-import 'memo_store_saver.dart';
 import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -102,7 +102,8 @@ class _HomePageState extends State<HomePage> {
                 color: ThemeColors.primary,
               ),
               child: Text(localizations.tsukimisou,
-                  style: const TextStyle(color: ThemeColors.onPrimary, fontSize: 24)),
+                  style: const TextStyle(
+                      color: ThemeColors.onPrimary, fontSize: 24)),
             ),
             subtitle(context, localizations.tags),
             const ListTile(
@@ -131,7 +132,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _load() async {
     final memoStore = MemoStore.instance();
-    final memoStoreLoader = await MemoStoreLoader.fromFileName(
+    final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       await memoStoreLoader.execute();
@@ -197,7 +198,7 @@ class _HomePageState extends State<HomePage> {
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
     await memoStoreGoogleDriveLoader.execute();
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
@@ -222,7 +223,8 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveLoader.execute();
     } on IOException catch (exception) {
       // Load error
-      await showErrorDialog(context, localizations.loadingMemoStoreFromGoogleDriveFailed);
+      await showErrorDialog(
+          context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
       return;
     }
@@ -235,20 +237,22 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToGoogleDriveFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToGoogleDriveFailed);
       setState(() {
-          _updateShownMemos();
+        _updateShownMemos();
       });
       Navigator.of(context).pop();
       return;
     }
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         toMemoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     setState(() {
       _updateShownMemos();

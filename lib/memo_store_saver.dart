@@ -21,17 +21,14 @@
  */
 
 import "dart:convert";
-import 'dart:io';
-
-import 'package:path_provider/path_provider.dart';
 
 import 'memo_store.dart';
 
-class MemoStoreSaverBase {
-  MemoStore _memoStore;
+class MemoStoreSaver {
+  final MemoStore _memoStore;
 
   /// Creates a memo store saver base.
-  MemoStoreSaverBase(this._memoStore);
+  MemoStoreSaver(this._memoStore);
 
   /// Serializes a memo store.
   String serialize() {
@@ -53,11 +50,12 @@ class MemoStoreSaverBase {
   }
 }
 
-class MemoStoreSaver extends MemoStoreSaverBase {
-  var _path = '';
+/*
+class MemoStoreLocalSaver extends MemoStoreSaver {
+  final String _path;
 
   /// Creates a memo store saver.
-  MemoStoreSaver(MemoStore memoStore, this._path) : super(memoStore);
+  MemoStoreLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store saver.
   Future<void> execute() async {
@@ -67,7 +65,7 @@ class MemoStoreSaver extends MemoStoreSaverBase {
   }
 
   /// Creates a memo store saver from file name.
-  static Future<MemoStoreSaver> fromFileName(
+  static Future<MemoStoreLocalSaver> fromFileName(
       MemoStore memoStore, String fileName) async {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
@@ -76,6 +74,7 @@ class MemoStoreSaver extends MemoStoreSaverBase {
     path = path + Platform.pathSeparator + fileName;
     print('path: ${path}\n');
 
-    return MemoStoreSaver(memoStore, path);
+    return MemoStoreLocalSaver(memoStore, path);
   }
 }
+*/

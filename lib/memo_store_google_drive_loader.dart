@@ -28,7 +28,7 @@ import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-class MemoStoreGoogleDriveLoader extends MemoStoreLoaderBase {
+class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
   final String _fileName;
 
   /// Creates a memo store loader.

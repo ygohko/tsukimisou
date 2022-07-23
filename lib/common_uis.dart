@@ -48,19 +48,19 @@ void showProgressIndicatorDialog(BuildContext context) {
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String text) async {
   await showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Error'),
-        content: Text(text),
-        actions: [
-          FlatButton(
-            child: const Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-          }),
-      ]);
-  });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            title: const Text('Error'),
+            content: Text(text),
+            actions: [
+              FlatButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ]);
+      });
 }
 
 /// Creates a subtitle.
@@ -70,8 +70,8 @@ Container subtitle(BuildContext context, String text) {
     child: Align(
       alignment: AlignmentDirectional.centerStart,
       child: Text(text,
-        style: Theme.of(context).textTheme.caption,
-        textAlign: TextAlign.start),
+          style: Theme.of(context).textTheme.caption,
+          textAlign: TextAlign.start),
     ),
   );
 }

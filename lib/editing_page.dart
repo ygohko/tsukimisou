@@ -28,7 +28,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'common_uis.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_saver.dart';
+import 'memo_store_local_saver.dart';
 
 class EditingPage extends StatefulWidget {
   final Memo? memo;
@@ -101,13 +101,14 @@ class _EditingPageState extends State<EditingPage> {
       // Update a memo
       memo.text = _controller.text;
     }
-    final memoStoreSaver = await MemoStoreSaver.fromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.savingMemoStoreToLocalStorageFailed);
+      await showErrorDialog(
+          context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
   }
