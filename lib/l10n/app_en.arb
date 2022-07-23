@@ -42,6 +42,13 @@
             "dateTime": {}
         }
     },
+    "boundTags": "Tags: {tags}",
+    "@boundTags": {
+        "description": "Text for tags list tile",
+        "placeholders": {
+            "tags": {}
+        }
+    },
     "delete": "Delete",
     "@delete": {
         "description": "Tooltip for Delete button"
