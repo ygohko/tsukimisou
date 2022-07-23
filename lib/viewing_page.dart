@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'binding_tags_page.dart';
 import 'common_uis.dart';
 import 'editing_page.dart';
 import 'memo.dart';
@@ -87,6 +88,7 @@ class _ViewingPageState extends State<ViewingPage> {
           const Divider(),
           ListTile(
             title: Text(localizations.boundTags(tagsString)),
+            onTap: _bindTags,
           ),
           const Divider(),
         ],
@@ -146,5 +148,16 @@ class _ViewingPageState extends State<ViewingPage> {
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
+  }
+
+  void _bindTags() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return BindingTagsPage(memo: widget.memo);
+        },
+      )
+    );
+    setState(() {});
   }
 }
