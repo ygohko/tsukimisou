@@ -56,7 +56,7 @@ class MemoStoreMerger {
     toMemoStore.memos = newMemos;
 
     // Update memos if needed.
-    for (var memo in toMemoStore.memos) {
+    for (final memo in toMemoStore.memos) {
       final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
       if (fromMemo != null) {
         if (fromMemo.revision <= memo.lastMergedRevision) {
@@ -64,14 +64,22 @@ class MemoStoreMerger {
         } else if (memo.revision <= memo.lastMergedRevision) {
           // From memo is modified and to memo is not modified. Update to memo.
           memo.text = fromMemo.text;
+          memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
         } else {
           // Both modified. Mark as Conflicted.
-          var text = 'This memo is conflicted.\nmine --------\n';
+          var text = 'This memo is conflicted.\nMine --------\n';
           text += memo.text;
           text += '\nTheirs --------\n';
           text += fromMemo.text;
           memo.text = text;
+          var tags = [...memo.tags];
+          for (final tag in fromMemo.tags) {
+            if (!memo.tags.contains(tag)) {
+              tags.add(tag);
+            }
+          }
+          memo.tags = tags;
         }
       }
     }
@@ -93,6 +101,7 @@ class MemoStoreMerger {
   }
 
   Memo? _getMemoFromId(MemoStore memoStore, String id) {
+    // TODO: Move to MemoStore.
     for (var memo in memoStore.memos) {
       if (memo.id == id) {
         return memo;

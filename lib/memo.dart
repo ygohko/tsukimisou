@@ -80,6 +80,8 @@ class Memo {
   /// Tags added to this memo.
   void set tags(List<String> tags) {
     _tags = tags;
+    _lastModified = DateTime.now().millisecondsSinceEpoch;
+    _revision++;
   }
 
   /// Revision of this memo.

@@ -51,7 +51,6 @@ class MemoStoreLoader {
       final memo = Memo();
       memo.id = deserializedMemo['id'];
       memo.text = deserializedMemo['text'];
-      memo.lastModified = deserializedMemo['lastModified'];
       final deserializedTags = deserializedMemo['tags'];
       final tags = <String>[];
       for (var tag in deserializedTags) {
@@ -60,6 +59,7 @@ class MemoStoreLoader {
         }
       }
       memo.tags = tags;
+      memo.lastModified = deserializedMemo['lastModified'];
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       _memoStore.addMemo(memo);

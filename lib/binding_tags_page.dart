@@ -110,6 +110,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
           content: TextField(
             controller: controller,
             decoration: InputDecoration(hintText: localizations.enterATagName),
+            autofocus: true,
           ),
           actions: [
             FlatButton(
