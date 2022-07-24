@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
               );
             } else if (i == 1) {
               return ListTile(
-                title: Text('All memos'),
+                title: Text(localizations.allMemos),
                 onTap: _disableFiltering,
               );
             } else if (i == 2) {
