@@ -151,10 +151,11 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _bindTags() async {
+    final memoStore = MemoStore.instance();
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return BindingTagsPage(memo: widget.memo);
+          return BindingTagsPage(memo: widget.memo, additinalTags: memoStore.tags);
         },
       )
     );

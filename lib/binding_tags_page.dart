@@ -32,27 +32,34 @@ import 'memo_store_local_saver.dart';
 
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
+  final List<String> additinalTags;
 
   /// Creates a binding tags page.
-  const BindingTagsPage({Key? key, required this.memo}) : super(key: key);
+  const BindingTagsPage({Key? key, required this.memo, required this.additinalTags}) : super(key: key);
 
   @override
   State<BindingTagsPage> createState() => _BindingTagsPageState();
 }
 
 class _BindingTagsPageState extends State<BindingTagsPage> {
+  List<String> _candidateTags = [];
   List<String> _boundTags = [];
 
   @override
   void initState() {
+    _candidateTags = [...widget.memo.tags];
+    for (final tag in widget.additinalTags) {
+      if (!_candidateTags.contains(tag)) {
+        _candidateTags.add(tag);
+      }
+    }
     _boundTags = [...widget.memo.tags];
   }
 
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final tags = widget.memo.tags;
-    final listCount = tags.length + 1;
+    final listCount = _candidateTags.length + 1;
     final itemCount = listCount * 2;
     return WillPopScope(
       onWillPop: _apply,
@@ -74,7 +81,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
                 onTap: _addTag,
               );
             }
-            final tag = widget.memo.tags[index];
+            final tag = _candidateTags[index];
             final bound = _boundTags.contains(tag);
             return ListTile(
               title: Text(tag),
@@ -131,8 +138,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       var added = false;
       setState(() {
         final tag = controller.text;
-        if (!widget.memo.tags.contains(tag)) {
-          widget.memo.tags.add(tag);
+        if (!_candidateTags.contains(tag)) {
+          _candidateTags.add(tag);
           added = true;
         }
         if (!_boundTags.contains(tag)) {
