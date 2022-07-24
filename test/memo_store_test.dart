@@ -61,6 +61,21 @@ void main() {
     });
 
     test(
+        'MemoStore.memos should receive tags that bound for memos in memo store.',
+        () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memo.text = 'This is a memo.';
+      memoStore.addMemo(memo);
+      var tags = memoStore.tags;
+      expect(tags.length, 0);
+      memo.tags.add('test');
+      tags = memoStore.tags;
+      expect(tags.length, 1);
+      expect(tags[0], 'test');
+    });
+
+    test(
         'MemoStore should create singleton instance when first time MemoStore.instance() called.',
         () {
       expect(MemoStore.instance(), isNotNull);
