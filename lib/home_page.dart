@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const tagsIndex = 3;
     final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
     final tags = memoStore.tags;
@@ -99,7 +100,7 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: Drawer(
         child: ListView.builder(
-          itemCount: 1 + 1 + tags.length + 1 + 1 + 1,
+          itemCount: tagsIndex + tags.length + 1 + 1 + 1,
           itemBuilder: (context, i) {
             if (i == 0) {
               return DrawerHeader(
@@ -111,17 +112,22 @@ class _HomePageState extends State<HomePage> {
                     color: ThemeColors.onPrimary, fontSize: 24)),
               );
             } else if (i == 1) {
-              return subtitle(context, localizations.tags);
-            } else if (i >= 2 && i < 2 + tags.length) {
               return ListTile(
-                title: Text(tags[i - 2]),
+                title: Text('All memos'),
+                onTap: _disableFiltering,
+              );
+            } else if (i == 2) {
+              return subtitle(context, localizations.tags);
+            } else if (i >= tagsIndex && i < tagsIndex + tags.length) {
+              return ListTile(
+                title: Text(tags[i - tagsIndex]),
                 onTap: () {
-                  _filter(tags[i - 2]);
+                  _filter(tags[i - tagsIndex]);
                 }
               );
-            } else if (i == 2 + tags.length) {
+            } else if (i == tagsIndex + tags.length) {
               return const Divider();
-            } else if (i == 3 + tags.length) {
+            } else if (i == tagsIndex + 1 + tags.length) {
               return subtitle(context, localizations.googleDriveIntegration);
             } else {
               return ListTile(
@@ -268,6 +274,14 @@ class _HomePageState extends State<HomePage> {
   void _filter(String tag) {
     _filteringTag = tag;
     _filteringEnabled = true;
+    setState(() {
+      _updateShownMemos();
+    });
+    Navigator.of(context).pop();
+  }
+
+  void _disableFiltering() {
+    _filteringEnabled = false;
     setState(() {
       _updateShownMemos();
     });
