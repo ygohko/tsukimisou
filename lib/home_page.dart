@@ -47,6 +47,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _shownMemos = <Memo>[];
+  var _filteringTag = '';
+  var _filteringEnabled = false;
 
   @override
   void initState() {
@@ -56,14 +58,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    const tagsIndex = 3;
     final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
+    final tags = memoStore.tags;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
       ),
       body: ListView.builder(
-          itemCount: memoStore.memos.length,
+          itemCount: _shownMemos.length,
           itemBuilder: (context, i) {
             final memo = _shownMemos[(_shownMemos.length - 1) - i];
             final updated =
@@ -95,36 +99,43 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       drawer: Drawer(
-        child: ListView(
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: ThemeColors.primary,
-              ),
-              child: Text(localizations.tsukimisou,
+        child: ListView.builder(
+          itemCount: tagsIndex + tags.length + 1 + 1 + 1,
+          itemBuilder: (context, i) {
+            if (i == 0) {
+              return DrawerHeader(
+                decoration: const BoxDecoration(
+                  color: ThemeColors.primary,
+                ),
+                child: Text(localizations.tsukimisou,
                   style: const TextStyle(
-                      color: ThemeColors.onPrimary, fontSize: 24)),
-            ),
-            subtitle(context, localizations.tags),
-            const ListTile(
-              title: const Text('Tags'),
-            ),
-            const ListTile(
-              title: const Text('Will be'),
-            ),
-            const ListTile(
-              title: const Text('Listed'),
-            ),
-            const ListTile(
-              title: const Text('Here'),
-            ),
-            const Divider(),
-            subtitle(context, localizations.googleDriveIntegration),
-            ListTile(
-              title: Text(localizations.synchronize),
-              onTap: _mergeWithGoogleDrive,
-            ),
-          ],
+                    color: ThemeColors.onPrimary, fontSize: 24)),
+              );
+            } else if (i == 1) {
+              return ListTile(
+                title: Text(localizations.allMemos),
+                onTap: _disableFiltering,
+              );
+            } else if (i == 2) {
+              return subtitle(context, localizations.tags);
+            } else if (i >= tagsIndex && i < tagsIndex + tags.length) {
+              return ListTile(
+                title: Text(tags[i - tagsIndex]),
+                onTap: () {
+                  _filter(tags[i - tagsIndex]);
+                }
+              );
+            } else if (i == tagsIndex + tags.length) {
+              return const Divider();
+            } else if (i == tagsIndex + 1 + tags.length) {
+              return subtitle(context, localizations.googleDriveIntegration);
+            } else {
+              return ListTile(
+                title: Text(localizations.synchronize),
+                onTap: _mergeWithGoogleDrive,
+              );
+            }
+          },
         ),
       ),
     );
@@ -260,10 +271,36 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
+  void _filter(String tag) {
+    _filteringTag = tag;
+    _filteringEnabled = true;
+    setState(() {
+      _updateShownMemos();
+    });
+    Navigator.of(context).pop();
+  }
+
+  void _disableFiltering() {
+    _filteringEnabled = false;
+    setState(() {
+      _updateShownMemos();
+    });
+    Navigator.of(context).pop();
+  }
+
   void _updateShownMemos() {
     final memoStore = MemoStore.instance();
     final memos = memoStore.memos;
-    _shownMemos = [...memos];
+    if (!_filteringEnabled) {
+      _shownMemos = [...memos];
+    } else {
+      _shownMemos.clear();
+      for (final memo in memos) {
+        if (memo.tags.contains(_filteringTag)) {
+          _shownMemos.add(memo);
+        }
+      }
+    }
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
   }
 }

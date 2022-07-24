@@ -72,6 +72,20 @@ class MemoStore {
     _lastMerged = lastMerged;
   }
 
+  /// Tags bound for memos
+  List<String> get tags {
+    var tags = <String>[];
+    for (final memo in _memos) {
+      for (final tag in memo.tags) {
+        if (!tags.contains(tag)) {
+          tags.add(tag);
+        }
+      }
+    }
+
+    return tags;
+  }
+
   /// Gets a singleton instance.
   static MemoStore instance() {
     if (_instance == null) {

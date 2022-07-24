@@ -3,6 +3,10 @@
     "@tsukimisou": {
         "description": "Application title"
     },
+    "allMemos": "All memos",
+    "@allMemos": {
+        "description": "Text for disable filtering list tile"
+    },
     "updated": "Updated: {dateTime}",
     "@updated": {
         "description": "Indicattion for update date and time",
