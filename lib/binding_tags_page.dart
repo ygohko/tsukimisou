@@ -86,7 +86,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             return ListTile(
               title: Text(tag),
               trailing: Icon(
-                bound ? Icons.check : Icons.check,
+                bound ? Icons.check_circle : Icons.check_circle_outline,
                 color: bound ? Colors.blue : null,
               ),
               onTap: () {
