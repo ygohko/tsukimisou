@@ -67,12 +67,16 @@ class MemoStoreMerger {
           memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
         } else {
-          // Both modified. Mark as Conflicted.
-          var text = 'This memo is conflicted.\nMine --------\n';
-          text += memo.text;
-          text += '\nTheirs --------\n';
-          text += fromMemo.text;
-          memo.text = text;
+          if (memo.text != fromMemo.text) {
+            // Both modified. Mark as Conflicted.
+            var text = 'This memo is conflicted.\nMine --------\n';
+            text += memo.text;
+            text += '\nTheirs --------\n';
+            text += fromMemo.text;
+            memo.text = text;
+          } else {
+            // Both same. Do nothing.
+          }
           var tags = [...memo.tags];
           for (final tag in fromMemo.tags) {
             if (!memo.tags.contains(tag)) {
