@@ -86,7 +86,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             return ListTile(
               title: Text(tag),
               trailing: Icon(
-                bound ? Icons.check : Icons.check,
+                bound ? Icons.check_circle : Icons.check_circle_outline,
                 color: bound ? Colors.blue : null,
               ),
               onTap: () {
@@ -158,8 +158,21 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
   Future<bool> _apply() async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
-    final memo = widget.memo;
-    memo.tags = [..._boundTags];
+    var applyingNeeded = false;
+    if (widget.memo.tags.length != _boundTags.length) {
+      applyingNeeded = true;
+    } else {
+      for (final tag in _boundTags) {
+        if (!widget.memo.tags.contains(tag)) {
+          applyingNeeded = true;
+          break;
+        }
+      }
+    }
+    if (!applyingNeeded) {
+      return true;
+    }
+    widget.memo.tags = [..._boundTags];
     final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'TsukimisouMemoStore.json');
     try {

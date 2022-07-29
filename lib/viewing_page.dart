@@ -26,7 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'binding_tags_page.dart';
-import 'common_uis.dart';
+import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -55,6 +55,8 @@ class _ViewingPageState extends State<ViewingPage> {
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
+    final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
+    final attributeStyle = common_uis.TextTheme.viewingPageMemoAttribute(context);;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.memoAtDateTime(dateTime.toString())),
@@ -78,16 +80,19 @@ class _ViewingPageState extends State<ViewingPage> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Text(widget.memo.text),
+                child: Text(widget.memo.text,
+                  style: textStyle),
               ),
             ),
           ),
           ListTile(
-            title: Text(localizations.updated(dateTime.toString())),
+            title: Text(localizations.updated(dateTime.toString()),
+              style: attributeStyle),
           ),
           const Divider(),
           ListTile(
-            title: Text(localizations.boundTags(tagsString)),
+            title: Text(localizations.boundTags(tagsString),
+              style: attributeStyle),
             onTap: _bindTags,
           ),
           const Divider(),
@@ -144,7 +149,7 @@ class _ViewingPageState extends State<ViewingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(
+      await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();

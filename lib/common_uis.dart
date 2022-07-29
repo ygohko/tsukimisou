@@ -24,12 +24,48 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+// TODO: Rename to ColorTheme?
 class ThemeColors {
   /// Primary color for this application.
   static const primary = Color(0xFF00003F);
 
   /// On primary color for this application.
   static const onPrimary = Color(0xFFEFEFFF);
+}
+
+class TextTheme {
+  /// Text style for memo attributes on home page.
+  static TextStyle homePageMemoAttribute(BuildContext context) {
+    var style = Theme.of(context).textTheme.bodyText2;
+    if (style == null) {
+      style = TextStyle();
+    }
+    style = style.apply(color: Colors.black.withOpacity(0.6));
+
+    return style;
+  }
+
+  /// Text style for memo text on vieweing page.
+  static TextStyle viewingPageMemoText(BuildContext context) {
+    var style = Theme.of(context).textTheme.bodyText2;
+    if (style == null) {
+      style = TextStyle();
+    }
+    style = style.apply(fontSizeFactor: 1.1);
+
+    return style;
+  }
+
+  /// Text style for memo attributes on vieweing page.
+  static TextStyle viewingPageMemoAttribute(BuildContext context) {
+    var style = Theme.of(context).textTheme.subtitle1;
+    if (style == null) {
+      style = TextStyle();
+    }
+    style = style.apply(color: Colors.black.withOpacity(0.6));
+
+    return style;
+  }
 }
 
 /// Shows dialogs to indicate progressing.

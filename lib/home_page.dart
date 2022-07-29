@@ -25,7 +25,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'common_uis.dart';
+import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
     final tags = memoStore.tags;
+    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
@@ -83,7 +84,9 @@ class _HomePageState extends State<HomePage> {
                       Text(memo.text),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(localizations.updated(updated)),
+                        child: Text(localizations.updated(updated),
+                          style: attributeStyle,
+                        ),
                       ),
                     ]),
               ),
@@ -105,11 +108,11 @@ class _HomePageState extends State<HomePage> {
             if (i == 0) {
               return DrawerHeader(
                 decoration: const BoxDecoration(
-                  color: ThemeColors.primary,
+                  color: common_uis.ThemeColors.primary,
                 ),
                 child: Text(localizations.tsukimisou,
                   style: const TextStyle(
-                    color: ThemeColors.onPrimary, fontSize: 24)),
+                    color: common_uis.ThemeColors.onPrimary, fontSize: 24)),
               );
             } else if (i == 1) {
               return ListTile(
@@ -117,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: _disableFiltering,
               );
             } else if (i == 2) {
-              return subtitle(context, localizations.tags);
+              return common_uis.subtitle(context, localizations.tags);
             } else if (i >= tagsIndex && i < tagsIndex + tags.length) {
               return ListTile(
                 title: Text(tags[i - tagsIndex]),
@@ -128,7 +131,7 @@ class _HomePageState extends State<HomePage> {
             } else if (i == tagsIndex + tags.length) {
               return const Divider();
             } else if (i == tagsIndex + 1 + tags.length) {
-              return subtitle(context, localizations.googleDriveIntegration);
+              return common_uis.subtitle(context, localizations.googleDriveIntegration);
             } else {
               return ListTile(
                 title: Text(localizations.synchronize),
@@ -186,7 +189,7 @@ class _HomePageState extends State<HomePage> {
 
   void _testGoogleDrive() async {
     Navigator.of(context).pop();
-    showProgressIndicatorDialog(context);
+    common_uis.showProgressIndicatorDialog(context);
     final file = GoogleDriveFile('test.txt');
     await file.writeAsString('Hello, World!\nこんにちわ、世界!');
     Navigator.of(context).pop();
@@ -194,7 +197,7 @@ class _HomePageState extends State<HomePage> {
 
   void _saveToGoogleDrive() async {
     Navigator.of(context).pop();
-    showProgressIndicatorDialog(context);
+    common_uis.showProgressIndicatorDialog(context);
     final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveSaver =
         MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
@@ -204,7 +207,7 @@ class _HomePageState extends State<HomePage> {
 
   void _loadFromGoogleDrive() async {
     Navigator.of(context).pop();
-    showProgressIndicatorDialog(context);
+    common_uis.showProgressIndicatorDialog(context);
     final memoStore = MemoStore.instance();
     final memoStoreGoogleDriveLoader =
         MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
@@ -225,7 +228,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _mergeWithGoogleDrive() async {
     Navigator.of(context).pop();
-    showProgressIndicatorDialog(context);
+    common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
     final memoStoreGoogleDriveLoader =
@@ -234,7 +237,7 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveLoader.execute();
     } on IOException catch (exception) {
       // Load error
-      await showErrorDialog(
+      await common_uis.showErrorDialog(
           context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
       return;
@@ -248,7 +251,7 @@ class _HomePageState extends State<HomePage> {
       await memoStoreGoogleDriveSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(
+      await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToGoogleDriveFailed);
       setState(() {
         _updateShownMemos();
@@ -262,7 +265,7 @@ class _HomePageState extends State<HomePage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(
+      await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     setState(() {
