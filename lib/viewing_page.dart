@@ -26,7 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'binding_tags_page.dart';
-import 'common_uis.dart';
+import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -55,16 +55,8 @@ class _ViewingPageState extends State<ViewingPage> {
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
-    var textStyle = Theme.of(context).textTheme.bodyText2;
-    if (textStyle == null) {
-      textStyle = TextStyle();
-    }
-    textStyle = textStyle.apply(fontSizeFactor: 1.1);
-    var updatedTextStyle = Theme.of(context).textTheme.subtitle1;
-    if (updatedTextStyle == null) {
-      updatedTextStyle = TextStyle();
-    }
-    updatedTextStyle = updatedTextStyle.apply(color: Colors.black.withOpacity(0.6));
+    final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
+    final attributeStyle = common_uis.TextTheme.viewingPageMemoAttribute(context);;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.memoAtDateTime(dateTime.toString())),
@@ -95,12 +87,12 @@ class _ViewingPageState extends State<ViewingPage> {
           ),
           ListTile(
             title: Text(localizations.updated(dateTime.toString()),
-              style: updatedTextStyle),
+              style: attributeStyle),
           ),
           const Divider(),
           ListTile(
             title: Text(localizations.boundTags(tagsString),
-              style: updatedTextStyle),
+              style: attributeStyle),
             onTap: _bindTags,
           ),
           const Divider(),
@@ -157,7 +149,7 @@ class _ViewingPageState extends State<ViewingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(
+      await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }
     Navigator.of(context).pop();
