@@ -62,6 +62,11 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = MemoStore.instance();
     final tags = memoStore.tags;
+    var updatedTextStyle = Theme.of(context).textTheme.bodyText2;
+    if (updatedTextStyle == null) {
+      updatedTextStyle = TextStyle();
+    }
+    updatedTextStyle = updatedTextStyle.apply(color: Colors.black.withOpacity(0.6));
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
@@ -83,7 +88,9 @@ class _HomePageState extends State<HomePage> {
                       Text(memo.text),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(localizations.updated(updated)),
+                        child: Text(localizations.updated(updated),
+                          style: updatedTextStyle,
+                        ),
                       ),
                     ]),
               ),

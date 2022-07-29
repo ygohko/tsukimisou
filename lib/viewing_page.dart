@@ -55,6 +55,16 @@ class _ViewingPageState extends State<ViewingPage> {
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
+    var textStyle = Theme.of(context).textTheme.bodyText2;
+    if (textStyle == null) {
+      textStyle = TextStyle();
+    }
+    textStyle = textStyle.apply(fontSizeFactor: 1.1);
+    var updatedTextStyle = Theme.of(context).textTheme.subtitle1;
+    if (updatedTextStyle == null) {
+      updatedTextStyle = TextStyle();
+    }
+    updatedTextStyle = updatedTextStyle.apply(color: Colors.black.withOpacity(0.6));
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.memoAtDateTime(dateTime.toString())),
@@ -78,16 +88,19 @@ class _ViewingPageState extends State<ViewingPage> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Text(widget.memo.text),
+                child: Text(widget.memo.text,
+                  style: textStyle),
               ),
             ),
           ),
           ListTile(
-            title: Text(localizations.updated(dateTime.toString())),
+            title: Text(localizations.updated(dateTime.toString()),
+              style: updatedTextStyle),
           ),
           const Divider(),
           ListTile(
-            title: Text(localizations.boundTags(tagsString)),
+            title: Text(localizations.boundTags(tagsString),
+              style: updatedTextStyle),
             onTap: _bindTags,
           ),
           const Divider(),
