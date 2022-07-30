@@ -127,5 +127,65 @@ void main() {
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.text.contains('This memo is conflicted.'), true);
     });
+
+    test(
+        'MemoStoreMerger should not make conficted memos if both memos in from and to memo store are modified but these texts are same.',
+        () {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+      final toMemo = Memo();
+      toMemo.text = "This is a memo.";
+      toMemoStore.addMemo(toMemo);
+      final fromMemo = Memo();
+      fromMemo.text = "This is a memo.";
+      fromMemo.id = toMemo.id;
+      fromMemoStore.addMemo(fromMemo);
+      expect(toMemoStore.memos.length, 1);
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      memoStoreMerger.execute();
+      expect(toMemoStore.memos.length, 1);
+      expect(toMemo.text.contains('This memo is conflicted.'), false);
+    });
+
+    test('MemoStoreMerger should update memo\'s tags if from memos are modified.', () {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+      final toMemo = Memo();
+      toMemo.text = "This is a to memo.";
+      toMemoStore.addMemo(toMemo);
+      final fromMemo = Memo();
+      fromMemo.text = "This is a from memo.";
+      fromMemo.text = "This is a from memo.";
+      fromMemo.tags = ['a', 'b', 'c'];
+      fromMemo.id = toMemo.id;
+      fromMemoStore.addMemo(fromMemo);
+      expect(toMemoStore.memos.length, 1);
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      memoStoreMerger.execute();
+      expect(toMemoStore.memos.length, 1);
+      expect(toMemo.text.contains('This is a from memo.'), true);
+      expect(toMemo.tags.length, 3);
+    });
+
+    test(
+        'MemoStoreMerger should merge memo\'s tags if both memos in from and to memo store are modified.',
+        () {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+      final toMemo = Memo();
+      toMemo.text = "This is a memo.";
+      toMemo.tags = ['a', 'b', 'c'];
+      toMemoStore.addMemo(toMemo);
+      final fromMemo = Memo();
+      fromMemo.text = "This is a memo.";
+      fromMemo.tags = ['a', 'd', 'e', 'f'];
+      fromMemo.id = toMemo.id;
+      fromMemoStore.addMemo(fromMemo);
+      expect(toMemoStore.memos.length, 1);
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      memoStoreMerger.execute();
+      expect(toMemoStore.memos.length, 1);
+      expect(toMemo.tags.length, 6);
+    });
   });
 }
