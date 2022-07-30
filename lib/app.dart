@@ -20,6 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,6 +35,10 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+    if (Platform.isWindows) {
+      textTheme = textTheme.apply(fontFamily: 'Noto Sans JP');
+    }
     return MaterialApp(
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -41,6 +47,7 @@ class App extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       theme: ThemeData(
+        textTheme: textTheme,
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
           backgroundColor: ColorTheme.primary,

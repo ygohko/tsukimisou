@@ -106,3 +106,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  fonts:
+    - family: Noto Sans JP
+      fonts:
+        - asset: fonts/NotoSansJP-Regular.otf
+        - asset: fonts/NotoSansJP-Medium.otf
+          weight: 500
