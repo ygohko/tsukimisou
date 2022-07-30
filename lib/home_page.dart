@@ -109,11 +109,11 @@ class _HomePageState extends State<HomePage> {
             if (i == 0) {
               return DrawerHeader(
                 decoration: const BoxDecoration(
-                  color: common_uis.ThemeColors.primary,
+                  color: common_uis.ColorTheme.primary,
                 ),
                 child: Text(localizations.tsukimisou,
                     style: const TextStyle(
-                        color: common_uis.ThemeColors.onPrimary, fontSize: 24)),
+                        color: common_uis.ColorTheme.onPrimary, fontSize: 24)),
               );
             } else if (i == 1) {
               return ListTile(
