@@ -188,45 +188,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _testGoogleDrive() async {
-    Navigator.of(context).pop();
-    common_uis.showProgressIndicatorDialog(context);
-    final file = GoogleDriveFile('test.txt');
-    await file.writeAsString('Hello, World!\nこんにちわ、世界!');
-    Navigator.of(context).pop();
-  }
-
-  void _saveToGoogleDrive() async {
-    Navigator.of(context).pop();
-    common_uis.showProgressIndicatorDialog(context);
-    final memoStore = MemoStore.instance();
-    final memoStoreGoogleDriveSaver =
-        MemoStoreGoogleDriveSaver(memoStore, 'TsukimisouMemoStore.json');
-    await memoStoreGoogleDriveSaver.execute();
-    Navigator.of(context).pop();
-  }
-
-  void _loadFromGoogleDrive() async {
-    Navigator.of(context).pop();
-    common_uis.showProgressIndicatorDialog(context);
-    final memoStore = MemoStore.instance();
-    final memoStoreGoogleDriveLoader =
-        MemoStoreGoogleDriveLoader(memoStore, 'TsukimisouMemoStore.json');
-    await memoStoreGoogleDriveLoader.execute();
-    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'TsukimisouMemoStore.json');
-    try {
-      memoStoreSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
-      // Do nothing for now
-    }
-    setState(() {
-      _updateShownMemos();
-    });
-    Navigator.of(context).pop();
-  }
-
   Future<void> _mergeWithGoogleDrive() async {
     Navigator.of(context).pop();
     common_uis.showProgressIndicatorDialog(context);
