@@ -35,7 +35,9 @@ class BindingTagsPage extends StatefulWidget {
   final List<String> additinalTags;
 
   /// Creates a binding tags page.
-  const BindingTagsPage({Key? key, required this.memo, required this.additinalTags}) : super(key: key);
+  const BindingTagsPage(
+      {Key? key, required this.memo, required this.additinalTags})
+      : super(key: key);
 
   @override
   State<BindingTagsPage> createState() => _BindingTagsPageState();
@@ -84,21 +86,20 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             final tag = _candidateTags[index];
             final bound = _boundTags.contains(tag);
             return ListTile(
-              title: Text(tag),
-              trailing: Icon(
-                bound ? Icons.check_circle : Icons.check_circle_outline,
-                color: bound ? Colors.blue : null,
-              ),
-              onTap: () {
-                setState(() {
+                title: Text(tag),
+                trailing: Icon(
+                  bound ? Icons.check_circle : Icons.check_circle_outline,
+                  color: bound ? Colors.blue : null,
+                ),
+                onTap: () {
+                  setState(() {
                     if (bound) {
                       _boundTags.remove(tag);
                     } else {
                       _boundTags.add(tag);
                     }
+                  });
                 });
-              }
-            );
           },
         ),
       ),
@@ -113,25 +114,26 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(localizations.addANewTagTitle),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(hintText: localizations.enterATagName),
-            autofocus: true,
-          ),
-          actions: [
-            FlatButton(
-              child: Text(localizations.cancel),
-              onPressed: () {
-                Navigator.of(context).pop();
-            }),
-            FlatButton(
-              child: Text(localizations.ok),
-              onPressed: () {
-                accepted = true;
-                Navigator.of(context).pop();
-            }),
-        ]);
+            title: Text(localizations.addANewTagTitle),
+            content: TextField(
+              controller: controller,
+              decoration:
+                  InputDecoration(hintText: localizations.enterATagName),
+              autofocus: true,
+            ),
+            actions: [
+              FlatButton(
+                  child: Text(localizations.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              FlatButton(
+                  child: Text(localizations.ok),
+                  onPressed: () {
+                    accepted = true;
+                    Navigator.of(context).pop();
+                  }),
+            ]);
       },
     );
     if (accepted) {

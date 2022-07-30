@@ -84,7 +84,8 @@ class _HomePageState extends State<HomePage> {
                       Text(memo.text),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text(localizations.updated(updated),
+                        child: Text(
+                          localizations.updated(updated),
                           style: attributeStyle,
                         ),
                       ),
@@ -108,11 +109,11 @@ class _HomePageState extends State<HomePage> {
             if (i == 0) {
               return DrawerHeader(
                 decoration: const BoxDecoration(
-                  color: common_uis.ThemeColors.primary,
+                  color: common_uis.ColorTheme.primary,
                 ),
                 child: Text(localizations.tsukimisou,
-                  style: const TextStyle(
-                    color: common_uis.ThemeColors.onPrimary, fontSize: 24)),
+                    style: const TextStyle(
+                        color: common_uis.ColorTheme.onPrimary, fontSize: 24)),
               );
             } else if (i == 1) {
               return ListTile(
@@ -123,15 +124,15 @@ class _HomePageState extends State<HomePage> {
               return common_uis.subtitle(context, localizations.tags);
             } else if (i >= tagsIndex && i < tagsIndex + tags.length) {
               return ListTile(
-                title: Text(tags[i - tagsIndex]),
-                onTap: () {
-                  _filter(tags[i - tagsIndex]);
-                }
-              );
+                  title: Text(tags[i - tagsIndex]),
+                  onTap: () {
+                    _filter(tags[i - tagsIndex]);
+                  });
             } else if (i == tagsIndex + tags.length) {
               return const Divider();
             } else if (i == tagsIndex + 1 + tags.length) {
-              return common_uis.subtitle(context, localizations.googleDriveIntegration);
+              return common_uis.subtitle(
+                  context, localizations.googleDriveIntegration);
             } else {
               return ListTile(
                 title: Text(localizations.synchronize),

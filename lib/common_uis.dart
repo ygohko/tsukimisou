@@ -24,8 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-// TODO: Rename to ColorTheme?
-class ThemeColors {
+class ColorTheme {
   /// Primary color for this application.
   static const primary = Color(0xFF00003F);
 

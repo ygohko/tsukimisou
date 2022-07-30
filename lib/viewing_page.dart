@@ -56,7 +56,9 @@ class _ViewingPageState extends State<ViewingPage> {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
     final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
-    final attributeStyle = common_uis.TextTheme.viewingPageMemoAttribute(context);;
+    final attributeStyle =
+        common_uis.TextTheme.viewingPageMemoAttribute(context);
+    ;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.memoAtDateTime(dateTime.toString())),
@@ -80,19 +82,18 @@ class _ViewingPageState extends State<ViewingPage> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Text(widget.memo.text,
-                  style: textStyle),
+                child: Text(widget.memo.text, style: textStyle),
               ),
             ),
           ),
           ListTile(
             title: Text(localizations.updated(dateTime.toString()),
-              style: attributeStyle),
+                style: attributeStyle),
           ),
           const Divider(),
           ListTile(
             title: Text(localizations.boundTags(tagsString),
-              style: attributeStyle),
+                style: attributeStyle),
             onTap: _bindTags,
           ),
           const Divider(),
@@ -157,13 +158,12 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _bindTags() async {
     final memoStore = MemoStore.instance();
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return BindingTagsPage(memo: widget.memo, additinalTags: memoStore.tags);
-        },
-      )
-    );
+    await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return BindingTagsPage(
+            memo: widget.memo, additinalTags: memoStore.tags);
+      },
+    ));
     setState(() {});
   }
 }

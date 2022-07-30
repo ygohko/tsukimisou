@@ -43,8 +43,8 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
-          backgroundColor: ThemeColors.primary,
-          foregroundColor: ThemeColors.onPrimary,
+          backgroundColor: ColorTheme.primary,
+          foregroundColor: ColorTheme.onPrimary,
         ),
       ),
       supportedLocales: [
