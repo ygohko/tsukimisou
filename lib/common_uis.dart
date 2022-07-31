@@ -30,6 +30,9 @@ class ColorTheme {
 
   /// On primary color for this application.
   static const onPrimary = Color(0xFFEFEFFF);
+
+  /// Primary light color for this application.
+  static const primaryLight = Color(0xFFE7E7FF);
 }
 
 class TextTheme {

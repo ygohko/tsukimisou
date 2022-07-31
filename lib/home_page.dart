@@ -119,15 +119,23 @@ class _HomePageState extends State<HomePage> {
               return ListTile(
                 title: Text(localizations.allMemos),
                 onTap: _disableFiltering,
+                selected: !_filteringEnabled,
+                selectedColor: common_uis.ColorTheme.primary,
+                selectedTileColor: common_uis.ColorTheme.primaryLight,
               );
             } else if (i == 2) {
               return common_uis.subtitle(context, localizations.tags);
             } else if (i >= tagsIndex && i < tagsIndex + tags.length) {
+              final tag = tags[i - tagsIndex];
               return ListTile(
-                  title: Text(tags[i - tagsIndex]),
-                  onTap: () {
-                    _filter(tags[i - tagsIndex]);
-                  });
+                title: Text(tag),
+                onTap: () {
+                  _filter(tag);
+                },
+                selected: _filteringEnabled && _filteringTag == tag,
+                selectedColor: common_uis.ColorTheme.primary,
+                selectedTileColor: common_uis.ColorTheme.primaryLight,
+              );
             } else if (i == tagsIndex + tags.length) {
               return const Divider();
             } else if (i == tagsIndex + 1 + tags.length) {
