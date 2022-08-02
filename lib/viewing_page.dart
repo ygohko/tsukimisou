@@ -82,7 +82,7 @@ class _ViewingPageState extends State<ViewingPage> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: Text(widget.memo.text, style: textStyle),
+                child: SelectableText(widget.memo.text, style: textStyle),
               ),
             ),
           ),
