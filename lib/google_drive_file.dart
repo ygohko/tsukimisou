@@ -23,6 +23,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
@@ -144,6 +145,27 @@ class _AuthenticatableClient extends BaseClient {
       'Authorization': 'Bearer ${credentials.accessToken.data}',
       'X-Goog-AuthUser': '0'
     };
+
+
+    // test
+    final aAccessToken = _accessToken;
+    final storage = FlutterSecureStorage();
+    if (aAccessToken != null) {
+      await storage.write(key: 'accessTokenData', value: aAccessToken.data);
+      await storage.write(key: 'accessTokenExpiry', value: aAccessToken.expiry.millisecondsSinceEpoch.toString());
+    }
+    final savedData = await storage.read(key: 'accessTokenData');
+    final savedExpiry = await storage.read(key: 'accessTokenExpiry');
+    if (savedData != null) {
+      print('savedData: ${savedData}');
+    } else {
+      print('savedData is null.');
+    }
+    if (savedExpiry != null) {
+      print('savedExpiry: ${savedExpiry}');
+    } else {
+      print('savedExpiry is null.');
+    }
   }
 
   /// Headers that is added when request is sent.
