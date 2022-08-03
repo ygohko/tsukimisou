@@ -133,6 +133,25 @@ class _AuthenticatableClient extends BaseClient {
       }
     }
 
+
+    // TODO: Try to create access token from secure storage.
+    final storage = FlutterSecureStorage();
+    final savedData = await storage.read(key: 'accessTokenData');
+    final savedExpiry = await storage.read(key: 'accessTokenExpiry');
+    if (savedData != null && savedExpiry != null) {
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final now = DateTime.now().toUtc();
+      if (now.isBefore(expiry)) {
+        _accessToken = AccessToken('Bearer', savedData, expiry);
+        _headers = {
+          'Authorization': 'Bearer ${savedData}',
+          'X-Goog-AuthUser': '0'
+        };
+
+        return;
+      }
+    }
+
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     var string = '';
@@ -149,11 +168,11 @@ class _AuthenticatableClient extends BaseClient {
 
     // test
     final aAccessToken = _accessToken;
-    final storage = FlutterSecureStorage();
     if (aAccessToken != null) {
       await storage.write(key: 'accessTokenData', value: aAccessToken.data);
       await storage.write(key: 'accessTokenExpiry', value: aAccessToken.expiry.millisecondsSinceEpoch.toString());
     }
+    /*
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
     if (savedData != null) {
@@ -166,6 +185,7 @@ class _AuthenticatableClient extends BaseClient {
     } else {
       print('savedExpiry is null.');
     }
+    */
   }
 
   /// Headers that is added when request is sent.
