@@ -133,8 +133,6 @@ class _AuthenticatableClient extends BaseClient {
       }
     }
 
-
-    // TODO: Try to create access token from secure storage.
     final storage = FlutterSecureStorage();
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
@@ -142,6 +140,7 @@ class _AuthenticatableClient extends BaseClient {
       final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final now = DateTime.now().toUtc();
       if (now.isBefore(expiry)) {
+        // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
         _headers = {
           'Authorization': 'Bearer ${savedData}',
@@ -164,28 +163,8 @@ class _AuthenticatableClient extends BaseClient {
       'Authorization': 'Bearer ${credentials.accessToken.data}',
       'X-Goog-AuthUser': '0'
     };
-
-
-    // test
-    final aAccessToken = _accessToken;
-    if (aAccessToken != null) {
-      await storage.write(key: 'accessTokenData', value: aAccessToken.data);
-      await storage.write(key: 'accessTokenExpiry', value: aAccessToken.expiry.millisecondsSinceEpoch.toString());
-    }
-    /*
-    final savedData = await storage.read(key: 'accessTokenData');
-    final savedExpiry = await storage.read(key: 'accessTokenExpiry');
-    if (savedData != null) {
-      print('savedData: ${savedData}');
-    } else {
-      print('savedData is null.');
-    }
-    if (savedExpiry != null) {
-      print('savedExpiry: ${savedExpiry}');
-    } else {
-      print('savedExpiry is null.');
-    }
-    */
+    await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
+    await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
   }
 
   /// Headers that is added when request is sent.
