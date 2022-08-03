@@ -23,6 +23,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
@@ -132,6 +133,24 @@ class _AuthenticatableClient extends BaseClient {
       }
     }
 
+    final storage = FlutterSecureStorage();
+    final savedData = await storage.read(key: 'accessTokenData');
+    final savedExpiry = await storage.read(key: 'accessTokenExpiry');
+    if (savedData != null && savedExpiry != null) {
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final now = DateTime.now().toUtc();
+      if (now.isBefore(expiry)) {
+        // Create access token from secure storage.
+        _accessToken = AccessToken('Bearer', savedData, expiry);
+        _headers = {
+          'Authorization': 'Bearer ${savedData}',
+          'X-Goog-AuthUser': '0'
+        };
+
+        return;
+      }
+    }
+
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
     var string = '';
@@ -144,6 +163,8 @@ class _AuthenticatableClient extends BaseClient {
       'Authorization': 'Bearer ${credentials.accessToken.data}',
       'X-Goog-AuthUser': '0'
     };
+    await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
+    await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
   }
 
   /// Headers that is added when request is sent.
