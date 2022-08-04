@@ -119,7 +119,7 @@ class _AuthenticatableClient extends BaseClient {
 
   /// Authenticate this client.
   Future<void> authenticate() async {
-    // TODO: Crean up.
+    // TODO: Clean up.
     final accessToken = _accessToken;
     if (accessToken != null) {
       final now = DateTime.now().toUtc();
