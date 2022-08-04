@@ -128,6 +128,7 @@ class _AuthenticatableClient extends BaseClient {
           'Authorization': 'Bearer ${accessToken.data}',
           'X-Goog-AuthUser': '0'
         };
+        print('Reusing existing access token.');
 
         return;
       }
@@ -146,14 +147,35 @@ class _AuthenticatableClient extends BaseClient {
           'Authorization': 'Bearer ${savedData}',
           'X-Goog-AuthUser': '0'
         };
+        print('Using access token made from secure storage.');
 
         return;
       }
     }
 
+    // Try to refresh credentials
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
-    var string = '';
+    final savedRefreshToken = await storage.read(key: 'refreshToken');
+    if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final accessToken = AccessToken('Bearer', savedData, expiry);
+      final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
+      final newCredentials = await refreshCredentials(id, accessCredentials, this);
+      _accessToken = newCredentials.accessToken;
+      _headers = {
+        'Authorization': 'Bearer ${newCredentials.accessToken.data}',
+        'X-Goog-AuthUser': '0'
+      };
+      print('Using refreshed credentials.');
+      await storage.write(key: 'accessTokenData', value: newCredentials.accessToken.data);
+      await storage.write(key: 'accessTokenExpiry', value: newCredentials.accessToken.expiry.millisecondsSinceEpoch.toString());
+      await storage.write(key: 'refreshToken', value: newCredentials.refreshToken);
+
+      return;
+    }
+
+    // Obtain access credentials
     final credentials = await obtainAccessCredentialsViaUserConsent(
         id, scopes, this, (url) async {
       await launch(url);
@@ -163,8 +185,10 @@ class _AuthenticatableClient extends BaseClient {
       'Authorization': 'Bearer ${credentials.accessToken.data}',
       'X-Goog-AuthUser': '0'
     };
+    print('Using refreshed credentials.');
     await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
     await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
+    await storage.write(key: 'refreshToken', value: credentials.refreshToken);
   }
 
   /// Headers that is added when request is sent.
