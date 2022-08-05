@@ -125,10 +125,7 @@ class _AuthenticatableClient extends BaseClient {
       final now = DateTime.now().toUtc();
       if (now.isBefore(accessToken.expiry)) {
         // Reuse the access token.
-        _headers = {
-          'Authorization': 'Bearer ${accessToken.data}',
-          'X-Goog-AuthUser': '0'
-        };
+        _updateHeaders(accessToken.data);
         print('Reusing existing access token.');
 
         return;
@@ -144,10 +141,14 @@ class _AuthenticatableClient extends BaseClient {
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
+        _updateHeaders(savedData);
+
+        /*
         _headers = {
           'Authorization': 'Bearer ${savedData}',
           'X-Goog-AuthUser': '0'
         };
+        */
         print('Using access token made from secure storage.');
 
         return;
@@ -164,10 +165,15 @@ class _AuthenticatableClient extends BaseClient {
       final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
       final newCredentials = await refreshCredentials(id, accessCredentials, this);
       _accessToken = newCredentials.accessToken;
+
+      _updateHeaders(newCredentials.accessToken.data);
+
+      /*
       _headers = {
         'Authorization': 'Bearer ${newCredentials.accessToken.data}',
         'X-Goog-AuthUser': '0'
       };
+      */
       print('Using refreshed credentials.');
       await storage.write(key: 'accessTokenData', value: newCredentials.accessToken.data);
       await storage.write(key: 'accessTokenExpiry', value: newCredentials.accessToken.expiry.millisecondsSinceEpoch.toString());
@@ -182,10 +188,15 @@ class _AuthenticatableClient extends BaseClient {
       await launch(url);
     });
     _accessToken = credentials.accessToken;
+
+    _updateHeaders(credentials.accessToken.data);
+
+    /*
     _headers = {
       'Authorization': 'Bearer ${credentials.accessToken.data}',
       'X-Goog-AuthUser': '0'
     };
+    */
     print('Using refreshed credentials.');
     await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
     await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
@@ -195,5 +206,12 @@ class _AuthenticatableClient extends BaseClient {
   /// Headers that is added when request is sent.
   void set headers(Map<String, String> headers) {
     _headers = headers;
+  }
+
+  void _updateHeaders(String accessTokenData) {
+    _headers = {
+      'Authorization': 'Bearer ${accessTokenData}',
+      'X-Goog-AuthUser': '0'
+    };
   }
 }
