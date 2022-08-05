@@ -175,9 +175,14 @@ class _AuthenticatableClient extends BaseClient {
       };
       */
       print('Using refreshed credentials.');
+
+
+      _storeCredentials(storage, newCredentials);
+      /*
       await storage.write(key: 'accessTokenData', value: newCredentials.accessToken.data);
       await storage.write(key: 'accessTokenExpiry', value: newCredentials.accessToken.expiry.millisecondsSinceEpoch.toString());
       await storage.write(key: 'refreshToken', value: newCredentials.refreshToken);
+      */
 
       return;
     }
@@ -198,9 +203,13 @@ class _AuthenticatableClient extends BaseClient {
     };
     */
     print('Using refreshed credentials.');
+
+    _storeCredentials(storage, credentials);
+    /*
     await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
     await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
     await storage.write(key: 'refreshToken', value: credentials.refreshToken);
+    */
   }
 
   /// Headers that is added when request is sent.
@@ -213,5 +222,11 @@ class _AuthenticatableClient extends BaseClient {
       'Authorization': 'Bearer ${accessTokenData}',
       'X-Goog-AuthUser': '0'
     };
+  }
+
+  void _storeCredentials(FlutterSecureStorage storage, AccessCredentials credentials) async {
+      await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
+      await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
+      await storage.write(key: 'refreshToken', value: credentials.refreshToken);
   }
 }
