@@ -119,7 +119,6 @@ class _AuthenticatableClient extends BaseClient {
 
   /// Authenticate this client.
   Future<void> authenticate() async {
-    // TODO: Clean up.
     final accessToken = _accessToken;
     if (accessToken != null) {
       final now = DateTime.now().toUtc();
@@ -142,13 +141,6 @@ class _AuthenticatableClient extends BaseClient {
         // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
         _updateHeaders(savedData);
-
-        /*
-        _headers = {
-          'Authorization': 'Bearer ${savedData}',
-          'X-Goog-AuthUser': '0'
-        };
-        */
         print('Using access token made from secure storage.');
 
         return;
@@ -165,24 +157,9 @@ class _AuthenticatableClient extends BaseClient {
       final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
       final newCredentials = await refreshCredentials(id, accessCredentials, this);
       _accessToken = newCredentials.accessToken;
-
       _updateHeaders(newCredentials.accessToken.data);
-
-      /*
-      _headers = {
-        'Authorization': 'Bearer ${newCredentials.accessToken.data}',
-        'X-Goog-AuthUser': '0'
-      };
-      */
       print('Using refreshed credentials.');
-
-
       _storeCredentials(storage, newCredentials);
-      /*
-      await storage.write(key: 'accessTokenData', value: newCredentials.accessToken.data);
-      await storage.write(key: 'accessTokenExpiry', value: newCredentials.accessToken.expiry.millisecondsSinceEpoch.toString());
-      await storage.write(key: 'refreshToken', value: newCredentials.refreshToken);
-      */
 
       return;
     }
@@ -193,23 +170,9 @@ class _AuthenticatableClient extends BaseClient {
       await launch(url);
     });
     _accessToken = credentials.accessToken;
-
     _updateHeaders(credentials.accessToken.data);
-
-    /*
-    _headers = {
-      'Authorization': 'Bearer ${credentials.accessToken.data}',
-      'X-Goog-AuthUser': '0'
-    };
-    */
     print('Using refreshed credentials.');
-
     _storeCredentials(storage, credentials);
-    /*
-    await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
-    await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
-    await storage.write(key: 'refreshToken', value: credentials.refreshToken);
-    */
   }
 
   /// Headers that is added when request is sent.
