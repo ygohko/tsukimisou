@@ -49,32 +49,3 @@ class MemoStoreSaver {
     return jsonEncode(serializable);
   }
 }
-
-/*
-class MemoStoreLocalSaver extends MemoStoreSaver {
-  final String _path;
-
-  /// Creates a memo store saver.
-  MemoStoreLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
-
-  /// Executes this memo store saver.
-  Future<void> execute() async {
-    final string = serialize();
-    final file = File(_path);
-    await file.writeAsString(string);
-  }
-
-  /// Creates a memo store saver from file name.
-  static Future<MemoStoreLocalSaver> fromFileName(
-      MemoStore memoStore, String fileName) async {
-    final applicationDocumentsDirectory =
-        await getApplicationDocumentsDirectory();
-    var path = applicationDocumentsDirectory.path;
-    print('path: ${path}\n');
-    path = path + Platform.pathSeparator + fileName;
-    print('path: ${path}\n');
-
-    return MemoStoreLocalSaver(memoStore, path);
-  }
-}
-*/

@@ -35,7 +35,7 @@ class MemoStoreMerger {
     // Remove memos if it is removed in from memo store.
     final newMemos = <Memo>[];
     for (var memo in toMemoStore.memos) {
-      final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
+      final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
         // Memo is in from memo store. Do not remove.
         newMemos.add(memo);
@@ -57,7 +57,7 @@ class MemoStoreMerger {
 
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
-      final fromMemo = _getMemoFromId(fromMemoStore, memo.id);
+      final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
         if (fromMemo.revision <= memo.lastMergedRevision) {
           // From memo is not modified. Do nothing.
@@ -90,7 +90,7 @@ class MemoStoreMerger {
 
     // Copy memos that are only in from memo store.
     for (var memo in fromMemoStore.memos) {
-      final toMemo = _getMemoFromId(toMemoStore, memo.id);
+      final toMemo = toMemoStore.memoFromId(memo.id);
       if (toMemo == null && toMemoStore.removedMemoIds.indexOf(memo.id) == -1) {
         toMemoStore.addMemo(memo);
       }
@@ -102,16 +102,5 @@ class MemoStoreMerger {
     }
     toMemoStore.removedMemoIds = <String>[];
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
-  }
-
-  Memo? _getMemoFromId(MemoStore memoStore, String id) {
-    // TODO: Move to MemoStore.
-    for (var memo in memoStore.memos) {
-      if (memo.id == id) {
-        return memo;
-      }
-    }
-
-    return null;
   }
 }

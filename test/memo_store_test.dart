@@ -45,8 +45,18 @@ void main() {
       expect(memoStore.memos.length, 0);
     });
 
+    test('MemoStore.memoFromId should return memo that has given ID.', () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memo.text = 'This is a memo.';
+      final id = memo.id;
+      memoStore.addMemo(memo);
+      final aMemo = memoStore.memoFromId(id);
+      expect(identical(aMemo, memo), true);
+    });
+
     test(
-        'MemoStore.memos should receive and accept memos that is stored by memo store.',
+        'MemoStore.memos should return and accept memos that is stored by memo store.',
         () {
       final memoStore = MemoStore();
       final memo = Memo();
@@ -61,7 +71,7 @@ void main() {
     });
 
     test(
-        'MemoStore.memos should receive tags that bound for memos in memo store.',
+        'MemoStore.memos should return tags that bound for memos in memo store.',
         () {
       final memoStore = MemoStore();
       final memo = Memo();
