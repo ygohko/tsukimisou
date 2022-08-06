@@ -124,10 +124,8 @@ class _AuthenticatableClient extends BaseClient {
       final now = DateTime.now().toUtc();
       if (now.isBefore(accessToken.expiry)) {
         // Reuse the access token.
-        _headers = {
-          'Authorization': 'Bearer ${accessToken.data}',
-          'X-Goog-AuthUser': '0'
-        };
+        _updateHeaders(accessToken.data);
+        print('Reusing existing access token.');
 
         return;
       }
@@ -142,33 +140,56 @@ class _AuthenticatableClient extends BaseClient {
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
-        _headers = {
-          'Authorization': 'Bearer ${savedData}',
-          'X-Goog-AuthUser': '0'
-        };
+        _updateHeaders(savedData);
+        print('Using access token made from secure storage.');
 
         return;
       }
     }
 
+    // Try to refresh credentials
     final id = ClientId(getIdentifier(), getSecret());
     final scopes = [DriveApi.driveFileScope];
-    var string = '';
+    final savedRefreshToken = await storage.read(key: 'refreshToken');
+    if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final accessToken = AccessToken('Bearer', savedData, expiry);
+      final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
+      final newCredentials = await refreshCredentials(id, accessCredentials, this);
+      _accessToken = newCredentials.accessToken;
+      _updateHeaders(newCredentials.accessToken.data);
+      print('Using refreshed credentials.');
+      _storeCredentials(storage, newCredentials);
+
+      return;
+    }
+
+    // Obtain access credentials
     final credentials = await obtainAccessCredentialsViaUserConsent(
         id, scopes, this, (url) async {
       await launch(url);
     });
     _accessToken = credentials.accessToken;
-    _headers = {
-      'Authorization': 'Bearer ${credentials.accessToken.data}',
-      'X-Goog-AuthUser': '0'
-    };
-    await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
-    await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
+    _updateHeaders(credentials.accessToken.data);
+    print('Using refreshed credentials.');
+    _storeCredentials(storage, credentials);
   }
 
   /// Headers that is added when request is sent.
   void set headers(Map<String, String> headers) {
     _headers = headers;
+  }
+
+  void _updateHeaders(String accessTokenData) {
+    _headers = {
+      'Authorization': 'Bearer ${accessTokenData}',
+      'X-Goog-AuthUser': '0'
+    };
+  }
+
+  void _storeCredentials(FlutterSecureStorage storage, AccessCredentials credentials) async {
+      await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
+      await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
+      await storage.write(key: 'refreshToken', value: credentials.refreshToken);
   }
 }
