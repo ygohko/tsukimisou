@@ -102,7 +102,7 @@ class _EditingPageState extends State<EditingPage> {
       memo.text = _controller.text;
     }
     final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'TsukimisouMemoStore.json');
+        memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
