@@ -48,6 +48,17 @@ class MemoStore {
     _memos.clear();
   }
 
+  /// Memo that has given ID.
+  Memo? memoFromId(String id) {
+    for (var memo in _memos) {
+      if (memo.id == id) {
+        return memo;
+      }
+    }
+
+    return null;
+  }
+
   /// Memos that are stored in this memo store.
   List<Memo> get memos => _memos;
 
