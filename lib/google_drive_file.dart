@@ -135,7 +135,8 @@ class _AuthenticatableClient extends BaseClient {
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
     if (savedData != null && savedExpiry != null) {
-      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final now = DateTime.now().toUtc();
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
@@ -152,10 +153,13 @@ class _AuthenticatableClient extends BaseClient {
     final scopes = [DriveApi.driveFileScope];
     final savedRefreshToken = await storage.read(key: 'refreshToken');
     if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
-      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final accessToken = AccessToken('Bearer', savedData, expiry);
-      final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
-      final newCredentials = await refreshCredentials(id, accessCredentials, this);
+      final accessCredentials =
+          AccessCredentials(accessToken, savedRefreshToken, scopes);
+      final newCredentials =
+          await refreshCredentials(id, accessCredentials, this);
       _accessToken = newCredentials.accessToken;
       _updateHeaders(newCredentials.accessToken.data);
       print('Using refreshed credentials.');
@@ -187,9 +191,14 @@ class _AuthenticatableClient extends BaseClient {
     };
   }
 
-  void _storeCredentials(FlutterSecureStorage storage, AccessCredentials credentials) async {
-      await storage.write(key: 'accessTokenData', value: credentials.accessToken.data);
-      await storage.write(key: 'accessTokenExpiry', value: credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
-      await storage.write(key: 'refreshToken', value: credentials.refreshToken);
+  void _storeCredentials(
+      FlutterSecureStorage storage, AccessCredentials credentials) async {
+    await storage.write(
+        key: 'accessTokenData', value: credentials.accessToken.data);
+    await storage.write(
+        key: 'accessTokenExpiry',
+        value:
+            credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
+    await storage.write(key: 'refreshToken', value: credentials.refreshToken);
   }
 }

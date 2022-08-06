@@ -147,7 +147,9 @@ void main() {
       expect(toMemo.text.contains('This memo is conflicted.'), false);
     });
 
-    test('MemoStoreMerger should update memo\'s tags if from memos are modified.', () {
+    test(
+        'MemoStoreMerger should update memo\'s tags if from memos are modified.',
+        () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final toMemo = Memo();
