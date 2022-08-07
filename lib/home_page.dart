@@ -107,13 +107,35 @@ class _HomePageState extends State<HomePage> {
           itemCount: tagsIndex + tags.length + 1 + 1 + 1,
           itemBuilder: (context, i) {
             if (i == 0) {
-              return DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: common_uis.ColorTheme.primary,
-                ),
-                child: Text(localizations.tsukimisou,
-                    style: const TextStyle(
+              return SizedBox(
+                height: 120,
+                child: DrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: common_uis.ColorTheme.primary,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /*
+                        Text('Memos',
+                        style: const TextStyle(
                         color: common_uis.ColorTheme.onPrimary, fontSize: 24)),
+                        */
+                        Text('Showing ${_shownMemos.length} memos\nTotal ${memoStore.memos.length} memos and ${tags.length} tags',
+                          style: const TextStyle(
+                            color: common_uis.ColorTheme.onPrimary)),
+                      ],
+                    ),
+                    /*
+                    Text('Memos',
+                    style: const TextStyle(
+                    color: common_uis.ColorTheme.onPrimary, fontSize: 24)),
+                    */
+                  ),
+                ),
               );
             } else if (i == 1) {
               return ListTile(
