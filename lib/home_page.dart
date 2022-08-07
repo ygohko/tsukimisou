@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text('Showing ${_shownMemos.length} memos\nTotal ${memoStore.memos.length} memos and ${tags.length} tags',
+                    child: Text(localizations.showingMemos(_shownMemos.length, memoStore.memos.length, tags.length),
                       style: const TextStyle(
                         color: common_uis.ColorTheme.onPrimary)
                     ),
