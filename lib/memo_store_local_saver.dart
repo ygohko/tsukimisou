@@ -47,6 +47,8 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
         await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
     print('path: ${path}\n');
+    path = path + Platform.pathSeparator + 'Tsukimisou';
+    Directory(path).create();
     path = path + Platform.pathSeparator + fileName;
     print('path: ${path}\n');
 

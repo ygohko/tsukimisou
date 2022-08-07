@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _load() async {
     final memoStore = MemoStore.instance();
     final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
-        memoStore, 'TsukimisouMemoStore.json');
+        memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
     } on IOException catch (exception) {
@@ -202,11 +202,14 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
     final memoStoreGoogleDriveLoader =
-        MemoStoreGoogleDriveLoader(fromMemoStore, 'TsukimisouMemoStore.json');
+        MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await memoStoreGoogleDriveLoader.execute();
-    } on IOException catch (exception) {
-      // Load error
+    } on HttpException {
+      // Load error can be ignored because the file may not exists.
+      // Do nothing.
+    } catch (exception) {
+      // Other error
       await common_uis.showErrorDialog(
           context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
@@ -216,7 +219,7 @@ class _HomePageState extends State<HomePage> {
     final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
     memoStoreMerger.execute();
     final memoStoreGoogleDriveSaver =
-        MemoStoreGoogleDriveSaver(toMemoStore, 'TsukimisouMemoStore.json');
+        MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await memoStoreGoogleDriveSaver.execute();
     } on IOException catch (exception) {
@@ -230,7 +233,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        toMemoStore, 'TsukimisouMemoStore.json');
+        toMemoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
