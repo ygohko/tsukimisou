@@ -3,6 +3,15 @@
     "@tsukimisou": {
         "description": "Application title"
     },
+    "showingMemos": "Showing {shownMemosCount} memos\nTotal {memosCount} memos and {tagsCount} tags",
+    "@showingMemos": {
+        "description": "Text for drawer header in home page",
+	"placeholders": {
+	    "shownMemosCount": {},
+	    "memosCount": {},
+	    "tagsCount": {}
+	}
+    },
     "allMemos": "All memos",
     "@allMemos": {
         "description": "Text for disable filtering list tile"
