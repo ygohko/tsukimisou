@@ -42,16 +42,17 @@ class GoogleDriveFile {
     final client = _AuthenticatableClient();
     await client.authenticate();
     final driveApi = DriveApi(client);
-    final result = await driveApi.files
-        .list(q: 'name = "${_fileName}" and "root" in parents');
-    final files = result.files;
-    if (files != null) {
-      for (var file in files) {
-        final fileId = file.id;
-        if (fileId != null) {
-          await driveApi.files.delete(fileId);
-        }
-      }
+
+    var directoryId = await _directoryId(driveApi);
+    if (directoryId == null) {
+      // TODO: Make a directory.
+      directoryId = await _createDirectory(driveApi);
+    }
+
+    final fileIds = await _fileIds(driveApi);
+    for (var fileId in fileIds) {
+      // Delete old files.
+      await driveApi.files.delete(fileId);
     }
 
     final encoded = utf8.encode(contents);
@@ -59,6 +60,7 @@ class GoogleDriveFile {
     final media = Media(stream, encoded.length);
     final file = File();
     file.name = _fileName;
+    file.parents = <String>[directoryId];
     await driveApi.files.create(file, uploadMedia: media);
     client.close();
   }
@@ -67,11 +69,30 @@ class GoogleDriveFile {
   Future<String> readAsString() async {
     final client = _AuthenticatableClient();
     await client.authenticate();
-    var string = '';
     final driveApi = DriveApi(client);
-    final result = await driveApi.files
-        .list(q: 'name = "${_fileName}" and "root" in parents');
-    final files = result.files;
+
+    // Find Tsukimisou directory
+    /*
+    final directoryId = directoryId(driveApi);
+    if (directoryId == null) {
+      // TODO: Create Tsukimisou directory if it does not exist.
+      throw HttpException;
+    }
+    print('directoryId: ${directoryId}');
+    */
+
+    // Find a file
+    final fileIds = await _fileIds(driveApi);
+    if (fileIds.length < 1) {
+      // File not found.
+      throw HttpException('File not found.');
+    }
+
+
+    /*
+    result = await driveApi.files
+        .list(q: 'name = "${_fileName}" and "${directoryId}" in parents');
+    files = result.files;
     if (files == null) {
       throw HttpException;
     }
@@ -82,14 +103,16 @@ class GoogleDriveFile {
     if (fileId == null) {
       throw HttpException;
     }
+    print('fileId: ${fileId}');
+    */
 
     final media = await driveApi.files
-        .get(fileId, downloadOptions: DownloadOptions.fullMedia) as Media;
+        .get(fileIds[0], downloadOptions: DownloadOptions.fullMedia) as Media;
     var values = <int>[];
     await media.stream.forEach((element) {
       values += element;
     });
-    string = utf8.decode(values);
+    final string = utf8.decode(values);
     print("string: ${string}");
     client.close();
 
@@ -98,6 +121,64 @@ class GoogleDriveFile {
 
   void _prompt(String url) async {
     await launch(url);
+  }
+
+  Future<String?> _directoryId(DriveApi driveApi) async {
+    // Find Tsukimisou directory
+    var result = await driveApi.files.list(q: 'name = "Tsukimisou" and "root" in parents');
+    var files = result.files;
+    if (files == null) {
+      // TODO: Create Tsukimisou directory if it does not exist.
+      throw HttpException('Directory not found.');
+    }
+    print('files.length: ${files.length}');
+    if (files.length < 1) {
+      // TODO: Create Tsukimisou directory if it does not exist.
+      return null;
+    }
+    for (final aFile in files) {
+      print('aFile.name: ${aFile.name}');
+    }
+    final directoryId = files[0].id;
+    if (directoryId == null) {
+      return null;
+    }
+
+    return directoryId;
+  }
+
+  Future<List<String>> _fileIds(DriveApi driveApi) async {
+    final directoryId = await _directoryId(driveApi);
+    if (directoryId == null) {
+      return <String>[];
+    }
+
+    print('directoryId: ${directoryId}');
+
+    final result = await driveApi.files
+        .list(q: 'name = "${_fileName}" and "${directoryId}" in parents');
+    final files = result.files;
+    if (files == null) {
+      throw HttpException('API does not return files.');
+    }
+    var fileIds = <String>[];
+    for (final file in files) {
+      final fileId = file.id;
+      if (fileId != null) {
+        fileIds.add(fileId);
+      }
+    }
+
+    return fileIds;
+  }
+
+  Future<String> _createDirectory(DriveApi driveApi) async {
+    var file = File();
+    file.name = 'Tsukimisou';
+    file.mimeType = "application/vnd.google-apps.folder";
+    file = await driveApi.files.create(file);
+
+    return file.id!;
   }
 }
 

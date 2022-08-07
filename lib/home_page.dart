@@ -205,8 +205,11 @@ class _HomePageState extends State<HomePage> {
         MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await memoStoreGoogleDriveLoader.execute();
-    } on IOException catch (exception) {
-      // Load error
+    } on HttpException {
+      // Load error can be ignored because the file may not exists.
+      // Do nothing.
+    } catch (exception) {
+      // Other error
       await common_uis.showErrorDialog(
           context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
