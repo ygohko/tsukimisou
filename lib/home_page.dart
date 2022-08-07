@@ -115,10 +115,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(localizations.showingMemos(_shownMemos.length, memoStore.memos.length, tags.length),
-                      style: const TextStyle(
-                        color: common_uis.ColorTheme.onPrimary)
-                    ),
+                    child: Text(
+                        localizations.showingMemos(_shownMemos.length,
+                            memoStore.memos.length, tags.length),
+                        style: const TextStyle(
+                            color: common_uis.ColorTheme.onPrimary)),
                   ),
                 ),
               );
@@ -162,8 +163,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _load() async {
     final memoStore = MemoStore.instance();
-    final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
-        memoStore, 'MemoStore.json');
+    final memoStoreLoader =
+        await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
     } on IOException catch (exception) {
@@ -239,8 +240,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        toMemoStore, 'MemoStore.json');
+    final memoStoreSaver =
+        await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
