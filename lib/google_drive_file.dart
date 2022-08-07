@@ -125,7 +125,7 @@ class GoogleDriveFile {
 
   Future<String?> _directoryId(DriveApi driveApi) async {
     // Find Tsukimisou directory
-    var result = await driveApi.files.list(q: 'name = "Tsukimisou" and "root" in parents');
+    var result = await driveApi.files.list(q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
     var files = result.files;
     if (files == null) {
       // TODO: Create Tsukimisou directory if it does not exist.
@@ -156,7 +156,7 @@ class GoogleDriveFile {
     print('directoryId: ${directoryId}');
 
     final result = await driveApi.files
-        .list(q: 'name = "${_fileName}" and "${directoryId}" in parents');
+        .list(q: 'name = "${_fileName}" and "${directoryId}" in parents and trashed = false');
     final files = result.files;
     if (files == null) {
       throw HttpException('API does not return files.');
