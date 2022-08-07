@@ -70,41 +70,12 @@ class GoogleDriveFile {
     final client = _AuthenticatableClient();
     await client.authenticate();
     final driveApi = DriveApi(client);
-
-    // Find Tsukimisou directory
-    /*
-    final directoryId = directoryId(driveApi);
-    if (directoryId == null) {
-      // TODO: Create Tsukimisou directory if it does not exist.
-      throw HttpException;
-    }
-    print('directoryId: ${directoryId}');
-    */
-
     // Find a file
     final fileIds = await _fileIds(driveApi);
     if (fileIds.length < 1) {
       // File not found.
       throw HttpException('File not found.');
     }
-
-
-    /*
-    result = await driveApi.files
-        .list(q: 'name = "${_fileName}" and "${directoryId}" in parents');
-    files = result.files;
-    if (files == null) {
-      throw HttpException;
-    }
-    if (files.length < 1) {
-      throw HttpException;
-    }
-    final fileId = files[0].id;
-    if (fileId == null) {
-      throw HttpException;
-    }
-    print('fileId: ${fileId}');
-    */
 
     final media = await driveApi.files
         .get(fileIds[0], downloadOptions: DownloadOptions.fullMedia) as Media;
@@ -124,20 +95,13 @@ class GoogleDriveFile {
   }
 
   Future<String?> _directoryId(DriveApi driveApi) async {
-    // Find Tsukimisou directory
     var result = await driveApi.files.list(q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
     var files = result.files;
     if (files == null) {
-      // TODO: Create Tsukimisou directory if it does not exist.
-      throw HttpException('Directory not found.');
+      throw HttpException('API does not return directories.');
     }
-    print('files.length: ${files.length}');
     if (files.length < 1) {
-      // TODO: Create Tsukimisou directory if it does not exist.
       return null;
-    }
-    for (final aFile in files) {
-      print('aFile.name: ${aFile.name}');
     }
     final directoryId = files[0].id;
     if (directoryId == null) {
@@ -152,9 +116,6 @@ class GoogleDriveFile {
     if (directoryId == null) {
       return <String>[];
     }
-
-    print('directoryId: ${directoryId}');
-
     final result = await driveApi.files
         .list(q: 'name = "${_fileName}" and "${directoryId}" in parents and trashed = false');
     final files = result.files;
