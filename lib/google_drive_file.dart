@@ -42,13 +42,11 @@ class GoogleDriveFile {
     final client = _AuthenticatableClient();
     await client.authenticate();
     final driveApi = DriveApi(client);
-
     var directoryId = await _directoryId(driveApi);
     if (directoryId == null) {
-      // TODO: Make a directory.
+      // Make a directory.
       directoryId = await _createDirectory(driveApi);
     }
-
     final fileIds = await _fileIds(driveApi);
     for (var fileId in fileIds) {
       // Delete old files.
