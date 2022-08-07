@@ -115,25 +115,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        /*
-                        Text('Memos',
-                        style: const TextStyle(
-                        color: common_uis.ColorTheme.onPrimary, fontSize: 24)),
-                        */
-                        Text('Showing ${_shownMemos.length} memos\nTotal ${memoStore.memos.length} memos and ${tags.length} tags',
-                          style: const TextStyle(
-                            color: common_uis.ColorTheme.onPrimary)),
-                      ],
+                    child: Text('Showing ${_shownMemos.length} memos\nTotal ${memoStore.memos.length} memos and ${tags.length} tags',
+                      style: const TextStyle(
+                        color: common_uis.ColorTheme.onPrimary)
                     ),
-                    /*
-                    Text('Memos',
-                    style: const TextStyle(
-                    color: common_uis.ColorTheme.onPrimary, fontSize: 24)),
-                    */
                   ),
                 ),
               );
