@@ -32,12 +32,20 @@
         "description": "Subtitle for tags group of drawer"
     },
     "googleDriveIntegration": "Google Drive integration",
-    "@googleDriveIntegratio": {
+    "@googleDriveIntegration": {
         "description": "Subtitle for Google Drive integration group of drawer"
     },
     "synchronize": "Synchronize",
     "@synchronize": {
         "description": "Text for synchronize list tile"
+    },
+    "others": "Others",
+    "@others": {
+        "description": "Subtitle for others group of drawer"
+    },
+    "about": "About",
+    "@about": {
+        "description": "Text for about list tile"
     },
     "loadingMemoStoreFromGoogleDriveFailed": "Loading memo store from Google Drive failed.",
     "@loadingMemoStoreFromGoogleDriveFailed": {

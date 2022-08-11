@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
@@ -58,10 +59,21 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const tagsIndex = 3;
-    final localizations = AppLocalizations.of(context)!;
+    const headerIndex = 0;
+    const allMemosIndex = 1;
+    const tagsSubtitleIndex = 2;
+    const tagsBeginIndex = 3;
     final memoStore = MemoStore.instance();
     final tags = memoStore.tags;
+    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
+    final integrationDividerIndex = tagsEndIndex + 1;
+    final integrationSubtitleIndex = integrationDividerIndex + 1;
+    final synchronizeIndex = integrationSubtitleIndex + 1;
+    final othersDividerIndex = synchronizeIndex + 1;
+    final othersSubtitleIndex = othersDividerIndex + 1;
+    final aboutIndex = othersSubtitleIndex + 1;
+    final drawerItemCount = aboutIndex + 1;
+    final localizations = AppLocalizations.of(context)!;
     final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
     return Scaffold(
       appBar: AppBar(
@@ -104,9 +116,9 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: Drawer(
         child: ListView.builder(
-          itemCount: tagsIndex + tags.length + 1 + 1 + 1,
+          itemCount: drawerItemCount,
           itemBuilder: (context, i) {
-            if (i == 0) {
+            if (i == headerIndex) {
               return SizedBox(
                 height: 120,
                 child: DrawerHeader(
@@ -123,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               );
-            } else if (i == 1) {
+            } else if (i == allMemosIndex) {
               return ListTile(
                 title: Text(localizations.allMemos),
                 onTap: _disableFiltering,
@@ -131,10 +143,10 @@ class _HomePageState extends State<HomePage> {
                 selectedColor: common_uis.ColorTheme.primary,
                 selectedTileColor: common_uis.ColorTheme.primaryLight,
               );
-            } else if (i == 2) {
+            } else if (i == tagsSubtitleIndex) {
               return common_uis.subtitle(context, localizations.tags);
-            } else if (i >= tagsIndex && i < tagsIndex + tags.length) {
-              final tag = tags[i - tagsIndex];
+            } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
+              final tag = tags[i - tagsBeginIndex];
               return ListTile(
                 title: Text(tag),
                 onTap: () {
@@ -144,15 +156,25 @@ class _HomePageState extends State<HomePage> {
                 selectedColor: common_uis.ColorTheme.primary,
                 selectedTileColor: common_uis.ColorTheme.primaryLight,
               );
-            } else if (i == tagsIndex + tags.length) {
+            } else if (i == integrationDividerIndex) {
               return const Divider();
-            } else if (i == tagsIndex + 1 + tags.length) {
+            } else if (i == integrationSubtitleIndex) {
               return common_uis.subtitle(
                   context, localizations.googleDriveIntegration);
-            } else {
+            } else if (i == synchronizeIndex){
               return ListTile(
                 title: Text(localizations.synchronize),
                 onTap: _mergeWithGoogleDrive,
+              );
+            } else if (i == othersDividerIndex) {
+              return const Divider();
+            } else if (i == othersSubtitleIndex) {
+              return common_uis.subtitle(
+                context, localizations.others);
+            } else {
+              return ListTile(
+                title: Text(localizations.about),
+                onTap: _showAbout,
               );
             }
           },
@@ -253,6 +275,18 @@ class _HomePageState extends State<HomePage> {
       _updateShownMemos();
     });
     Navigator.of(context).pop();
+  }
+
+  void _showAbout() async {
+    final localizations = AppLocalizations.of(context)!;
+    final packageInfo = await PackageInfo.fromPlatform();
+    Navigator.of(context).pop();
+    showAboutDialog(
+      context: context,
+      applicationName: localizations.tsukimisou,
+      applicationVersion: packageInfo.version,
+      applicationLegalese: '(c) 2022 Yasuaki Gohko',
+    );
   }
 
   void _filter(String tag) {
