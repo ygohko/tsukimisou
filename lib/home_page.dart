@@ -169,11 +169,11 @@ class _HomePageState extends State<HomePage> {
               return const Divider();
             } else if (i == othersSubtitleIndex) {
               return common_uis.subtitle(
-                context, 'Others');
+                context, localizations.others);
             } else {
               return ListTile(
-                title: Text('About'),
-                onTap: _mergeWithGoogleDrive,
+                title: Text(localizations.about),
+                onTap: _showAbout,
               );
             }
           },
@@ -274,6 +274,17 @@ class _HomePageState extends State<HomePage> {
       _updateShownMemos();
     });
     Navigator.of(context).pop();
+  }
+
+  void _showAbout() {
+    final localizations = AppLocalizations.of(context)!;
+    Navigator.of(context).pop();
+    showAboutDialog(
+      context: context,
+      applicationName: localizations.tsukimisou,
+      applicationVersion: 'X.Y.Z',
+      applicationLegalese: '(c) 2022 Yasuaki Gohko',
+    );
   }
 
   void _filter(String tag) {
