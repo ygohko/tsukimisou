@@ -32,24 +32,28 @@ class MemoStoreMerger {
 
   /// Executes this memo store manager.
   void execute() {
-    // Remove memos if it is removed in from memo store.
+    // Remove memos if it is removed in fromMemoStore.
     final newMemos = <Memo>[];
     for (var memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
-        // Memo is in from memo store. Do not remove.
+        // Memo is in fromMemoStore. Do not remove.
         newMemos.add(memo);
       } else {
-        final toLastModified =
-            DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toUtc();
-        final fromLastMerged =
-            DateTime.fromMillisecondsSinceEpoch(fromMemoStore.lastMerged)
-                .toUtc();
-        if (fromLastMerged.isBefore(toLastModified)) {
-          // Memo is updated after last merged. Do not remove.
-          newMemos.add(memo);
+        final toLastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toUtc();
+        final toLastMerged = DateTime.fromMillisecondsSinceEpoch(toMemoStore.lastMerged).toUtc();
+        if (toLastModified.isBefore(toLastMerged)) {
+          // Memos is already syncrhonized and removed from fromMemoStore.
+          final fromLastMerged = DateTime.fromMillisecondsSinceEpoch(fromMemoStore.lastMerged).toUtc();
+          if (fromLastMerged.isBefore(toLastModified)) {
+            // Memo is updated after last merged. Do not remove.
+            newMemos.add(memo);
+          } else {
+            // Memo is not updated after last merged. Do nothing.
+          }
         } else {
-          // Memo is not updated after last merged. Do nothing.
+          // Memo is not synchronized. Do not remove.
+          newMemos.add(memo);
         }
       }
     }
@@ -60,15 +64,15 @@ class MemoStoreMerger {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
         if (fromMemo.revision <= memo.lastMergedRevision) {
-          // From memo is not modified. Do nothing.
+          // fromMemo is not modified. Do nothing.
         } else if (memo.revision <= memo.lastMergedRevision) {
-          // From memo is modified and to memo is not modified. Update to memo.
+          // fromMmemo is modified and toMemo is not modified. Update toMemo.
           memo.text = fromMemo.text;
           memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
         } else {
           if (memo.text != fromMemo.text) {
-            // Both modified. Mark as Conflicted.
+            // Both modified. Mark as conflicted.
             var text = 'This memo is conflicted.\nMine --------\n';
             text += memo.text;
             text += '\nTheirs --------\n';

@@ -31,7 +31,25 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should remove memos in to memo store if it is modified before last merged.',
+        'MemoStoreMerger should remove memos in toMemoStore if it is synchronized and modified before fromMemoStore.lastMerged.',
+        () {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+      final memo = Memo();
+      memo.text = 'This is a to memo.';
+      sleep(const Duration(milliseconds: 1));
+      toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
+      sleep(const Duration(milliseconds: 1));
+      fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
+      toMemoStore.addMemo(memo);
+      expect(toMemoStore.memos.length, 1);
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      memoStoreMerger.execute();
+      expect(toMemoStore.memos.length, 0);
+    });
+
+    test(
+        'MemoStoreMerger should not remove memos in toMemoStore if it is not synchronized.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -43,7 +61,7 @@ void main() {
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();
-      expect(toMemoStore.memos.length, 0);
+      expect(toMemoStore.memos.length, 1);
     });
 
     test('MemoStoreMerger should move memos that are only in from memo store.',
