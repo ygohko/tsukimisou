@@ -231,10 +231,10 @@ class _HomePageState extends State<HomePage> {
     common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
-    final memoStoreGoogleDriveLoader =
+    final loader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
-      await memoStoreGoogleDriveLoader.execute();
+      await loader.execute();
     } on HttpException {
       // Loading failure can be ignored because the file may not exists. Do nothing.
     } on Exception catch (exception) {
@@ -245,12 +245,12 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     final toMemoStore = MemoStore.instance();
-    final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-    memoStoreMerger.execute();
-    final memoStoreGoogleDriveSaver =
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    merger.execute();
+    final saver =
         MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
-      await memoStoreGoogleDriveSaver.execute();
+      await saver.execute();
     } on Exception catch (exception) {
       // Saving failed.
       await common_uis.showErrorDialog(
@@ -261,10 +261,10 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final memoStoreSaver =
+    final localSaver =
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
-      memoStoreSaver.execute();
+      localSaver.execute();
     } on FileSystemException catch (exception) {
       // Saving failed.
       await common_uis.showErrorDialog(
