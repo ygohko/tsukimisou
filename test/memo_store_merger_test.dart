@@ -15,7 +15,7 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should keep memos in to memo store if it is modified after last merged.',
+        'MemoStoreMerger should keep memos in toMemoStore if it is modified after last merged.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -31,7 +31,7 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should remove memos in toMemoStore if it is synchronized and modified before fromMemoStore.lastMerged.',
+        'MemoStoreMerger should remove memos in toMemoStore if it is synchronized and modified before last merged.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -64,7 +64,7 @@ void main() {
       expect(toMemoStore.memos.length, 1);
     });
 
-    test('MemoStoreMerger should move memos that are only in from memo store.',
+    test('MemoStoreMerger should move memos that are only in fromMemoStore.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -108,7 +108,7 @@ void main() {
       expect(toMemo.text.contains('This is a from memo.'), true);
     });
 
-    test('MemoStoreMerger should not update memos if to memos are modified.',
+    test('MemoStoreMerger should not update memos if toMemos are modified.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -128,7 +128,7 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should make conficted memos if both memos in from and to memo store are modified.',
+        'MemoStoreMerger should make conficted memos if both memos in fromMemoStore and toMemoStore are modified.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -147,7 +147,7 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should not make conficted memos if both memos in from and to memo store are modified but these texts are same.',
+        'MemoStoreMerger should not make conficted memos if both memos in fromMemoStore and toMemoStore are modified but these texts are same.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -188,7 +188,7 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should merge memo\'s tags if both memos in from and to memo store are modified.',
+        'MemoStoreMerger should merge memo\'s tags if both memos in fromMemoStore and toMemoStore are modified.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
