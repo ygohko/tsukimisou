@@ -236,10 +236,9 @@ class _HomePageState extends State<HomePage> {
     try {
       await memoStoreGoogleDriveLoader.execute();
     } on HttpException {
-      // Load error can be ignored because the file may not exists.
-      // Do nothing.
-    } catch (exception) {
-      // Other error
+      // Loading failure can be ignored because the file may not exists. Do nothing.
+    } on Exception catch (exception) {
+      // Other failure.
       await common_uis.showErrorDialog(
           context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
@@ -252,8 +251,8 @@ class _HomePageState extends State<HomePage> {
         MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await memoStoreGoogleDriveSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
+    } on Exception catch (exception) {
+      // Saving failed.
       await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToGoogleDriveFailed);
       setState(() {
@@ -266,8 +265,8 @@ class _HomePageState extends State<HomePage> {
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
+    } on FileSystemException catch (exception) {
+      // Saving failed.
       await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }

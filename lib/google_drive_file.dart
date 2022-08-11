@@ -88,10 +88,6 @@ class GoogleDriveFile {
     return string;
   }
 
-  void _prompt(String url) async {
-    await launch(url);
-  }
-
   Future<String?> _directoryId(DriveApi driveApi) async {
     var result = await driveApi.files.list(q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
     var files = result.files;
@@ -198,25 +194,33 @@ class _AuthenticatableClient extends BaseClient {
       final accessToken = AccessToken('Bearer', savedData, expiry);
       final accessCredentials =
           AccessCredentials(accessToken, savedRefreshToken, scopes);
-      final newCredentials =
+      try {
+        final newCredentials =
           await refreshCredentials(id, accessCredentials, this);
-      _accessToken = newCredentials.accessToken;
-      _updateHeaders(newCredentials.accessToken.data);
-      print('Using refreshed credentials.');
-      _storeCredentials(storage, newCredentials);
+          _accessToken = newCredentials.accessToken;
+          _updateHeaders(newCredentials.accessToken.data);
+          print('Using refreshed credentials.');
+          _storeCredentials(storage, newCredentials);
 
-      return;
+          return;
+      } on Exception catch (exception) {
+        // Refresh failed. Try next step.
+      }
     }
 
     // Obtain access credentials
-    final credentials = await obtainAccessCredentialsViaUserConsent(
+    try {
+      final credentials = await obtainAccessCredentialsViaUserConsent(
         id, scopes, this, (url) async {
-      await launch(url);
-    });
-    _accessToken = credentials.accessToken;
-    _updateHeaders(credentials.accessToken.data);
-    print('Using refreshed credentials.');
-    _storeCredentials(storage, credentials);
+          await launch(url);
+      });
+      _accessToken = credentials.accessToken;
+      _updateHeaders(credentials.accessToken.data);
+      print('Using new credentials.');
+      _storeCredentials(storage, credentials);
+    } on Exception catch (exception) {
+      throw AuthenticationException('Failed to obtain access credentials.');
+    }
   }
 
   /// Headers that is added when request is sent.
@@ -241,4 +245,10 @@ class _AuthenticatableClient extends BaseClient {
             credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
     await storage.write(key: 'refreshToken', value: credentials.refreshToken);
   }
+}
+
+class AuthenticationException implements Exception {
+  final String message;
+
+  AuthenticationException(this.message);
 }
