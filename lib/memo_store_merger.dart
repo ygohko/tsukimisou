@@ -40,11 +40,15 @@ class MemoStoreMerger {
         // Memo is in fromMemoStore. Do not remove.
         newMemos.add(memo);
       } else {
-        final toLastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toUtc();
-        final toLastMerged = DateTime.fromMillisecondsSinceEpoch(toMemoStore.lastMerged).toUtc();
+        final toLastModified =
+            DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toUtc();
+        final toLastMerged =
+            DateTime.fromMillisecondsSinceEpoch(toMemoStore.lastMerged).toUtc();
         if (toLastModified.isBefore(toLastMerged)) {
           // Memos is already syncrhonized and removed from fromMemoStore.
-          final fromLastMerged = DateTime.fromMillisecondsSinceEpoch(fromMemoStore.lastMerged).toUtc();
+          final fromLastMerged =
+              DateTime.fromMillisecondsSinceEpoch(fromMemoStore.lastMerged)
+                  .toUtc();
           if (fromLastMerged.isBefore(toLastModified)) {
             // Memo is updated after last merged. Do not remove.
             newMemos.add(memo);
