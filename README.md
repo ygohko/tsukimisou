@@ -1,16 +1,14 @@
-# tsukimisou
+# Tsukimisou
 
-A new Flutter project.
+Tsukimisou is a Flutter based simple memo application. Currently this
+application is confirmed to work on Android and Windows.
 
-## Getting Started
+## How to build
 
-This project is a starting point for a Flutter application.
+Set up Flutter for your enviromnent and change current directory
+to this source code, then type below:
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+flutter build [PLATFORM]
+```
