@@ -231,29 +231,28 @@ class _HomePageState extends State<HomePage> {
     common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
-    final memoStoreGoogleDriveLoader =
+    final loader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
-      await memoStoreGoogleDriveLoader.execute();
+      await loader.execute();
     } on HttpException {
-      // Load error can be ignored because the file may not exists.
-      // Do nothing.
-    } catch (exception) {
-      // Other error
+      // Loading failure can be ignored because the file may not exists. Do nothing.
+    } on Exception catch (exception) {
+      // Other failure.
       await common_uis.showErrorDialog(
           context, localizations.loadingMemoStoreFromGoogleDriveFailed);
       Navigator.of(context).pop();
       return;
     }
     final toMemoStore = MemoStore.instance();
-    final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-    memoStoreMerger.execute();
-    final memoStoreGoogleDriveSaver =
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    merger.execute();
+    final saver =
         MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
-      await memoStoreGoogleDriveSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
+      await saver.execute();
+    } on Exception catch (exception) {
+      // Saving failed.
       await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToGoogleDriveFailed);
       setState(() {
@@ -262,12 +261,12 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final memoStoreSaver =
+    final localSaver =
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
-      memoStoreSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
+      localSaver.execute();
+    } on FileSystemException catch (exception) {
+      // Saving failed.
       await common_uis.showErrorDialog(
           context, localizations.savingMemoStoreToLocalStorageFailed);
     }
