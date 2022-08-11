@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
@@ -276,13 +277,14 @@ class _HomePageState extends State<HomePage> {
     Navigator.of(context).pop();
   }
 
-  void _showAbout() {
+  void _showAbout() async {
     final localizations = AppLocalizations.of(context)!;
+    final packageInfo = await PackageInfo.fromPlatform();
     Navigator.of(context).pop();
     showAboutDialog(
       context: context,
       applicationName: localizations.tsukimisou,
-      applicationVersion: 'X.Y.Z',
+      applicationVersion: packageInfo.version,
       applicationLegalese: '(c) 2022 Yasuaki Gohko',
     );
   }
