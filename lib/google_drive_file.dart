@@ -23,7 +23,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
@@ -168,16 +167,17 @@ class _AuthenticatableClient extends BaseClient {
     throw UnimplementedError();
   }
 
-  /// Headers that is added when request is sent.
-  void set headers(Map<String, String> headers) {
-    _headers = headers;
-  }
-
-  void _updateHeaders(String accessTokenData) {
+  /// Updates headers
+  void updateHeaders(String accessTokenData) {
     _headers = {
       'Authorization': 'Bearer ${accessTokenData}',
       'X-Goog-AuthUser': '0'
     };
+  }
+
+  /// Headers that is added when request is sent.
+  void set headers(Map<String, String> headers) {
+    _headers = headers;
   }
 }
 
@@ -192,7 +192,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
       final now = DateTime.now().toUtc();
       if (now.isBefore(accessToken.expiry)) {
         // Reuse the access token.
-        _updateHeaders(accessToken.data);
+        updateHeaders(accessToken.data);
         print('Reusing existing access token.');
 
         return;
@@ -208,7 +208,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
-        _updateHeaders(savedData);
+        updateHeaders(savedData);
         print('Using access token made from secure storage.');
 
         return;
@@ -226,7 +226,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
       try {
         final newCredentials = await refreshCredentials(id, accessCredentials, this);
         _accessToken = newCredentials.accessToken;
-        _updateHeaders(newCredentials.accessToken.data);
+        updateHeaders(newCredentials.accessToken.data);
         print('Using refreshed credentials.');
         _storeCredentials(storage, newCredentials);
 
@@ -243,7 +243,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
           await launch(url);
       });
       _accessToken = credentials.accessToken;
-      _updateHeaders(credentials.accessToken.data);
+      updateHeaders(credentials.accessToken.data);
       print('Using new credentials.');
       _storeCredentials(storage, credentials);
     } on Exception catch (exception) {
@@ -267,28 +267,24 @@ class _AuthenticatableAndroidClient extends _AuthenticatableClient {
   /// Authenticates this client.
   @override
   Future<void> authenticate() async {
-    print('Begining sign in...');
-
     final scopes = [DriveApi.driveFileScope];
     final signIn = GoogleSignIn(
       scopes: scopes,
     );
-    // TODO: Remove this if not needed.
-    signIn.onCurrentUserChanged.listen((account) async {
-        final client = (await signIn.authenticatedClient())!;
-    });
-    final account = await signIn.signIn();
-    if (account == null) {
-      return;
+    try {
+      final account = await signIn.signIn();
+      if (account == null) {
+        return;
+      }
+      final authentication = await account.authentication;
+      final accessToken = authentication.accessToken;
+      if (accessToken == null) {
+        return;
+      }
+    updateHeaders(accessToken);
+    } on Exception catch (exception) {
+      throw AuthenticationException('Failed to sign in to Google.');
     }
-    final authentication = await account.authentication;
-    final accessToken = authentication.accessToken;
-    if (accessToken == null) {
-      return;
-    }
-    _updateHeaders(accessToken);
-
-    print('Finished.');
   }
 }
 
