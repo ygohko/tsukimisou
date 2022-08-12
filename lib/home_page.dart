@@ -233,9 +233,8 @@ class _HomePageState extends State<HomePage> {
     final fromMemoStore = MemoStore();
     final loader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
-    // try {
+    try {
       await loader.execute();
-    /*
     } on HttpException {
       // Loading failure can be ignored because the file may not exists. Do nothing.
     } on Exception catch (exception) {
@@ -248,7 +247,6 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    */
     final toMemoStore = MemoStore.instance();
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();

@@ -291,7 +291,10 @@ class _AuthenticatableAndroidClient extends _AuthenticatableClient {
         throw AuthenticationException('Failed to sign in to Google.');
     }
     try {
-      final account = await signIn.signIn();
+      var account = await signIn.signInSilently();
+      if (account == null) {
+        account = await signIn.signIn();
+      }
       if (account == null) {
         throw AuthenticationException('Failed to sign in to Google.');
       }
