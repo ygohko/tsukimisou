@@ -23,9 +23,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -208,18 +210,38 @@ class _AuthenticatableClient extends BaseClient {
       }
     }
 
-    // Obtain access credentials
-    try {
-      final credentials = await obtainAccessCredentialsViaUserConsent(
-        id, scopes, this, (url) async {
-          await launch(url);
+    // This may not work on Android Release.
+    // TODO: Fix it.
+    // Obtain access credentials.
+    if (Platform.isWindows) {
+      try {
+        final credentials = await obtainAccessCredentialsViaUserConsent(
+          id, scopes, this, (url) async {
+            await launch(url);
+        });
+        _accessToken = credentials.accessToken;
+        _updateHeaders(credentials.accessToken.data);
+        print('Using new credentials.');
+        _storeCredentials(storage, credentials);
+      } on Exception catch (exception) {
+        throw AuthenticationException('Failed to obtain access credentials.');
+      }
+    } else {
+      print('Begining sign in...');
+
+      final signIn = GoogleSignIn(
+        scopes: scopes,
+      );
+      signIn.onCurrentUserChanged.listen((account) async {
+          final client = (await signIn.authenticatedClient())!;
       });
-      _accessToken = credentials.accessToken;
-      _updateHeaders(credentials.accessToken.data);
-      print('Using new credentials.');
-      _storeCredentials(storage, credentials);
-    } on Exception catch (exception) {
-      throw AuthenticationException('Failed to obtain access credentials.');
+      await signIn.signIn();
+
+      print('Finished.');
+
+
+      // TODO: Store credentials.
+
     }
   }
 
