@@ -41,7 +41,7 @@ class GoogleDriveFile {
 
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
-    final client = _AuthenticatableClient();
+    final client = _AuthenticatableWindowsClient();
     await client.authenticate();
     final driveApi = DriveApi(client);
     var directoryId = await _directoryId(driveApi);
@@ -67,7 +67,7 @@ class GoogleDriveFile {
 
   /// Reads contents as a string.
   Future<String> readAsString() async {
-    final client = _AuthenticatableClient();
+    final client = _AuthenticatableWindowsClient();
     await client.authenticate();
     final driveApi = DriveApi(client);
     // Find a file
@@ -143,9 +143,7 @@ class _AuthenticatableClient extends BaseClient {
   Map<String, String>? _headers = null;
   final Client _client = Client();
 
-  static AccessToken? _accessToken = null;
-
-  /// Send a request.
+  /// Sends a request.
   Future<StreamedResponse> send(BaseRequest request) {
     final headers = _headers;
     if (headers != null) {
@@ -155,7 +153,29 @@ class _AuthenticatableClient extends BaseClient {
     return _client.send(request);
   }
 
+  /// Authenticates this client.
+  Future<void> authenticate() async {
+    throw UnimplementedError();
+  }
+
+  /// Headers that is added when request is sent.
+  void set headers(Map<String, String> headers) {
+    _headers = headers;
+  }
+
+  void _updateHeaders(String accessTokenData) {
+    _headers = {
+      'Authorization': 'Bearer ${accessTokenData}',
+      'X-Goog-AuthUser': '0'
+    };
+  }
+}
+
+class _AuthenticatableWindowsClient extends _AuthenticatableClient {
+  static AccessToken? _accessToken = null;
+
   /// Authenticate this client.
+  @override
   Future<void> authenticate() async {
     final accessToken = _accessToken;
     if (accessToken != null) {
@@ -227,6 +247,7 @@ class _AuthenticatableClient extends BaseClient {
         throw AuthenticationException('Failed to obtain access credentials.');
       }
     } else {
+      // TODO: Move to _AuthenticatableAndroidClient
       print('Begining sign in...');
 
       final signIn = GoogleSignIn(
@@ -254,18 +275,6 @@ class _AuthenticatableClient extends BaseClient {
 
 
     }
-  }
-
-  /// Headers that is added when request is sent.
-  void set headers(Map<String, String> headers) {
-    _headers = headers;
-  }
-
-  void _updateHeaders(String accessTokenData) {
-    _headers = {
-      'Authorization': 'Bearer ${accessTokenData}',
-      'X-Goog-AuthUser': '0'
-    };
   }
 
   void _storeCredentials(
