@@ -238,9 +238,6 @@ class _HomePageState extends State<HomePage> {
     } on HttpException {
       // Loading failure can be ignored because the file may not exists. Do nothing.
     } on Exception catch (exception) {
-      print('exception: ${exception}');
-      print('exception.runtimeType.toString(): ${exception.runtimeType.toString()}');
-
       // Other failure.
       await common_uis.showErrorDialog(
           context, localizations.loadingMemoStoreFromGoogleDriveFailed);
