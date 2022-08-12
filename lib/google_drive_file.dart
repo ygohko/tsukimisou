@@ -264,24 +264,43 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
 }
 
 class _AuthenticatableAndroidClient extends _AuthenticatableClient {
+  static GoogleSignIn? _signIn = null;
+
   /// Authenticates this client.
   @override
   Future<void> authenticate() async {
-    final scopes = [DriveApi.driveFileScope];
-    final signIn = GoogleSignIn(
-      scopes: scopes,
-    );
-    try {
-      final account = await signIn.signIn();
+    var signIn = _signIn;
+    if (signIn != null) {
+      final account = signIn.currentUser;
       if (account == null) {
-        return;
+        throw AuthenticationException('Failed to sign in to Google.');
       }
       final authentication = await account.authentication;
       final accessToken = authentication.accessToken;
       if (accessToken == null) {
-        return;
+        throw AuthenticationException('Failed to sign in to Google.');
       }
-    updateHeaders(accessToken);
+      updateHeaders(accessToken);
+
+      return;
+    }
+
+    _signIn = GoogleSignIn(scopes: [DriveApi.driveFileScope]);
+    signIn = _signIn;
+    if (signIn == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+    }
+    try {
+      final account = await signIn.signIn();
+      if (account == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+      }
+      final authentication = await account.authentication;
+      final accessToken = authentication.accessToken;
+      if (accessToken == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+      }
+      updateHeaders(accessToken);
     } on Exception catch (exception) {
       throw AuthenticationException('Failed to sign in to Google.');
     }
