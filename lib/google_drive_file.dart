@@ -26,6 +26,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -39,7 +40,12 @@ class GoogleDriveFile {
 
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
-    final client = _AuthenticatableClient();
+    _AuthenticatableClient? client = null;
+    if (Platform.isWindows) {
+      client = _AuthenticatableWindowsClient();
+    } else {
+      client = _AuthenticatableAndroidClient();
+    }
     await client.authenticate();
     final driveApi = DriveApi(client);
     var directoryId = await _directoryId(driveApi);
@@ -65,7 +71,12 @@ class GoogleDriveFile {
 
   /// Reads contents as a string.
   Future<String> readAsString() async {
-    final client = _AuthenticatableClient();
+    _AuthenticatableClient? client = null;
+    if (Platform.isWindows) {
+      client = _AuthenticatableWindowsClient();
+    } else {
+      client = _AuthenticatableAndroidClient();
+    }
     await client.authenticate();
     final driveApi = DriveApi(client);
     // Find a file
@@ -141,9 +152,7 @@ class _AuthenticatableClient extends BaseClient {
   Map<String, String>? _headers = null;
   final Client _client = Client();
 
-  static AccessToken? _accessToken = null;
-
-  /// Send a request.
+  /// Sends a request.
   Future<StreamedResponse> send(BaseRequest request) {
     final headers = _headers;
     if (headers != null) {
@@ -153,14 +162,37 @@ class _AuthenticatableClient extends BaseClient {
     return _client.send(request);
   }
 
-  /// Authenticate this client.
+  /// Authenticates this client.
+  Future<void> authenticate() async {
+    throw UnimplementedError();
+  }
+
+  /// Updates headers
+  void updateHeaders(String accessTokenData) {
+    _headers = {
+      'Authorization': 'Bearer ${accessTokenData}',
+      'X-Goog-AuthUser': '0'
+    };
+  }
+
+  /// Headers that is added when request is sent.
+  void set headers(Map<String, String> headers) {
+    _headers = headers;
+  }
+}
+
+class _AuthenticatableWindowsClient extends _AuthenticatableClient {
+  static AccessToken? _accessToken = null;
+
+  /// Authenticates this client.
+  @override
   Future<void> authenticate() async {
     final accessToken = _accessToken;
     if (accessToken != null) {
       final now = DateTime.now().toUtc();
       if (now.isBefore(accessToken.expiry)) {
         // Reuse the access token.
-        _updateHeaders(accessToken.data);
+        updateHeaders(accessToken.data);
         print('Reusing existing access token.');
 
         return;
@@ -171,13 +203,12 @@ class _AuthenticatableClient extends BaseClient {
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
     if (savedData != null && savedExpiry != null) {
-      final expiry =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final now = DateTime.now().toUtc();
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
-        _updateHeaders(savedData);
+        updateHeaders(savedData);
         print('Using access token made from secure storage.');
 
         return;
@@ -189,50 +220,35 @@ class _AuthenticatableClient extends BaseClient {
     final scopes = [DriveApi.driveFileScope];
     final savedRefreshToken = await storage.read(key: 'refreshToken');
     if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
-      final expiry =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final accessToken = AccessToken('Bearer', savedData, expiry);
-      final accessCredentials =
-          AccessCredentials(accessToken, savedRefreshToken, scopes);
+      final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
       try {
-        final newCredentials =
-          await refreshCredentials(id, accessCredentials, this);
-          _accessToken = newCredentials.accessToken;
-          _updateHeaders(newCredentials.accessToken.data);
-          print('Using refreshed credentials.');
-          _storeCredentials(storage, newCredentials);
+        final newCredentials = await refreshCredentials(id, accessCredentials, this);
+        _accessToken = newCredentials.accessToken;
+        updateHeaders(newCredentials.accessToken.data);
+        print('Using refreshed credentials.');
+        _storeCredentials(storage, newCredentials);
 
-          return;
+        return;
       } on Exception catch (exception) {
         // Refresh failed. Try next step.
       }
     }
 
-    // Obtain access credentials
+    // Obtain access credentials.
     try {
       final credentials = await obtainAccessCredentialsViaUserConsent(
         id, scopes, this, (url) async {
           await launch(url);
       });
       _accessToken = credentials.accessToken;
-      _updateHeaders(credentials.accessToken.data);
+      updateHeaders(credentials.accessToken.data);
       print('Using new credentials.');
       _storeCredentials(storage, credentials);
     } on Exception catch (exception) {
       throw AuthenticationException('Failed to obtain access credentials.');
     }
-  }
-
-  /// Headers that is added when request is sent.
-  void set headers(Map<String, String> headers) {
-    _headers = headers;
-  }
-
-  void _updateHeaders(String accessTokenData) {
-    _headers = {
-      'Authorization': 'Bearer ${accessTokenData}',
-      'X-Goog-AuthUser': '0'
-    };
   }
 
   void _storeCredentials(
@@ -244,6 +260,53 @@ class _AuthenticatableClient extends BaseClient {
         value:
             credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
     await storage.write(key: 'refreshToken', value: credentials.refreshToken);
+  }
+}
+
+class _AuthenticatableAndroidClient extends _AuthenticatableClient {
+  static GoogleSignIn? _signIn = null;
+
+  /// Authenticates this client.
+  @override
+  Future<void> authenticate() async {
+    var signIn = _signIn;
+    if (signIn != null) {
+      final account = signIn.currentUser;
+      if (account == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+      }
+      final authentication = await account.authentication;
+      final accessToken = authentication.accessToken;
+      if (accessToken == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+      }
+      updateHeaders(accessToken);
+
+      return;
+    }
+
+    _signIn = GoogleSignIn(scopes: [DriveApi.driveFileScope]);
+    signIn = _signIn;
+    if (signIn == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+    }
+    try {
+      var account = await signIn.signInSilently();
+      if (account == null) {
+        account = await signIn.signIn();
+      }
+      if (account == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+      }
+      final authentication = await account.authentication;
+      final accessToken = authentication.accessToken;
+      if (accessToken == null) {
+        throw AuthenticationException('Failed to sign in to Google.');
+      }
+      updateHeaders(accessToken);
+    } on Exception catch (exception) {
+      throw AuthenticationException('Failed to sign in to Google.');
+    }
   }
 }
 
