@@ -41,7 +41,12 @@ class GoogleDriveFile {
 
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
-    final client = _AuthenticatableWindowsClient();
+    _AuthenticatableClient? client = null;
+    if (Platform.isWindows) {
+      client = _AuthenticatableWindowsClient();
+    } else {
+      client = _AuthenticatableAndroidClient();
+    }
     await client.authenticate();
     final driveApi = DriveApi(client);
     var directoryId = await _directoryId(driveApi);
@@ -67,7 +72,12 @@ class GoogleDriveFile {
 
   /// Reads contents as a string.
   Future<String> readAsString() async {
-    final client = _AuthenticatableWindowsClient();
+    _AuthenticatableClient? client = null;
+    if (Platform.isWindows) {
+      client = _AuthenticatableWindowsClient();
+    } else {
+      client = _AuthenticatableAndroidClient();
+    }
     await client.authenticate();
     final driveApi = DriveApi(client);
     // Find a file
@@ -174,7 +184,7 @@ class _AuthenticatableClient extends BaseClient {
 class _AuthenticatableWindowsClient extends _AuthenticatableClient {
   static AccessToken? _accessToken = null;
 
-  /// Authenticate this client.
+  /// Authenticates this client.
   @override
   Future<void> authenticate() async {
     final accessToken = _accessToken;
@@ -193,8 +203,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
     if (savedData != null && savedExpiry != null) {
-      final expiry =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final now = DateTime.now().toUtc();
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
@@ -211,69 +220,34 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
     final scopes = [DriveApi.driveFileScope];
     final savedRefreshToken = await storage.read(key: 'refreshToken');
     if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
-      final expiry =
-          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final accessToken = AccessToken('Bearer', savedData, expiry);
-      final accessCredentials =
-          AccessCredentials(accessToken, savedRefreshToken, scopes);
+      final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
       try {
-        final newCredentials =
-          await refreshCredentials(id, accessCredentials, this);
-          _accessToken = newCredentials.accessToken;
-          _updateHeaders(newCredentials.accessToken.data);
-          print('Using refreshed credentials.');
-          _storeCredentials(storage, newCredentials);
+        final newCredentials = await refreshCredentials(id, accessCredentials, this);
+        _accessToken = newCredentials.accessToken;
+        _updateHeaders(newCredentials.accessToken.data);
+        print('Using refreshed credentials.');
+        _storeCredentials(storage, newCredentials);
 
-          return;
+        return;
       } on Exception catch (exception) {
         // Refresh failed. Try next step.
       }
     }
 
-    // This may not work on Android Release.
-    // TODO: Fix it.
     // Obtain access credentials.
-    if (Platform.isWindows) {
-      try {
-        final credentials = await obtainAccessCredentialsViaUserConsent(
-          id, scopes, this, (url) async {
-            await launch(url);
-        });
-        _accessToken = credentials.accessToken;
-        _updateHeaders(credentials.accessToken.data);
-        print('Using new credentials.');
-        _storeCredentials(storage, credentials);
-      } on Exception catch (exception) {
-        throw AuthenticationException('Failed to obtain access credentials.');
-      }
-    } else {
-      // TODO: Move to _AuthenticatableAndroidClient
-      print('Begining sign in...');
-
-      final signIn = GoogleSignIn(
-        scopes: scopes,
-      );
-      signIn.onCurrentUserChanged.listen((account) async {
-          final client = (await signIn.authenticatedClient())!;
+    try {
+      final credentials = await obtainAccessCredentialsViaUserConsent(
+        id, scopes, this, (url) async {
+          await launch(url);
       });
-      final account = await signIn.signIn();
-      if (account == null) {
-        return;
-      }
-      final authentication = await account.authentication;
-      final accessToken = authentication.accessToken;
-      if (accessToken == null) {
-        return;
-      }
-      _accessToken = AccessToken('Bearer', accessToken, DateTime.utc(2023, 1,1));
-      _updateHeaders(accessToken);
-
-      // Store may not be needed.
-
-      print('Finished.');
-
-
-
+      _accessToken = credentials.accessToken;
+      _updateHeaders(credentials.accessToken.data);
+      print('Using new credentials.');
+      _storeCredentials(storage, credentials);
+    } on Exception catch (exception) {
+      throw AuthenticationException('Failed to obtain access credentials.');
     }
   }
 
@@ -286,6 +260,35 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
         value:
             credentials.accessToken.expiry.millisecondsSinceEpoch.toString());
     await storage.write(key: 'refreshToken', value: credentials.refreshToken);
+  }
+}
+
+class _AuthenticatableAndroidClient extends _AuthenticatableClient {
+  /// Authenticates this client.
+  @override
+  Future<void> authenticate() async {
+    print('Begining sign in...');
+
+    final scopes = [DriveApi.driveFileScope];
+    final signIn = GoogleSignIn(
+      scopes: scopes,
+    );
+    // TODO: Remove this if not needed.
+    signIn.onCurrentUserChanged.listen((account) async {
+        final client = (await signIn.authenticatedClient())!;
+    });
+    final account = await signIn.signIn();
+    if (account == null) {
+      return;
+    }
+    final authentication = await account.authentication;
+    final accessToken = authentication.accessToken;
+    if (accessToken == null) {
+      return;
+    }
+    _updateHeaders(accessToken);
+
+    print('Finished.');
   }
 }
 
