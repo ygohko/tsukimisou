@@ -235,12 +235,23 @@ class _AuthenticatableClient extends BaseClient {
       signIn.onCurrentUserChanged.listen((account) async {
           final client = (await signIn.authenticatedClient())!;
       });
-      await signIn.signIn();
+      final account = await signIn.signIn();
+      if (account == null) {
+        return;
+      }
+      final authentication = await account.authentication;
+      final accessToken = authentication.accessToken;
+      if (accessToken == null) {
+        return;
+      }
+      _accessToken = AccessToken('Bearer', accessToken, DateTime.utc(2023, 1,1));
+      _updateHeaders(accessToken);
+
+      // Store may not be needed.
 
       print('Finished.');
 
 
-      // TODO: Store credentials.
 
     }
   }
