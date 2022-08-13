@@ -22,7 +22,9 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -50,6 +52,7 @@ class _HomePageState extends State<HomePage> {
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
+  var _licenseAdded = false;
 
   @override
   void initState() {
@@ -277,6 +280,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showAbout() async {
+    if (!_licenseAdded) {
+      _addLicenses();
+      _licenseAdded = true;
+    }
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
     Navigator.of(context).pop();
@@ -325,5 +332,20 @@ class _HomePageState extends State<HomePage> {
       }
     }
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+  }
+
+  void _addLicenses() async {
+    LicenseRegistry.addLicense(() async* {
+        var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
+        yield LicenseEntryWithLineBreaks(
+          ['Noto Fonts'],
+          text,
+        );
+        text = await rootBundle.loadString('assets/licenses/tsukimisou.txt');
+        yield LicenseEntryWithLineBreaks(
+          ['Tsukimisou'],
+          text,
+        );
+    });
   }
 }
