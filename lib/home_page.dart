@@ -164,7 +164,7 @@ class _HomePageState extends State<HomePage> {
             } else if (i == integrationSubtitleIndex) {
               return common_uis.subtitle(
                   context, localizations.googleDriveIntegration);
-            } else if (i == synchronizeIndex){
+            } else if (i == synchronizeIndex) {
               return ListTile(
                 title: Text(localizations.synchronize),
                 onTap: _mergeWithGoogleDrive,
@@ -172,8 +172,7 @@ class _HomePageState extends State<HomePage> {
             } else if (i == othersDividerIndex) {
               return const Divider();
             } else if (i == othersSubtitleIndex) {
-              return common_uis.subtitle(
-                context, localizations.others);
+              return common_uis.subtitle(context, localizations.others);
             } else {
               return ListTile(
                 title: Text(localizations.about),
@@ -234,8 +233,7 @@ class _HomePageState extends State<HomePage> {
     common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
-    final loader =
-        MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+    final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
     } on HttpException {
@@ -250,8 +248,7 @@ class _HomePageState extends State<HomePage> {
     final toMemoStore = MemoStore.instance();
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
-    final saver =
-        MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+    final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception catch (exception) {
@@ -336,16 +333,16 @@ class _HomePageState extends State<HomePage> {
 
   void _addLicenses() async {
     LicenseRegistry.addLicense(() async* {
-        var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
-        yield LicenseEntryWithLineBreaks(
-          ['Noto Fonts'],
-          text,
-        );
-        text = await rootBundle.loadString('assets/licenses/tsukimisou.txt');
-        yield LicenseEntryWithLineBreaks(
-          ['Tsukimisou'],
-          text,
-        );
+      var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
+      yield LicenseEntryWithLineBreaks(
+        ['Noto Fonts'],
+        text,
+      );
+      text = await rootBundle.loadString('assets/licenses/tsukimisou.txt');
+      yield LicenseEntryWithLineBreaks(
+        ['Tsukimisou'],
+        text,
+      );
     });
   }
 }

@@ -101,8 +101,8 @@ class _EditingPageState extends State<EditingPage> {
       // Update a memo
       memo.text = _controller.text;
     }
-    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'MemoStore.json');
+    final memoStoreSaver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
