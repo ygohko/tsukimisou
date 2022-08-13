@@ -92,13 +92,11 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
                   color: bound ? Colors.blue : null,
                 ),
                 onTap: () {
-                  setState(() {
-                    if (bound) {
-                      _boundTags.remove(tag);
-                    } else {
-                      _boundTags.add(tag);
-                    }
-                  });
+                  if (bound) {
+                    _unbindTag(tag);
+                  } else {
+                    _bindTag(tag);
+                  }
                 });
           },
         ),
@@ -186,5 +184,17 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     }
 
     return true;
+  }
+
+  void _bindTag(String tag) {
+    setState(() {
+      _boundTags.add(tag);
+    });
+  }
+
+  void _unbindTag(String tag) {
+    setState(() {
+      _boundTags.remove(tag);
+    });
   }
 }
