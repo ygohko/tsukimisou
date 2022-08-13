@@ -100,7 +100,8 @@ class GoogleDriveFile {
   }
 
   Future<String?> _directoryId(DriveApi driveApi) async {
-    var result = await driveApi.files.list(q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
+    var result = await driveApi.files.list(
+        q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
     var files = result.files;
     if (files == null) {
       throw HttpException('API does not return directories.');
@@ -121,8 +122,8 @@ class GoogleDriveFile {
     if (directoryId == null) {
       return <String>[];
     }
-    final result = await driveApi.files
-        .list(q: 'name = "${_fileName}" and "${directoryId}" in parents and trashed = false');
+    final result = await driveApi.files.list(
+        q: 'name = "${_fileName}" and "${directoryId}" in parents and trashed = false');
     final files = result.files;
     if (files == null) {
       throw HttpException('API does not return files.');
@@ -203,7 +204,8 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
     if (savedData != null && savedExpiry != null) {
-      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final now = DateTime.now().toUtc();
       if (now.isBefore(expiry)) {
         // Create access token from secure storage.
@@ -220,11 +222,14 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
     final scopes = [DriveApi.driveFileScope];
     final savedRefreshToken = await storage.read(key: 'refreshToken');
     if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
-      final expiry = DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
+      final expiry =
+          DateTime.fromMillisecondsSinceEpoch(int.parse(savedExpiry)).toUtc();
       final accessToken = AccessToken('Bearer', savedData, expiry);
-      final accessCredentials = AccessCredentials(accessToken, savedRefreshToken, scopes);
+      final accessCredentials =
+          AccessCredentials(accessToken, savedRefreshToken, scopes);
       try {
-        final newCredentials = await refreshCredentials(id, accessCredentials, this);
+        final newCredentials =
+            await refreshCredentials(id, accessCredentials, this);
         _accessToken = newCredentials.accessToken;
         updateHeaders(newCredentials.accessToken.data);
         print('Using refreshed credentials.');
@@ -239,8 +244,8 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
     // Obtain access credentials.
     try {
       final credentials = await obtainAccessCredentialsViaUserConsent(
-        id, scopes, this, (url) async {
-          await launch(url);
+          id, scopes, this, (url) async {
+        await launch(url);
       });
       _accessToken = credentials.accessToken;
       updateHeaders(credentials.accessToken.data);
@@ -288,7 +293,7 @@ class _AuthenticatableAndroidClient extends _AuthenticatableClient {
     _signIn = GoogleSignIn(scopes: [DriveApi.driveFileScope]);
     signIn = _signIn;
     if (signIn == null) {
-        throw AuthenticationException('Failed to sign in to Google.');
+      throw AuthenticationException('Failed to sign in to Google.');
     }
     try {
       var account = await signIn.signInSilently();
