@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.gonypage.tsukimisou">
+   <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="Tsukimisou"
         android:name="${applicationName}"
