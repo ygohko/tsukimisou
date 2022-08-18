@@ -47,6 +47,10 @@
     "@about": {
         "description": "Text for about list tile"
     },
+    "privacyPolicy": "Privacy policy",
+    "@privacyPolicy": {
+        "description": "Text for privacy policy list tile"
+    },
     "loadingMemoStoreFromGoogleDriveFailed": "Loading memo store from Google Drive failed.",
     "@loadingMemoStoreFromGoogleDriveFailed": {
         "description": "Error text when loading from Google Drive failed"
