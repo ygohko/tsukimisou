@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
               return const Divider();
             } else if (i == othersSubtitleIndex) {
               return common_uis.subtitle(context, localizations.others);
-            } else if (i == aboutIndex){
+            } else if (i == aboutIndex) {
               return ListTile(
                 title: Text(localizations.about),
                 onTap: _showAbout,
