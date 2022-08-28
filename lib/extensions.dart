@@ -23,11 +23,13 @@
 import 'package:intl/intl.dart';
 
 extension StringConverting on DateTime {
+  /// Returns a string that contains detailed information of this instance.
   String toDetailedString() {
     final format = DateFormat('yyyy/MM/dd HH:mm');
     return format.format(this);
   }
 
+  /// Returns a string that contains information changes depended by elapsed days of this instance.
   String toSmartString() {
     final now = DateTime.now();
     if (year == now.year) {
