@@ -28,6 +28,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
+import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -61,7 +62,7 @@ class _ViewingPageState extends State<ViewingPage> {
     ;
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.memoAtDateTime(dateTime.toString())),
+        title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
@@ -87,7 +88,7 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
           ),
           ListTile(
-            title: Text(localizations.updated(dateTime.toString()),
+            title: Text(localizations.updated(dateTime.toDetailedString()),
                 style: attributeStyle),
           ),
           const Divider(),

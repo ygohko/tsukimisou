@@ -31,6 +31,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
+import 'extensions.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
             final memo = _shownMemos[(_shownMemos.length - 1) - i];
             final updated =
                 DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-                    .toString();
+                    .toSmartString();
             return Card(
                 child: InkWell(
               child: Padding(
