@@ -26,12 +26,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
+import 'extensions.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
             final memo = _shownMemos[(_shownMemos.length - 1) - i];
             final updated =
                 DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-                    .toDetailedString();
+                    .toSmartString();
             return Card(
                 child: InkWell(
               child: Padding(
@@ -357,12 +357,5 @@ class _HomePageState extends State<HomePage> {
         text,
       );
     });
-  }
-}
-
-extension StringConverting on DateTime {
-  String toDetailedString() {
-    final format = DateFormat('yyyy/MM/dd HH:mm');
-    return format.format(this);
   }
 }
