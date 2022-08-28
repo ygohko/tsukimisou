@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
@@ -75,7 +76,8 @@ class _HomePageState extends State<HomePage> {
     final othersDividerIndex = synchronizeIndex + 1;
     final othersSubtitleIndex = othersDividerIndex + 1;
     final aboutIndex = othersSubtitleIndex + 1;
-    final drawerItemCount = aboutIndex + 1;
+    final privacyPolicyIndex = aboutIndex + 1;
+    final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
     return Scaffold(
@@ -173,10 +175,15 @@ class _HomePageState extends State<HomePage> {
               return const Divider();
             } else if (i == othersSubtitleIndex) {
               return common_uis.subtitle(context, localizations.others);
-            } else {
+            } else if (i == aboutIndex){
               return ListTile(
                 title: Text(localizations.about),
                 onTap: _showAbout,
+              );
+            } else {
+              return ListTile(
+                title: Text(localizations.privacyPolicy),
+                onTap: _showPrivacyPolicy,
               );
             }
           },
@@ -296,6 +303,11 @@ class _HomePageState extends State<HomePage> {
       ),
       applicationLegalese: '(c) 2022 Yasuaki Gohko',
     );
+  }
+
+  void _showPrivacyPolicy() async {
+    await launch('https://sites.gonypage.jp/home/tsukimisou/privacy-policy');
+    Navigator.of(context).pop();
   }
 
   void _filter(String tag) {
