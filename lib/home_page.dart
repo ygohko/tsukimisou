@@ -474,6 +474,13 @@ class _HomePageState extends State<HomePage> {
     final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
+    late double drawerWidth;
+    final windowWidth = MediaQuery.of(context).size.width;
+    if (windowWidth > 600.0) {
+      drawerWidth = 300.0;
+    } else {
+      drawerWidth = windowWidth / 2.0;
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
@@ -483,7 +490,7 @@ class _HomePageState extends State<HomePage> {
           ConstrainedBox(
             constraints: BoxConstraints(
               minWidth: 0.0,
-              maxWidth: 300.0,
+              maxWidth: drawerWidth,
             ),
             child: ListView.builder(
               itemCount: drawerItemCount,
