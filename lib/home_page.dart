@@ -549,6 +549,7 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
+            flex: 1,
           ),
           Expanded(
             child: ListView.builder(
@@ -581,6 +582,7 @@ class _HomePageState extends State<HomePage> {
                     },
                 ));
             }),
+            flex: 2,
           ),
         ],
       ),
