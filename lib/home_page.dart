@@ -480,7 +480,11 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Row(
         children: [
-          Expanded(
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: 0.0,
+              maxWidth: 300.0,
+            ),
             child: ListView.builder(
               itemCount: drawerItemCount,
               itemBuilder: (context, i) {
@@ -549,7 +553,6 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
-            flex: 1,
           ),
           Expanded(
             child: ListView.builder(
@@ -582,7 +585,6 @@ class _HomePageState extends State<HomePage> {
                     },
                 ));
             }),
-            flex: 2,
           ),
         ],
       ),
