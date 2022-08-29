@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringTag = '';
   var _filteringEnabled = false;
   var _licenseAdded = false;
+  final _tablet = true;
 
   @override
   void initState() {
@@ -64,8 +65,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // return _buildForPhone(context);
-    return _buildForTablet(context);
+    if (!_tablet) {
+      return _buildForPhone(context);
+    } else {
+      return _buildForTablet(context);
+    }
 
     /*
     const headerIndex = 0;
@@ -242,7 +246,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _mergeWithGoogleDrive() async {
-    Navigator.of(context).pop();
+    if (!_tablet) {
+      Navigator.of(context).pop();
+    }
     common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
@@ -296,7 +302,9 @@ class _HomePageState extends State<HomePage> {
     }
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
-    Navigator.of(context).pop();
+    if (!_tablet) {
+      Navigator.of(context).pop();
+    }
     showAboutDialog(
       context: context,
       applicationName: localizations.tsukimisou,
@@ -313,7 +321,9 @@ class _HomePageState extends State<HomePage> {
 
   void _showPrivacyPolicy() async {
     await launch('https://sites.gonypage.jp/home/tsukimisou/privacy-policy');
-    Navigator.of(context).pop();
+    if (!_tablet) {
+      Navigator.of(context).pop();
+    }
   }
 
   Widget _buildForPhone(BuildContext context) {
@@ -660,8 +670,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-    // adhoc
-    // Navigator.of(context).pop();
+    if (!_tablet) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _disableFiltering() {
@@ -669,8 +680,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-    // adhoc
-    // Navigator.of(context).pop();
+    if (!_tablet) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _updateShownMemos() {
