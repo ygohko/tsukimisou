@@ -56,8 +56,6 @@ class _HomePageState extends State<HomePage> {
   var _filteringTag = '';
   var _filteringEnabled = false;
   var _licenseAdded = false;
-  // TODO: Rename this
-  final _tablet = true;
 
   @override
   void initState() {
@@ -67,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       return _buildForPhone(context);
     } else {
       return _buildForTablet(context);
@@ -90,7 +88,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addMemo() async {
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
             return EditingPage();
@@ -128,7 +126,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _viewMemo(Memo memo) async {
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (context) {
@@ -163,7 +161,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _mergeWithGoogleDrive() async {
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
     common_uis.showProgressIndicatorDialog(context);
@@ -219,7 +217,7 @@ class _HomePageState extends State<HomePage> {
     }
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
     showAboutDialog(
@@ -238,7 +236,7 @@ class _HomePageState extends State<HomePage> {
 
   void _showPrivacyPolicy() async {
     await launch('https://sites.gonypage.jp/home/tsukimisou/privacy-policy');
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
   }
@@ -601,7 +599,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
   }
@@ -611,7 +609,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-    if (!_tablet) {
+    if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
   }

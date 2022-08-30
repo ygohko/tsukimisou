@@ -113,3 +113,11 @@ Container subtitle(BuildContext context, String text) {
     ),
   );
 }
+
+bool hasLargeScreen() {
+  if (Platform.isWindows) {
+    return true;
+  }
+
+  return false;
+}

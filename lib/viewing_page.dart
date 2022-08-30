@@ -23,6 +23,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'binding_tags_page.dart';
@@ -104,15 +105,38 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _edit() async {
-    await Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return EditingPage(memo: widget.memo);
-      },
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return OpenUpwardsPageTransitionsBuilder().buildTransitions(
-            null, context, animation, secondaryAnimation, child);
-      },
-    ));
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return EditingPage(memo: widget.memo);
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+              null, context, animation, secondaryAnimation, child);
+          },
+      ));
+    } else {
+      await showAnimatedDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: EditingPage(memo: widget.memo),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        animationType: DialogTransitionType.slideFromBottom,
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {});
   }
 
@@ -159,12 +183,35 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _bindTags() async {
     final memoStore = MemoStore.instance();
-    await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return BindingTagsPage(
-            memo: widget.memo, additinalTags: memoStore.tags);
-      },
-    ));
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return BindingTagsPage(
+              memo: widget.memo, additinalTags: memoStore.tags);
+          },
+      ));
+    } else {
+      showAnimatedDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: BindingTagsPage(
+                memo: widget.memo, additinalTags: memoStore.tags),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        animationType: DialogTransitionType.scale,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {});
   }
 }
