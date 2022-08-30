@@ -72,136 +72,6 @@ class _HomePageState extends State<HomePage> {
     } else {
       return _buildForTablet(context);
     }
-
-    /*
-    const headerIndex = 0;
-    const allMemosIndex = 1;
-    const tagsSubtitleIndex = 2;
-    const tagsBeginIndex = 3;
-    final memoStore = MemoStore.instance();
-    final tags = memoStore.tags;
-    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    final integrationDividerIndex = tagsEndIndex + 1;
-    final integrationSubtitleIndex = integrationDividerIndex + 1;
-    final synchronizeIndex = integrationSubtitleIndex + 1;
-    final othersDividerIndex = synchronizeIndex + 1;
-    final othersSubtitleIndex = othersDividerIndex + 1;
-    final aboutIndex = othersSubtitleIndex + 1;
-    final privacyPolicyIndex = aboutIndex + 1;
-    final drawerItemCount = privacyPolicyIndex + 1;
-    final localizations = AppLocalizations.of(context)!;
-    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.tsukimisou),
-      ),
-      body: ListView.builder(
-          itemCount: _shownMemos.length,
-          itemBuilder: (context, i) {
-            final memo = _shownMemos[(_shownMemos.length - 1) - i];
-            final updated =
-                DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-                    .toSmartString();
-            return Card(
-                child: InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(memo.text),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          localizations.updated(updated),
-                          style: attributeStyle,
-                        ),
-                      ),
-                    ]),
-              ),
-              onTap: () {
-                print('tapped ${memo.text}');
-                _viewMemo(memo);
-              },
-            ));
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: localizations.addAMemo,
-        child: const Icon(Icons.add),
-      ),
-      drawer: Drawer(
-        child: ListView.builder(
-          itemCount: drawerItemCount,
-          itemBuilder: (context, i) {
-            if (i == headerIndex) {
-              return SizedBox(
-                height: 120,
-                child: DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: common_uis.ColorTheme.primary,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                        localizations.showingMemos(_shownMemos.length,
-                            memoStore.memos.length, tags.length),
-                        style: const TextStyle(
-                            color: common_uis.ColorTheme.onPrimary)),
-                  ),
-                ),
-              );
-            } else if (i == allMemosIndex) {
-              return ListTile(
-                title: Text(localizations.allMemos),
-                onTap: _disableFiltering,
-                selected: !_filteringEnabled,
-                selectedColor: common_uis.ColorTheme.primary,
-                selectedTileColor: common_uis.ColorTheme.primaryLight,
-              );
-            } else if (i == tagsSubtitleIndex) {
-              return common_uis.subtitle(context, localizations.tags);
-            } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
-              final tag = tags[i - tagsBeginIndex];
-              return ListTile(
-                title: Text(tag),
-                onTap: () {
-                  _filter(tag);
-                },
-                selected: _filteringEnabled && _filteringTag == tag,
-                selectedColor: common_uis.ColorTheme.primary,
-                selectedTileColor: common_uis.ColorTheme.primaryLight,
-              );
-            } else if (i == integrationDividerIndex) {
-              return const Divider();
-            } else if (i == integrationSubtitleIndex) {
-              return common_uis.subtitle(
-                  context, localizations.googleDriveIntegration);
-            } else if (i == synchronizeIndex) {
-              return ListTile(
-                title: Text(localizations.synchronize),
-                onTap: _mergeWithGoogleDrive,
-              );
-            } else if (i == othersDividerIndex) {
-              return const Divider();
-            } else if (i == othersSubtitleIndex) {
-              return common_uis.subtitle(context, localizations.others);
-            } else if (i == aboutIndex) {
-              return ListTile(
-                title: Text(localizations.about),
-                onTap: _showAbout,
-              );
-            } else {
-              return ListTile(
-                title: Text(localizations.privacyPolicy),
-                onTap: _showPrivacyPolicy,
-              );
-            }
-          },
-        ),
-      ),
-    );
-    */
   }
 
   Future<void> _load() async {
@@ -231,36 +101,6 @@ class _HomePageState extends State<HomePage> {
           },
       ));
     } else {
-      /*
-      final theme = Theme.of(context);
-      await showGeneralDialog(
-        context: context,
-        pageBuilder: (context, animation, secondaryAnimation) {
-          return SafeArea(
-            top: false,
-            child: Theme(
-              data: theme,
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: 600.0,
-                    minHeight: 600.0,
-                    maxWidth: 600.0,
-                    maxHeight: 600.0
-                  ),
-                  child: EditingPage(),
-                ),
-              ),
-            ),
-          );
-        },
-        barrierDismissible: false,
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
-            null, context, animation, secondaryAnimation, child);
-        },
-      );
-      */
       await showAnimatedDialog(
         context: context,
         builder: (context) {
@@ -288,13 +128,35 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _viewMemo(Memo memo) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
+    if (!_tablet) {
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) {
+            return ViewingPage(memo: memo);
+          },
+        ),
+      );
+    } else {
+      await showAnimatedDialog(
+        context: context,
         builder: (context) {
-          return ViewingPage(memo: memo);
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: ViewingPage(memo: memo),
+            ),
+          );
         },
-      ),
-    );
+        barrierDismissible: false,
+        animationType: DialogTransitionType.scale,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {
       _updateShownMemos();
     });
