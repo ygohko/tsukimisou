@@ -398,8 +398,8 @@ class _HomePageState extends State<HomePage> {
     final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
     late double drawerWidth;
     final windowWidth = MediaQuery.of(context).size.width;
-    if (windowWidth > 600.0) {
-      drawerWidth = 300.0;
+    if (windowWidth > 512.0) {
+      drawerWidth = 256.0;
     } else {
       drawerWidth = windowWidth / 2.0;
     }
