@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringTag = '';
   var _filteringEnabled = false;
   var _licenseAdded = false;
+  // TODO: Rename this
   final _tablet = true;
 
   @override
@@ -218,15 +219,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addMemo() async {
-    await Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return EditingPage();
-      },
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+    if (!_tablet) {
+      await Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return EditingPage();
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+              null, context, animation, secondaryAnimation, child);
+          },
+      ));
+    } else {
+      await showGeneralDialog(
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: EditingPage(),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
             null, context, animation, secondaryAnimation, child);
-      },
-    ));
+        },
+      );
+    }
     setState(() {
       _updateShownMemos();
     });
@@ -326,6 +351,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  // TODO: Rename this
   Widget _buildForPhone(BuildContext context) {
     const headerIndex = 0;
     const allMemosIndex = 1;
@@ -456,6 +482,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // TODO: Rename this
   Widget _buildForTablet(BuildContext context) {
     const headerIndex = 0;
     const allMemosIndex = 1;
