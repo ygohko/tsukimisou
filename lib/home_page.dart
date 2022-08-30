@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -230,9 +231,39 @@ class _HomePageState extends State<HomePage> {
           },
       ));
     } else {
+      /*
+      final theme = Theme.of(context);
       await showGeneralDialog(
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) {
+          return SafeArea(
+            top: false,
+            child: Theme(
+              data: theme,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: 600.0,
+                    minHeight: 600.0,
+                    maxWidth: 600.0,
+                    maxHeight: 600.0
+                  ),
+                  child: EditingPage(),
+                ),
+              ),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+            null, context, animation, secondaryAnimation, child);
+        },
+      );
+      */
+      await showAnimatedDialog(
+        context: context,
+        builder: (context) {
           return Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(
@@ -246,10 +277,9 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        transitionBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
-            null, context, animation, secondaryAnimation, child);
-        },
+        animationType: DialogTransitionType.slideFromBottom,
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 300),
       );
     }
     setState(() {
