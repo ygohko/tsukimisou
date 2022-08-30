@@ -493,6 +493,7 @@ class _HomePageState extends State<HomePage> {
               maxWidth: drawerWidth,
             ),
             child: ListView.builder(
+              primary: false,
               itemCount: drawerItemCount,
               itemBuilder: (context, i) {
                 if (i == headerIndex) {
