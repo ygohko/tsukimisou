@@ -59,10 +59,17 @@ class _EditingPageState extends State<EditingPage> {
     if (widget.memo != null) {
       title = localizations.editAMemo;
     }
+    late Widget leading;
+    if (hasLargeScreen() && widget.memo == null) {
+      leading = CloseButton();
+    } else {
+      leading = BackButton();
+    }
     return WillPopScope(
       onWillPop: _confirm,
       child: Scaffold(
         appBar: AppBar(
+          leading: leading,
           title: Text(title),
           actions: [
             IconButton(

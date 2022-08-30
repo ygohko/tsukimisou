@@ -60,9 +60,9 @@ class _ViewingPageState extends State<ViewingPage> {
     final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
     final attributeStyle =
         common_uis.TextTheme.viewingPageMemoAttribute(context);
-    ;
     return Scaffold(
       appBar: AppBar(
+        leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
         title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
         actions: [
           IconButton(
