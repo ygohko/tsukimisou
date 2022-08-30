@@ -110,7 +110,10 @@ class _HomePageState extends State<HomePage> {
                 maxWidth: 600.0,
                 maxHeight: 600.0
               ),
-              child: EditingPage(),
+              child: Dialog(
+                child: EditingPage(),
+                elevation: 24,
+              ),
             ),
           );
         },
@@ -146,7 +149,9 @@ class _HomePageState extends State<HomePage> {
                 maxWidth: 600.0,
                 maxHeight: 600.0
               ),
-              child: ViewingPage(memo: memo),
+              child: Dialog(
+                child: ViewingPage(memo: memo),
+              ),
             ),
           );
         },

@@ -127,11 +127,15 @@ class _ViewingPageState extends State<ViewingPage> {
                 maxWidth: 600.0,
                 maxHeight: 600.0
               ),
-              child: EditingPage(memo: widget.memo),
+              child: Dialog(
+                child: EditingPage(memo: widget.memo),
+                elevation: 0,
+              ),
             ),
           );
         },
         barrierDismissible: false,
+        barrierColor: Color(0x00000000),
         animationType: DialogTransitionType.slideFromBottom,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
@@ -202,12 +206,16 @@ class _ViewingPageState extends State<ViewingPage> {
                 maxWidth: 600.0,
                 maxHeight: 600.0
               ),
-              child: BindingTagsPage(
-                memo: widget.memo, additinalTags: memoStore.tags),
+              child: Dialog(
+                child: BindingTagsPage(
+                  memo: widget.memo, additinalTags: memoStore.tags),
+                elevation: 0,
+              ),
             ),
           );
         },
         barrierDismissible: false,
+        barrierColor: Color(0x00000000),
         animationType: DialogTransitionType.scale,
         duration: Duration(milliseconds: 300),
       );
