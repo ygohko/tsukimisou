@@ -269,35 +269,11 @@ class _HomePageState extends State<HomePage> {
         title: Text(localizations.tsukimisou),
       ),
       body: ListView.builder(
-          itemCount: _shownMemos.length,
-          itemBuilder: (context, i) {
-            final memo = _shownMemos[(_shownMemos.length - 1) - i];
-            final updated =
-                DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-                    .toSmartString();
-            return Card(
-                child: InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(memo.text),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          localizations.updated(updated),
-                          style: attributeStyle,
-                        ),
-                      ),
-                    ]),
-              ),
-              onTap: () {
-                print('tapped ${memo.text}');
-                _viewMemo(memo);
-              },
-            ));
-          }),
+        itemCount: _shownMemos.length,
+        itemBuilder: (context, i) {
+          return _buildMemoListViewItem(context, i);
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
         tooltip: localizations.addAMemo,
@@ -486,33 +462,9 @@ class _HomePageState extends State<HomePage> {
             child: ListView.builder(
               itemCount: _shownMemos.length,
               itemBuilder: (context, i) {
-                final memo = _shownMemos[(_shownMemos.length - 1) - i];
-                final updated =
-                DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-                .toSmartString();
-                return Card(
-                  child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(memo.text),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              localizations.updated(updated),
-                              style: attributeStyle,
-                            ),
-                          ),
-                      ]),
-                    ),
-                    onTap: () {
-                      print('tapped ${memo.text}');
-                      _viewMemo(memo);
-                    },
-                ));
-            }),
+                return _buildMemoListViewItem(context, i);
+              }
+            ),
           ),
         ],
       ),
@@ -521,80 +473,41 @@ class _HomePageState extends State<HomePage> {
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
-      /*
-      drawer: Drawer(
-        child: ListView.builder(
-          itemCount: drawerItemCount,
-          itemBuilder: (context, i) {
-            if (i == headerIndex) {
-              return SizedBox(
-                height: 120,
-                child: DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: common_uis.ColorTheme.primary,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                        localizations.showingMemos(_shownMemos.length,
-                            memoStore.memos.length, tags.length),
-                        style: const TextStyle(
-                            color: common_uis.ColorTheme.onPrimary)),
-                  ),
-                ),
-              );
-            } else if (i == allMemosIndex) {
-              return ListTile(
-                title: Text(localizations.allMemos),
-                onTap: _disableFiltering,
-                selected: !_filteringEnabled,
-                selectedColor: common_uis.ColorTheme.primary,
-                selectedTileColor: common_uis.ColorTheme.primaryLight,
-              );
-            } else if (i == tagsSubtitleIndex) {
-              return common_uis.subtitle(context, localizations.tags);
-            } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
-              final tag = tags[i - tagsBeginIndex];
-              return ListTile(
-                title: Text(tag),
-                onTap: () {
-                  _filter(tag);
-                },
-                selected: _filteringEnabled && _filteringTag == tag,
-                selectedColor: common_uis.ColorTheme.primary,
-                selectedTileColor: common_uis.ColorTheme.primaryLight,
-              );
-            } else if (i == integrationDividerIndex) {
-              return const Divider();
-            } else if (i == integrationSubtitleIndex) {
-              return common_uis.subtitle(
-                  context, localizations.googleDriveIntegration);
-            } else if (i == synchronizeIndex) {
-              return ListTile(
-                title: Text(localizations.synchronize),
-                onTap: _mergeWithGoogleDrive,
-              );
-            } else if (i == othersDividerIndex) {
-              return const Divider();
-            } else if (i == othersSubtitleIndex) {
-              return common_uis.subtitle(context, localizations.others);
-            } else if (i == aboutIndex) {
-              return ListTile(
-                title: Text(localizations.about),
-                onTap: _showAbout,
-              );
-            } else {
-              return ListTile(
-                title: Text(localizations.privacyPolicy),
-                onTap: _showPrivacyPolicy,
-              );
-            }
-          },
-        ),
-      ),
-      */
     );
   }
+
+  Widget _buildMemoListViewItem(BuildContext context, int i) {
+    final localizations = AppLocalizations.of(context)!;
+    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
+    final memo = _shownMemos[(_shownMemos.length - 1) - i];
+    final updated =
+    DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
+    .toSmartString();
+    return Card(
+      child: InkWell(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(memo.text),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  localizations.updated(updated),
+                  style: attributeStyle,
+                ),
+              ),
+          ]),
+        ),
+        onTap: () {
+          print('tapped ${memo.text}');
+          _viewMemo(memo);
+        },
+    ));
+  }
+
+
 
   void _filter(String tag) {
     _filteringTag = tag;

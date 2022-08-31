@@ -114,6 +114,7 @@ Container subtitle(BuildContext context, String text) {
   );
 }
 
+/// Returns whether this device has a large screen.
 bool hasLargeScreen() {
   if (Platform.isWindows) {
     return true;
