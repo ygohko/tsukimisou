@@ -66,9 +66,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (!common_uis.hasLargeScreen()) {
-      return _buildForPhone(context);
+      return _buildForSmallScreen(context);
     } else {
-      return _buildForTablet(context);
+      return _buildForLargeScreen(context);
     }
   }
 
@@ -246,8 +246,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  // TODO: Rename this
-  Widget _buildForPhone(BuildContext context) {
+  Widget _buildForSmallScreen(BuildContext context) {
     const headerIndex = 0;
     const allMemosIndex = 1;
     const tagsSubtitleIndex = 2;
@@ -377,8 +376,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // TODO: Rename this
-  Widget _buildForTablet(BuildContext context) {
+  Widget _buildForLargeScreen(BuildContext context) {
     const headerIndex = 0;
     const allMemosIndex = 1;
     const tagsSubtitleIndex = 2;
