@@ -247,36 +247,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildForSmallScreen(BuildContext context) {
-    const headerIndex = 0;
-    const allMemosIndex = 1;
-    const tagsSubtitleIndex = 2;
-    const tagsBeginIndex = 3;
-    final memoStore = MemoStore.instance();
-    final tags = memoStore.tags;
-    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    final integrationDividerIndex = tagsEndIndex + 1;
-    final integrationSubtitleIndex = integrationDividerIndex + 1;
-    final synchronizeIndex = integrationSubtitleIndex + 1;
-    final othersDividerIndex = synchronizeIndex + 1;
-    final othersSubtitleIndex = othersDividerIndex + 1;
-    final aboutIndex = othersSubtitleIndex + 1;
-    final privacyPolicyIndex = aboutIndex + 1;
-    final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
       ),
       body: _memoListView(),
-
-      /*
-      ListView.builder(
-        itemCount: _shownMemos.length,
-        itemBuilder: (context, i) {
-          return _buildMemoListViewItem(context, i);
-        },
-      ),
-      */
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
         tooltip: localizations.addAMemo,
@@ -289,23 +265,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildForLargeScreen(BuildContext context) {
-    const headerIndex = 0;
-    const allMemosIndex = 1;
-    const tagsSubtitleIndex = 2;
-    const tagsBeginIndex = 3;
-    final memoStore = MemoStore.instance();
-    final tags = memoStore.tags;
-    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    final integrationDividerIndex = tagsEndIndex + 1;
-    final integrationSubtitleIndex = integrationDividerIndex + 1;
-    final synchronizeIndex = integrationSubtitleIndex + 1;
-    final othersDividerIndex = synchronizeIndex + 1;
-    final othersSubtitleIndex = othersDividerIndex + 1;
-    final aboutIndex = othersSubtitleIndex + 1;
-    final privacyPolicyIndex = aboutIndex + 1;
-    final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
-    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
     late double drawerWidth;
     final windowWidth = MediaQuery.of(context).size.width;
     if (windowWidth > 512.0) {
@@ -328,15 +288,6 @@ class _HomePageState extends State<HomePage> {
           ),
           Expanded(
             child: _memoListView(),
-
-            /*
-            ListView.builder(
-              itemCount: _shownMemos.length,
-              itemBuilder: (context, i) {
-                return _buildMemoListViewItem(context, i);
-              }
-            ),
-            */
           ),
         ],
       ),
