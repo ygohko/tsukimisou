@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,133 +65,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    const headerIndex = 0;
-    const allMemosIndex = 1;
-    const tagsSubtitleIndex = 2;
-    const tagsBeginIndex = 3;
-    final memoStore = MemoStore.instance();
-    final tags = memoStore.tags;
-    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    final integrationDividerIndex = tagsEndIndex + 1;
-    final integrationSubtitleIndex = integrationDividerIndex + 1;
-    final synchronizeIndex = integrationSubtitleIndex + 1;
-    final othersDividerIndex = synchronizeIndex + 1;
-    final othersSubtitleIndex = othersDividerIndex + 1;
-    final aboutIndex = othersSubtitleIndex + 1;
-    final privacyPolicyIndex = aboutIndex + 1;
-    final drawerItemCount = privacyPolicyIndex + 1;
-    final localizations = AppLocalizations.of(context)!;
-    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.tsukimisou),
-      ),
-      body: ListView.builder(
-          itemCount: _shownMemos.length,
-          itemBuilder: (context, i) {
-            final memo = _shownMemos[(_shownMemos.length - 1) - i];
-            final updated =
-                DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-                    .toSmartString();
-            return Card(
-                child: InkWell(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(memo.text),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          localizations.updated(updated),
-                          style: attributeStyle,
-                        ),
-                      ),
-                    ]),
-              ),
-              onTap: () {
-                print('tapped ${memo.text}');
-                _viewMemo(memo);
-              },
-            ));
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
-        tooltip: localizations.addAMemo,
-        child: const Icon(Icons.add),
-      ),
-      drawer: Drawer(
-        child: ListView.builder(
-          itemCount: drawerItemCount,
-          itemBuilder: (context, i) {
-            if (i == headerIndex) {
-              return SizedBox(
-                height: 120,
-                child: DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: common_uis.ColorTheme.primary,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                        localizations.showingMemos(_shownMemos.length,
-                            memoStore.memos.length, tags.length),
-                        style: const TextStyle(
-                            color: common_uis.ColorTheme.onPrimary)),
-                  ),
-                ),
-              );
-            } else if (i == allMemosIndex) {
-              return ListTile(
-                title: Text(localizations.allMemos),
-                onTap: _disableFiltering,
-                selected: !_filteringEnabled,
-                selectedColor: common_uis.ColorTheme.primary,
-                selectedTileColor: common_uis.ColorTheme.primaryLight,
-              );
-            } else if (i == tagsSubtitleIndex) {
-              return common_uis.subtitle(context, localizations.tags);
-            } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
-              final tag = tags[i - tagsBeginIndex];
-              return ListTile(
-                title: Text(tag),
-                onTap: () {
-                  _filter(tag);
-                },
-                selected: _filteringEnabled && _filteringTag == tag,
-                selectedColor: common_uis.ColorTheme.primary,
-                selectedTileColor: common_uis.ColorTheme.primaryLight,
-              );
-            } else if (i == integrationDividerIndex) {
-              return const Divider();
-            } else if (i == integrationSubtitleIndex) {
-              return common_uis.subtitle(
-                  context, localizations.googleDriveIntegration);
-            } else if (i == synchronizeIndex) {
-              return ListTile(
-                title: Text(localizations.synchronize),
-                onTap: _mergeWithGoogleDrive,
-              );
-            } else if (i == othersDividerIndex) {
-              return const Divider();
-            } else if (i == othersSubtitleIndex) {
-              return common_uis.subtitle(context, localizations.others);
-            } else if (i == aboutIndex) {
-              return ListTile(
-                title: Text(localizations.about),
-                onTap: _showAbout,
-              );
-            } else {
-              return ListTile(
-                title: Text(localizations.privacyPolicy),
-                onTap: _showPrivacyPolicy,
-              );
-            }
-          },
-        ),
-      ),
-    );
+    if (!common_uis.hasLargeScreen()) {
+      return _buildForSmallScreen(context);
+    } else {
+      return _buildForLargeScreen(context);
+    }
   }
 
   Future<void> _load() async {
@@ -209,35 +88,87 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _addMemo() async {
-    await Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return EditingPage();
-      },
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return OpenUpwardsPageTransitionsBuilder().buildTransitions(
-            null, context, animation, secondaryAnimation, child);
-      },
-    ));
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return EditingPage();
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+              null, context, animation, secondaryAnimation, child);
+          },
+      ));
+    } else {
+      await showAnimatedDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: Dialog(
+                child: EditingPage(),
+                elevation: 24,
+              ),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        animationType: DialogTransitionType.slideFromBottom,
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {
       _updateShownMemos();
     });
   }
 
   void _viewMemo(Memo memo) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) {
+            return ViewingPage(memo: memo);
+          },
+        ),
+      );
+    } else {
+      await showAnimatedDialog(
+        context: context,
         builder: (context) {
-          return ViewingPage(memo: memo);
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: Dialog(
+                child: ViewingPage(memo: memo),
+              ),
+            ),
+          );
         },
-      ),
-    );
+        barrierDismissible: false,
+        animationType: DialogTransitionType.scale,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {
       _updateShownMemos();
     });
   }
 
   Future<void> _mergeWithGoogleDrive() async {
-    Navigator.of(context).pop();
+    if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
     common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
@@ -291,7 +222,9 @@ class _HomePageState extends State<HomePage> {
     }
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
-    Navigator.of(context).pop();
+    if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
     showAboutDialog(
       context: context,
       applicationName: localizations.tsukimisou,
@@ -308,7 +241,186 @@ class _HomePageState extends State<HomePage> {
 
   void _showPrivacyPolicy() async {
     await launch('https://sites.gonypage.jp/home/tsukimisou/privacy-policy');
-    Navigator.of(context).pop();
+    if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  Widget _buildForSmallScreen(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localizations.tsukimisou),
+      ),
+      body: _memoListView(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addMemo,
+        tooltip: localizations.addAMemo,
+        child: const Icon(Icons.add),
+      ),
+      drawer: Drawer(
+        child: _drawerListView(true),
+      ),
+    );
+  }
+
+  Widget _buildForLargeScreen(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    late double drawerWidth;
+    final windowWidth = MediaQuery.of(context).size.width;
+    if (windowWidth > 512.0) {
+      drawerWidth = 256.0;
+    } else {
+      drawerWidth = windowWidth / 2.0;
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localizations.tsukimisou),
+      ),
+      body: Row(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: 0.0,
+              maxWidth: drawerWidth,
+            ),
+            child: _drawerListView(false),
+          ),
+          Expanded(
+            child: _memoListView(),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addMemo,
+        tooltip: localizations.addAMemo,
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  ListView _memoListView() {
+    return ListView.builder(
+      itemCount: _shownMemos.length,
+      itemBuilder: (context, i) {
+        final localizations = AppLocalizations.of(context)!;
+        final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
+        final memo = _shownMemos[(_shownMemos.length - 1) - i];
+        final updated =
+        DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
+        .toSmartString();
+        return Card(
+          child: InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(memo.text),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      localizations.updated(updated),
+                      style: attributeStyle,
+                    ),
+                  ),
+              ]),
+            ),
+            onTap: () {
+              print('tapped ${memo.text}');
+              _viewMemo(memo);
+            },
+        ));
+      },
+    );
+  }
+
+  ListView _drawerListView(bool primary) {
+    const headerIndex = 0;
+    const allMemosIndex = 1;
+    const tagsSubtitleIndex = 2;
+    const tagsBeginIndex = 3;
+    final memoStore = MemoStore.instance();
+    final tags = memoStore.tags;
+    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
+    final integrationDividerIndex = tagsEndIndex + 1;
+    final integrationSubtitleIndex = integrationDividerIndex + 1;
+    final synchronizeIndex = integrationSubtitleIndex + 1;
+    final othersDividerIndex = synchronizeIndex + 1;
+    final othersSubtitleIndex = othersDividerIndex + 1;
+    final aboutIndex = othersSubtitleIndex + 1;
+    final privacyPolicyIndex = aboutIndex + 1;
+    final drawerItemCount = privacyPolicyIndex + 1;
+    final localizations = AppLocalizations.of(context)!;
+    return ListView.builder(
+      primary: primary,
+      itemCount: drawerItemCount,
+      itemBuilder: (context, i) {
+        if (i == headerIndex) {
+          return SizedBox(
+            height: 120,
+            child: DrawerHeader(
+              decoration: const BoxDecoration(
+                color: common_uis.ColorTheme.primary,
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  localizations.showingMemos(_shownMemos.length,
+                    memoStore.memos.length, tags.length),
+                  style: const TextStyle(
+                    color: common_uis.ColorTheme.onPrimary)),
+              ),
+            ),
+          );
+        } else if (i == allMemosIndex) {
+          return ListTile(
+            title: Text(localizations.allMemos),
+            onTap: _disableFiltering,
+            selected: !_filteringEnabled,
+            selectedColor: common_uis.ColorTheme.primary,
+            selectedTileColor: common_uis.ColorTheme.primaryLight,
+          );
+        } else if (i == tagsSubtitleIndex) {
+          return common_uis.subtitle(context, localizations.tags);
+        } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
+          final tag = tags[i - tagsBeginIndex];
+          return ListTile(
+            title: Text(tag),
+            onTap: () {
+              _filter(tag);
+            },
+            selected: _filteringEnabled && _filteringTag == tag,
+            selectedColor: common_uis.ColorTheme.primary,
+            selectedTileColor: common_uis.ColorTheme.primaryLight,
+          );
+        } else if (i == integrationDividerIndex) {
+          return const Divider();
+        } else if (i == integrationSubtitleIndex) {
+          return common_uis.subtitle(
+            context, localizations.googleDriveIntegration);
+        } else if (i == synchronizeIndex) {
+          return ListTile(
+            title: Text(localizations.synchronize),
+            onTap: _mergeWithGoogleDrive,
+          );
+        } else if (i == othersDividerIndex) {
+          return const Divider();
+        } else if (i == othersSubtitleIndex) {
+          return common_uis.subtitle(context, localizations.others);
+        } else if (i == aboutIndex) {
+          return ListTile(
+            title: Text(localizations.about),
+            onTap: _showAbout,
+          );
+        } else {
+          return ListTile(
+            title: Text(localizations.privacyPolicy),
+            onTap: _showPrivacyPolicy,
+          );
+        }
+      },
+    );
   }
 
   void _filter(String tag) {
@@ -317,7 +429,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-    Navigator.of(context).pop();
+    if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _disableFiltering() {
@@ -325,7 +439,9 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-    Navigator.of(context).pop();
+    if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _updateShownMemos() {

@@ -23,6 +23,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'binding_tags_page.dart';
@@ -59,9 +60,9 @@ class _ViewingPageState extends State<ViewingPage> {
     final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
     final attributeStyle =
         common_uis.TextTheme.viewingPageMemoAttribute(context);
-    ;
     return Scaffold(
       appBar: AppBar(
+        leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
         title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
         actions: [
           IconButton(
@@ -104,15 +105,42 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _edit() async {
-    await Navigator.of(context).push(PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return EditingPage(memo: widget.memo);
-      },
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return OpenUpwardsPageTransitionsBuilder().buildTransitions(
-            null, context, animation, secondaryAnimation, child);
-      },
-    ));
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return EditingPage(memo: widget.memo);
+          },
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+              null, context, animation, secondaryAnimation, child);
+          },
+      ));
+    } else {
+      await showAnimatedDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: Dialog(
+                child: EditingPage(memo: widget.memo),
+                elevation: 0,
+              ),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        barrierColor: Color(0x00000000),
+        animationType: DialogTransitionType.slideFromBottom,
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {});
   }
 
@@ -159,12 +187,39 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _bindTags() async {
     final memoStore = MemoStore.instance();
-    await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) {
-        return BindingTagsPage(
-            memo: widget.memo, additinalTags: memoStore.tags);
-      },
-    ));
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) {
+            return BindingTagsPage(
+              memo: widget.memo, additinalTags: memoStore.tags);
+          },
+      ));
+    } else {
+      showAnimatedDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minWidth: 600.0,
+                minHeight: 600.0,
+                maxWidth: 600.0,
+                maxHeight: 600.0
+              ),
+              child: Dialog(
+                child: BindingTagsPage(
+                  memo: widget.memo, additinalTags: memoStore.tags),
+                elevation: 0,
+              ),
+            ),
+          );
+        },
+        barrierDismissible: false,
+        barrierColor: Color(0x00000000),
+        animationType: DialogTransitionType.scale,
+        duration: Duration(milliseconds: 300),
+      );
+    }
     setState(() {});
   }
 }
