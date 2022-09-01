@@ -263,7 +263,6 @@ class _HomePageState extends State<HomePage> {
     final privacyPolicyIndex = aboutIndex + 1;
     final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
-    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
@@ -283,6 +282,10 @@ class _HomePageState extends State<HomePage> {
         child: ListView.builder(
           itemCount: drawerItemCount,
           itemBuilder: (context, i) {
+            return _buildDrawerListViewItem(context, i);
+
+
+            /*
             if (i == headerIndex) {
               return SizedBox(
                 height: 120,
@@ -346,6 +349,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: _showPrivacyPolicy,
               );
             }
+            */
           },
         ),
       ),
@@ -392,6 +396,9 @@ class _HomePageState extends State<HomePage> {
               primary: false,
               itemCount: drawerItemCount,
               itemBuilder: (context, i) {
+                return _buildDrawerListViewItem(context, i);
+
+                /*
                 if (i == headerIndex) {
                   return SizedBox(
                     height: 120,
@@ -455,6 +462,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: _showPrivacyPolicy,
                   );
                 }
+                */
               },
             ),
           ),
@@ -507,7 +515,88 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
-
+  Widget _buildDrawerListViewItem(BuildContext context, int i) {
+    const headerIndex = 0;
+    const allMemosIndex = 1;
+    const tagsSubtitleIndex = 2;
+    const tagsBeginIndex = 3;
+    final memoStore = MemoStore.instance();
+    final tags = memoStore.tags;
+    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
+    final integrationDividerIndex = tagsEndIndex + 1;
+    final integrationSubtitleIndex = integrationDividerIndex + 1;
+    final synchronizeIndex = integrationSubtitleIndex + 1;
+    final othersDividerIndex = synchronizeIndex + 1;
+    final othersSubtitleIndex = othersDividerIndex + 1;
+    final aboutIndex = othersSubtitleIndex + 1;
+    final privacyPolicyIndex = aboutIndex + 1;
+    final drawerItemCount = privacyPolicyIndex + 1;
+    final localizations = AppLocalizations.of(context)!;
+    final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
+    if (i == headerIndex) {
+      return SizedBox(
+        height: 120,
+        child: DrawerHeader(
+          decoration: const BoxDecoration(
+            color: common_uis.ColorTheme.primary,
+          ),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              localizations.showingMemos(_shownMemos.length,
+                memoStore.memos.length, tags.length),
+              style: const TextStyle(
+                color: common_uis.ColorTheme.onPrimary)),
+          ),
+        ),
+      );
+    } else if (i == allMemosIndex) {
+      return ListTile(
+        title: Text(localizations.allMemos),
+        onTap: _disableFiltering,
+        selected: !_filteringEnabled,
+        selectedColor: common_uis.ColorTheme.primary,
+        selectedTileColor: common_uis.ColorTheme.primaryLight,
+      );
+    } else if (i == tagsSubtitleIndex) {
+      return common_uis.subtitle(context, localizations.tags);
+    } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
+      final tag = tags[i - tagsBeginIndex];
+      return ListTile(
+        title: Text(tag),
+        onTap: () {
+          _filter(tag);
+        },
+        selected: _filteringEnabled && _filteringTag == tag,
+        selectedColor: common_uis.ColorTheme.primary,
+        selectedTileColor: common_uis.ColorTheme.primaryLight,
+      );
+    } else if (i == integrationDividerIndex) {
+      return const Divider();
+    } else if (i == integrationSubtitleIndex) {
+      return common_uis.subtitle(
+        context, localizations.googleDriveIntegration);
+    } else if (i == synchronizeIndex) {
+      return ListTile(
+        title: Text(localizations.synchronize),
+        onTap: _mergeWithGoogleDrive,
+      );
+    } else if (i == othersDividerIndex) {
+      return const Divider();
+    } else if (i == othersSubtitleIndex) {
+      return common_uis.subtitle(context, localizations.others);
+    } else if (i == aboutIndex) {
+      return ListTile(
+        title: Text(localizations.about),
+        onTap: _showAbout,
+      );
+    } else {
+      return ListTile(
+        title: Text(localizations.privacyPolicy),
+        onTap: _showPrivacyPolicy,
+      );
+    }
+  }
 
   void _filter(String tag) {
     _filteringTag = tag;
