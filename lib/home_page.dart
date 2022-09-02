@@ -52,6 +52,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var _commonUiInitialized = false;
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
@@ -65,6 +66,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_commonUiInitialized) {
+      common_uis.init(context);
+      _commonUiInitialized = true;
+    }
     if (!common_uis.hasLargeScreen()) {
       return _buildForSmallScreen(context);
     } else {

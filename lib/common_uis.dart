@@ -24,6 +24,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+late Size _size;
+
 class ColorTheme {
   /// Primary color for this application.
   static const primary = Color(0xFF00003F);
@@ -114,9 +116,22 @@ Container subtitle(BuildContext context, String text) {
   );
 }
 
+/// Initializes this library.
+void init(BuildContext context) {
+  _size = MediaQuery.of(context).size;
+}
+
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
   if (Platform.isWindows) {
+    return true;
+  }
+  if (Platform.isAndroid) {
+    print('size: (${_size.width}, ${_size.height})');
+    if (_size.width < 600 || _size.height < 600) {
+      return false;
+    }
+
     return true;
   }
 
