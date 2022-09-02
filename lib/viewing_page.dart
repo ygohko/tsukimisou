@@ -120,13 +120,8 @@ class _ViewingPageState extends State<ViewingPage> {
         context: context,
         builder: (context) {
           return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 600.0,
-                minHeight: 600.0,
-                maxWidth: 600.0,
-                maxHeight: 600.0
-              ),
+            child: SizedBox(
+              width: 600.0,
               child: Dialog(
                 child: EditingPage(memo: widget.memo),
                 elevation: 0,
