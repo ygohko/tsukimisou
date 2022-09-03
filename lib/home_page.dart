@@ -52,10 +52,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _commonUiInitialized = false;
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
+  var _commonUiInitialized = false;
   var _licenseAdded = false;
 
   @override
@@ -457,6 +457,10 @@ class _HomePageState extends State<HomePage> {
           _shownMemos.add(memo);
         }
       }
+    }
+    if (_shownMemos.length <= 0) {
+      _filteringEnabled = false;
+      _shownMemos = [...memos];
     }
     _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
   }
