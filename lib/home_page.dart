@@ -95,13 +95,13 @@ class _HomePageState extends State<HomePage> {
   void _addMemo() async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return EditingPage();
-          },
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return EditingPage();
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
-          },
+        },
       ));
     } else {
       await showAnimatedDialog(
@@ -145,11 +145,10 @@ class _HomePageState extends State<HomePage> {
           return Center(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minWidth: 600.0,
-                minHeight: 600.0,
-                maxWidth: 600.0,
-                maxHeight: 600.0
-              ),
+                  minWidth: 600.0,
+                  minHeight: 600.0,
+                  maxWidth: 600.0,
+                  maxHeight: 600.0),
               child: Dialog(
                 child: ViewingPage(memo: memo),
               ),
@@ -305,16 +304,16 @@ class _HomePageState extends State<HomePage> {
       itemCount: _shownMemos.length,
       itemBuilder: (context, i) {
         final localizations = AppLocalizations.of(context)!;
-        final attributeStyle = common_uis.TextTheme.homePageMemoAttribute(context);
+        final attributeStyle =
+            common_uis.TextTheme.homePageMemoAttribute(context);
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
-        final updated =
-        DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-        .toSmartString();
+        final updated = DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
+            .toSmartString();
         return Card(
-          child: InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
+            child: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(memo.text),
@@ -325,12 +324,12 @@ class _HomePageState extends State<HomePage> {
                       style: attributeStyle,
                     ),
                   ),
-              ]),
-            ),
-            onTap: () {
-              print('tapped ${memo.text}');
-              _viewMemo(memo);
-            },
+                ]),
+          ),
+          onTap: () {
+            print('tapped ${memo.text}');
+            _viewMemo(memo);
+          },
         ));
       },
     );
@@ -367,10 +366,10 @@ class _HomePageState extends State<HomePage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  localizations.showingMemos(_shownMemos.length,
-                    memoStore.memos.length, tags.length),
-                  style: const TextStyle(
-                    color: common_uis.ColorTheme.onPrimary)),
+                    localizations.showingMemos(_shownMemos.length,
+                        memoStore.memos.length, tags.length),
+                    style: const TextStyle(
+                        color: common_uis.ColorTheme.onPrimary)),
               ),
             ),
           );
@@ -399,7 +398,7 @@ class _HomePageState extends State<HomePage> {
           return const Divider();
         } else if (i == integrationSubtitleIndex) {
           return common_uis.subtitle(
-            context, localizations.googleDriveIntegration);
+              context, localizations.googleDriveIntegration);
         } else if (i == synchronizeIndex) {
           return ListTile(
             title: Text(localizations.synchronize),
