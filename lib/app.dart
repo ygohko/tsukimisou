@@ -54,6 +54,7 @@ class App extends StatelessWidget {
           foregroundColor: ColorTheme.onPrimary,
         ),
       ),
+      color: ColorTheme.primary,
       supportedLocales: [
         Locale('en', ''),
         Locale('ja', ''),
