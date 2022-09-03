@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
           return Center(
             child: SizedBox(
               width: 600.0,
-              // height: 600.0,
+              height: Platform.isWindows ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(),
                 elevation: 24,
@@ -123,26 +123,6 @@ class _HomePageState extends State<HomePage> {
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
-
-      /*
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: SizedBox(
-              width: 600.0,
-              //height: 600.0,
-              child: Dialog(
-                child: EditingPage(),
-                elevation: 24,
-              ),
-            ),
-          );
-        },
-        barrierDismissible: false,
-      );
-      */
-
     }
     setState(() {
       _updateShownMemos();

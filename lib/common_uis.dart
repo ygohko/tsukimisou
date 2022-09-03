@@ -127,7 +127,6 @@ bool hasLargeScreen() {
     return true;
   }
   if (Platform.isAndroid) {
-    print('size: (${_size.width}, ${_size.height})');
     if (_size.width < 600 || _size.height < 600) {
       return false;
     }
