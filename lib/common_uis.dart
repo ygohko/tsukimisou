@@ -94,7 +94,7 @@ Future<void> showErrorDialog(BuildContext context, String text) async {
             title: const Text('Error'),
             content: Text(text),
             actions: [
-              FlatButton(
+              TextButton(
                   child: const Text('OK'),
                   onPressed: () {
                     Navigator.of(context).pop();

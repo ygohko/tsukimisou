@@ -141,12 +141,12 @@ class _EditingPageState extends State<EditingPage> {
               title: Text(localizations.confirm),
               content: Text(localizations.doYouReallyWantToDiscardTheChanges),
               actions: [
-                FlatButton(
+                TextButton(
                     child: Text(localizations.cancel),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
-                FlatButton(
+                TextButton(
                     child: Text(localizations.ok),
                     onPressed: () {
                       accepted = true;
