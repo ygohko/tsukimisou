@@ -191,7 +191,7 @@ class _ViewingPageState extends State<ViewingPage> {
           },
       ));
     } else {
-      showAnimatedDialog(
+      await showAnimatedDialog(
         context: context,
         builder: (context) {
           return Center(
