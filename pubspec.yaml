@@ -86,7 +86,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
-    - assets/images/icon.png
+    - assets/images/about_icon.png
     - assets/licenses/noto_fonts.txt
     - assets/licenses/tsukimisou.txt
 

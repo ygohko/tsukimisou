@@ -227,10 +227,7 @@ class _HomePageState extends State<HomePage> {
       applicationName: localizations.tsukimisou,
       applicationVersion: packageInfo.version,
       applicationIcon: Image(
-        // TODO: Prepare multi density icons.
-        image: AssetImage('assets/images/icon.png'),
-        width: 64.0,
-        height: 64.0,
+        image: AssetImage('assets/images/about_icon.png'),
       ),
       applicationLegalese: '(c) 2022 Yasuaki Gohko',
     );
