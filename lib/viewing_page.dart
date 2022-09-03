@@ -107,13 +107,13 @@ class _ViewingPageState extends State<ViewingPage> {
   void _edit() async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return EditingPage(memo: widget.memo);
-          },
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return EditingPage(memo: widget.memo);
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
-          },
+        },
       ));
     } else {
       await showAnimatedDialog(
@@ -185,26 +185,22 @@ class _ViewingPageState extends State<ViewingPage> {
     final memoStore = MemoStore.instance();
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) {
-            return BindingTagsPage(
+        builder: (context) {
+          return BindingTagsPage(
               memo: widget.memo, additinalTags: memoStore.tags);
-          },
+        },
       ));
     } else {
       await showAnimatedDialog(
         context: context,
         builder: (context) {
           return Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minWidth: 600.0,
-                minHeight: 600.0,
-                maxWidth: 600.0,
-                maxHeight: 600.0
-              ),
+            child: SizedBox(
+              width: 600.0,
+              height: 600.0,
               child: Dialog(
                 child: BindingTagsPage(
-                  memo: widget.memo, additinalTags: memoStore.tags),
+                    memo: widget.memo, additinalTags: memoStore.tags),
                 elevation: 0,
               ),
             ),
