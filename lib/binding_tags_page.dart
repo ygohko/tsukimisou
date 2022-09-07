@@ -154,7 +154,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
         final snackBar = SnackBar(
           content: Text(localizations.thatTagAlreadyExists),
         );
-        _scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
+        _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
       }
     }
   }
