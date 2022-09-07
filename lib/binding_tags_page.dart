@@ -46,6 +46,7 @@ class BindingTagsPage extends StatefulWidget {
 class _BindingTagsPageState extends State<BindingTagsPage> {
   List<String> _candidateTags = [];
   List<String> _boundTags = [];
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   @override
   void initState() {
@@ -65,27 +66,29 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     final itemCount = listCount * 2;
     return WillPopScope(
       onWillPop: _apply,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(localizations.bindTags),
-        ),
-        body: ListView.builder(
-          itemCount: itemCount,
-          itemBuilder: (context, i) {
-            if (i.isOdd) {
-              return const Divider();
-            }
+      child: ScaffoldMessenger(
+        key: _scaffoldMessengerKey,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(localizations.bindTags),
+          ),
+          body: ListView.builder(
+            itemCount: itemCount,
+            itemBuilder: (context, i) {
+              if (i.isOdd) {
+                return const Divider();
+              }
 
-            final index = i ~/ 2;
-            if (index == listCount - 1) {
+              final index = i ~/ 2;
+              if (index == listCount - 1) {
+                return ListTile(
+                  title: Text(localizations.addANewTag),
+                  onTap: _addTag,
+                );
+              }
+              final tag = _candidateTags[index];
+              final bound = _boundTags.contains(tag);
               return ListTile(
-                title: Text(localizations.addANewTag),
-                onTap: _addTag,
-              );
-            }
-            final tag = _candidateTags[index];
-            final bound = _boundTags.contains(tag);
-            return ListTile(
                 title: Text(tag),
                 trailing: Icon(
                   bound ? Icons.check_circle : Icons.check_circle_outline,
@@ -97,8 +100,9 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
                   } else {
                     _bindTag(tag);
                   }
-                });
-          },
+              });
+            },
+          ),
         ),
       ),
     );
@@ -150,7 +154,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
         final snackBar = SnackBar(
           content: Text(localizations.thatTagAlreadyExists),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
       }
     }
   }
