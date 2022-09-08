@@ -26,7 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(640, 720);
+  Win32Window::Size size(880, 720);
   if (!window.CreateAndShow(L"Tsukimisou", origin, size)) {
     return EXIT_FAILURE;
   }
