@@ -136,5 +136,9 @@
     "thatTagAlreadyExists": "That tag already exists.",
     "@thatTagAlreadyExists": {
         "description": "Snack bar text when tag already exists"
+    },
+    "canNotAddUnnamedTag": "Can not add unnamed tag.",
+    "@canNotAddUnnamedTag": {
+        "description": "Snack bar text when unnamed tag is to be added"
     }
 }

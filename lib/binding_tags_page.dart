@@ -139,20 +139,26 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       },
     );
     if (accepted) {
+      final tag = controller.text;
       var added = false;
-      setState(() {
-        final tag = controller.text;
-        if (!_candidateTags.contains(tag)) {
-          _candidateTags.add(tag);
-          added = true;
-        }
-        if (!_boundTags.contains(tag)) {
-          _boundTags.add(tag);
-        }
-      });
+      late String snackBarText;
+      if (tag != "") {
+        snackBarText = localizations.thatTagAlreadyExists;
+        setState(() {
+            if (!_candidateTags.contains(tag)) {
+              _candidateTags.add(tag);
+              added = true;
+            }
+            if (!_boundTags.contains(tag)) {
+              _boundTags.add(tag);
+            }
+        });
+      } else {
+        snackBarText = localizations.canNotAddUnnamedTag;
+      }
       if (!added) {
         final snackBar = SnackBar(
-          content: Text(localizations.thatTagAlreadyExists),
+          content: Text(snackBarText),
         );
         _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
       }
