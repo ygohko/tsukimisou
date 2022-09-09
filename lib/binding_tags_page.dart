@@ -154,7 +154,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             }
         });
       } else {
-        snackBarText = "Can not add unnamed tag.";
+        snackBarText = localizations.canNotAddUnnamedTag;
       }
       if (!added) {
         final snackBar = SnackBar(
