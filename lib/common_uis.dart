@@ -123,10 +123,10 @@ void init(BuildContext context) {
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
-  if (Platform.isWindows) {
+  if (Platform.isWindows || Platform.isMacOS) {
     return true;
   }
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid || Platform.isIOS) {
     if (_size.width < 600 || _size.height < 600) {
       return false;
     }

@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
           return Center(
             child: SizedBox(
               width: 600.0,
-              height: Platform.isWindows ? 600.0 : null,
+              height: (Platform.isWindows || Platform.isMacOS) ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(),
                 elevation: 24,
