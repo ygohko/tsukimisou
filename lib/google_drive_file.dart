@@ -41,7 +41,7 @@ class GoogleDriveFile {
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
     _AuthenticatableClient? client = null;
-    if (Platform.isWindows) {
+    if (Platform.isWindows || Platform.isMacOS) {
       client = _AuthenticatableWindowsClient();
     } else {
       client = _AuthenticatableAndroidClient();
@@ -72,7 +72,7 @@ class GoogleDriveFile {
   /// Reads contents as a string.
   Future<String> readAsString() async {
     _AuthenticatableClient? client = null;
-    if (Platform.isWindows) {
+    if (Platform.isWindows || Platform.isMacOS) {
       client = _AuthenticatableWindowsClient();
     } else {
       client = _AuthenticatableAndroidClient();
@@ -242,7 +242,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
     }
 
     // Obtain access credentials.
-    try {
+    // try {
       final credentials = await obtainAccessCredentialsViaUserConsent(
           id, scopes, this, (url) async {
         await launch(url);
@@ -251,9 +251,11 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
       updateHeaders(credentials.accessToken.data);
       print('Using new credentials.');
       _storeCredentials(storage, credentials);
+    /*
     } on Exception catch (exception) {
       throw AuthenticationException('Failed to obtain access credentials.');
     }
+    */
   }
 
   void _storeCredentials(
