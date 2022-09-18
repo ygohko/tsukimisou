@@ -126,7 +126,7 @@ bool hasLargeScreen() {
   if (Platform.isWindows || Platform.isMacOS) {
     return true;
   }
-  if (Platform.isAndroid) {
+  if (Platform.isAndroid || Platform.isIOS) {
     if (_size.width < 600 || _size.height < 600) {
       return false;
     }

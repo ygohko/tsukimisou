@@ -122,10 +122,10 @@ class _ViewingPageState extends State<ViewingPage> {
           return Center(
             child: SizedBox(
               width: 600.0,
-              height: Platform.isWindows ? 600.0 : null,
+              height: (Platform.isWindows || Platform.isMacOS) ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(memo: widget.memo),
-                elevation: Platform.isWindows ? 0 : 24,
+                elevation: (Platform.isWindows || Platform.isMacOS) ? 0 : 24,
               ),
             ),
           );
