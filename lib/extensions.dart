@@ -20,6 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 
 extension StringConverting on DateTime {
@@ -45,4 +47,12 @@ extension StringConverting on DateTime {
       return format.format(this);
     }
   }
+}
+
+extension AbstractProviding on Platform {
+  /// Returns whether platform is desktop or not.
+  bool get isDesktop => Platform.isWindows || Platform.isMacOS;
+
+  /// Returns whether platform is mobile or not.
+  bool get isMobile => Platform.isAndroid || Platform.isIOS;
 }

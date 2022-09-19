@@ -24,6 +24,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import 'extensions.dart';
+
 late Size _size;
 
 class ColorTheme {
@@ -123,10 +125,11 @@ void init(BuildContext context) {
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
-  if (Platform.isWindows || Platform.isMacOS) {
+  final platform = Platform();
+  if (platform.isDesktop) {
     return true;
   }
-  if (Platform.isAndroid || Platform.isIOS) {
+  if (platform.isMobile) {
     if (_size.width < 600 || _size.height < 600) {
       return false;
     }

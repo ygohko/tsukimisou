@@ -107,10 +107,11 @@ class _HomePageState extends State<HomePage> {
       await showAnimatedDialog(
         context: context,
         builder: (context) {
+          final platform = Platform();
           return Center(
             child: SizedBox(
               width: 600.0,
-              height: (Platform.isWindows || Platform.isMacOS) ? 600.0 : null,
+              height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(),
                 elevation: 24,

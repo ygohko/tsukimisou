@@ -119,13 +119,14 @@ class _ViewingPageState extends State<ViewingPage> {
       await showAnimatedDialog(
         context: context,
         builder: (context) {
+          final platform = Platform();
           return Center(
             child: SizedBox(
               width: 600.0,
-              height: (Platform.isWindows || Platform.isMacOS) ? 600.0 : null,
+              height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(memo: widget.memo),
-                elevation: (Platform.isWindows || Platform.isMacOS) ? 0 : 24,
+                elevation: platform.isDesktop ? 0 : 24,
               ),
             ),
           );
