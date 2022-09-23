@@ -23,6 +23,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:platform/platform.dart';
 
 import 'extensions.dart';
 
@@ -125,7 +126,7 @@ void init(BuildContext context) {
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
-  final platform = Platform();
+  final platform = LocalPlatform();
   if (platform.isDesktop) {
     return true;
   }

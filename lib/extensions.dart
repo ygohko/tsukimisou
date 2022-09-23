@@ -20,9 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'dart:io';
-
 import 'package:intl/intl.dart';
+import 'package:platform/platform.dart';
 
 extension StringConverting on DateTime {
   /// Returns a string that contains detailed information of this instance.
@@ -51,8 +50,8 @@ extension StringConverting on DateTime {
 
 extension AbstractProviding on Platform {
   /// Returns whether platform is desktop or not.
-  bool get isDesktop => Platform.isWindows || Platform.isMacOS;
+  bool get isDesktop => isWindows || isMacOS;
 
   /// Returns whether platform is mobile or not.
-  bool get isMobile => Platform.isAndroid || Platform.isIOS;
+  bool get isMobile => isAndroid || isIOS;
 }

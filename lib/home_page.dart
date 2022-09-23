@@ -28,6 +28,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:platform/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
@@ -107,7 +108,7 @@ class _HomePageState extends State<HomePage> {
       await showAnimatedDialog(
         context: context,
         builder: (context) {
-          final platform = Platform();
+          final platform = LocalPlatform();
           return Center(
             child: SizedBox(
               width: 600.0,
