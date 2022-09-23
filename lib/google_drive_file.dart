@@ -28,9 +28,11 @@ import 'package:googleapis/drive/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart';
+import 'package:platform/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'client_id.dart';
+import 'extensions.dart';
 
 class GoogleDriveFile {
   final String _fileName;
@@ -41,7 +43,8 @@ class GoogleDriveFile {
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
     _AuthenticatableClient? client = null;
-    if (Platform.isWindows) {
+    final platform = LocalPlatform();
+    if (platform.isDesktop) {
       client = _AuthenticatableWindowsClient();
     } else {
       client = _AuthenticatableAndroidClient();
@@ -72,7 +75,8 @@ class GoogleDriveFile {
   /// Reads contents as a string.
   Future<String> readAsString() async {
     _AuthenticatableClient? client = null;
-    if (Platform.isWindows) {
+    final platform = LocalPlatform();
+    if (platform.isDesktop) {
       client = _AuthenticatableWindowsClient();
     } else {
       client = _AuthenticatableAndroidClient();

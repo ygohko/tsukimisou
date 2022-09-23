@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:platform/platform.dart';
 
 import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
@@ -119,13 +120,14 @@ class _ViewingPageState extends State<ViewingPage> {
       await showAnimatedDialog(
         context: context,
         builder: (context) {
+          final platform = LocalPlatform();
           return Center(
             child: SizedBox(
               width: 600.0,
-              height: (Platform.isWindows || Platform.isMacOS) ? 600.0 : null,
+              height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(memo: widget.memo),
-                elevation: (Platform.isWindows || Platform.isMacOS) ? 0 : 24,
+                elevation: platform.isDesktop ? 0 : 24,
               ),
             ),
           );

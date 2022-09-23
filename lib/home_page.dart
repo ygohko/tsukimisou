@@ -28,6 +28,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:platform/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
@@ -107,10 +108,11 @@ class _HomePageState extends State<HomePage> {
       await showAnimatedDialog(
         context: context,
         builder: (context) {
+          final platform = LocalPlatform();
           return Center(
             child: SizedBox(
               width: 600.0,
-              height: (Platform.isWindows || Platform.isMacOS) ? 600.0 : null,
+              height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
                 child: EditingPage(),
                 elevation: 24,
