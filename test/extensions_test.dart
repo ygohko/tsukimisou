@@ -1,3 +1,4 @@
+import 'package:platform/platform.dart';
 import 'package:test/test.dart';
 import 'package:tsukimisou/extensions.dart';
 
@@ -18,6 +19,18 @@ void main() {
 
       dateTime = DateTime(2000, 1, 2, 3, 4);
       expect(dateTime.toSmartString(), '2000/01/02');
+    });
+  });
+
+  group('AbstructProviding', () {
+    test('Platform should return whether platform is desktop or not.', () {
+      final platform = LocalPlatform();
+      expect(platform.isDesktop, true);
+    });
+
+    test('Platform should return whether platform is mobile or not.', () {
+      final platform = LocalPlatform();
+      expect(platform.isMobile, false);
     });
   });
 }
