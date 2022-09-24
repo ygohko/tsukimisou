@@ -89,18 +89,18 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
               final tag = _candidateTags[index];
               final bound = _boundTags.contains(tag);
               return ListTile(
-                title: Text(tag),
-                trailing: Icon(
-                  bound ? Icons.check_circle : Icons.check_circle_outline,
-                  color: bound ? Colors.blue : null,
-                ),
-                onTap: () {
-                  if (bound) {
-                    _unbindTag(tag);
-                  } else {
-                    _bindTag(tag);
-                  }
-              });
+                  title: Text(tag),
+                  trailing: Icon(
+                    bound ? Icons.check_circle : Icons.check_circle_outline,
+                    color: bound ? Colors.blue : null,
+                  ),
+                  onTap: () {
+                    if (bound) {
+                      _unbindTag(tag);
+                    } else {
+                      _bindTag(tag);
+                    }
+                  });
             },
           ),
         ),
@@ -145,13 +145,13 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       if (tag != "") {
         snackBarText = localizations.thatTagAlreadyExists;
         setState(() {
-            if (!_candidateTags.contains(tag)) {
-              _candidateTags.add(tag);
-              added = true;
-            }
-            if (!_boundTags.contains(tag)) {
-              _boundTags.add(tag);
-            }
+          if (!_candidateTags.contains(tag)) {
+            _candidateTags.add(tag);
+            added = true;
+          }
+          if (!_boundTags.contains(tag)) {
+            _boundTags.add(tag);
+          }
         });
       } else {
         snackBarText = localizations.canNotAddUnnamedTag;
