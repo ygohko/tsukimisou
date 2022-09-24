@@ -45,9 +45,9 @@ class GoogleDriveFile {
     _AuthenticatableClient? client = null;
     final platform = LocalPlatform();
     if (platform.isDesktop) {
-      client = _AuthenticatableWindowsClient();
+      client = _AuthenticatableDesktopClient();
     } else {
-      client = _AuthenticatableAndroidClient();
+      client = _AuthenticatableMobileClient();
     }
     await client.authenticate();
     final driveApi = DriveApi(client);
@@ -77,9 +77,9 @@ class GoogleDriveFile {
     _AuthenticatableClient? client = null;
     final platform = LocalPlatform();
     if (platform.isDesktop) {
-      client = _AuthenticatableWindowsClient();
+      client = _AuthenticatableDesktopClient();
     } else {
-      client = _AuthenticatableAndroidClient();
+      client = _AuthenticatableMobileClient();
     }
     await client.authenticate();
     final driveApi = DriveApi(client);
@@ -186,7 +186,7 @@ class _AuthenticatableClient extends BaseClient {
   }
 }
 
-class _AuthenticatableWindowsClient extends _AuthenticatableClient {
+class _AuthenticatableDesktopClient extends _AuthenticatableClient {
   static AccessToken? _accessToken = null;
 
   /// Authenticates this client.
@@ -272,7 +272,7 @@ class _AuthenticatableWindowsClient extends _AuthenticatableClient {
   }
 }
 
-class _AuthenticatableAndroidClient extends _AuthenticatableClient {
+class _AuthenticatableMobileClient extends _AuthenticatableClient {
   static GoogleSignIn? _signIn = null;
 
   /// Authenticates this client.
