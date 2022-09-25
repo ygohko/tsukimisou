@@ -78,11 +78,21 @@ class TextTheme {
 
 /// Shows dialogs to indicate progressing.
 void showProgressIndicatorDialog(BuildContext context) {
+  final platform = LocalPlatform();
+  late final Widget indicator;
+  if (!platform.isApple) {
+    indicator = const CircularProgressIndicator();
+  } else {
+    indicator = const CupertinoActivityIndicator(
+      color: Colors.white,
+      radius: 20.0,
+    );
+  }
   showDialog(
     context: context,
     builder: (context) {
-      return const Center(
-        child: const CircularProgressIndicator(),
+      return Center(
+        child: indicator,
       );
     },
     barrierDismissible: false,

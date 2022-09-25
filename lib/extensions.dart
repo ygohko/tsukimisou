@@ -54,4 +54,7 @@ extension AbstractProviding on Platform {
 
   /// Returns whether platform is mobile or not.
   bool get isMobile => isAndroid || isIOS;
+
+  /// Returns whether platform is developed by Apple or not.
+  bool get isApple => isMacOS || isIOS;
 }
