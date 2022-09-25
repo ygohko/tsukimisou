@@ -89,6 +89,7 @@ void showProgressIndicatorDialog(BuildContext context) {
   );
 }
 
+/// Shows dialogs to prompt confirmation.
 Future<bool> showConfirmationDialog(BuildContext context, String title, String content, String acceptingText, String rejectingText, bool destructive) async {
   final platform = LocalPlatform();
   var accepted = false;
@@ -115,22 +116,42 @@ Future<bool> showConfirmationDialog(BuildContext context, String title, String c
     });
   } else {
     late final Widget leftWidget;
-    leftWidget = CupertinoDialogAction(
-      isDefaultAction: true,
-      onPressed: () {
-        accepted = true;
-        Navigator.of(context).pop();
-      },
-      child: Text(acceptingText),
-    );
+    if (destructive) {
+      leftWidget = CupertinoDialogAction(
+        isDestructiveAction: true,
+        onPressed: () {
+          accepted = true;
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      );
+    } else {
+      leftWidget = CupertinoDialogAction(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(rejectingText),
+      );
+    }
     late final Widget rightWidget;
-    rightWidget = CupertinoDialogAction(
-      isDestructiveAction: true,
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-      child: Text(rejectingText),
-    );
+    if (destructive) {
+      rightWidget = CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(rejectingText),
+      );
+    } else {
+      rightWidget = CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () {
+          accepted = true;
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      );
+    }
     await showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -148,7 +169,6 @@ Future<bool> showConfirmationDialog(BuildContext context, String title, String c
 
   return accepted;
 }
-
 
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String text) async {
