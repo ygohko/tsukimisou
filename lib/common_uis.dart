@@ -171,19 +171,18 @@ Future<bool> showConfirmationDialog(BuildContext context, String title, String c
 }
 
 /// Shows dialogs to indicate errors.
-Future<void> showErrorDialog(BuildContext context, String text) async {
+Future<void> showErrorDialog(BuildContext context, String title, String content, String acceptingText) async {
   final platform = LocalPlatform();
   if (!platform.isIOS) {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          // TODO: Localize this
-          title: const Text('Error'),
-          content: Text(text),
+          title: Text(title),
+          content: Text(content),
           actions: [
             TextButton(
-              child: const Text('OK'),
+              child: Text(acceptingText),
               onPressed: () {
                 Navigator.of(context).pop();
             }),
@@ -194,16 +193,15 @@ Future<void> showErrorDialog(BuildContext context, String text) async {
       context: context,
       builder: (context) {
         return CupertinoAlertDialog(
-          // TODO: Localize this
-          title: const Text('Error'),
-          content: Text(text),
+          title: Text(title),
+          content: Text(content),
           actions: [
             CupertinoDialogAction(
               isDefaultAction: true,
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: Text(acceptingText),
             ),
           ],
         );

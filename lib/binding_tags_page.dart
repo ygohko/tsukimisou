@@ -190,7 +190,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     } on IOException catch (exception) {
       // Save error
       await showErrorDialog(
-          context, localizations.savingMemoStoreToLocalStorageFailed);
+          context, localizations.error, localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
 
     return true;

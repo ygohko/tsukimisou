@@ -101,6 +101,10 @@
     "@ok": {
         "description": "Text for OK button"
     },
+    "error": "Error",
+    "@confirm": {
+        "description": "Title for error dialog"
+    },
     "addANewMemo": "Add a new memo",
     "@addANewMemo": {
         "description": "Title for editing page when editing a new memo"
