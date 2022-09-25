@@ -22,6 +22,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:platform/platform.dart';
 
@@ -88,12 +89,74 @@ void showProgressIndicatorDialog(BuildContext context) {
   );
 }
 
+Future<bool> showConfirmationDialog(BuildContext context, String title, String content, String acceptingText, String rejectingText, bool destructive) async {
+  final platform = LocalPlatform();
+  var accepted = false;
+  if (!platform.isIOS) {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              child: Text(rejectingText),
+              onPressed: () {
+                Navigator.of(context).pop();
+            }),
+            TextButton(
+              child: Text(acceptingText),
+              onPressed: () {
+                accepted = true;
+                Navigator.of(context).pop();
+            }),
+        ]);
+    });
+  } else {
+    late final Widget leftWidget;
+    leftWidget = CupertinoDialogAction(
+      isDefaultAction: true,
+      onPressed: () {
+        accepted = true;
+        Navigator.of(context).pop();
+      },
+      child: Text(acceptingText),
+    );
+    late final Widget rightWidget;
+    rightWidget = CupertinoDialogAction(
+      isDestructiveAction: true,
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+      child: Text(rejectingText),
+    );
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            leftWidget,
+            rightWidget,
+          ],
+        );
+      }
+    );
+  }
+
+  return accepted;
+}
+
+
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String text) async {
   await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
+            // TODO: Localize this
             title: const Text('Error'),
             content: Text(text),
             actions: [

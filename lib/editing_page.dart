@@ -134,7 +134,9 @@ class _EditingPageState extends State<EditingPage> {
       }
     }
 
-    var accepted = false;
+    final accepted = await showConfirmationDialog(context, localizations.confirm, localizations.doYouReallyWantToDiscardTheChanges, localizations.ok, localizations.cancel, true);
+
+    // var accepted = false;
     /*
     await showDialog(
         context: context,
@@ -157,7 +159,7 @@ class _EditingPageState extends State<EditingPage> {
               ]);
         });
     */
-
+    /*
     await showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -184,7 +186,7 @@ class _EditingPageState extends State<EditingPage> {
         );
       }
     );
-
+    */
 
     return accepted;
   }
