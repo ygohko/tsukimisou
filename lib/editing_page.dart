@@ -22,6 +22,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -134,6 +135,7 @@ class _EditingPageState extends State<EditingPage> {
     }
 
     var accepted = false;
+    /*
     await showDialog(
         context: context,
         builder: (context) {
@@ -154,6 +156,35 @@ class _EditingPageState extends State<EditingPage> {
                     }),
               ]);
         });
+    */
+
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(localizations.confirm),
+          content: Text(localizations.doYouReallyWantToDiscardTheChanges),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                accepted = true;
+                Navigator.of(context).pop();
+              },
+              child: Text(localizations.ok),
+            ),
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(localizations.cancel),
+            ),
+          ],
+        );
+      }
+    );
+
 
     return accepted;
   }
