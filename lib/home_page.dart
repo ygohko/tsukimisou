@@ -179,7 +179,10 @@ class _HomePageState extends State<HomePage> {
     } on Exception catch (exception) {
       // Other failure.
       await common_uis.showErrorDialog(
-          context, localizations.error, localizations.loadingMemoStoreFromGoogleDriveFailed, localizations.ok);
+          context,
+          localizations.error,
+          localizations.loadingMemoStoreFromGoogleDriveFailed,
+          localizations.ok);
       Navigator.of(context).pop();
       return;
     }
@@ -191,8 +194,8 @@ class _HomePageState extends State<HomePage> {
       await saver.execute();
     } on Exception catch (exception) {
       // Saving failed.
-      await common_uis.showErrorDialog(
-          context, localizations.error, localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.error,
+          localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
       setState(() {
         _updateShownMemos();
       });
@@ -205,8 +208,8 @@ class _HomePageState extends State<HomePage> {
       localSaver.execute();
     } on FileSystemException catch (exception) {
       // Saving failed.
-      await common_uis.showErrorDialog(
-          context, localizations.error, localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.error,
+          localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
     setState(() {
       _updateShownMemos();
