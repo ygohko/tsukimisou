@@ -21,6 +21,7 @@
     "doYouReallyWantToDeleteThisMemo": "このメモを本当に削除してよいですか?",
     "cancel": "キャンセル",
     "ok": "OK",
+    "error": "エラー",
     "addANewMemo": "新しいメモを追加",
     "editAMemo": "メモを編集",
     "save": "保存",

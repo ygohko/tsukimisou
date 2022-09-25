@@ -22,6 +22,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:platform/platform.dart';
 
@@ -88,22 +89,125 @@ void showProgressIndicatorDialog(BuildContext context) {
   );
 }
 
-/// Shows dialogs to indicate errors.
-Future<void> showErrorDialog(BuildContext context, String text) async {
-  await showDialog(
+/// Shows dialogs to prompt confirmation.
+Future<bool> showConfirmationDialog(BuildContext context, String title, String content, String acceptingText, String rejectingText, bool destructive) async {
+  final platform = LocalPlatform();
+  var accepted = false;
+  if (!platform.isIOS) {
+    await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-            title: const Text('Error'),
-            content: Text(text),
-            actions: [
-              TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-            ]);
-      });
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              child: Text(rejectingText),
+              onPressed: () {
+                Navigator.of(context).pop();
+            }),
+            TextButton(
+              child: Text(acceptingText),
+              onPressed: () {
+                accepted = true;
+                Navigator.of(context).pop();
+            }),
+        ]);
+    });
+  } else {
+    late final Widget leftWidget;
+    if (destructive) {
+      leftWidget = CupertinoDialogAction(
+        isDestructiveAction: true,
+        onPressed: () {
+          accepted = true;
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      );
+    } else {
+      leftWidget = CupertinoDialogAction(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(rejectingText),
+      );
+    }
+    late final Widget rightWidget;
+    if (destructive) {
+      rightWidget = CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(rejectingText),
+      );
+    } else {
+      rightWidget = CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () {
+          accepted = true;
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      );
+    }
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            leftWidget,
+            rightWidget,
+          ],
+        );
+      }
+    );
+  }
+
+  return accepted;
+}
+
+/// Shows dialogs to indicate errors.
+Future<void> showErrorDialog(BuildContext context, String title, String content, String acceptingText) async {
+  final platform = LocalPlatform();
+  if (!platform.isIOS) {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            TextButton(
+              child: Text(acceptingText),
+              onPressed: () {
+                Navigator.of(context).pop();
+            }),
+        ]);
+    });
+  } else {
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(acceptingText),
+            ),
+          ],
+        );
+      }
+    );
+  }
 }
 
 /// Creates a subtitle.

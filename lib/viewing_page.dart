@@ -144,27 +144,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _delete() async {
     final localizations = AppLocalizations.of(context)!;
-    var accepted = false;
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text(localizations.confirm),
-              content: Text(localizations.doYouReallyWantToDeleteThisMemo),
-              actions: [
-                TextButton(
-                    child: Text(localizations.cancel),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                TextButton(
-                    child: Text(localizations.ok),
-                    onPressed: () {
-                      accepted = true;
-                      Navigator.of(context).pop();
-                    }),
-              ]);
-        });
+    final accepted = await common_uis.showConfirmationDialog(context, localizations.confirm, localizations.doYouReallyWantToDeleteThisMemo, localizations.ok, localizations.cancel, true);
     if (!accepted) {
       return;
     }
@@ -178,7 +158,7 @@ class _ViewingPageState extends State<ViewingPage> {
     } on IOException catch (exception) {
       // Save error
       await common_uis.showErrorDialog(
-          context, localizations.savingMemoStoreToLocalStorageFailed);
+          context, localizations.error, localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
     Navigator.of(context).pop();
   }

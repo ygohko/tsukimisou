@@ -115,7 +115,7 @@ class _EditingPageState extends State<EditingPage> {
     } on IOException catch (exception) {
       // Save error
       await showErrorDialog(
-          context, localizations.savingMemoStoreToLocalStorageFailed);
+          context, localizations.error, localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
     Navigator.of(context).pop();
   }
@@ -132,28 +132,7 @@ class _EditingPageState extends State<EditingPage> {
         return true;
       }
     }
-
-    var accepted = false;
-    await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text(localizations.confirm),
-              content: Text(localizations.doYouReallyWantToDiscardTheChanges),
-              actions: [
-                TextButton(
-                    child: Text(localizations.cancel),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                TextButton(
-                    child: Text(localizations.ok),
-                    onPressed: () {
-                      accepted = true;
-                      Navigator.of(context).pop();
-                    }),
-              ]);
-        });
+    final accepted = await showConfirmationDialog(context, localizations.confirm, localizations.doYouReallyWantToDiscardTheChanges, localizations.ok, localizations.cancel, true);
 
     return accepted;
   }
