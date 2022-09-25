@@ -172,21 +172,44 @@ Future<bool> showConfirmationDialog(BuildContext context, String title, String c
 
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String text) async {
-  await showDialog(
+  final platform = LocalPlatform();
+  if (!platform.isIOS) {
+    await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-            // TODO: Localize this
-            title: const Text('Error'),
-            content: Text(text),
-            actions: [
-              TextButton(
-                  child: const Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-            ]);
-      });
+          // TODO: Localize this
+          title: const Text('Error'),
+          content: Text(text),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+            }),
+        ]);
+    });
+  } else {
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          // TODO: Localize this
+          title: const Text('Error'),
+          content: Text(text),
+          actions: [
+            CupertinoDialogAction(
+              isDefaultAction: true,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      }
+    );
+  }
 }
 
 /// Creates a subtitle.
