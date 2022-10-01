@@ -81,9 +81,12 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _initAsync() async {
     await _load();
-    final initialText = await _getInitialText();
-    if (initialText != null) {
-      _addMemo(initialText: initialText);
+    final platform = LocalPlatform();
+    if (platform.isMobile) {
+      final initialText = await ReceiveSharingIntent.getInitialText();
+      if (initialText != null) {
+        _addMemo(initialText: initialText);
+      }
     }
   }
 
@@ -100,45 +103,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
-  }
-
-  Future<String?> _getInitialText() async {
-    final platform = LocalPlatform();
-    if (platform.isMobile) {
-      var/*final*/ initialText = await ReceiveSharingIntent.getInitialText();
-      return initialText;
-
-      if (initialText != null) {
-        initialText = 'intent received.\n${initialText}';
-      } else {
-        initialText = 'intent not received.';
-      }
-
-      if (initialText != null) {
-        print('intent received.');
-        print('initialText: ${initialText}');
-
-
-        await Navigator.of(context).push(PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return EditingPage(
-                initialText: initialText
-              );
-            },
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              return OpenUpwardsPageTransitionsBuilder().buildTransitions(
-                null, context, animation, secondaryAnimation, child);
-            },
-        ));
-
-
-
-      } else {
-        print('intent not received.');
-      }
-    }
-
-    return null;
   }
 
   void _addMemo({String? initialText}) async {
