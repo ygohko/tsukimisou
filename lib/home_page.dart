@@ -63,8 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _load();
-    _loadIntent();
+    _initAsync();
   }
 
   @override
@@ -77,6 +76,14 @@ class _HomePageState extends State<HomePage> {
       return _buildForSmallScreen(context);
     } else {
       return _buildForLargeScreen(context);
+    }
+  }
+
+  Future<void> _initAsync() async {
+    await _load();
+    final initialText = await _getInitialText();
+    if (initialText != null) {
+      _addMemo(initialText: initialText);
     }
   }
 
@@ -95,11 +102,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> _loadIntent() async {
+  Future<String?> _getInitialText() async {
     final platform = LocalPlatform();
     if (platform.isMobile) {
-      // adhoc
       var/*final*/ initialText = await ReceiveSharingIntent.getInitialText();
+      return initialText;
 
       if (initialText != null) {
         initialText = 'intent received.\n${initialText}';
@@ -130,13 +137,17 @@ class _HomePageState extends State<HomePage> {
         print('intent not received.');
       }
     }
+
+    return null;
   }
 
-  void _addMemo() async {
+  void _addMemo({String? initialText}) async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
-          return EditingPage();
+          return EditingPage(
+            initialText: initialText
+          );
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return OpenUpwardsPageTransitionsBuilder().buildTransitions(
@@ -153,7 +164,9 @@ class _HomePageState extends State<HomePage> {
               width: 600.0,
               height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
-                child: EditingPage(),
+                child: EditingPage(
+                  initialText: initialText
+                ),
                 elevation: 24,
               ),
             ),
