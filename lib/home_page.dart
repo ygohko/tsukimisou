@@ -98,10 +98,34 @@ class _HomePageState extends State<HomePage> {
   Future<void> _loadIntent() async {
     final platform = LocalPlatform();
     if (platform.isMobile) {
-      final initialText = await ReceiveSharingIntent.getInitialText();
+      // adhoc
+      var/*final*/ initialText = await ReceiveSharingIntent.getInitialText();
+
+      if (initialText != null) {
+        initialText = 'intent received.\n${initialText}';
+      } else {
+        initialText = 'intent not received.';
+      }
+
       if (initialText != null) {
         print('intent received.');
         print('initialText: ${initialText}');
+
+
+        await Navigator.of(context).push(PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return EditingPage(
+                initialText: initialText
+              );
+            },
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+                null, context, animation, secondaryAnimation, child);
+            },
+        ));
+
+
+
       } else {
         print('intent not received.');
       }

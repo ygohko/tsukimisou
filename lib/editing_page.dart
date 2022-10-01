@@ -31,10 +31,12 @@ import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
 
 class EditingPage extends StatefulWidget {
+  // TODO: these can be private?
   final Memo? memo;
+  final String? initialText;
 
   /// Creates a editing page.
-  const EditingPage({Key? key, this.memo}) : super(key: key);
+  const EditingPage({Key? key, this.memo, this.initialText}) : super(key: key);
 
   @override
   State<EditingPage> createState() => _EditingPageState();
@@ -47,8 +49,11 @@ class _EditingPageState extends State<EditingPage> {
   void initState() {
     super.initState();
     final memo = widget.memo;
+    final initialText = widget.initialText;
     if (memo != null) {
       _controller.text = memo.text;
+    } else if (initialText != null) {
+      _controller.text = initialText;
     }
   }
 
