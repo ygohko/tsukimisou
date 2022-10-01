@@ -29,6 +29,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:platform/platform.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
@@ -63,6 +64,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _load();
+    _loadIntent();
   }
 
   @override
@@ -91,6 +93,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _updateShownMemos();
     });
+  }
+
+  Future<void> _loadIntent() async {
+    final platform = LocalPlatform();
+    if (platform.isMobile) {
+      final initialText = await ReceiveSharingIntent.getInitialText();
+      if (initialText != null) {
+        print('intent received.');
+        print('initialText: ${initialText}');
+      } else {
+        print('intent not received.');
+      }
+    }
   }
 
   void _addMemo() async {
