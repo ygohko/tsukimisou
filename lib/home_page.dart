@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initAsync() async {
     await _load();
     final platform = LocalPlatform();
-    if (platform.isMobile) {
+    if (platform.isAndroid) {
       final initialText = await ReceiveSharingIntent.getInitialText();
       if (initialText != null) {
         _addMemo(initialText: initialText);
