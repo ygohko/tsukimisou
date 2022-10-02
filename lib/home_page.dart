@@ -29,6 +29,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:platform/platform.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'common_uis.dart' as common_uis;
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _load();
+    _initAsync();
   }
 
   @override
@@ -75,6 +76,17 @@ class _HomePageState extends State<HomePage> {
       return _buildForSmallScreen(context);
     } else {
       return _buildForLargeScreen(context);
+    }
+  }
+
+  Future<void> _initAsync() async {
+    await _load();
+    final platform = LocalPlatform();
+    if (platform.isAndroid) {
+      final initialText = await ReceiveSharingIntent.getInitialText();
+      if (initialText != null) {
+        _addMemo(initialText: initialText);
+      }
     }
   }
 
@@ -93,11 +105,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _addMemo() async {
+  void _addMemo({String? initialText}) async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
-          return EditingPage();
+          return EditingPage(
+            initialText: initialText
+          );
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return OpenUpwardsPageTransitionsBuilder().buildTransitions(
@@ -114,7 +128,9 @@ class _HomePageState extends State<HomePage> {
               width: 600.0,
               height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
-                child: EditingPage(),
+                child: EditingPage(
+                  initialText: initialText
+                ),
                 elevation: 24,
               ),
             ),
