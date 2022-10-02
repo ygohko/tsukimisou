@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
@@ -66,6 +67,11 @@ class _ViewingPageState extends State<ViewingPage> {
         leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
         title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: _share,
+            tooltip: localizations.share,
+          ),
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: _delete,
@@ -140,6 +146,13 @@ class _ViewingPageState extends State<ViewingPage> {
       );
     }
     setState(() {});
+  }
+
+  void _share() async {
+    final localizations = AppLocalizations.of(context)!;
+    await Share.share(
+      widget.memo.text,
+      subject: localizations.sharedFromTsukimisou);
   }
 
   void _delete() async {

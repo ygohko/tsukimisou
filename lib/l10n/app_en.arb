@@ -77,6 +77,10 @@
             "tags": {}
         }
     },
+    "share": "Share",
+    "@share": {
+        "description": "Tooltip for Share button"
+    },
     "delete": "Delete",
     "@delete": {
         "description": "Tooltip for Delete button"
@@ -84,6 +88,10 @@
     "edit": "Edit",
     "@edit": {
         "description": "Tooltip for Edit button"
+    },
+    "sharedFromTsukimisou": "Shared from Tukimisou",
+    "@sharedFromTsukimisou": {
+        "description": "Subject when sharing a memo"
     },
     "confirm": "Confirm",
     "@confirm": {
