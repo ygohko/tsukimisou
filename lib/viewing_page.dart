@@ -191,7 +191,6 @@ class _ViewingPageState extends State<ViewingPage> {
         },
       ));
     } else {
-      // final transition = common_uis.scaleTransition();
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
@@ -209,7 +208,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        // transition: transition,
+        transitionBuilder: common_uis.dialogToDialogTransitionBuilder(),
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 150),
       );

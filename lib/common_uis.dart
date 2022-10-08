@@ -28,7 +28,7 @@ import 'package:platform/platform.dart';
 
 import 'extensions.dart';
 
-typedef DialogTransitionBuilder = AnimatedWidget Function(Animation<double> animation, Alignment alignment, Widget child);
+typedef DialogTransitionBuilder = AnimatedWidget Function(Animation<double> animation, Curve curve, Alignment alignment, Widget child);
 
 late Size _size;
 
@@ -255,7 +255,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
 Future<T?> showTransitiningDialog<T extends Object?>({
   required BuildContext context,
   required WidgetBuilder builder,
-  // required AnimatedWidget transition,
+  required DialogTransitionBuilder transitionBuilder,
   Curve curve = Curves.linear,
   Duration? duration,
   Alignment alignment = Alignment.center,
@@ -287,7 +287,7 @@ Future<T?> showTransitiningDialog<T extends Object?>({
         Animation<double> secondaryAnimation, Widget child) {
 
 
-        return dialogToDialogTransitionBuilder()(animation, alignment, child);
+        return transitionBuilder(animation, curve, alignment, child);
 
         /*
         return DialogToDialogTransition(
@@ -544,7 +544,7 @@ Container subtitle(BuildContext context, String text) {
 
 /// Returns function to build dialog to dialog transition.
 DialogTransitionBuilder dialogToDialogTransitionBuilder() {
-  return (Animation<double> animation, Alignment alignment, Widget child) {
+  return (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
     return DialogToDialogTransition(
       scales: animation,
       alignment: alignment,
