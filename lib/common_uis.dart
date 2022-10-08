@@ -28,6 +28,8 @@ import 'package:platform/platform.dart';
 
 import 'extensions.dart';
 
+typedef DialogTransitionBuilder = AnimatedWidget Function(Animation<double> animation, Alignment alignment, Widget child);
+
 late Size _size;
 
 class ColorTheme {
@@ -73,6 +75,26 @@ class TextTheme {
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
+  }
+}
+
+class DialogToDialogTransition extends AnimatedWidget {
+  final Alignment alignment;
+  final Widget child;
+
+  DialogToDialogTransition({Key? key, required Animation<double> scales, this.alignment = Alignment.center, required this.child}) : super(key: key, listenable: scales);
+
+  Animation<double> get scales => listenable as Animation<double>;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = 1.0 + (1.0 - scales.value) * -0.2;
+    final transform = Matrix4.diagonal3Values(scale, scale, scale);
+    return Transform(
+      transform: transform,
+      alignment: alignment,
+      child: child,
+    );
   }
 }
 
@@ -230,34 +252,6 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
-
-
-
-class TestTransition extends AnimatedWidget {
-  final Alignment alignment;
-  final Widget child;
-
-  TestTransition({Key? key, required Animation<double> scales, this.alignment = Alignment.center, required this.child}) : super(key: key, listenable: scales);
-
-  Animation<double> get scales => listenable as Animation<double>;
-
-  @override
-  Widget build(BuildContext context) {
-    final scale = (1.0 - scales.value) * -0.2 + 1.0;
-    final transform = Matrix4.diagonal3Values(scale, scale, scale);
-    return Transform(
-      transform: transform,
-      alignment: alignment,
-      child: child,
-    );
-  }
-}
-
-
-
-
-
-
 Future<T?> showTransitiningDialog<T extends Object?>({
   required BuildContext context,
   required WidgetBuilder builder,
@@ -272,13 +266,6 @@ Future<T?> showTransitiningDialog<T extends Object?>({
   assert(debugCheckHasMaterialLocalizations(context));
 
   final ThemeData theme = Theme.of(context);
-
-
-
-
-  // TODO: Is this needed?
-  // isShowing = true;
-
 
   return showGeneralDialog(
     context: context,
@@ -300,24 +287,18 @@ Future<T?> showTransitiningDialog<T extends Object?>({
         Animation<double> secondaryAnimation, Widget child) {
 
 
-        return TestTransition(
+        return dialogToDialogTransitionBuilder()(animation, alignment, child);
+
+        /*
+        return DialogToDialogTransition(
           scales: animation,
-          /*
-          CurvedAnimation(
-            parent: animation,
-            curve: Interval(
-              0.0,
-              0.5,
-              curve: curve,
-            ),
-          ),
-          */
           alignment: alignment,
           child: FadeTransition(
             opacity: animation,
             child: child,
           ),
         );
+        */
 
         /*
         return ScaleTransition(
@@ -561,23 +542,19 @@ Container subtitle(BuildContext context, String text) {
   );
 }
 
-/*
-/// Creates a scale transition.
-AnimatedWidget scaleTransition() {
-  return  ScaleTransition(
-    alignment: alignment,
-    scale: CurvedAnimation(
-      parent: animation,
-      curve: Interval(
-        0.00,
-        0.50,
-        curve: curve,
+/// Returns function to build dialog to dialog transition.
+DialogTransitionBuilder dialogToDialogTransitionBuilder() {
+  return (Animation<double> animation, Alignment alignment, Widget child) {
+    return DialogToDialogTransition(
+      scales: animation,
+      alignment: alignment,
+      child: FadeTransition(
+        opacity: animation,
+        child: child,
       ),
-    ),
-    child: child,
-  );
+    );
+  };
 }
-*/
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
