@@ -28,7 +28,11 @@ import 'package:platform/platform.dart';
 
 import 'extensions.dart';
 
-typedef DialogTransitionBuilder = AnimatedWidget Function(Animation<double> animation, Curve curve, Alignment alignment, Widget child);
+typedef DialogTransitionBuilder = AnimatedWidget Function(
+    Animation<double> animation,
+    Curve curve,
+    Alignment alignment,
+    Widget child);
 
 late Size _size;
 
@@ -82,7 +86,12 @@ class DialogToDialogTransition extends AnimatedWidget {
   final Alignment alignment;
   final Widget child;
 
-  DialogToDialogTransition({Key? key, required Animation<double> scales, this.alignment = Alignment.center, required this.child}) : super(key: key, listenable: scales);
+  DialogToDialogTransition(
+      {Key? key,
+      required Animation<double> scales,
+      this.alignment = Alignment.center,
+      required this.child})
+      : super(key: key, listenable: scales);
 
   Animation<double> get scales => listenable as Animation<double>;
 
@@ -283,7 +292,7 @@ Future<T?> showTransitiningDialog<T>({
     barrierColor: barrierColor ?? Colors.black54,
     transitionDuration: duration ?? const Duration(milliseconds: 400),
     transitionBuilder: (BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+        Animation<double> secondaryAnimation, Widget child) {
       return transitionBuilder(animation, curve, alignment, child);
     },
   );
@@ -304,7 +313,8 @@ Container subtitle(BuildContext context, String text) {
 
 /// Returns function to build default dialog transition.
 DialogTransitionBuilder defaultDialogTransitionBuilder() {
-  return (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+  return (Animation<double> animation, Curve curve, Alignment alignment,
+      Widget child) {
     return ScaleTransition(
       alignment: alignment,
       scale: CurvedAnimation(
@@ -322,7 +332,8 @@ DialogTransitionBuilder defaultDialogTransitionBuilder() {
 
 /// Returns function to build editing dialog transition.
 DialogTransitionBuilder editingDialogTransitionBuilder() {
-  return (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+  return (Animation<double> animation, Curve curve, Alignment alignment,
+      Widget child) {
     return SlideTransition(
       transformHitTests: false,
       position: Tween<Offset>(
@@ -336,7 +347,8 @@ DialogTransitionBuilder editingDialogTransitionBuilder() {
 
 /// Returns function to build dialog to dialog transition.
 DialogTransitionBuilder dialogToDialogTransitionBuilder() {
-  return (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+  return (Animation<double> animation, Curve curve, Alignment alignment,
+      Widget child) {
     return DialogToDialogTransition(
       scales: animation,
       alignment: alignment,
