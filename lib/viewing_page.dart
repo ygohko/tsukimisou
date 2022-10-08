@@ -23,7 +23,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
 import 'package:share_plus/share_plus.dart';
@@ -123,7 +122,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
       ));
     } else {
-      await showAnimatedDialog(
+      await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
           final platform = LocalPlatform();
@@ -140,7 +139,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        animationType: DialogTransitionType.slideFromBottom,
+        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -191,7 +190,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
       ));
     } else {
-      await showAnimatedDialog(
+      await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
           return Center(
@@ -208,8 +207,9 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        animationType: DialogTransitionType.scale,
-        duration: Duration(milliseconds: 300),
+        transitionBuilder: common_uis.dialogToDialogTransitionBuilder(),
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 150),
       );
     }
     setState(() {});

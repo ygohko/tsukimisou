@@ -28,6 +28,12 @@ import 'package:platform/platform.dart';
 
 import 'extensions.dart';
 
+typedef DialogTransitionBuilder = AnimatedWidget Function(
+    Animation<double> animation,
+    Curve curve,
+    Alignment alignment,
+    Widget child);
+
 late Size _size;
 
 class ColorTheme {
@@ -74,6 +80,36 @@ class TextTheme {
 
     return style;
   }
+}
+
+class DialogToDialogTransition extends AnimatedWidget {
+  final Alignment alignment;
+  final Widget child;
+
+  DialogToDialogTransition(
+      {Key? key,
+      required Animation<double> scales,
+      this.alignment = Alignment.center,
+      required this.child})
+      : super(key: key, listenable: scales);
+
+  Animation<double> get scales => listenable as Animation<double>;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = 1.0 + (1.0 - scales.value) * -0.2;
+    final transform = Matrix4.diagonal3Values(scale, scale, scale);
+    return Transform(
+      transform: transform,
+      alignment: alignment,
+      child: child,
+    );
+  }
+}
+
+/// Initializes this library.
+void init(BuildContext context) {
+  _size = MediaQuery.of(context).size;
 }
 
 /// Shows dialogs to indicate progressing.
@@ -225,6 +261,43 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
+/// Shows dialogs with transition.
+Future<T?> showTransitiningDialog<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  required DialogTransitionBuilder transitionBuilder,
+  Curve curve = Curves.linear,
+  Duration? duration,
+  Alignment alignment = Alignment.center,
+  bool barrierDismissible = false,
+  Color? barrierColor,
+  Axis? axis = Axis.horizontal,
+}) {
+  assert(debugCheckHasMaterialLocalizations(context));
+  final ThemeData theme = Theme.of(context);
+  return showGeneralDialog(
+    context: context,
+    pageBuilder: (BuildContext buildContext, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      final Widget pageChild = Builder(builder: builder);
+      return SafeArea(
+        top: false,
+        child: Builder(builder: (BuildContext context) {
+          return Theme(data: theme, child: pageChild);
+        }),
+      );
+    },
+    barrierDismissible: barrierDismissible,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: barrierColor ?? Colors.black54,
+    transitionDuration: duration ?? const Duration(milliseconds: 400),
+    transitionBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
+      return transitionBuilder(animation, curve, alignment, child);
+    },
+  );
+}
+
 /// Creates a subtitle.
 Container subtitle(BuildContext context, String text) {
   return Container(
@@ -238,9 +311,53 @@ Container subtitle(BuildContext context, String text) {
   );
 }
 
-/// Initializes this library.
-void init(BuildContext context) {
-  _size = MediaQuery.of(context).size;
+/// Returns function to build default dialog transition.
+DialogTransitionBuilder defaultDialogTransitionBuilder() {
+  return (Animation<double> animation, Curve curve, Alignment alignment,
+      Widget child) {
+    return ScaleTransition(
+      alignment: alignment,
+      scale: CurvedAnimation(
+        parent: animation,
+        curve: Interval(
+          0.00,
+          0.50,
+          curve: curve,
+        ),
+      ),
+      child: child,
+    );
+  };
+}
+
+/// Returns function to build editing dialog transition.
+DialogTransitionBuilder editingDialogTransitionBuilder() {
+  return (Animation<double> animation, Curve curve, Alignment alignment,
+      Widget child) {
+    return SlideTransition(
+      transformHitTests: false,
+      position: Tween<Offset>(
+        begin: const Offset(0.0, 1.0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)).animate(animation),
+      child: child,
+    );
+  };
+}
+
+/// Returns function to build dialog to dialog transition.
+DialogTransitionBuilder dialogToDialogTransitionBuilder() {
+  return (Animation<double> animation, Curve curve, Alignment alignment,
+      Widget child) {
+    return DialogToDialogTransition(
+      scales: animation,
+      alignment: alignment,
+      child: FadeTransition(
+        opacity: animation,
+        child: child,
+      ),
+    );
+  };
 }
 
 /// Returns whether this device has a large screen.
