@@ -252,7 +252,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
-/// Shows dialogs with transition
+/// Shows dialogs with transition.
 Future<T?> showTransitiningDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
