@@ -76,6 +76,11 @@ class TextTheme {
   }
 }
 
+/// Initializes this library.
+void init(BuildContext context) {
+  _size = MediaQuery.of(context).size;
+}
+
 /// Shows dialogs to indicate progressing.
 void showProgressIndicatorDialog(BuildContext context) {
   final platform = LocalPlatform();
@@ -225,6 +230,324 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
+
+
+
+class TestTransition extends AnimatedWidget {
+  final Alignment alignment;
+  final Widget child;
+
+  TestTransition({Key? key, required Animation<double> scales, this.alignment = Alignment.center, required this.child}) : super(key: key, listenable: scales);
+
+  Animation<double> get scales => listenable as Animation<double>;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = (1.0 - scales.value) * -0.2 + 1.0;
+    final transform = Matrix4.diagonal3Values(scale, scale, scale);
+    return Transform(
+      transform: transform,
+      alignment: alignment,
+      child: child,
+    );
+  }
+}
+
+
+
+
+
+
+Future<T?> showTransitiningDialog<T extends Object?>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  // required AnimatedWidget transition,
+  Curve curve = Curves.linear,
+  Duration? duration,
+  Alignment alignment = Alignment.center,
+  bool barrierDismissible = false,
+  Color? barrierColor,
+  Axis? axis = Axis.horizontal,
+}) {
+  assert(debugCheckHasMaterialLocalizations(context));
+
+  final ThemeData theme = Theme.of(context);
+
+
+
+
+  // TODO: Is this needed?
+  // isShowing = true;
+
+
+  return showGeneralDialog(
+    context: context,
+    pageBuilder: (BuildContext buildContext, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      final Widget pageChild = Builder(builder: builder);
+      return SafeArea(
+        top: false,
+        child: Builder(builder: (BuildContext context) {
+          return Theme(data: theme, child: pageChild);
+        }),
+      );
+    },
+    barrierDismissible: barrierDismissible,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: barrierColor ?? Colors.black54,
+    transitionDuration: duration ?? const Duration(milliseconds: 400),
+    transitionBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
+
+
+        return TestTransition(
+          scales: animation,
+          /*
+          CurvedAnimation(
+            parent: animation,
+            curve: Interval(
+              0.0,
+              0.5,
+              curve: curve,
+            ),
+          ),
+          */
+          alignment: alignment,
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
+
+        /*
+        return ScaleTransition(
+          alignment: alignment,
+          scale: CurvedAnimation(
+            parent: animation,
+            curve: Interval(
+              0.0,
+              0.5,
+              curve: curve,
+            ),
+          ),
+          child: child,
+        );
+        */
+
+
+    },
+  );
+}
+
+
+      /*
+      switch (animationType) {
+        case DialogTransitionType.fade:
+          return FadeTransition(opacity: animation, child: child);
+        case DialogTransitionType.slideFromRight:
+          return SlideTransition(
+            transformHitTests: false,
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: child,
+          );
+        case DialogTransitionType.slideFromLeft:
+          return SlideTransition(
+            transformHitTests: false,
+            position: Tween<Offset>(
+              begin: const Offset(-1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: child,
+          );
+        case DialogTransitionType.slideFromRightFade:
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          );
+        case DialogTransitionType.slideFromLeftFade:
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(-1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          );
+        case DialogTransitionType.slideFromTop:
+          return SlideTransition(
+            transformHitTests: false,
+            position: Tween<Offset>(
+              begin: const Offset(0.0, -1.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: child,
+          );
+        case DialogTransitionType.slideFromTopFade:
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.0, -1.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          );
+        case DialogTransitionType.slideFromBottom:
+          return SlideTransition(
+            transformHitTests: false,
+            position: Tween<Offset>(
+              begin: const Offset(0.0, 1.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: child,
+          );
+        case DialogTransitionType.slideFromBottomFade:
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0.0, 1.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: curve)).animate(animation),
+            child: FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          );
+        case DialogTransitionType.scale:
+          return ScaleTransition(
+            alignment: alignment,
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: curve,
+              ),
+            ),
+            child: child,
+          );
+        case DialogTransitionType.fadeScale:
+          return ScaleTransition(
+            alignment: alignment,
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: curve,
+              ),
+            ),
+            child: FadeTransition(
+              opacity: CurvedAnimation(
+                parent: animation,
+                curve: curve,
+              ),
+              child: child,
+            ),
+          );
+        case DialogTransitionType.scaleRotate:
+          return ScaleTransition(
+            alignment: alignment,
+            scale: CurvedAnimation(
+              parent: animation,
+              curve: Interval(
+                0.00,
+                0.50,
+                curve: curve,
+              ),
+            ),
+            child: CustomRotationTransition(
+              alignment: alignment,
+              turns: Tween<double>(begin: 1, end: 2).animate(CurvedAnimation(
+                  parent: animation, curve: Interval(0.0, 1.0, curve: curve))),
+              child: child,
+            ),
+          );
+        case DialogTransitionType.rotate:
+          return CustomRotationTransition(
+            alignment: alignment,
+            turns: Tween<double>(begin: 1, end: 2).animate(CurvedAnimation(
+                parent: animation, curve: Interval(0.0, 1.0, curve: curve))),
+            child: child,
+          );
+        case DialogTransitionType.fadeRotate:
+          return CustomRotationTransition(
+            alignment: alignment,
+            turns: Tween<double>(begin: 1, end: 2).animate(CurvedAnimation(
+                parent: animation, curve: Interval(0.0, 1.0, curve: curve))),
+            child: FadeTransition(
+              opacity: CurvedAnimation(
+                parent: animation,
+                curve: curve,
+              ),
+              child: child,
+            ),
+          );
+        case DialogTransitionType.rotate3D:
+          return Rotation3DTransition(
+            alignment: alignment,
+            turns: Tween<double>(begin: math.pi, end: 2.0 * math.pi).animate(
+                CurvedAnimation(
+                    parent: animation,
+                    curve: Interval(0.0, 1.0, curve: curve))),
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  CurvedAnimation(
+                      parent: animation,
+                      curve: Interval(0.5, 1.0, curve: Curves.elasticOut))),
+              child: child,
+            ),
+          );
+        case DialogTransitionType.size:
+          return Align(
+            alignment: alignment,
+            child: SizeTransition(
+              sizeFactor: CurvedAnimation(
+                parent: animation,
+                curve: curve,
+              ),
+              axis: axis ?? Axis.vertical,
+              child: child,
+            ),
+          );
+        case DialogTransitionType.sizeFade:
+          return Align(
+            alignment: alignment,
+            child: SizeTransition(
+              sizeFactor: CurvedAnimation(
+                parent: animation,
+                curve: curve,
+              ),
+              child: FadeTransition(
+                opacity: CurvedAnimation(
+                  parent: animation,
+                  curve: curve,
+                ),
+                child: child,
+              ),
+            ),
+          );
+        case DialogTransitionType.none:
+          return child;
+        default:
+          return FadeTransition(opacity: animation, child: child);
+      }
+      */
+
+
+
+
 /// Creates a subtitle.
 Container subtitle(BuildContext context, String text) {
   return Container(
@@ -238,10 +561,23 @@ Container subtitle(BuildContext context, String text) {
   );
 }
 
-/// Initializes this library.
-void init(BuildContext context) {
-  _size = MediaQuery.of(context).size;
+/*
+/// Creates a scale transition.
+AnimatedWidget scaleTransition() {
+  return  ScaleTransition(
+    alignment: alignment,
+    scale: CurvedAnimation(
+      parent: animation,
+      curve: Interval(
+        0.00,
+        0.50,
+        curve: curve,
+      ),
+    ),
+    child: child,
+  );
 }
+*/
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {

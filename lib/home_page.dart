@@ -168,6 +168,7 @@ class _HomePageState extends State<HomePage> {
         },
         barrierDismissible: false,
         animationType: DialogTransitionType.scale,
+        curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
     }

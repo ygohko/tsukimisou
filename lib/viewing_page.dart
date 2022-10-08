@@ -191,7 +191,8 @@ class _ViewingPageState extends State<ViewingPage> {
         },
       ));
     } else {
-      await showAnimatedDialog(
+      // final transition = common_uis.scaleTransition();
+      await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
           return Center(
@@ -208,8 +209,9 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        animationType: DialogTransitionType.scale,
-        duration: Duration(milliseconds: 300),
+        // transition: transition,
+        curve: Curves.fastOutSlowIn,
+        duration: Duration(milliseconds: 150),
       );
     }
     setState(() {});
