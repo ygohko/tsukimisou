@@ -31,7 +31,6 @@ import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
 
 class EditingPage extends StatefulWidget {
-  // TODO: these can be private?
   final Memo? memo;
   final String? initialText;
 
