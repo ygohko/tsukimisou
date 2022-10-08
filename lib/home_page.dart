@@ -109,9 +109,7 @@ class _HomePageState extends State<HomePage> {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
-          return EditingPage(
-            initialText: initialText
-          );
+          return EditingPage(initialText: initialText);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return OpenUpwardsPageTransitionsBuilder().buildTransitions(
@@ -128,9 +126,7 @@ class _HomePageState extends State<HomePage> {
               width: 600.0,
               height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
-                child: EditingPage(
-                  initialText: initialText
-                ),
+                child: EditingPage(initialText: initialText),
                 elevation: 24,
               ),
             ),

@@ -150,9 +150,8 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _share() async {
     final localizations = AppLocalizations.of(context)!;
-    await Share.share(
-      widget.memo.text,
-      subject: localizations.sharedFromTsukimisou);
+    await Share.share(widget.memo.text,
+        subject: localizations.sharedFromTsukimisou);
   }
 
   void _delete() async {
