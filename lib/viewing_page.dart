@@ -123,7 +123,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
       ));
     } else {
-      await showAnimatedDialog(
+      await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
           final platform = LocalPlatform();
@@ -140,7 +140,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        animationType: DialogTransitionType.slideFromBottom,
+        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );

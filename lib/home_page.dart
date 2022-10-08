@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> {
         },
       ));
     } else {
-      await showAnimatedDialog(
+      await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
           final platform = LocalPlatform();
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        animationType: DialogTransitionType.slideFromBottom,
+        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      await showAnimatedDialog(
+      await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
           return Center(
@@ -167,7 +167,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        animationType: DialogTransitionType.scale,
+        transitionBuilder: common_uis.defaultDialogTransitionBuilder(),
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );

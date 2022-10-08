@@ -264,9 +264,7 @@ Future<T?> showTransitiningDialog<T extends Object?>({
   Axis? axis = Axis.horizontal,
 }) {
   assert(debugCheckHasMaterialLocalizations(context));
-
   final ThemeData theme = Theme.of(context);
-
   return showGeneralDialog(
     context: context,
     pageBuilder: (BuildContext buildContext, Animation<double> animation,
@@ -284,38 +282,8 @@ Future<T?> showTransitiningDialog<T extends Object?>({
     barrierColor: barrierColor ?? Colors.black54,
     transitionDuration: duration ?? const Duration(milliseconds: 400),
     transitionBuilder: (BuildContext context, Animation<double> animation,
-        Animation<double> secondaryAnimation, Widget child) {
-
-
-        return transitionBuilder(animation, curve, alignment, child);
-
-        /*
-        return DialogToDialogTransition(
-          scales: animation,
-          alignment: alignment,
-          child: FadeTransition(
-            opacity: animation,
-            child: child,
-          ),
-        );
-        */
-
-        /*
-        return ScaleTransition(
-          alignment: alignment,
-          scale: CurvedAnimation(
-            parent: animation,
-            curve: Interval(
-              0.0,
-              0.5,
-              curve: curve,
-            ),
-          ),
-          child: child,
-        );
-        */
-
-
+      Animation<double> secondaryAnimation, Widget child) {
+      return transitionBuilder(animation, curve, alignment, child);
     },
   );
 }
@@ -540,6 +508,38 @@ Container subtitle(BuildContext context, String text) {
           textAlign: TextAlign.start),
     ),
   );
+}
+
+/// Returns function to build default dialog transition.
+DialogTransitionBuilder defaultDialogTransitionBuilder() {
+  return (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+    return ScaleTransition(
+      alignment: alignment,
+      scale: CurvedAnimation(
+        parent: animation,
+        curve: Interval(
+          0.00,
+          0.50,
+          curve: curve,
+        ),
+      ),
+      child: child,
+    );
+  };
+}
+
+/// Returns function to build editing dialog transition.
+DialogTransitionBuilder editingDialogTransitionBuilder() {
+  return (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+    return SlideTransition(
+      transformHitTests: false,
+      position: Tween<Offset>(
+        begin: const Offset(0.0, 1.0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)).animate(animation),
+      child: child,
+    );
+  };
 }
 
 /// Returns function to build dialog to dialog transition.
