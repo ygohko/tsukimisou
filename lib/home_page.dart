@@ -263,7 +263,9 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
       ),
-      body: _memoListView(),
+      body: Scrollbar(
+        child: _memoListView(),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
         tooltip: localizations.addAMemo,
@@ -298,7 +300,9 @@ class _HomePageState extends State<HomePage> {
             child: _drawerListView(false),
           ),
           Expanded(
-            child: _memoListView(),
+            child: Scrollbar(
+              child: _memoListView(),
+            ),
           ),
         ],
       ),
