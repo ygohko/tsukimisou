@@ -88,16 +88,16 @@ class DialogToDialogTransition extends AnimatedWidget {
 
   DialogToDialogTransition(
       {Key? key,
-      required Animation<double> scales,
+      required Animation<double> phase,
       this.alignment = Alignment.center,
       required this.child})
-      : super(key: key, listenable: scales);
+      : super(key: key, listenable: phase);
 
-  Animation<double> get scales => listenable as Animation<double>;
+  Animation<double> get phase => listenable as Animation<double>;
 
   @override
   Widget build(BuildContext context) {
-    final scale = 1.0 + (1.0 - scales.value) * -0.2;
+    final scale = 1.0 + (1.0 - phase.value) * -0.2;
     final transform = Matrix4.diagonal3Values(scale, scale, scale);
     return Transform(
       transform: transform,
@@ -350,7 +350,7 @@ DialogTransitionBuilder dialogToDialogTransitionBuilder() {
   return (Animation<double> animation, Curve curve, Alignment alignment,
       Widget child) {
     return DialogToDialogTransition(
-      scales: animation,
+      phase: animation,
       alignment: alignment,
       child: FadeTransition(
         opacity: animation,
