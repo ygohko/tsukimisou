@@ -36,7 +36,7 @@ typedef DialogTransitionBuilder = AnimatedWidget Function(
 
 late Size _size;
 
-class ColorTheme {
+class TsukimisouColors {
   /// Primary color for this application.
   static const primary = Color(0xFF00003F);
 
