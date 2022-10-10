@@ -84,7 +84,8 @@ class TsukimisouTextStyles {
 
 class DialogTransitionBuilders {
   /// Primary dialog transition.
-  static final primary = (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+  static final primary = (Animation<double> animation, Curve curve,
+      Alignment alignment, Widget child) {
     return ScaleTransition(
       alignment: alignment,
       scale: CurvedAnimation(
@@ -100,7 +101,8 @@ class DialogTransitionBuilders {
   };
 
   /// Transition for editing dialog.
-  static final editing = (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+  static final editing = (Animation<double> animation, Curve curve,
+      Alignment alignment, Widget child) {
     return SlideTransition(
       transformHitTests: false,
       position: Tween<Offset>(
@@ -112,7 +114,8 @@ class DialogTransitionBuilders {
   };
 
   /// Transition when showing dialogs from other dialog.
-  static final dialogToDialog = (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+  static final dialogToDialog = (Animation<double> animation, Curve curve,
+      Alignment alignment, Widget child) {
     return DialogToDialogTransition(
       phase: animation,
       alignment: alignment,
