@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        transitionBuilder: common_uis.defaultDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.primary,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );

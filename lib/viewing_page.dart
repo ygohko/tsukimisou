@@ -139,7 +139,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -207,7 +207,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        transitionBuilder: common_uis.dialogToDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.dialogToDialog,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 150),
       );

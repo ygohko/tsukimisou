@@ -82,10 +82,53 @@ class TsukimisouTextStyles {
   }
 }
 
+class DialogTransitionBuilders {
+  /// Primary dialog transition.
+  static final primary = (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+    return ScaleTransition(
+      alignment: alignment,
+      scale: CurvedAnimation(
+        parent: animation,
+        curve: Interval(
+          0.00,
+          0.50,
+          curve: curve,
+        ),
+      ),
+      child: child,
+    );
+  };
+
+  /// Transition for editing dialog.
+  static final editing = (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+    return SlideTransition(
+      transformHitTests: false,
+      position: Tween<Offset>(
+        begin: const Offset(0.0, 1.0),
+        end: Offset.zero,
+      ).chain(CurveTween(curve: curve)).animate(animation),
+      child: child,
+    );
+  };
+
+  /// Transition when showing dialogs from other dialog.
+  static final dialogToDialog = (Animation<double> animation, Curve curve, Alignment alignment, Widget child) {
+    return DialogToDialogTransition(
+      phase: animation,
+      alignment: alignment,
+      child: FadeTransition(
+        opacity: animation,
+        child: child,
+      ),
+    );
+  };
+}
+
 class DialogToDialogTransition extends AnimatedWidget {
   final Alignment alignment;
   final Widget child;
 
+  /// Creates a dialog to dialog transition.
   DialogToDialogTransition(
       {Key? key,
       required Animation<double> phase,
@@ -93,11 +136,11 @@ class DialogToDialogTransition extends AnimatedWidget {
       required this.child})
       : super(key: key, listenable: phase);
 
-  Animation<double> get phase => listenable as Animation<double>;
+  Animation<double> get _phase => listenable as Animation<double>;
 
   @override
   Widget build(BuildContext context) {
-    final scale = 1.0 + (1.0 - phase.value) * -0.2;
+    final scale = 1.0 + (1.0 - _phase.value) * -0.2;
     final transform = Matrix4.diagonal3Values(scale, scale, scale);
     return Transform(
       transform: transform,
@@ -309,55 +352,6 @@ Container subtitle(BuildContext context, String text) {
           textAlign: TextAlign.start),
     ),
   );
-}
-
-/// Returns function to build default dialog transition.
-DialogTransitionBuilder defaultDialogTransitionBuilder() {
-  return (Animation<double> animation, Curve curve, Alignment alignment,
-      Widget child) {
-    return ScaleTransition(
-      alignment: alignment,
-      scale: CurvedAnimation(
-        parent: animation,
-        curve: Interval(
-          0.00,
-          0.50,
-          curve: curve,
-        ),
-      ),
-      child: child,
-    );
-  };
-}
-
-/// Returns function to build editing dialog transition.
-DialogTransitionBuilder editingDialogTransitionBuilder() {
-  return (Animation<double> animation, Curve curve, Alignment alignment,
-      Widget child) {
-    return SlideTransition(
-      transformHitTests: false,
-      position: Tween<Offset>(
-        begin: const Offset(0.0, 1.0),
-        end: Offset.zero,
-      ).chain(CurveTween(curve: curve)).animate(animation),
-      child: child,
-    );
-  };
-}
-
-/// Returns function to build dialog to dialog transition.
-DialogTransitionBuilder dialogToDialogTransitionBuilder() {
-  return (Animation<double> animation, Curve curve, Alignment alignment,
-      Widget child) {
-    return DialogToDialogTransition(
-      phase: animation,
-      alignment: alignment,
-      child: FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
-    );
-  };
 }
 
 /// Returns whether this device has a large screen.
