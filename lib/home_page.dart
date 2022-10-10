@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         barrierDismissible: false,
-        transitionBuilder: common_uis.defaultDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.primary,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, i) {
         final localizations = AppLocalizations.of(context)!;
         final attributeStyle =
-            common_uis.TextTheme.homePageMemoAttribute(context);
+            common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
         final updated = DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
             .toSmartString();
@@ -376,7 +376,7 @@ class _HomePageState extends State<HomePage> {
             height: 120,
             child: DrawerHeader(
               decoration: const BoxDecoration(
-                color: common_uis.ColorTheme.primary,
+                color: common_uis.TsukimisouColors.primary,
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -384,7 +384,7 @@ class _HomePageState extends State<HomePage> {
                     localizations.showingMemos(_shownMemos.length,
                         memoStore.memos.length, tags.length),
                     style: const TextStyle(
-                        color: common_uis.ColorTheme.onPrimary)),
+                        color: common_uis.TsukimisouColors.onPrimary)),
               ),
             ),
           );
@@ -393,8 +393,8 @@ class _HomePageState extends State<HomePage> {
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
             selected: !_filteringEnabled,
-            selectedColor: common_uis.ColorTheme.primary,
-            selectedTileColor: common_uis.ColorTheme.primaryLight,
+            selectedColor: common_uis.TsukimisouColors.primary,
+            selectedTileColor: common_uis.TsukimisouColors.primaryLight,
           );
         } else if (i == tagsSubtitleIndex) {
           return common_uis.subtitle(context, localizations.tags);
@@ -406,8 +406,8 @@ class _HomePageState extends State<HomePage> {
               _filter(tag);
             },
             selected: _filteringEnabled && _filteringTag == tag,
-            selectedColor: common_uis.ColorTheme.primary,
-            selectedTileColor: common_uis.ColorTheme.primaryLight,
+            selectedColor: common_uis.TsukimisouColors.primary,
+            selectedTileColor: common_uis.TsukimisouColors.primaryLight,
           );
         } else if (i == integrationDividerIndex) {
           return const Divider();

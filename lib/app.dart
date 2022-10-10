@@ -50,11 +50,11 @@ class App extends StatelessWidget {
         textTheme: textTheme,
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
-          backgroundColor: ColorTheme.primary,
-          foregroundColor: ColorTheme.onPrimary,
+          backgroundColor: TsukimisouColors.primary,
+          foregroundColor: TsukimisouColors.onPrimary,
         ),
       ),
-      color: ColorTheme.primary,
+      color: TsukimisouColors.primary,
       supportedLocales: [
         Locale('en', ''),
         Locale('ja', ''),

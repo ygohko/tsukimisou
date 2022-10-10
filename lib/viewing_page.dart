@@ -58,9 +58,10 @@ class _ViewingPageState extends State<ViewingPage> {
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
-    final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
+    final textStyle =
+        common_uis.TsukimisouTextStyles.viewingPageMemoText(context);
     final attributeStyle =
-        common_uis.TextTheme.viewingPageMemoAttribute(context);
+        common_uis.TsukimisouTextStyles.viewingPageMemoAttribute(context);
     return Scaffold(
       appBar: AppBar(
         leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
@@ -139,7 +140,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        transitionBuilder: common_uis.editingDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 300),
       );
@@ -207,7 +208,7 @@ class _ViewingPageState extends State<ViewingPage> {
         },
         barrierDismissible: false,
         barrierColor: Color(0x00000000),
-        transitionBuilder: common_uis.dialogToDialogTransitionBuilder(),
+        transitionBuilder: common_uis.DialogTransitionBuilders.dialogToDialog,
         curve: Curves.fastOutSlowIn,
         duration: Duration(milliseconds: 150),
       );
