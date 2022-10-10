@@ -58,9 +58,9 @@ class _ViewingPageState extends State<ViewingPage> {
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
-    final textStyle = common_uis.TextTheme.viewingPageMemoText(context);
+    final textStyle = common_uis.TsukimisouTextStyles.viewingPageMemoText(context);
     final attributeStyle =
-        common_uis.TextTheme.viewingPageMemoAttribute(context);
+        common_uis.TsukimisouTextStyles.viewingPageMemoAttribute(context);
     return Scaffold(
       appBar: AppBar(
         leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),

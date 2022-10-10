@@ -320,7 +320,7 @@ class _HomePageState extends State<HomePage> {
       itemBuilder: (context, i) {
         final localizations = AppLocalizations.of(context)!;
         final attributeStyle =
-            common_uis.TextTheme.homePageMemoAttribute(context);
+            common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
         final updated = DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
             .toSmartString();

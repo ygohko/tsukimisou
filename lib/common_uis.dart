@@ -47,7 +47,7 @@ class TsukimisouColors {
   static const primaryLight = Color(0xFFE7E7FF);
 }
 
-class TextTheme {
+class TsukimisouTextStyles {
   /// Text style for memo attributes on home page.
   static TextStyle homePageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
