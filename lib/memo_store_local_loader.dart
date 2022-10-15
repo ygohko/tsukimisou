@@ -46,10 +46,8 @@ class MemoStoreLocalLoader extends MemoStoreLoader {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
-    print('path: ${path}\n');
     path = path + Platform.pathSeparator + 'Tsukimisou';
     path = path + Platform.pathSeparator + fileName;
-    print('path: ${path}\n');
 
     return MemoStoreLocalLoader(memoStore, path);
   }

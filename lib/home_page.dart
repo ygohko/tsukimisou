@@ -342,7 +342,6 @@ class _HomePageState extends State<HomePage> {
                 ]),
           ),
           onTap: () {
-            print('tapped ${memo.text}');
             _viewMemo(memo);
           },
         ));

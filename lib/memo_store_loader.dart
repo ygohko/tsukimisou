@@ -34,7 +34,6 @@ class MemoStoreLoader {
   /// Deserializes memo store.
   void deserialize(String serialized) {
     final decoded = jsonDecode(serialized);
-    print('aDecoded: ${decoded}');
     final version = decoded['version'];
     _memoStore.clearMemos();
     _memoStore.lastMerged = decoded['lastMerged'];
