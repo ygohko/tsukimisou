@@ -97,7 +97,6 @@ class GoogleDriveFile {
       values += element;
     });
     final string = utf8.decode(values);
-    print("string: ${string}");
     client.close();
 
     return string;
@@ -198,7 +197,6 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
       if (now.isBefore(accessToken.expiry)) {
         // Reuse the access token.
         updateHeaders(accessToken.data);
-        print('Reusing existing access token.');
 
         return;
       }
@@ -215,7 +213,6 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
         // Create access token from secure storage.
         _accessToken = AccessToken('Bearer', savedData, expiry);
         updateHeaders(savedData);
-        print('Using access token made from secure storage.');
 
         return;
       }
@@ -236,7 +233,6 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
             await refreshCredentials(id, accessCredentials, this);
         _accessToken = newCredentials.accessToken;
         updateHeaders(newCredentials.accessToken.data);
-        print('Using refreshed credentials.');
         _storeCredentials(storage, newCredentials);
 
         return;
@@ -253,7 +249,6 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
       });
       _accessToken = credentials.accessToken;
       updateHeaders(credentials.accessToken.data);
-      print('Using new credentials.');
       _storeCredentials(storage, credentials);
     } on Exception catch (exception) {
       throw AuthenticationException('Failed to obtain access credentials.');
