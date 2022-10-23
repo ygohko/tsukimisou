@@ -10,6 +10,7 @@
     "others": "その他",
     "about": "このアプリについて",
     "privacyPolicy": "プライバシーポリシー",
+    "memoStoreIsLockedByOtherDevice": "メモストアが他のデバイスにロックされています。後ほど再度お試しください。",
     "loadingMemoStoreFromGoogleDriveFailed": "メモストアのGoogle Driveからの読み込みに失敗しました。",
     "savingMemoStoreToGoogleDriveFailed": "メモストアのGoogle Driveへの保存に失敗しました。",
     "savingMemoStoreToLocalStorageFailed": "メモストアのローカルストレージへの保存に失敗しました。",

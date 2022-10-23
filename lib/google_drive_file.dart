@@ -117,23 +117,20 @@ class GoogleDriveFile {
     // Find a file.
     final fileIds = await _fileIds(driveApi, _fileName);
     if (fileIds.length < 1) {
-      // TODO: Find a locked file.
+      // Find a locked file.
       final lockedFileIds = await _fileIds(driveApi, lockedFileName);
       if (lockedFileIds.length < 1) {
         // File not found.
-        throw FileNotFoundExceptiion('File not found.');
+        throw FileNotFoundException('File not found.');
       } else {
         // File locked.
-        throw FileLockedExceptiion('File locked.');
+        throw FileLockedException('File locked.');
       }
     }
 
     // Rename a file to lock
     final file = File(name: lockedFileName);
     await driveApi.files.update(file, fileIds[0]);
-
-    // Adhoc.
-    sleep(Duration(seconds: 10));
 
     final media = await driveApi.files
         .get(fileIds[0], downloadOptions: DownloadOptions.fullMedia) as Media;
@@ -371,10 +368,10 @@ class AuthenticationException implements Exception {
   AuthenticationException(this.message);
 }
 
-class FileNotFoundExceptiion extends HttpException {
-  FileNotFoundExceptiion(String message, {Uri? uri}) : super(message, uri: uri);
+class FileNotFoundException extends HttpException {
+  FileNotFoundException(String message, {Uri? uri}) : super(message, uri: uri);
 }
 
-class FileLockedExceptiion extends HttpException {
-  FileLockedExceptiion(String message, {Uri? uri}) : super(message, uri: uri);
+class FileLockedException extends HttpException {
+  FileLockedException(String message, {Uri? uri}) : super(message, uri: uri);
 }
