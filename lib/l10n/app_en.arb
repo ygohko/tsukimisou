@@ -51,6 +51,10 @@
     "@privacyPolicy": {
         "description": "Text for privacy policy list tile"
     },
+    "memoStoreIsLockedByOtherDevice": "Memo store is locked by other device. Please try again later.",
+    "@memoStoreIsLockedByOtherDevice": {
+        "description": "Error text when loading from Google Drive failed because memo store is locked"
+    },
     "loadingMemoStoreFromGoogleDriveFailed": "Loading memo store from Google Drive failed.",
     "@loadingMemoStoreFromGoogleDriveFailed": {
         "description": "Error text when loading from Google Drive failed"

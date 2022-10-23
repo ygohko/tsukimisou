@@ -56,7 +56,7 @@ class GoogleDriveFile {
       // Make a directory.
       directoryId = await _createDirectory(driveApi);
     }
-    final fileIds = await _fileIds(driveApi);
+    final fileIds = await _fileIds(driveApi, _fileName);
     for (var fileId in fileIds) {
       // Delete old files.
       await driveApi.files.delete(fileId);
@@ -84,7 +84,7 @@ class GoogleDriveFile {
     await client.authenticate();
     final driveApi = DriveApi(client);
     // Find a file
-    final fileIds = await _fileIds(driveApi);
+    final fileIds = await _fileIds(driveApi, _fileName);
     if (fileIds.length < 1) {
       // File not found.
       throw HttpException('File not found.');
@@ -97,6 +97,50 @@ class GoogleDriveFile {
       values += element;
     });
     final string = utf8.decode(values);
+    client.close();
+
+    return string;
+  }
+
+  /// Reads contents as a string with locking.
+  Future<String> readAsStringLocked() async {
+    _AuthenticatableClient? client = null;
+    final platform = LocalPlatform();
+    if (platform.isDesktop) {
+      client = _AuthenticatableDesktopClient();
+    } else {
+      client = _AuthenticatableMobileClient();
+    }
+    await client.authenticate();
+    final lockedFileName = _fileName + '.locked';
+    final driveApi = DriveApi(client);
+    // Find a file.
+    final fileIds = await _fileIds(driveApi, _fileName);
+    if (fileIds.length < 1) {
+      // Find a locked file.
+      final lockedFileIds = await _fileIds(driveApi, lockedFileName);
+      if (lockedFileIds.length < 1) {
+        // File not found.
+        throw FileNotFoundException('File not found.');
+      } else {
+        // File locked.
+        throw FileLockedException('File locked.');
+      }
+    }
+
+    // Rename a file to lock
+    final file = File(name: lockedFileName);
+    await driveApi.files.update(file, fileIds[0]);
+    final media = await driveApi.files
+        .get(fileIds[0], downloadOptions: DownloadOptions.fullMedia) as Media;
+    var values = <int>[];
+    await media.stream.forEach((element) {
+      values += element;
+    });
+    final string = utf8.decode(values);
+    // Rename a file to unlock.
+    final aFile = File(name: _fileName);
+    await driveApi.files.update(aFile, fileIds[0]);
     client.close();
 
     return string;
@@ -120,13 +164,14 @@ class GoogleDriveFile {
     return directoryId;
   }
 
-  Future<List<String>> _fileIds(DriveApi driveApi) async {
+  // TODO: Change to static method?
+  Future<List<String>> _fileIds(DriveApi driveApi, String fileName) async {
     final directoryId = await _directoryId(driveApi);
     if (directoryId == null) {
       return <String>[];
     }
     final result = await driveApi.files.list(
-        q: 'name = "${_fileName}" and "${directoryId}" in parents and trashed = false');
+        q: 'name = "${fileName}" and "${directoryId}" in parents and trashed = false');
     final files = result.files;
     if (files == null) {
       throw HttpException('API does not return files.');
@@ -318,4 +363,12 @@ class AuthenticationException implements Exception {
   final String message;
 
   AuthenticationException(this.message);
+}
+
+class FileNotFoundException extends HttpException {
+  FileNotFoundException(String message, {Uri? uri}) : super(message, uri: uri);
+}
+
+class FileLockedException extends HttpException {
+  FileLockedException(String message, {Uri? uri}) : super(message, uri: uri);
 }

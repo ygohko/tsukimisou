@@ -186,8 +186,17 @@ class _HomePageState extends State<HomePage> {
     final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
-    } on HttpException {
+    } on FileNotFoundException {
       // Loading failure can be ignored because the file may not exists. Do nothing.
+    } on FileLockedException {
+      // Loading failure caused by locked memo store.
+      await common_uis.showErrorDialog(
+          context,
+          localizations.error,
+          localizations.memoStoreIsLockedByOtherDevice,
+          localizations.ok);
+      Navigator.of(context).pop();
+      return;
     } on Exception catch (exception) {
       // Other failure.
       await common_uis.showErrorDialog(
