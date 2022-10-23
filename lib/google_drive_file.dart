@@ -56,7 +56,7 @@ class GoogleDriveFile {
       // Make a directory.
       directoryId = await _createDirectory(driveApi);
     }
-    final fileIds = await _fileIds(driveApi);
+    final fileIds = await _fileIds(driveApi, _fileName);
     for (var fileId in fileIds) {
       // Delete old files.
       await driveApi.files.delete(fileId);
@@ -84,7 +84,7 @@ class GoogleDriveFile {
     await client.authenticate();
     final driveApi = DriveApi(client);
     // Find a file
-    final fileIds = await _fileIds(driveApi);
+    final fileIds = await _fileIds(driveApi, _fileName);
     if (fileIds.length < 1) {
       // File not found.
       throw HttpException('File not found.');
@@ -112,23 +112,27 @@ class GoogleDriveFile {
       client = _AuthenticatableMobileClient();
     }
     await client.authenticate();
+    final lockedFileName = _fileName + '.locked';
     final driveApi = DriveApi(client);
     // Find a file.
-    final fileIds = await _fileIds(driveApi);
+    final fileIds = await _fileIds(driveApi, _fileName);
     if (fileIds.length < 1) {
       // TODO: Find a locked file.
-
-
-      // File not found.
-      throw HttpException('File not found.');
-
-
+      final lockedFileIds = await _fileIds(driveApi, lockedFileName);
+      if (lockedFileIds.length < 1) {
+        // File not found.
+        throw FileNotFoundExceptiion('File not found.');
+      } else {
+        // File locked.
+        throw FileLockedExceptiion('File locked.');
+      }
     }
 
-    final lockedFileName = _fileName + '.locked';
+    // Rename a file to lock
     final file = File(name: lockedFileName);
     await driveApi.files.update(file, fileIds[0]);
 
+    // Adhoc.
     sleep(Duration(seconds: 10));
 
     final media = await driveApi.files
@@ -139,6 +143,7 @@ class GoogleDriveFile {
     });
     final string = utf8.decode(values);
 
+    // Rename a file to unlock.
     final aFile = File(name: _fileName);
     await driveApi.files.update(aFile, fileIds[0]);
 
@@ -165,13 +170,14 @@ class GoogleDriveFile {
     return directoryId;
   }
 
-  Future<List<String>> _fileIds(DriveApi driveApi) async {
+  // TODO: Change to static method?
+  Future<List<String>> _fileIds(DriveApi driveApi, String fileName) async {
     final directoryId = await _directoryId(driveApi);
     if (directoryId == null) {
       return <String>[];
     }
     final result = await driveApi.files.list(
-        q: 'name = "${_fileName}" and "${directoryId}" in parents and trashed = false');
+        q: 'name = "${fileName}" and "${directoryId}" in parents and trashed = false');
     final files = result.files;
     if (files == null) {
       throw HttpException('API does not return files.');
@@ -363,4 +369,12 @@ class AuthenticationException implements Exception {
   final String message;
 
   AuthenticationException(this.message);
+}
+
+class FileNotFoundExceptiion extends HttpException {
+  FileNotFoundExceptiion(String message, {Uri? uri}) : super(message, uri: uri);
+}
+
+class FileLockedExceptiion extends HttpException {
+  FileLockedExceptiion(String message, {Uri? uri}) : super(message, uri: uri);
 }

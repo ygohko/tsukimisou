@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
     final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
-    } on HttpException {
+    } on FileNotFoundExceptiion {
       // Loading failure can be ignored because the file may not exists. Do nothing.
     } on Exception catch (exception) {
       // Other failure.
