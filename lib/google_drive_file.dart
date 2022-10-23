@@ -102,6 +102,51 @@ class GoogleDriveFile {
     return string;
   }
 
+  /// Reads contents as a string with locking.
+  Future<String> readAsStringLocked() async {
+    _AuthenticatableClient? client = null;
+    final platform = LocalPlatform();
+    if (platform.isDesktop) {
+      client = _AuthenticatableDesktopClient();
+    } else {
+      client = _AuthenticatableMobileClient();
+    }
+    await client.authenticate();
+    final driveApi = DriveApi(client);
+    // Find a file.
+    final fileIds = await _fileIds(driveApi);
+    if (fileIds.length < 1) {
+      // TODO: Find a locked file.
+
+
+      // File not found.
+      throw HttpException('File not found.');
+
+
+    }
+
+    final lockedFileName = _fileName + '.locked';
+    final file = File(name: lockedFileName);
+    await driveApi.files.update(file, fileIds[0]);
+
+    sleep(Duration(seconds: 10));
+
+    final media = await driveApi.files
+        .get(fileIds[0], downloadOptions: DownloadOptions.fullMedia) as Media;
+    var values = <int>[];
+    await media.stream.forEach((element) {
+      values += element;
+    });
+    final string = utf8.decode(values);
+
+    final aFile = File(name: _fileName);
+    await driveApi.files.update(aFile, fileIds[0]);
+
+    client.close();
+
+    return string;
+  }
+
   Future<String?> _directoryId(DriveApi driveApi) async {
     var result = await driveApi.files.list(
         q: 'name = "Tsukimisou" and "root" in parents and trashed = false');

@@ -38,7 +38,7 @@ class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
   /// Executes this memo store loader.
   Future<void> execute() async {
     final file = GoogleDriveFile(_fileName);
-    final string = await file.readAsString();
+    final string = await file.readAsStringLocked();
     deserialize(string);
   }
 }
