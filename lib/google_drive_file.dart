@@ -131,7 +131,6 @@ class GoogleDriveFile {
     // Rename a file to lock
     final file = File(name: lockedFileName);
     await driveApi.files.update(file, fileIds[0]);
-
     final media = await driveApi.files
         .get(fileIds[0], downloadOptions: DownloadOptions.fullMedia) as Media;
     var values = <int>[];
@@ -139,11 +138,9 @@ class GoogleDriveFile {
       values += element;
     });
     final string = utf8.decode(values);
-
     // Rename a file to unlock.
     final aFile = File(name: _fileName);
     await driveApi.files.update(aFile, fileIds[0]);
-
     client.close();
 
     return string;
