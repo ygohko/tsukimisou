@@ -331,9 +331,8 @@ class _HomePageState extends State<HomePage> {
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
-        final updated = DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-            .toSmartString();
         final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+        final updated = lastModified.toSmartString();
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(MemoStore.instance().lastMerged);
         final contents = [
           Text(memo.text),
