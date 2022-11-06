@@ -350,7 +350,7 @@ class _HomePageState extends State<HomePage> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                "Unsynchronized",
+                localizations.unsynchronized,
                 style: attributeStyle,
               ),
             ),
