@@ -3,6 +3,7 @@
     "showingMemos": "{shownMemosCount}件のメモを表示中\n全{memosCount}件のメモと全{tagsCount}個のタグ",
     "allMemos": "すべてのメモ",
     "updated": "更新: {dateTime}",
+    "unsynchronized": "未同期",
     "addAMemo": "メモを追加",
     "tags": "タグ",
     "googleDriveIntegration": "Google Drive連携",

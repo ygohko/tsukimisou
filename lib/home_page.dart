@@ -331,30 +331,44 @@ class _HomePageState extends State<HomePage> {
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
-        final updated = DateTime.fromMillisecondsSinceEpoch(memo.lastModified)
-            .toSmartString();
-        return Card(
-            child: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(memo.text),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      localizations.updated(updated),
-                      style: attributeStyle,
-                    ),
-                  ),
-                ]),
+        final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+        final updated = lastModified.toSmartString();
+        final lastMerged = DateTime.fromMillisecondsSinceEpoch(MemoStore.instance().lastMerged);
+        final contents = [
+          Text(memo.text),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              localizations.updated(updated),
+              style: attributeStyle,
+            ),
           ),
-          onTap: () {
-            _viewMemo(memo);
-          },
-        ));
-      },
+        ];
+        if (lastModified.isAfter(lastMerged)) {
+          contents.add(
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                localizations.unsynchronized,
+                style: attributeStyle,
+              ),
+            ),
+          );
+        }
+        return Card(
+          child: InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: contents,
+              ),
+            ),
+            onTap: () {
+              _viewMemo(memo);
+            },
+          ));
+        },
     );
   }
 

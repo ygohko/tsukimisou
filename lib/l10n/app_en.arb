@@ -23,6 +23,10 @@
             "dateTime": {}
         }
     },
+    "unsynchronized": "Unsynchronized",
+    "@unsynchronized": {
+        "description": "Indicattion for memos that is not synchronized"
+    },
     "addAMemo": "Add a memo",
     "@addAMemo": {
         "description": "Tooltip for add a memo button"
