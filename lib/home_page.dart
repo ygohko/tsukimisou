@@ -28,6 +28,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:platform/platform.dart';
+import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader =
         await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
     try {
@@ -99,9 +100,6 @@ class _HomePageState extends State<HomePage> {
       // Load error
       // Do nothing for now
     }
-    setState(() {
-      _updateShownMemos();
-    });
   }
 
   void _addMemo({String? initialText}) async {
@@ -137,9 +135,6 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(milliseconds: 300),
       );
     }
-    setState(() {
-      _updateShownMemos();
-    });
   }
 
   void _viewMemo(Memo memo) async {
@@ -171,9 +166,6 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(milliseconds: 300),
       );
     }
-    setState(() {
-      _updateShownMemos();
-    });
   }
 
   Future<void> _mergeWithGoogleDrive() async {
@@ -207,7 +199,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final toMemoStore = MemoStore.instance();
+    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
     final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
@@ -217,9 +209,6 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
-      setState(() {
-        _updateShownMemos();
-      });
       Navigator.of(context).pop();
       return;
     }
@@ -232,9 +221,6 @@ class _HomePageState extends State<HomePage> {
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
-    setState(() {
-      _updateShownMemos();
-    });
     Navigator.of(context).pop();
   }
 
@@ -273,7 +259,12 @@ class _HomePageState extends State<HomePage> {
         title: Text(localizations.tsukimisou),
       ),
       body: Scrollbar(
-        child: _memoListView(),
+        child: Consumer<MemoStore>(
+          builder: (context, memoStore, child) {
+            _updateShownMemos();
+            return _memoListView();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
@@ -281,7 +272,12 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       drawer: Drawer(
-        child: _drawerListView(true),
+        child: Consumer<MemoStore>(
+          builder: (context, memoStore, child) {
+            _updateShownMemos();
+            return _drawerListView(true);
+          },
+        ),
       ),
     );
   }
@@ -306,11 +302,21 @@ class _HomePageState extends State<HomePage> {
               minWidth: 0.0,
               maxWidth: drawerWidth,
             ),
-            child: _drawerListView(false),
+            child: Consumer<MemoStore>(
+              builder: (context, memoStore, child) {
+                _updateShownMemos();
+                return _drawerListView(false);
+              },
+            ),
           ),
           Expanded(
             child: Scrollbar(
-              child: _memoListView(),
+              child: Consumer<MemoStore>(
+                builder: (context, memoStore, child) {
+                  _updateShownMemos();
+                  return _memoListView();
+                },
+              ),
             ),
           ),
         ],
@@ -333,7 +339,7 @@ class _HomePageState extends State<HomePage> {
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
         final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final updated = lastModified.toSmartString();
-        final lastMerged = DateTime.fromMillisecondsSinceEpoch(MemoStore.instance().lastMerged);
+        final lastMerged = DateTime.fromMillisecondsSinceEpoch(Provider.of<MemoStore>(context, listen: false).lastMerged);
         final contents = [
           Text(memo.text),
           Align(
@@ -377,7 +383,7 @@ class _HomePageState extends State<HomePage> {
     const allMemosIndex = 1;
     const tagsSubtitleIndex = 2;
     const tagsBeginIndex = 3;
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final tags = memoStore.tags;
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     final integrationDividerIndex = tagsEndIndex + 1;
@@ -482,7 +488,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateShownMemos() {
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memos = memoStore.memos;
     if (!_filteringEnabled) {
       _shownMemos = [...memos];

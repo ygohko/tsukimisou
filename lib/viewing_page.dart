@@ -25,6 +25,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import 'binding_tags_page.dart';
@@ -167,7 +168,7 @@ class _ViewingPageState extends State<ViewingPage> {
       return;
     }
 
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     memoStore.removeMemo(widget.memo);
     final memoStoreSaver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
@@ -182,7 +183,7 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _bindTags() async {
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {

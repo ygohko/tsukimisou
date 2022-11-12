@@ -110,5 +110,6 @@ class MemoStoreMerger {
     }
     toMemoStore.removedMemoIds = <String>[];
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
+    toMemoStore.notifyListeners();
   }
 }
