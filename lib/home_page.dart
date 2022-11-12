@@ -100,9 +100,6 @@ class _HomePageState extends State<HomePage> {
       // Load error
       // Do nothing for now
     }
-    setState(() {
-      _updateShownMemos();
-    });
   }
 
   void _addMemo({String? initialText}) async {
@@ -138,9 +135,6 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(milliseconds: 300),
       );
     }
-    setState(() {
-      _updateShownMemos();
-    });
   }
 
   void _viewMemo(Memo memo) async {
@@ -172,9 +166,6 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(milliseconds: 300),
       );
     }
-    setState(() {
-      _updateShownMemos();
-    });
   }
 
   Future<void> _mergeWithGoogleDrive() async {
@@ -218,9 +209,6 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
-      setState(() {
-        _updateShownMemos();
-      });
       Navigator.of(context).pop();
       return;
     }
@@ -233,9 +221,6 @@ class _HomePageState extends State<HomePage> {
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
-    setState(() {
-      _updateShownMemos();
-    });
     Navigator.of(context).pop();
   }
 
@@ -274,7 +259,12 @@ class _HomePageState extends State<HomePage> {
         title: Text(localizations.tsukimisou),
       ),
       body: Scrollbar(
-        child: _memoListView(),
+        child: Consumer<MemoStore>(
+          builder: (context, memoStore, child) {
+            _updateShownMemos();
+            return _memoListView();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addMemo,
@@ -282,7 +272,12 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
       drawer: Drawer(
-        child: _drawerListView(true),
+        child: Consumer<MemoStore>(
+          builder: (context, memoStore, child) {
+            _updateShownMemos();
+            return _drawerListView(true);
+          },
+        ),
       ),
     );
   }
@@ -307,11 +302,21 @@ class _HomePageState extends State<HomePage> {
               minWidth: 0.0,
               maxWidth: drawerWidth,
             ),
-            child: _drawerListView(false),
+            child: Consumer<MemoStore>(
+              builder: (context, memoStore, child) {
+                _updateShownMemos();
+                return _drawerListView(false);
+              },
+            ),
           ),
           Expanded(
             child: Scrollbar(
-              child: _memoListView(),
+              child: Consumer<MemoStore>(
+                builder: (context, memoStore, child) {
+                  _updateShownMemos();
+                  return _memoListView();
+                },
+              ),
             ),
           ),
         ],

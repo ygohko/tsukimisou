@@ -112,6 +112,7 @@ class _EditingPageState extends State<EditingPage> {
     } else {
       // Update a memo
       memo.text = _controller.text;
+      memoStore.notifyListeners();
     }
     final memoStoreSaver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
