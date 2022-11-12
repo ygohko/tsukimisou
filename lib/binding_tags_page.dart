@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
 import 'memo.dart';
@@ -167,7 +168,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
 
   Future<bool> _apply() async {
     final localizations = AppLocalizations.of(context)!;
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     var applyingNeeded = false;
     if (widget.memo.tags.length != _boundTags.length) {
       applyingNeeded = true;

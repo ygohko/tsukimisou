@@ -29,8 +29,6 @@ class MemoStore extends ChangeNotifier {
   var _removedMemoIds = <String>[];
   var _lastMerged = 0;
 
-  static MemoStore? _instance = null;
-
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
     _memos.add(memo);
@@ -100,14 +98,5 @@ class MemoStore extends ChangeNotifier {
     }
 
     return tags;
-  }
-
-  /// Gets a singleton instance.
-  static MemoStore instance() {
-    if (_instance == null) {
-      _instance = MemoStore();
-    }
-
-    return _instance!;
   }
 }

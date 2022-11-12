@@ -24,6 +24,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
 import 'memo.dart';
@@ -101,7 +102,7 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final localizations = AppLocalizations.of(context)!;
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = widget.memo;
     if (memo == null) {
       // Add a new memo

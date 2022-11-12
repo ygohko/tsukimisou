@@ -28,6 +28,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:platform/platform.dart';
+import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -90,7 +91,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader =
         await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
     try {
@@ -207,7 +208,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final toMemoStore = MemoStore.instance();
+    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
     final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
@@ -333,7 +334,7 @@ class _HomePageState extends State<HomePage> {
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
         final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final updated = lastModified.toSmartString();
-        final lastMerged = DateTime.fromMillisecondsSinceEpoch(MemoStore.instance().lastMerged);
+        final lastMerged = DateTime.fromMillisecondsSinceEpoch(Provider.of<MemoStore>(context, listen: false).lastMerged);
         final contents = [
           Text(memo.text),
           Align(
@@ -377,7 +378,7 @@ class _HomePageState extends State<HomePage> {
     const allMemosIndex = 1;
     const tagsSubtitleIndex = 2;
     const tagsBeginIndex = 3;
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final tags = memoStore.tags;
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     final integrationDividerIndex = tagsEndIndex + 1;
@@ -482,7 +483,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateShownMemos() {
-    final memoStore = MemoStore.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memos = memoStore.memos;
     if (!_filteringEnabled) {
       _shownMemos = [...memos];
