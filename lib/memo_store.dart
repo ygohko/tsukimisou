@@ -20,9 +20,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:flutter/foundation.dart';
+
 import 'memo.dart';
 
-class MemoStore {
+class MemoStore extends ChangeNotifier {
   var _memos = <Memo>[];
   var _removedMemoIds = <String>[];
   var _lastMerged = 0;
@@ -32,6 +34,7 @@ class MemoStore {
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
     _memos.add(memo);
+    notifyListeners();
   }
 
   /// Removes a memo from this memo store.
@@ -41,11 +44,13 @@ class MemoStore {
     }
     _removedMemoIds.add(memo.id);
     _memos.remove(memo);
+    notifyListeners();
   }
 
   /// Clears memos from this memo store.
   void clearMemos() {
     _memos.clear();
+    notifyListeners();
   }
 
   /// Memo that has given ID.
