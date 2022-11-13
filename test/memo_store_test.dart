@@ -85,11 +85,5 @@ void main() {
       expect(tags.length, 1);
       expect(tags[0], 'test');
     });
-
-    test(
-        'MemoStore should create singleton instance when first time MemoStore.instance() called.',
-        () {
-      expect(MemoStore.instance(), isNotNull);
-    });
   });
 }
