@@ -59,6 +59,14 @@
     "@memoStoreIsLockedByOtherDevice": {
         "description": "Error text when loading from Google Drive failed because memo store is locked"
     },
+    "memoStoreIsStillLocked": "Memo store is still locked but if there are no synchronizing devices you can also force unlock. Do you want to unlock?",
+    "@memoStoreIsStillLocked": {
+        "description": "Confirmation text when user can unlock memo store"
+    },
+    "unlock": "Unlock",
+    "@unlock": {
+        "description": "Text for unlock button"
+    },
     "loadingMemoStoreFromGoogleDriveFailed": "Loading memo store from Google Drive failed.",
     "@loadingMemoStoreFromGoogleDriveFailed": {
         "description": "Error text when loading from Google Drive failed"
