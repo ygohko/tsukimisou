@@ -291,6 +291,18 @@ class _HomePageState extends State<HomePage> {
     } else {
       drawerWidth = windowWidth / 2.0;
     }
+    Widget rightPaneWidget = Consumer<MemoStore>(
+      builder: (context, memoStore, child) {
+        _updateShownMemos();
+        return _memoListView();
+      },
+    );
+    final platform = LocalPlatform();
+    if (platform.isMobile) {
+      rightPaneWidget = Scrollbar(
+        child: rightPaneWidget,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
@@ -310,14 +322,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child: Scrollbar(
-              child: Consumer<MemoStore>(
-                builder: (context, memoStore, child) {
-                  _updateShownMemos();
-                  return _memoListView();
-                },
-              ),
-            ),
+            child: rightPaneWidget,
           ),
         ],
       ),

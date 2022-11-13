@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/home_page.dart';
 
 void main() {
+  // TODO: Fix test failure.
   testWidgets('HomePage widget smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
       localizationsDelegates: [
