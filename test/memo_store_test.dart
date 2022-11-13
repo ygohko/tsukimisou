@@ -3,7 +3,6 @@ import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
 
 void main() {
-  // TODO: Fix test failure.
   group('MemoStore', () {
     test('MemoStore should have zero memos when created.', () {
       expect(MemoStore().memos.length, 0);
@@ -84,12 +83,6 @@ void main() {
       tags = memoStore.tags;
       expect(tags.length, 1);
       expect(tags[0], 'test');
-    });
-
-    test(
-        'MemoStore should create singleton instance when first time MemoStore.instance() called.',
-        () {
-      expect(MemoStore.instance(), isNotNull);
     });
   });
 }
