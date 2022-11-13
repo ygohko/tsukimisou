@@ -3,7 +3,6 @@ import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
 
 void main() {
-  // TODO: Fix test failure.
   group('MemoStore', () {
     test('MemoStore should have zero memos when created.', () {
       expect(MemoStore().memos.length, 0);
