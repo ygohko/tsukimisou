@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
   var _licenseAdded = false;
+  var _fileLockedCount = 0;
 
   @override
   void initState() {
@@ -182,13 +183,30 @@ class _HomePageState extends State<HomePage> {
       // Loading failure can be ignored because the file may not exists. Do nothing.
     } on FileLockedException {
       // Loading failure caused by locked memo store.
-      await common_uis.showErrorDialog(
+      _fileLockedCount++;
+      if (_fileLockedCount < 3) {
+        await common_uis.showErrorDialog(
           context,
           localizations.error,
           localizations.memoStoreIsLockedByOtherDevice,
           localizations.ok);
-      Navigator.of(context).pop();
-      return;
+        Navigator.of(context).pop();
+        return;
+      } else {
+        // Confirm to force unlock
+        final accepted = await common_uis.showConfirmationDialog(
+          context,
+          "Confirm",
+          "Memo store is still locked but you can also force unlock. Do you want to unlock?",
+          "Unlock",
+          "Cancel",
+          false);
+        if (accepted) {
+          await _unlockGoogleDrive();
+        }
+        Navigator.of(context).pop();
+        return;
+      }
     } on Exception catch (exception) {
       // Other failure.
       await common_uis.showErrorDialog(
@@ -199,6 +217,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
+    _fileLockedCount = 0;
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
@@ -222,6 +241,11 @@ class _HomePageState extends State<HomePage> {
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
     }
     Navigator.of(context).pop();
+  }
+
+  Future<void> _unlockGoogleDrive() async {
+    final file = GoogleDriveFile('MemoStore.json');
+    await file.unlock();
   }
 
   void _showAbout() async {

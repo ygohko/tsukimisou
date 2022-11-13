@@ -146,6 +146,31 @@ class GoogleDriveFile {
     return string;
   }
 
+  /// Unlock this file.
+  Future<void> unlock() async {
+    _AuthenticatableClient? client = null;
+    final platform = LocalPlatform();
+    if (platform.isDesktop) {
+      client = _AuthenticatableDesktopClient();
+    } else {
+      client = _AuthenticatableMobileClient();
+    }
+    await client.authenticate();
+    final lockedFileName = _fileName + '.locked';
+    final driveApi = DriveApi(client);
+    // Find a file.
+    final lockedFileIds = await _fileIds(driveApi, lockedFileName);
+    if (lockedFileIds.length < 1) {
+      // File not found.
+      throw FileNotFoundException('File not found.');
+    }
+
+    // Rename a file to unlock.
+    final file = File(name: _fileName);
+    await driveApi.files.update(file, lockedFileIds[0]);
+    client.close();
+  }
+
   Future<String?> _directoryId(DriveApi driveApi) async {
     var result = await driveApi.files.list(
         q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
