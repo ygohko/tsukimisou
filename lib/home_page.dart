@@ -196,10 +196,10 @@ class _HomePageState extends State<HomePage> {
         // Confirm to force unlock
         final accepted = await common_uis.showConfirmationDialog(
           context,
-          "Confirm",
-          "Memo store is still locked but you can also force unlock. Do you want to unlock?",
-          "Unlock",
-          "Cancel",
+          localizations.confirm,
+          localizations.memoStoreIsStillLocked,
+          localizations.unlock,
+          localizations.cancel,
           false);
         if (accepted) {
           await _unlockGoogleDrive();
