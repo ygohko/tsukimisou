@@ -185,22 +185,19 @@ class _HomePageState extends State<HomePage> {
       // Loading failure caused by locked memo store.
       _fileLockedCount++;
       if (_fileLockedCount < 3) {
-        await common_uis.showErrorDialog(
-          context,
-          localizations.error,
-          localizations.memoStoreIsLockedByOtherDevice,
-          localizations.ok);
+        await common_uis.showErrorDialog(context, localizations.error,
+            localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
         Navigator.of(context).pop();
         return;
       } else {
         // Confirm to force unlock
         final accepted = await common_uis.showConfirmationDialog(
-          context,
-          localizations.confirm,
-          localizations.memoStoreIsStillLocked,
-          localizations.unlock,
-          localizations.cancel,
-          false);
+            context,
+            localizations.confirm,
+            localizations.memoStoreIsStillLocked,
+            localizations.unlock,
+            localizations.cancel,
+            false);
         if (accepted) {
           await _unlockGoogleDrive();
         }
@@ -366,9 +363,11 @@ class _HomePageState extends State<HomePage> {
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
-        final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+        final lastModified =
+            DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final updated = lastModified.toSmartString();
-        final lastMerged = DateTime.fromMillisecondsSinceEpoch(Provider.of<MemoStore>(context, listen: false).lastMerged);
+        final lastMerged = DateTime.fromMillisecondsSinceEpoch(
+            Provider.of<MemoStore>(context, listen: false).lastMerged);
         final contents = [
           Text(memo.text),
           Align(
@@ -391,19 +390,19 @@ class _HomePageState extends State<HomePage> {
           );
         }
         return Card(
-          child: InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: contents,
-              ),
+            child: InkWell(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: contents,
             ),
-            onTap: () {
-              _viewMemo(memo);
-            },
-          ));
-        },
+          ),
+          onTap: () {
+            _viewMemo(memo);
+          },
+        ));
+      },
     );
   }
 

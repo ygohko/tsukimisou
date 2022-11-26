@@ -171,7 +171,16 @@ class GoogleDriveFile {
     client.close();
   }
 
-  Future<String?> _directoryId(DriveApi driveApi) async {
+  Future<String> _createDirectory(DriveApi driveApi) async {
+    var file = File();
+    file.name = 'Tsukimisou';
+    file.mimeType = "application/vnd.google-apps.folder";
+    file = await driveApi.files.create(file);
+
+    return file.id!;
+  }
+
+  static Future<String?> _directoryId(DriveApi driveApi) async {
     var result = await driveApi.files.list(
         q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
     var files = result.files;
@@ -189,8 +198,7 @@ class GoogleDriveFile {
     return directoryId;
   }
 
-  // TODO: Change to static method?
-  Future<List<String>> _fileIds(DriveApi driveApi, String fileName) async {
+  static Future<List<String>> _fileIds(DriveApi driveApi, String fileName) async {
     final directoryId = await _directoryId(driveApi);
     if (directoryId == null) {
       return <String>[];
@@ -210,15 +218,6 @@ class GoogleDriveFile {
     }
 
     return fileIds;
-  }
-
-  Future<String> _createDirectory(DriveApi driveApi) async {
-    var file = File();
-    file.name = 'Tsukimisou';
-    file.mimeType = "application/vnd.google-apps.folder";
-    file = await driveApi.files.create(file);
-
-    return file.id!;
   }
 }
 
