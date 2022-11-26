@@ -8,9 +8,7 @@ void main() {
   testWidgets('App widget smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
       ChangeNotifierProvider(
-        create: (context) => MemoStore(),
-        child: const App()
-      ),
+          create: (context) => MemoStore(), child: const App()),
     );
     expect(find.text('Tsukimisou'), findsOneWidget);
     expect(find.byIcon(Icons.add), findsOneWidget);

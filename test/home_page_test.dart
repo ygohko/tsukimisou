@@ -7,7 +7,8 @@ import 'package:tsukimisou/memo_store.dart';
 
 void main() {
   testWidgets('HomePage widget smoke test', (WidgetTester tester) async {
-    await tester.pumpWidget(ChangeNotifierProvider(
+    await tester.pumpWidget(
+      ChangeNotifierProvider(
         create: (context) => MemoStore(),
         child: MaterialApp(
           localizationsDelegates: [
