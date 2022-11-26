@@ -35,6 +35,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
+import 'factories.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -92,9 +93,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
+    final factories = Provider.of<Factories>(context, listen: false);
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memoStoreLoader =
-        await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
+    final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
     } on IOException catch (exception) {

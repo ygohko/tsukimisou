@@ -20,21 +20,23 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'app.dart';
-import 'factories.dart';
 import 'memo_store.dart';
+import 'memo_store_local_loader.dart';
 
-void main() async {
-  runApp(
-    MultiProvider(
-      providers: [
-        Provider<Factories>(create: (context) => AppFactories()),
-        ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
-      ],
-      child: const App(),
-    ),
-  );
+abstract class Factories {
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName);
+}
+
+class AppFactories extends Factories {
+  @override
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
+    return MemoStoreLocalLoader.fromFileName(memoStore, fileName);
+  }
+}
+
+class TestFactories extends Factories {
+  @override
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
+    return MemoStoreMockLocalLoader.fromFileName(memoStore, fileName);
+  }
 }
