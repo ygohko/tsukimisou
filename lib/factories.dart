@@ -22,9 +22,11 @@
 
 import 'memo_store.dart';
 import 'memo_store_local_loader.dart';
+import 'memo_store_local_saver.dart';
 
 abstract class Factories {
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName);
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName);
 }
 
 class AppFactories extends Factories {
@@ -32,11 +34,21 @@ class AppFactories extends Factories {
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
     return MemoStoreLocalLoader.fromFileName(memoStore, fileName);
   }
+
+  @override
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
+    return MemoStoreLocalSaver.fromFileName(memoStore, fileName);
+  }
 }
 
 class TestFactories extends Factories {
   @override
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalLoader.fromFileName(memoStore, fileName);
+  }
+
+  @override
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
+    return MemoStoreMockLocalSaver.fromFileName(memoStore, fileName);
   }
 }
