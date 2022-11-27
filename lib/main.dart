@@ -24,11 +24,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
+import 'factories.dart';
 import 'memo_store.dart';
 
 void main() async {
+  Factories.init(FactoriesType.app);
   runApp(
-    ChangeNotifierProvider(
+    ChangeNotifierProvider<MemoStore>(
       create: (context) => MemoStore(),
       child: const App(),
     ),

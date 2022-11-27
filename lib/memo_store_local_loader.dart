@@ -27,13 +27,22 @@ import 'package:path_provider/path_provider.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-class MemoStoreLocalLoader extends MemoStoreLoader {
+abstract class MemoStoreAbstractLocalLoader extends MemoStoreLoader {
+  /// Creates a memo store loader.
+  MemoStoreAbstractLocalLoader(MemoStore memoStore) : super(memoStore);
+
+  /// Executes this memo store loader.
+  Future<void> execute();
+}
+
+class MemoStoreLocalLoader extends MemoStoreAbstractLocalLoader {
   final String _path;
 
   /// Creates a memo store loader.
   MemoStoreLocalLoader(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store loader.
+  @override
   Future<void> execute() async {
     final file = File(_path);
     final string = await file.readAsString();
@@ -50,5 +59,28 @@ class MemoStoreLocalLoader extends MemoStoreLoader {
     path = path + Platform.pathSeparator + fileName;
 
     return MemoStoreLocalLoader(memoStore, path);
+  }
+}
+
+class MemoStoreMockLocalLoader extends MemoStoreAbstractLocalLoader {
+  /// Creates a memo store loader.
+  MemoStoreMockLocalLoader(MemoStore memoStore, String path) : super(memoStore);
+
+  /// Executes this memo store loader.
+  @override
+  Future<void> execute() async {
+    // TODO: Load test data.
+  }
+
+  /// Creates a memo store loader from file name.
+  static Future<MemoStoreMockLocalLoader> fromFileName(
+      MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory =
+        await getApplicationDocumentsDirectory();
+    var path = applicationDocumentsDirectory.path;
+    path = path + Platform.pathSeparator + 'Tsukimisou';
+    path = path + Platform.pathSeparator + fileName;
+
+    return MemoStoreMockLocalLoader(memoStore, path);
   }
 }

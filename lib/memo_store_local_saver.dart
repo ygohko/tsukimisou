@@ -27,13 +27,22 @@ import 'package:path_provider/path_provider.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
-class MemoStoreLocalSaver extends MemoStoreSaver {
+abstract class MemoStoreAbstractLocalSaver extends MemoStoreSaver {
+  /// Creates a memo store saver.
+  MemoStoreAbstractLocalSaver(MemoStore memoStore) : super(memoStore);
+
+  /// Executes this memo store saver.
+  Future<void> execute();
+}
+
+class MemoStoreLocalSaver extends MemoStoreAbstractLocalSaver {
   final String _path;
 
   /// Creates a memo store saver.
   MemoStoreLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store saver.
+  @override
   Future<void> execute() async {
     final string = serialize();
     final file = File(_path);
@@ -51,5 +60,29 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
     path = path + Platform.pathSeparator + fileName;
 
     return MemoStoreLocalSaver(memoStore, path);
+  }
+}
+
+class MemoStoreMockLocalSaver extends MemoStoreAbstractLocalSaver {
+  /// Creates a memo store saver.
+  MemoStoreMockLocalSaver(MemoStore memoStore, String path) : super(memoStore);
+
+  /// Executes this memo store saver.
+  @override
+  Future<void> execute() async {
+    // TODO: Implemenet this
+  }
+
+  /// Creates a memo store saver from file name.
+  static Future<MemoStoreMockLocalSaver> fromFileName(
+      MemoStore memoStore, String fileName) async {
+    final applicationDocumentsDirectory =
+        await getApplicationDocumentsDirectory();
+    var path = applicationDocumentsDirectory.path;
+    path = path + Platform.pathSeparator + 'Tsukimisou';
+    Directory(path).create();
+    path = path + Platform.pathSeparator + fileName;
+
+    return MemoStoreMockLocalSaver(memoStore, path);
   }
 }

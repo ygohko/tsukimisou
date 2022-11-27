@@ -28,7 +28,15 @@ import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
+abstract class MemoStoreAbstractGoogleDriveLoader extends MemoStoreLoader {
+  /// Creates a memo store loader.
+  MemoStoreAbstractGoogleDriveLoader(MemoStore memoStore) : super(memoStore);
+
+  /// Executes this memo store loader.
+  Future<void> execute();
+}
+
+class MemoStoreGoogleDriveLoader extends MemoStoreAbstractGoogleDriveLoader {
   final String _fileName;
 
   /// Creates a memo store loader.
@@ -36,9 +44,22 @@ class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
       : super(memoStore);
 
   /// Executes this memo store loader.
+  @override
   Future<void> execute() async {
     final file = GoogleDriveFile(_fileName);
     final string = await file.readAsStringLocked();
     deserialize(string);
+  }
+}
+
+class MemoStoreMockGoogleDriveLoader extends MemoStoreAbstractGoogleDriveLoader {
+  /// Creates a memo store loader.
+  MemoStoreMockGoogleDriveLoader(MemoStore memoStore, String fileName)
+      : super(memoStore);
+
+  /// Executes this memo store loader.
+  @override
+  Future<void> execute() async {
+    // TODO: Load test data.
   }
 }
