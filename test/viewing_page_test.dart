@@ -39,7 +39,7 @@ void main() {
       expect(find.text('Confirm'), findsOneWidget);
   });
 
-  testWidgets('ViewingPage should show EditingPage dialog when user taps delete button.', (WidgetTester tester) async {
+  testWidgets('ViewingPage should show EditingPage when user taps edit button.', (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
       await tester.tap(find.byIcon(Icons.edit));
