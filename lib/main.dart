@@ -28,12 +28,10 @@ import 'factories.dart';
 import 'memo_store.dart';
 
 void main() async {
+  Factories.init(FactoriesType.app);
   runApp(
-    MultiProvider(
-      providers: [
-        Provider<Factories>(create: (context) => AppFactories()),
-        ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
-      ],
+    ChangeNotifierProvider<MemoStore>(
+      create: (context) => MemoStore(),
       child: const App(),
     ),
   );

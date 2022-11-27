@@ -169,7 +169,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
 
   Future<bool> _apply() async {
     final localizations = AppLocalizations.of(context)!;
-    final factories = Provider.of<Factories>(context, listen: false);
+    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     var applyingNeeded = false;
     if (widget.memo.tags.length != _boundTags.length) {

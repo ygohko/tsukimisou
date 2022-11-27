@@ -103,7 +103,7 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final localizations = AppLocalizations.of(context)!;
-    final factories = Provider.of<Factories>(context, listen: false);
+    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = widget.memo;
     if (memo == null) {

@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final factories = Provider.of<Factories>(context, listen: false);
+    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(memoStore, 'MemoStore.json');
     try {
@@ -216,7 +216,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     _fileLockedCount = 0;
-    final factories = Provider.of<Factories>(context, listen: false);
+    final factories = Factories.instance();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();

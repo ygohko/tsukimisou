@@ -169,7 +169,7 @@ class _ViewingPageState extends State<ViewingPage> {
       return;
     }
 
-    final factories = Provider.of<Factories>(context, listen: false);
+    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     memoStore.removeMemo(widget.memo);
     final memoStoreSaver =

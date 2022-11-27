@@ -24,25 +24,25 @@ import 'memo_store.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 
-enum FactriesType {
-  App,
-  Test,
+enum FactoriesType {
+  app,
+  test,
 }
 
 abstract class Factories {
-  static var _type = FactriesType.App;
+  static var _type = FactoriesType.app;
   static Factories? _instance = null;
 
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName);
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName);
 
-  static void init(FactriesType type) {
+  static void init(FactoriesType type) {
     _type = type;
   }
 
   static Factories instance() {
     if (_instance == null) {
-      if (_type == FactriesType.App) {
+      if (_type == FactoriesType.app) {
         _instance = AppFactories();
       } else {
         _instance = TestFactories();
