@@ -20,13 +20,22 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+// TODO: Remove this if unneeded.
 import 'dart:convert';
 
 import 'google_drive_file.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
-class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
+abstract class MemoStoreAbstractGoogleDriveSaver extends MemoStoreSaver {
+  /// Creates a memo store saver.
+  MemoStoreAbstractGoogleDriveSaver(MemoStore memoStore) : super(memoStore);
+
+  /// Executes this memo store saver.
+  Future<void> execute();
+}
+
+class MemoStoreGoogleDriveSaver extends MemoStoreAbstractGoogleDriveSaver {
   final String _fileName;
 
   /// Creates a memo store saver.
@@ -34,9 +43,22 @@ class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
       : super(memoStore);
 
   /// Executes this memo store saver.
+  @override
   Future<void> execute() async {
     final string = serialize();
     final file = GoogleDriveFile(_fileName);
     await file.writeAsString(string);
+  }
+}
+
+class MemoStoreMockGoogleDriveSaver extends MemoStoreAbstractGoogleDriveSaver {
+  /// Creates a memo store saver.
+  MemoStoreMockGoogleDriveSaver(MemoStore memoStore, String fileName)
+      : super(memoStore);
+
+  /// Executes this memo store saver.
+  @override
+  Future<void> execute() async {
+    // TODO: Add test codes.
   }
 }

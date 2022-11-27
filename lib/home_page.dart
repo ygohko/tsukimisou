@@ -220,7 +220,7 @@ class _HomePageState extends State<HomePage> {
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
-    final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+    final saver = factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception catch (exception) {
