@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:provider/provider.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo.dart';
+import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/viewing_page.dart';
 
 Future<void> init(WidgetTester tester, Memo memo) async {
   memo.text = 'This is a test.';
-  await tester.pumpWidget(MaterialApp(
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-      ],
-      home: ViewingPage(memo: memo),
-  ));
+  await tester.pumpWidget(
+    ChangeNotifierProvider(
+      create: (context) => MemoStore(),
+      child: MaterialApp(
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+        ],
+        home: ViewingPage(memo: memo),
+      ),
+    ),
+  );;
 }
 
 void main() {
@@ -45,5 +52,13 @@ void main() {
       await tester.tap(find.byIcon(Icons.edit));
       await tester.pump();
       expect(find.text('Edit a memo'), findsOneWidget);
+  });
+
+  testWidgets('ViewingPage should show EditingPage when user taps edit button.', (WidgetTester tester) async {
+      final memo = Memo();
+      await init(tester, memo);
+      await tester.tap(find.textContaining('Tags:'));
+      await tester.pump();
+      expect(find.text('Bind tags'), findsOneWidget);
   });
 }
