@@ -177,7 +177,8 @@ class _HomePageState extends State<HomePage> {
     common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
-    final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+    final factories = Factories.instance();
+    final loader = factories.memoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
     } on FileNotFoundException {
@@ -216,7 +217,6 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     _fileLockedCount = 0;
-    final factories = Factories.instance();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();

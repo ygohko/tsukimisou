@@ -21,6 +21,7 @@
  */
 
 import 'memo_store.dart';
+import 'memo_store_google_drive_loader.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 
@@ -35,6 +36,7 @@ abstract class Factories {
 
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName);
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName);
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName);
 
   static void init(FactoriesType type) {
     _type = type;
@@ -63,6 +65,11 @@ class AppFactories extends Factories {
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
     return MemoStoreLocalSaver.fromFileName(memoStore, fileName);
   }
+
+  @override
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+    return MemoStoreGoogleDriveLoader(memoStore, fileName);
+  }
 }
 
 class TestFactories extends Factories {
@@ -74,5 +81,10 @@ class TestFactories extends Factories {
   @override
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalSaver.fromFileName(memoStore, fileName);
+  }
+
+  @override
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+    return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
   }
 }
