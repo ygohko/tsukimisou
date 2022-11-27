@@ -17,7 +17,7 @@ Future<void> init(WidgetTester tester, Memo? memo) async {
 void main() {
   Factories.init(FactoriesType.test);
 
-  group('Memo', () {
+  group('EditingPage', () {
     testWidgets('EditingPage widget smoke test', (WidgetTester tester) async {
       await init(tester, null);
       expect(find.text('Add a new memo'), findsOneWidget);

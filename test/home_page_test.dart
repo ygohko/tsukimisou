@@ -23,18 +23,20 @@ Future<void> init(WidgetTester tester) async {
 void main() {
   Factories.init(FactoriesType.test);
 
-  testWidgets('HomePage shoud have specified widgets.', (WidgetTester tester) async {
-    await init(tester);
-    expect(find.text('Tsukimisou'), findsOneWidget);
-    expect(find.byIcon(Icons.add), findsOneWidget);
-  });
+  group('HomePage', () {
+    testWidgets('HomePage shoud have specified widgets.', (WidgetTester tester) async {
+      await init(tester);
+      expect(find.text('Tsukimisou'), findsOneWidget);
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
 
-  testWidgets('HomePage shoud show EditingPage when user taps add button.', (WidgetTester tester) async {
-    await init(tester);
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-    expect(find.textContaining('Add a new memo'), findsOneWidget);
-    expect(find.byIcon(Icons.done), findsOneWidget);
-    expect(find.byIcon(Icons.close), findsOneWidget);
+    testWidgets('HomePage shoud show EditingPage when user taps add button.', (WidgetTester tester) async {
+      await init(tester);
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      expect(find.textContaining('Add a new memo'), findsOneWidget);
+      expect(find.byIcon(Icons.done), findsOneWidget);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+    });
   });
 }
