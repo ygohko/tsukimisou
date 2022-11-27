@@ -27,6 +27,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
+import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -102,6 +103,7 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final localizations = AppLocalizations.of(context)!;
+    final factories = Provider.of<Factories>(context, listen: false);
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = widget.memo;
     if (memo == null) {
@@ -114,8 +116,7 @@ class _EditingPageState extends State<EditingPage> {
       memo.text = _controller.text;
       memoStore.notifyListeners();
     }
-    final memoStoreSaver =
-        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
+    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {

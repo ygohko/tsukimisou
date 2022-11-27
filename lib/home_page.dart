@@ -216,6 +216,7 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     _fileLockedCount = 0;
+    final factories = Provider.of<Factories>(context, listen: false);
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
@@ -229,8 +230,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final localSaver =
-        await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
+    final localSaver = await factories.memoStoreLocalSaverFromFileName(toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
     } on FileSystemException catch (exception) {
