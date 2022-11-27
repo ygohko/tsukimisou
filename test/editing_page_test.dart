@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/editing_page.dart';
+import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo.dart';
 
 void main() {
+  Factories.init(FactoriesType.test);
+
   group('Memo', () {
     testWidgets('EditingPage widget smoke test', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(

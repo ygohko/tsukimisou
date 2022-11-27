@@ -25,5 +25,8 @@ void main() {
     expect(find.byIcon(Icons.add), findsOneWidget);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
+    expect(find.text('Add a new memo'), findsOneWidget);
+    expect(find.byIcon(Icons.done), findsOneWidget);
+    expect(find.byIcon(Icons.close), findsOneWidget);
   });
 }
