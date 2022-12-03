@@ -35,10 +35,14 @@ abstract class Factories {
   static var _type = FactoriesType.app;
   static Factories? _instance = null;
 
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName);
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName);
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName);
-  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(MemoStore memoStore, String fileName);
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+      MemoStore memoStore, String fileName);
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
+      MemoStore memoStore, String fileName);
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
+      MemoStore memoStore, String fileName);
+  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
+      MemoStore memoStore, String fileName);
 
   static void init(FactoriesType type) {
     _type = type;
@@ -59,44 +63,52 @@ abstract class Factories {
 
 class AppFactories extends Factories {
   @override
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreLocalLoader.fromFileName(memoStore, fileName);
   }
 
   @override
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreLocalSaver.fromFileName(memoStore, fileName);
   }
 
   @override
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
+      MemoStore memoStore, String fileName) {
     return MemoStoreGoogleDriveLoader(memoStore, fileName);
   }
 
   @override
-  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
+      MemoStore memoStore, String fileName) {
     return MemoStoreGoogleDriveSaver(memoStore, fileName);
   }
 }
 
 class TestFactories extends Factories {
   @override
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalLoader.fromFileName(memoStore, fileName);
   }
 
   @override
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalSaver.fromFileName(memoStore, fileName);
   }
 
   @override
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
+      MemoStore memoStore, String fileName) {
     return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
   }
 
   @override
-  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
+      MemoStore memoStore, String fileName) {
     return MemoStoreMockGoogleDriveSaver(memoStore, fileName);
   }
 }

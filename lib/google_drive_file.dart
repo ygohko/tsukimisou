@@ -198,7 +198,8 @@ class GoogleDriveFile {
     return directoryId;
   }
 
-  static Future<List<String>> _fileIds(DriveApi driveApi, String fileName) async {
+  static Future<List<String>> _fileIds(
+      DriveApi driveApi, String fileName) async {
     final directoryId = await _directoryId(driveApi);
     if (directoryId == null) {
       return <String>[];

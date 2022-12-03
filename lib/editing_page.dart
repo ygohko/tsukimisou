@@ -116,7 +116,8 @@ class _EditingPageState extends State<EditingPage> {
       memo.text = _controller.text;
       memoStore.notifyListeners();
     }
-    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(memoStore, 'MemoStore.json');
+    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+        memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {

@@ -19,14 +19,16 @@ Future<void> init(WidgetTester tester, Memo memo) async {
         home: ViewingPage(memo: memo),
       ),
     ),
-  );;
+  );
+  ;
 }
 
 void main() {
   Factories.init(FactoriesType.test);
 
   group('ViewingPage', () {
-    testWidgets('ViewingPage should have specified widgets.', (WidgetTester tester) async {
+    testWidgets('ViewingPage should have specified widgets.',
+        (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
       expect(find.byIcon(Icons.close), findsOneWidget);
@@ -39,7 +41,9 @@ void main() {
       expect(find.textContaining('Tags:'), findsOneWidget);
     });
 
-    testWidgets('ViewingPage should show confirmation dialog when user taps delete button.', (WidgetTester tester) async {
+    testWidgets(
+        'ViewingPage should show confirmation dialog when user taps delete button.',
+        (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
       await tester.tap(find.byIcon(Icons.delete));
@@ -47,7 +51,9 @@ void main() {
       expect(find.text('Confirm'), findsOneWidget);
     });
 
-    testWidgets('ViewingPage should show EditingPage when user taps edit button.', (WidgetTester tester) async {
+    testWidgets(
+        'ViewingPage should show EditingPage when user taps edit button.',
+        (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
       await tester.tap(find.byIcon(Icons.edit));
@@ -55,7 +61,9 @@ void main() {
       expect(find.text('Edit a memo'), findsOneWidget);
     });
 
-    testWidgets('ViewingPage should show EditingPage when user taps edit button.', (WidgetTester tester) async {
+    testWidgets(
+        'ViewingPage should show EditingPage when user taps edit button.',
+        (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
       await tester.tap(find.textContaining('Tags:'));

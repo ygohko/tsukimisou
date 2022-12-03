@@ -24,13 +24,15 @@ void main() {
   Factories.init(FactoriesType.test);
 
   group('HomePage', () {
-    testWidgets('HomePage shoud have specified widgets.', (WidgetTester tester) async {
+    testWidgets('HomePage shoud have specified widgets.',
+        (WidgetTester tester) async {
       await init(tester);
       expect(find.text('Tsukimisou'), findsOneWidget);
       expect(find.byIcon(Icons.add), findsOneWidget);
     });
 
-    testWidgets('HomePage shoud show EditingPage when user taps add button.', (WidgetTester tester) async {
+    testWidgets('HomePage shoud show EditingPage when user taps add button.',
+        (WidgetTester tester) async {
       await init(tester);
       await tester.tap(find.byIcon(Icons.add));
       await tester.pump();
