@@ -40,11 +40,10 @@ void main() {
       expect(find.byIcon(Icons.done), findsOneWidget);
     });
 
-    testWidgets('EditingPage should have specified widgets when adding a new memo.', (WidgetTester tester) async {
+    testWidgets('EditingPage should update memo text when done button is pressed.', (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
       await tester.enterText(find.byType(TextField), 'This is a text');
-      await tester.pump();
       await tester.tap(find.byIcon(Icons.done));
       await tester.pump();
       expect(memo.text, 'This is a text');
