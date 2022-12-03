@@ -95,7 +95,8 @@ class _HomePageState extends State<HomePage> {
   Future<void> _load() async {
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(memoStore, 'MemoStore.json');
+    final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(
+        memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
     } on IOException catch (exception) {
@@ -178,7 +179,8 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
-    final loader = factories.memoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+    final loader =
+        factories.memoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
     } on FileNotFoundException {
@@ -220,7 +222,8 @@ class _HomePageState extends State<HomePage> {
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
-    final saver = factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+    final saver =
+        factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception catch (exception) {
@@ -230,7 +233,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return;
     }
-    final localSaver = await factories.memoStoreLocalSaverFromFileName(toMemoStore, 'MemoStore.json');
+    final localSaver = await factories.memoStoreLocalSaverFromFileName(
+        toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
     } on FileSystemException catch (exception) {

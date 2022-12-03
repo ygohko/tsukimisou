@@ -52,7 +52,8 @@ class MemoStoreGoogleDriveLoader extends MemoStoreAbstractGoogleDriveLoader {
   }
 }
 
-class MemoStoreMockGoogleDriveLoader extends MemoStoreAbstractGoogleDriveLoader {
+class MemoStoreMockGoogleDriveLoader
+    extends MemoStoreAbstractGoogleDriveLoader {
   /// Creates a memo store loader.
   MemoStoreMockGoogleDriveLoader(MemoStore memoStore, String fileName)
       : super(memoStore);

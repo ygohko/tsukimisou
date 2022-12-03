@@ -35,15 +35,25 @@ abstract class Factories {
   static var _type = FactoriesType.app;
   static Factories? _instance = null;
 
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName);
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName);
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName);
-  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(MemoStore memoStore, String fileName);
+  /// Ceates memo store local loader.
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+      MemoStore memoStore, String fileName);
+  /// Ceates memo store local saver.
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
+      MemoStore memoStore, String fileName);
+  /// Ceates memo store Google Drive loader.
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
+      MemoStore memoStore, String fileName);
+  /// Ceates memo store Google Drive saver.
+  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
+      MemoStore memoStore, String fileName);
 
+  /// Initializes this class.
   static void init(FactoriesType type) {
     _type = type;
   }
 
+  /// Instance of this class.
   static Factories instance() {
     if (_instance == null) {
       if (_type == FactoriesType.app) {
@@ -58,45 +68,61 @@ abstract class Factories {
 }
 
 class AppFactories extends Factories {
+  /// Ceates memo store local loader.
   @override
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreLocalLoader.fromFileName(memoStore, fileName);
   }
 
+  /// Ceates memo store local saver.
   @override
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreLocalSaver.fromFileName(memoStore, fileName);
   }
 
+  /// Ceates memo store Google Drive loader.
   @override
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
+      MemoStore memoStore, String fileName) {
     return MemoStoreGoogleDriveLoader(memoStore, fileName);
   }
 
+  /// Ceates memo store Google Drive saver.
   @override
-  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
+      MemoStore memoStore, String fileName) {
     return MemoStoreGoogleDriveSaver(memoStore, fileName);
   }
 }
 
 class TestFactories extends Factories {
+  /// Ceates memo store local loader.
   @override
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalLoader.fromFileName(memoStore, fileName);
   }
 
+  /// Ceates memo store local saver.
   @override
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(MemoStore memoStore, String fileName) async {
+  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
+      MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalSaver.fromFileName(memoStore, fileName);
   }
 
+  /// Ceates memo store Google Drive loader.
   @override
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
+      MemoStore memoStore, String fileName) {
     return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
   }
 
+  /// Ceates memo store Google Drive saver.
   @override
-  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(MemoStore memoStore, String fileName) {
+  MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
+      MemoStore memoStore, String fileName) {
     return MemoStoreMockGoogleDriveSaver(memoStore, fileName);
   }
 }

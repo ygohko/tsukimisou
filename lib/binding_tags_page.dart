@@ -187,7 +187,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     }
     widget.memo.tags = [..._boundTags];
     memoStore.notifyListeners();
-    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(memoStore, 'MemoStore.json');
+    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+        memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
