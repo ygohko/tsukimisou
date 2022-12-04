@@ -50,7 +50,7 @@ extension StringConverting on DateTime {
 
 extension AbstractProviding on Platform {
   /// Returns whether platform is desktop or not.
-  bool get isDesktop => isWindows || isMacOS;
+  bool get isDesktop => isWindows || isMacOS || isLinux;
 
   /// Returns whether platform is mobile or not.
   bool get isMobile => isAndroid || isIOS;
