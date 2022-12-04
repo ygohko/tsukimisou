@@ -34,14 +34,10 @@ jobs:
       - name: Install dependencies
         run: |
           flutter pub get
-          
-      - name: List current directory
-        run: |
-          ls
-          
+                    
       - name: Prepare client ID
         run: |
-          cp lib/clinet_id.dart.orig lib/client_id.dart
+          cp lib/client_id.dart.orig lib/client_id.dart
 
       - name: Test
         run: |
