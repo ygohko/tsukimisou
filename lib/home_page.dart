@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
       _savingToGoogleDrive = true;
     });
     final saver =
-      factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+        factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception catch (exception) {
