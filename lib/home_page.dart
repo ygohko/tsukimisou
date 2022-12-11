@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
   var _licenseAdded = false;
+  var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
   var _fileLockedCount = 0;
 
@@ -178,6 +179,9 @@ class _HomePageState extends State<HomePage> {
     }
     // common_uis.showProgressIndicatorDialog(context);
 
+    setState(() {
+      _mergingWithGoogleDrive = true;
+    });
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
         content: Text('Synchronizing...'),
@@ -254,6 +258,9 @@ class _HomePageState extends State<HomePage> {
     // Navigator.of(context).pop();
 
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    setState(() {
+      _mergingWithGoogleDrive = false;
+    });
 
     print('Saving for Google Drive...');
     setState(() {
@@ -322,7 +329,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
+        onPressed: _mergingWithGoogleDrive ? null : _addMemo,
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
@@ -382,7 +389,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
+        onPressed: _mergingWithGoogleDrive ? null : _addMemo,
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
@@ -432,7 +439,7 @@ class _HomePageState extends State<HomePage> {
               children: contents,
             ),
           ),
-          onTap: () {
+          onTap: _mergingWithGoogleDrive ? null : () {
             _viewMemo(memo);
           },
         ));
@@ -508,7 +515,7 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
-            enabled: !_savingToGoogleDrive,
+            enabled: !(_mergingWithGoogleDrive || _savingToGoogleDrive),
           );
         } else if (i == othersDividerIndex) {
           return const Divider();
