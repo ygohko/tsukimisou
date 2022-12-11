@@ -187,6 +187,7 @@ class _HomePageState extends State<HomePage> {
       MaterialBanner(
         content: Text(localizations.synchronizing),
         leading: const CircularProgressIndicator(),
+        elevation: 2.0,
         actions: [
           TextButton(
             onPressed: () {
