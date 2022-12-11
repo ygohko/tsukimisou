@@ -179,25 +179,25 @@ class _HomePageState extends State<HomePage> {
     }
     // common_uis.showProgressIndicatorDialog(context);
 
+    final localizations = AppLocalizations.of(context)!;
     setState(() {
       _mergingWithGoogleDrive = true;
     });
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
-        content: Text('Synchronizing...'),
+        content: Text(localizations.synchronizing),
         leading: const CircularProgressIndicator(),
         actions: [
           TextButton(
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
             },
-            child: Text('Dismiss'),
+            child: Text(localizations.dismiss),
           ),
         ],
       ),
     );
 
-    final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
     final loader =

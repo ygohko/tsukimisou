@@ -11,6 +11,8 @@
     "others": "その他",
     "about": "このアプリについて",
     "privacyPolicy": "プライバシーポリシー",
+    "synchronizing": "同期中...",
+    "dismiss": "表示を消す",
     "memoStoreIsLockedByOtherDevice": "メモストアが他のデバイスにロックされています。後ほど再度お試しください。",
     "memoStoreIsStillLocked": "メモストアはまだロックされていますが、他のデバイスが同期中ではないのなら強制的にロック解除することもできます。ロック解除しますか?",
     "unlock": "ロック解除",
