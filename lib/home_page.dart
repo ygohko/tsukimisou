@@ -176,7 +176,23 @@ class _HomePageState extends State<HomePage> {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
-    common_uis.showProgressIndicatorDialog(context);
+    // common_uis.showProgressIndicatorDialog(context);
+
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        content: Text('Synchronizing...'),
+        leading: const CircularProgressIndicator(),
+        actions: [
+          TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+            },
+            child: Text('Dismiss'),
+          ),
+        ],
+      ),
+    );
+
     final localizations = AppLocalizations.of(context)!;
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
@@ -192,7 +208,7 @@ class _HomePageState extends State<HomePage> {
       if (_fileLockedCount < 3) {
         await common_uis.showErrorDialog(context, localizations.error,
             localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
         return;
       } else {
         // Confirm to force unlock
@@ -206,7 +222,7 @@ class _HomePageState extends State<HomePage> {
         if (accepted) {
           await _unlockGoogleDrive();
         }
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
         return;
       }
     } on Exception catch (exception) {
@@ -216,7 +232,7 @@ class _HomePageState extends State<HomePage> {
           localizations.error,
           localizations.loadingMemoStoreFromGoogleDriveFailed,
           localizations.ok);
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       return;
     }
     _fileLockedCount = 0;
@@ -232,10 +248,12 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
       return;
     }
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
+
+    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
 
     print('Saving for Google Drive...');
     setState(() {
