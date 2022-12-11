@@ -177,8 +177,6 @@ class _HomePageState extends State<HomePage> {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
-    // common_uis.showProgressIndicatorDialog(context);
-
     final localizations = AppLocalizations.of(context)!;
     setState(() {
       _mergingWithGoogleDrive = true;
@@ -213,7 +211,7 @@ class _HomePageState extends State<HomePage> {
       if (_fileLockedCount < 3) {
         await common_uis.showErrorDialog(context, localizations.error,
             localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
-        // Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         return;
       } else {
         // Confirm to force unlock
@@ -226,8 +224,8 @@ class _HomePageState extends State<HomePage> {
             false);
         if (accepted) {
           await _unlockGoogleDrive();
-        }
-        // Navigator.of(context).pop();
+        } 
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         return;
       }
     } on Exception catch (exception) {
@@ -237,7 +235,7 @@ class _HomePageState extends State<HomePage> {
           localizations.error,
           localizations.loadingMemoStoreFromGoogleDriveFailed,
           localizations.ok);
-      // Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       return;
     }
     _fileLockedCount = 0;
@@ -253,17 +251,14 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
-      // Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       return;
     }
-    // Navigator.of(context).pop();
-
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
     setState(() {
       _mergingWithGoogleDrive = false;
     });
 
-    print('Saving for Google Drive...');
     setState(() {
       _savingToGoogleDrive = true;
     });
@@ -279,7 +274,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _savingToGoogleDrive = false;
     });
-    print('Done.');
   }
 
   Future<void> _unlockGoogleDrive() async {
