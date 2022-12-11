@@ -55,6 +55,14 @@
     "@privacyPolicy": {
         "description": "Text for privacy policy list tile"
     },
+    "synchronizing": "Synchronizing...",
+    "@synchronizing": {
+        "description": "Text for banner when shown in synchronizing."
+    },
+    "dismiss": "Dismiss",
+    "@dismiss": {
+        "description": "Button text for dismiss button in synchronizing banner."
+    },
     "memoStoreIsLockedByOtherDevice": "Memo store is locked by other device. Please try again later.",
     "@memoStoreIsLockedByOtherDevice": {
         "description": "Error text when loading from Google Drive failed because memo store is locked"

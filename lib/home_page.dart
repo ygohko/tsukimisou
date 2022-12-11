@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
   var _licenseAdded = false;
+  var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
   var _fileLockedCount = 0;
 
@@ -176,8 +177,26 @@ class _HomePageState extends State<HomePage> {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
-    common_uis.showProgressIndicatorDialog(context);
     final localizations = AppLocalizations.of(context)!;
+    setState(() {
+      _mergingWithGoogleDrive = true;
+    });
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        content: Text(localizations.synchronizing),
+        leading: const CircularProgressIndicator(),
+        elevation: 2.0,
+        actions: [
+          TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+            },
+            child: Text(localizations.dismiss),
+          ),
+        ],
+      ),
+    );
+
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
     final loader =
@@ -192,7 +211,7 @@ class _HomePageState extends State<HomePage> {
       if (_fileLockedCount < 3) {
         await common_uis.showErrorDialog(context, localizations.error,
             localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
-        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         return;
       } else {
         // Confirm to force unlock
@@ -205,8 +224,8 @@ class _HomePageState extends State<HomePage> {
             false);
         if (accepted) {
           await _unlockGoogleDrive();
-        }
-        Navigator.of(context).pop();
+        } 
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         return;
       }
     } on Exception catch (exception) {
@@ -216,7 +235,7 @@ class _HomePageState extends State<HomePage> {
           localizations.error,
           localizations.loadingMemoStoreFromGoogleDriveFailed,
           localizations.ok);
-      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       return;
     }
     _fileLockedCount = 0;
@@ -232,12 +251,14 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
-      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       return;
     }
-    Navigator.of(context).pop();
+    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    setState(() {
+      _mergingWithGoogleDrive = false;
+    });
 
-    print('Saving for Google Drive...');
     setState(() {
       _savingToGoogleDrive = true;
     });
@@ -253,7 +274,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _savingToGoogleDrive = false;
     });
-    print('Done.');
   }
 
   Future<void> _unlockGoogleDrive() async {
@@ -304,7 +324,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
+        onPressed: _mergingWithGoogleDrive ? null : _addMemo,
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
@@ -364,7 +384,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addMemo,
+        onPressed: _mergingWithGoogleDrive ? null : _addMemo,
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
@@ -414,7 +434,7 @@ class _HomePageState extends State<HomePage> {
               children: contents,
             ),
           ),
-          onTap: () {
+          onTap: _mergingWithGoogleDrive ? null : () {
             _viewMemo(memo);
           },
         ));
@@ -490,7 +510,7 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
-            enabled: !_savingToGoogleDrive,
+            enabled: !(_mergingWithGoogleDrive || _savingToGoogleDrive),
           );
         } else if (i == othersDividerIndex) {
           return const Divider();
