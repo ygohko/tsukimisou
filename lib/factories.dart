@@ -38,12 +38,15 @@ abstract class Factories {
   /// Ceates memo store local loader.
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
       MemoStore memoStore, String fileName);
+
   /// Ceates memo store local saver.
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
       MemoStore memoStore, String fileName);
+
   /// Ceates memo store Google Drive loader.
   MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
       MemoStore memoStore, String fileName);
+
   /// Ceates memo store Google Drive saver.
   MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
       MemoStore memoStore, String fileName);
