@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
   var _licenseAdded = false;
+  var _savingToGoogleDrive = false;
   var _fileLockedCount = 0;
 
   @override
@@ -222,17 +223,7 @@ class _HomePageState extends State<HomePage> {
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.execute();
-    final saver =
-        factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
-    try {
-      await saver.execute();
-    } on Exception catch (exception) {
-      // Saving failed.
-      await common_uis.showErrorDialog(context, localizations.error,
-          localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
-      Navigator.of(context).pop();
-      return;
-    }
+
     final localSaver = await factories.memoStoreLocalSaverFromFileName(
         toMemoStore, 'MemoStore.json');
     try {
@@ -241,8 +232,28 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
+      Navigator.of(context).pop();
+      return;
     }
     Navigator.of(context).pop();
+
+    print('Saving for Google Drive...');
+    setState(() {
+      _savingToGoogleDrive = true;
+    });
+    final saver =
+        factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+    try {
+      await saver.execute();
+    } on Exception catch (exception) {
+      // Saving failed.
+      await common_uis.showErrorDialog(context, localizations.error,
+          localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
+    }
+    setState(() {
+      _savingToGoogleDrive = false;
+    });
+    print('Done.');
   }
 
   Future<void> _unlockGoogleDrive() async {
@@ -479,6 +490,7 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
+            enabled: !_savingToGoogleDrive,
           );
         } else if (i == othersDividerIndex) {
           return const Divider();
