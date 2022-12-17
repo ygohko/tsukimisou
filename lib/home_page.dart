@@ -194,12 +194,19 @@ class _HomePageState extends State<HomePage> {
       // Loading failure caused by locked memo store.
       _fileLockedCount++;
       if (_fileLockedCount < 3) {
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        setState(() {
+          _mergingWithGoogleDrive = false;
+        });
         await common_uis.showErrorDialog(context, localizations.error,
             localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         return;
       } else {
         // Confirm to force unlock
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        setState(() {
+          _mergingWithGoogleDrive = false;
+        });
         final accepted = await common_uis.showConfirmationDialog(
             context,
             localizations.confirm,
@@ -209,18 +216,20 @@ class _HomePageState extends State<HomePage> {
             false);
         if (accepted) {
           await _unlockGoogleDrive();
-        } 
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        }
         return;
       }
     } on Exception catch (exception) {
       // Other failure.
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      setState(() {
+        _mergingWithGoogleDrive = false;
+      });
       await common_uis.showErrorDialog(
           context,
           localizations.error,
           localizations.loadingMemoStoreFromGoogleDriveFailed,
           localizations.ok);
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       return;
     }
     _fileLockedCount = 0;
@@ -234,9 +243,12 @@ class _HomePageState extends State<HomePage> {
       localSaver.execute();
     } on FileSystemException catch (exception) {
       // Saving failed.
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      setState(() {
+        _mergingWithGoogleDrive = false;
+      });
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       return;
     }
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
