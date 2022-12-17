@@ -181,35 +181,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _mergingWithGoogleDrive = true;
     });
-    ScaffoldMessenger.of(context).showMaterialBanner(
-      MaterialBanner(
-        content: Row(
-          children: [
-            Spacer(),
-            const SizedBox(
-              child: const CircularProgressIndicator(),
-              width: 17.0,
-              height: 17.0,
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            Text(localizations.synchronizing),
-            Spacer(),
-          ],
-        ),
-        actions: [
-          Text(''),
-          TextButton(
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-            },
-            child: Text(localizations.dismiss),
-          ),
-        ],
-      ),
-    );
-
+    _showSynchronizingBanner();
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
     final loader =
@@ -320,6 +292,38 @@ class _HomePageState extends State<HomePage> {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
+  }
+
+  void _showSynchronizingBanner() {
+    final localizations = AppLocalizations.of(context)!;
+    ScaffoldMessenger.of(context).showMaterialBanner(
+      MaterialBanner(
+        content: Row(
+          children: [
+            Spacer(),
+            const SizedBox(
+              child: const CircularProgressIndicator(),
+              width: 17.0,
+              height: 17.0,
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(localizations.synchronizing),
+            Spacer(),
+          ],
+        ),
+        actions: [
+          Text(''),
+          TextButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+            },
+            child: Text(localizations.dismiss),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildForSmallScreen(BuildContext context) {
