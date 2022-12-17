@@ -183,28 +183,23 @@ class _HomePageState extends State<HomePage> {
     });
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
-        content: //Text(localizations.synchronizing),
-          Row(
-            children: [
-              Spacer(),
-              const CircularProgressIndicator(),
-              SizedBox(
-                width: 10.0,
-              ),
-              Text(localizations.synchronizing),
-              Spacer(),
-            ],
-          ),
-        // leading: const CircularProgressIndicator(),
-        elevation: 2.0,
+        content: Row(
+          children: [
+            Spacer(),
+            const SizedBox(
+              child: const CircularProgressIndicator(),
+              width: 17.0,
+              height: 17.0,
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(localizations.synchronizing),
+            Spacer(),
+          ],
+        ),
         actions: [
           Text(''),
-          /*
-          TextButton(
-            onPressed: null,
-            child: Text(''),
-          ),
-          */
           TextButton(
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
@@ -212,7 +207,6 @@ class _HomePageState extends State<HomePage> {
             child: Text(localizations.dismiss),
           ),
         ],
-        // padding: EdgeInsets.symmetric(horizontal: 160.0),
       ),
     );
 
