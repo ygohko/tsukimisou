@@ -2,7 +2,7 @@
     package="jp.gonypage.tsukimisou">
    <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="Tsukimisou"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:allowBackup="false">
