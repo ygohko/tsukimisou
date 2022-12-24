@@ -40,14 +40,25 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        TextField(
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search),
-            hintText: 'Search memos',
+        Padding(
+          padding: EdgeInsets.all(4.0),
+          child: SizedBox(
+            height: 36.0,
+            child: TextField(
+              autofocus: true,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                contentPadding: EdgeInsets.zero,
+                hintText: 'Search memos',
+              ),
+              onSubmitted: (string) {
+                _search(string);
+              },
+            ),
           ),
-          onSubmitted: (string) {
-            _search(string);
-          },
         ),
         Expanded(
           child: ListView.builder(

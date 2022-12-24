@@ -348,12 +348,12 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {
+            onPressed: _searching ? null : () {
               setState(() {
                 _searching = true;
               });
             },
-            tooltip: "Search",
+            tooltip: _searching ? null : "Search",
           ),
         ],
       ),
@@ -413,12 +413,12 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () {
+            onPressed: _searching ? null : () {
               setState(() {
                 _searching = true;
               });
             },
-            tooltip: "Search",
+            tooltip: _searching ? null : "Search",
           ),
         ],
       ),
@@ -542,7 +542,7 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
-            selected: !_filteringEnabled,
+            selected: !_filteringEnabled && !_searching,
             selectedColor: common_uis.TsukimisouColors.primary,
             selectedTileColor: common_uis.TsukimisouColors.primaryLight,
           );
@@ -555,7 +555,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               _filter(tag);
             },
-            selected: _filteringEnabled && _filteringTag == tag,
+            selected: _filteringEnabled && _filteringTag == tag && !_searching,
             selectedColor: common_uis.TsukimisouColors.primary,
             selectedTileColor: common_uis.TsukimisouColors.primaryLight,
           );
@@ -592,6 +592,7 @@ class _HomePageState extends State<HomePage> {
   void _filter(String tag) {
     _filteringTag = tag;
     _filteringEnabled = true;
+    _searching = false;
     setState(() {
       _updateShownMemos();
     });
@@ -602,6 +603,7 @@ class _HomePageState extends State<HomePage> {
 
   void _disableFiltering() {
     _filteringEnabled = false;
+    _searching = false;
     setState(() {
       _updateShownMemos();
     });
