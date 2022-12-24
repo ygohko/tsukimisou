@@ -21,6 +21,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'memo_store.dart';
 
 class SearchingPageContents extends StatefulWidget {
   /// Creates a home page.
@@ -43,15 +46,9 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             hintText: 'Search memos',
           ),
           onSubmitted: (string) {
-            setState(() {
-              _strings.add(string);
-            });
+            _search(string);
           },
         ),
-        /*
-        SizedBox(
-          height: 500.0,
-        */
         Expanded(
           child: ListView.builder(
             itemCount: _strings.length,
@@ -69,5 +66,18 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         ),
       ],
     );
+  }
+
+  void _search(String query) {
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final memos = memoStore.memos;
+    setState(() {
+      _strings.clear();
+      for (final memo in memos) {
+        if (memo.text.indexOf(query) >= 0) {
+          _strings.add(memo.text);
+        }
+      }
+    });
   }
 }
