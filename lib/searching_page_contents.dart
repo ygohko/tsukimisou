@@ -48,6 +48,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             autofocus: true,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
+              // TODO: Add the cancel button.
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
