@@ -44,6 +44,7 @@ import 'memo_store_google_drive_saver.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
+import 'searching_page_contents.dart';
 import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   var _licenseAdded = false;
   var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
+  var _searching = false;
   var _fileLockedCount = 0;
 
   @override
@@ -343,6 +345,18 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            // TODO: Add small screen support for searching.
+            onPressed: _searching ? null : () {
+              setState(() {
+                _searching = true;
+              });
+            },
+            tooltip: _searching ? null : localizations.search,
+          ),
+        ],
       ),
       body: Scrollbar(
         child: Consumer<MemoStore>(
@@ -377,12 +391,17 @@ class _HomePageState extends State<HomePage> {
     } else {
       drawerWidth = windowWidth / 2.0;
     }
-    Widget rightPaneWidget = Consumer<MemoStore>(
-      builder: (context, memoStore, child) {
-        _updateShownMemos();
-        return _memoListView();
-      },
-    );
+    late Widget rightPaneWidget;
+    if (!_searching) {
+      rightPaneWidget = Consumer<MemoStore>(
+        builder: (context, memoStore, child) {
+          _updateShownMemos();
+          return _memoListView();
+        },
+      );
+    } else {
+      rightPaneWidget = SearchingPageContents();
+    }
     final platform = LocalPlatform();
     if (platform.isMobile) {
       rightPaneWidget = Scrollbar(
@@ -392,6 +411,17 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _searching ? null : () {
+              setState(() {
+                _searching = true;
+              });
+            },
+            tooltip: _searching ? null : localizations.search,
+          ),
+        ],
       ),
       body: Row(
         children: [
@@ -501,6 +531,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
+                // TODO: Show test for seaching
                 child: Text(
                     localizations.showingMemos(_shownMemos.length,
                         memoStore.memos.length, tags.length),
@@ -513,7 +544,7 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
-            selected: !_filteringEnabled,
+            selected: !_filteringEnabled && !_searching,
             selectedColor: common_uis.TsukimisouColors.primary,
             selectedTileColor: common_uis.TsukimisouColors.primaryLight,
           );
@@ -526,7 +557,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               _filter(tag);
             },
-            selected: _filteringEnabled && _filteringTag == tag,
+            selected: _filteringEnabled && _filteringTag == tag && !_searching,
             selectedColor: common_uis.TsukimisouColors.primary,
             selectedTileColor: common_uis.TsukimisouColors.primaryLight,
           );
@@ -563,6 +594,7 @@ class _HomePageState extends State<HomePage> {
   void _filter(String tag) {
     _filteringTag = tag;
     _filteringEnabled = true;
+    _searching = false;
     setState(() {
       _updateShownMemos();
     });
@@ -573,6 +605,7 @@ class _HomePageState extends State<HomePage> {
 
   void _disableFiltering() {
     _filteringEnabled = false;
+    _searching = false;
     setState(() {
       _updateShownMemos();
     });

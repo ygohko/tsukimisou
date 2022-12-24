@@ -1,5 +1,6 @@
 {
     "tsukimisou": "Tsukimisou",
+    "search": "検索",
     "showingMemos": "{shownMemosCount}件のメモを表示中\n全{memosCount}件のメモと全{tagsCount}個のタグ",
     "allMemos": "すべてのメモ",
     "updated": "更新: {dateTime}",
@@ -39,5 +40,6 @@
     "addANewTagTitle": "新しいタグを追加",
     "enterATagName": "タグ名を入力する",
     "thatTagAlreadyExists": "このタグはすでにあります。",
-    "canNotAddUnnamedTag": "名前のないタグは追加できません。"
+    "canNotAddUnnamedTag": "名前のないタグは追加できません。",
+    "searchMemos": "メモを検索"
 }

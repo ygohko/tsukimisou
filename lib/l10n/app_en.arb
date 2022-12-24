@@ -3,6 +3,10 @@
     "@tsukimisou": {
         "description": "Application title"
     },
+    "search": "Search",
+    "@search": {
+        "description": "Tooltip for search button"
+    },
     "showingMemos": "Showing {shownMemosCount} memos\nTotal {memosCount} memos and {tagsCount} tags",
     "@showingMemos": {
         "description": "Text for drawer header in home page",
@@ -176,5 +180,9 @@
     "canNotAddUnnamedTag": "Can not add unnamed tag.",
     "@canNotAddUnnamedTag": {
         "description": "Snack bar text when unnamed tag is to be added"
+    },
+    "searchMemos": "Search memos",
+    "@searchMemos": {
+        "description": "Hint text for search text field"
     }
 }
