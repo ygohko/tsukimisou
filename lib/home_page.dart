@@ -354,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                 _searching = true;
               });
             },
-            tooltip: _searching ? null : "Search",
+            tooltip: _searching ? null : localizations.search,
           ),
         ],
       ),
@@ -419,7 +419,7 @@ class _HomePageState extends State<HomePage> {
                 _searching = true;
               });
             },
-            tooltip: _searching ? null : "Search",
+            tooltip: _searching ? null : localizations.search,
           ),
         ],
       ),

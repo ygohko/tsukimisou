@@ -21,6 +21,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'memo_store.dart';
@@ -38,6 +39,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return  Column(
       children: [
         Padding(
@@ -52,7 +54,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 contentPadding: EdgeInsets.zero,
-                hintText: 'Search memos',
+                hintText: localizations.searchMemos,
               ),
               onSubmitted: (string) {
                 _search(string);
