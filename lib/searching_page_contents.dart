@@ -44,22 +44,18 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
       children: [
         Padding(
           padding: EdgeInsets.all(4.0),
-          child: SizedBox(
-            height: 36.0,
-            child: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                contentPadding: EdgeInsets.zero,
-                hintText: localizations.searchMemos,
+          child: TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
               ),
-              onSubmitted: (string) {
-                _search(string);
-              },
+              hintText: localizations.searchMemos,
             ),
+            onSubmitted: (string) {
+              _search(string);
+            },
           ),
         ),
         Expanded(
