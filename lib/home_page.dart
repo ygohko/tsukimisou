@@ -348,6 +348,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
+            // TODO: Add small screen support for searching.
             onPressed: _searching ? null : () {
               setState(() {
                 _searching = true;
@@ -530,6 +531,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
+                // TODO: Show test for seaching
                 child: Text(
                     localizations.showingMemos(_shownMemos.length,
                         memoStore.memos.length, tags.length),

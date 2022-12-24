@@ -64,6 +64,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           child: ListView.builder(
             itemCount: _strings.length,
             itemBuilder: (context, i) {
+              // TODO: Create proper cards.
               return Card(
                 child: InkWell(
                   child: Padding(
