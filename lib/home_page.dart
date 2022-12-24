@@ -44,6 +44,7 @@ import 'memo_store_google_drive_saver.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
+import 'searching_page_contents.dart';
 import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   var _licenseAdded = false;
   var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
+  var _searching = false;
   var _fileLockedCount = 0;
 
   @override
@@ -343,6 +345,17 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                _searching = true;
+              });
+            },
+            tooltip: "Search",
+          ),
+        ],
       ),
       body: Scrollbar(
         child: Consumer<MemoStore>(
@@ -377,12 +390,17 @@ class _HomePageState extends State<HomePage> {
     } else {
       drawerWidth = windowWidth / 2.0;
     }
-    Widget rightPaneWidget = Consumer<MemoStore>(
-      builder: (context, memoStore, child) {
-        _updateShownMemos();
-        return _memoListView();
-      },
-    );
+    late Widget rightPaneWidget;
+    if (!_searching) {
+      rightPaneWidget = Consumer<MemoStore>(
+        builder: (context, memoStore, child) {
+          _updateShownMemos();
+          return _memoListView();
+        },
+      );
+    } else {
+      rightPaneWidget = SearchingPageContents();
+    }
     final platform = LocalPlatform();
     if (platform.isMobile) {
       rightPaneWidget = Scrollbar(
@@ -392,6 +410,17 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                _searching = true;
+              });
+            },
+            tooltip: "Search",
+          ),
+        ],
       ),
       body: Row(
         children: [
