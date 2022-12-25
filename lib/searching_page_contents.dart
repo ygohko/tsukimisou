@@ -28,6 +28,7 @@ import 'common_uis.dart' as common_uis;
 import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'viewing_page.dart';
 
 class SearchingPageContents extends StatefulWidget {
   /// Creates a searching page contents.
@@ -39,10 +40,12 @@ class SearchingPageContents extends StatefulWidget {
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
+  // TODO: Update search result when memo store is updated.
   final _memos = <Memo>[];
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Disable viewing memo when synchronizing.
     final localizations = AppLocalizations.of(context)!;
     return  Column(
       children: [
@@ -71,13 +74,15 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           child: ListView.builder(
             itemCount: _memos.length,
             itemBuilder: (context, i) {
-              // TODO: Create proper cards.
               return Card(
                 child: InkWell(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: _memoCardContents(_memos[i], context, false),
                   ),
+                  onTap: () async {
+                    await _viewMemo(_memos[i], context);
+                  }
                 ),
               );
             },
@@ -141,4 +146,36 @@ Widget _memoCardContents(Memo memo, BuildContext context, bool unsynchronized) {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: contents,
   );
+}
+
+Future<void> _viewMemo(Memo memo, BuildContext context) async {
+  // TODO: Move to common_uis.
+  if (!common_uis.hasLargeScreen()) {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return ViewingPage(memo: memo);
+        },
+      ),
+    );
+  } else {
+    await common_uis.showTransitiningDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: SizedBox(
+            width: 600.0,
+            height: 600.0,
+            child: Dialog(
+              child: ViewingPage(memo: memo),
+            ),
+          ),
+        );
+      },
+      barrierDismissible: false,
+      transitionBuilder: common_uis.DialogTransitionBuilders.primary,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(milliseconds: 300),
+    );
+  }
 }
