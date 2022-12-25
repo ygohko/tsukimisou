@@ -24,6 +24,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'common_uis.dart' as common_uis;
+import 'extensions.dart';
+import 'memo.dart';
 import 'memo_store.dart';
 
 class SearchingPageContents extends StatefulWidget {
@@ -36,7 +39,7 @@ class SearchingPageContents extends StatefulWidget {
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
-  final _strings = <String>[];
+  final _memos = <Memo>[];
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +69,14 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: _strings.length,
+            itemCount: _memos.length,
             itemBuilder: (context, i) {
               // TODO: Create proper cards.
               return Card(
                 child: InkWell(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Text(_strings[i]),
+                    child: _memoCardContents(_memos[i], context, false),
                   ),
                 ),
               );
@@ -94,12 +97,48 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memos = memoStore.memos;
     setState(() {
-      _strings.clear();
+      _memos.clear();
       for (final memo in memos) {
         if (memo.text.indexOf(query) >= 0) {
-          _strings.add(memo.text);
+          _memos.add(memo);
         }
       }
     });
   }
+}
+
+Widget _memoCardContents(Memo memo, BuildContext context, bool unsynchronized) {
+  // TODO: Move to common_uis.
+  final localizations = AppLocalizations.of(context)!;
+  final attributeStyle =
+  common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
+  final lastModified =
+  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+  final updated = lastModified.toSmartString();
+  final contents = [
+    Text(memo.text),
+    Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        localizations.updated(updated),
+        style: attributeStyle,
+      ),
+    ),
+  ];
+  if (unsynchronized) {
+    contents.add(
+      Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          localizations.unsynchronized,
+          style: attributeStyle,
+        ),
+      ),
+    );
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: contents,
+  );
 }
