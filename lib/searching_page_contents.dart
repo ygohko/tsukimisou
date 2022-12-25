@@ -35,7 +35,8 @@ class SearchingPageContents extends StatefulWidget {
 }
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
-  var _strings = <String>[];
+  final _controller = TextEditingController();
+  final _strings = <String>[];
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +44,24 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     return  Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(4.0),
           child: TextField(
             autofocus: true,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
-              // TODO: Add the cancel button.
+              suffixIcon: IconButton(
+                icon: Icon(Icons.cancel),
+                onPressed: () {
+                  _controller.clear();
+                },
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30.0),
               ),
               hintText: localizations.searchMemos,
             ),
-            onSubmitted: (string) {
-              _search(string);
-            },
+            controller: _controller,
+            onSubmitted: _search,
           ),
         ),
         Expanded(
@@ -77,6 +82,12 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         ),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _search(String query) {
