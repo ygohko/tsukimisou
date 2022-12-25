@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
   var _licenseAdded = false;
+  // TODO: Move to app state?
   var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
