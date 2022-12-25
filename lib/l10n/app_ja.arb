@@ -41,5 +41,6 @@
     "enterATagName": "タグ名を入力する",
     "thatTagAlreadyExists": "このタグはすでにあります。",
     "canNotAddUnnamedTag": "名前のないタグは追加できません。",
-    "searchMemos": "メモを検索"
+    "searchMemos": "メモを検索",
+    "searchTitle": "検索"
 }

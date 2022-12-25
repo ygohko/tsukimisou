@@ -27,7 +27,7 @@ import 'package:provider/provider.dart';
 import 'memo_store.dart';
 
 class SearchingPageContents extends StatefulWidget {
-  /// Creates a home page.
+  /// Creates a searching page contents.
   const SearchingPageContents({Key? key}) : super(key: key);
 
   @override
@@ -44,22 +44,19 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
       children: [
         Padding(
           padding: EdgeInsets.all(4.0),
-          child: SizedBox(
-            height: 36.0,
-            child: TextField(
-              autofocus: true,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                contentPadding: EdgeInsets.zero,
-                hintText: localizations.searchMemos,
+          child: TextField(
+            autofocus: true,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              // TODO: Add the cancel button.
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(30.0),
               ),
-              onSubmitted: (string) {
-                _search(string);
-              },
+              hintText: localizations.searchMemos,
             ),
+            onSubmitted: (string) {
+              _search(string);
+            },
           ),
         ),
         Expanded(

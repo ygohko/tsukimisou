@@ -44,6 +44,7 @@ import 'memo_store_google_drive_saver.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
+import 'searching_page.dart';
 import 'searching_page_contents.dart';
 import 'viewing_page.dart';
 
@@ -280,6 +281,21 @@ class _HomePageState extends State<HomePage> {
     await file.unlock();
   }
 
+  Future<void> _searchForSmallScreen() async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return SearchingPage();
+        },
+      ),
+    );
+  }
+
+  void _searchForLargeScreen() {
+    setState(() {
+      _searching = true;
+    });
+  }
+
   void _showAbout() async {
     if (!_licenseAdded) {
       _addLicenses();
@@ -348,13 +364,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            // TODO: Add small screen support for searching.
-            onPressed: _searching ? null : () {
-              setState(() {
-                _searching = true;
-              });
-            },
-            tooltip: _searching ? null : localizations.search,
+            onPressed: _searchForSmallScreen,
+            tooltip: localizations.search,
           ),
         ],
       ),
@@ -414,11 +425,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: _searching ? null : () {
-              setState(() {
-                _searching = true;
-              });
-            },
+            onPressed: _searching ? null : _searchForLargeScreen,
             tooltip: _searching ? null : localizations.search,
           ),
         ],
