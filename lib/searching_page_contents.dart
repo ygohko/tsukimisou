@@ -27,7 +27,7 @@ import 'package:provider/provider.dart';
 import 'memo_store.dart';
 
 class SearchingPageContents extends StatefulWidget {
-  /// Creates a home page.
+  /// Creates a searching page contents.
   const SearchingPageContents({Key? key}) : super(key: key);
 
   @override

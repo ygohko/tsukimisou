@@ -44,6 +44,7 @@ import 'memo_store_google_drive_saver.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
+import 'searching_page.dart';
 import 'searching_page_contents.dart';
 import 'viewing_page.dart';
 
@@ -348,13 +349,15 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            // TODO: Add small screen support for searching.
-            onPressed: _searching ? null : () {
-              setState(() {
-                _searching = true;
-              });
+            onPressed: async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return SearchingPage();
+                  },
+                ),
+              );
             },
-            tooltip: _searching ? null : localizations.search,
+            tooltip: localizations.search,
           ),
         ],
       ),
