@@ -167,7 +167,7 @@
     },
     "addANewTagTitle": "Add a new tag",
     "@addANewTagTitle": {
-        "description": "Title for tag adding dialig"
+        "description": "Title for tag adding dialog"
     },
     "enterATagName": "Enter a tag name",
     "@enterATagName": {
@@ -184,5 +184,9 @@
     "searchMemos": "Search memos",
     "@searchMemos": {
         "description": "Hint text for search text field"
+    },
+    "searchTitle": "Search",
+    "@searchTitle": {
+        "description": "App bar title for searching page"
     }
 }

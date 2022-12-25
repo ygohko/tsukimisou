@@ -281,6 +281,21 @@ class _HomePageState extends State<HomePage> {
     await file.unlock();
   }
 
+  Future<void> _searchForSmallScreen() async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) {
+          return SearchingPage();
+        },
+      ),
+    );
+  }
+
+  void _searchForLargeScreen() {
+    setState(() {
+      _searching = true;
+    });
+  }
+
   void _showAbout() async {
     if (!_licenseAdded) {
       _addLicenses();
@@ -349,14 +364,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: () async {
-              await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) {
-                    return SearchingPage();
-                  },
-                ),
-              );
-            },
+            onPressed: _searchForSmallScreen,
             tooltip: localizations.search,
           ),
         ],
@@ -417,11 +425,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: _searching ? null : () {
-              setState(() {
-                _searching = true;
-              });
-            },
+            onPressed: _searching ? null : _searchForLargeScreen,
             tooltip: _searching ? null : localizations.search,
           ),
         ],

@@ -21,6 +21,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'searching_page_contents.dart';
 
@@ -35,9 +36,10 @@ class SearchingPage extends StatefulWidget {
 class _SearchingPageState extends State<SearchingPage> {
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search memos"),
+        title: Text(localizations.searchTitle),
       ),
       body: SearchingPageContents(),
     );
