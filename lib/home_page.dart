@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
-            onPressed: async {
+            onPressed: () async {
               await Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) {
                     return SearchingPage();
