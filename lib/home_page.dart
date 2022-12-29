@@ -350,45 +350,47 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildForSmallScreen(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final appState = Provider.of<AppState>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.tsukimisou),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: _searchForSmallScreen,
-            tooltip: localizations.search,
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(localizations.tsukimisou),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: _searchForSmallScreen,
+                tooltip: localizations.search,
+              ),
+            ],
           ),
-        ],
-      ),
-      body: Scrollbar(
-        child: Consumer<MemoStore>(
-          builder: (context, memoStore, child) {
-            _updateShownMemos();
-            return _memoListView();
-          },
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
-        tooltip: localizations.addAMemo,
-        child: const Icon(Icons.add),
-      ),
-      drawer: Drawer(
-        child: Consumer<MemoStore>(
-          builder: (context, memoStore, child) {
-            _updateShownMemos();
-            return _drawerListView(true);
-          },
-        ),
-      ),
+          body: Scrollbar(
+            child: Consumer<MemoStore>(
+              builder: (context, memoStore, child) {
+                _updateShownMemos();
+                return _memoListView();
+              },
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
+            tooltip: localizations.addAMemo,
+            child: const Icon(Icons.add),
+          ),
+          drawer: Drawer(
+            child: Consumer<MemoStore>(
+              builder: (context, memoStore, child) {
+                _updateShownMemos();
+                return _drawerListView(true);
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildForLargeScreen(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final appState = Provider.of<AppState>(context, listen: false);
     late double drawerWidth;
     final windowWidth = MediaQuery.of(context).size.width;
     if (windowWidth > 512.0) {
@@ -396,58 +398,62 @@ class _HomePageState extends State<HomePage> {
     } else {
       drawerWidth = windowWidth / 2.0;
     }
-    late Widget rightPaneWidget;
-    if (!_searching) {
-      rightPaneWidget = Consumer<MemoStore>(
-        builder: (context, memoStore, child) {
-          _updateShownMemos();
-          return _memoListView();
-        },
-      );
-    } else {
-      rightPaneWidget = SearchingPageContents();
-    }
-    final platform = LocalPlatform();
-    if (platform.isMobile) {
-      rightPaneWidget = Scrollbar(
-        child: rightPaneWidget,
-      );
-    }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.tsukimisou),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: _searching ? null : _searchForLargeScreen,
-            tooltip: _searching ? null : localizations.search,
-          ),
-        ],
-      ),
-      body: Row(
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              minWidth: 0.0,
-              maxWidth: drawerWidth,
-            ),
-            child: Consumer<MemoStore>(
-              builder: (context, memoStore, child) {
-                _updateShownMemos();
-                return _drawerListView(false);
-              },
-            ),
-          ),
-          Expanded(
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        late Widget rightPaneWidget;
+        if (!_searching) {
+          rightPaneWidget = Consumer<MemoStore>(
+            builder: (context, memoStore, child) {
+              _updateShownMemos();
+              return _memoListView();
+            },
+          );
+        } else {
+          rightPaneWidget = SearchingPageContents();
+        }
+        final platform = LocalPlatform();
+        if (platform.isMobile) {
+          rightPaneWidget = Scrollbar(
             child: rightPaneWidget,
+          );
+        }
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(localizations.tsukimisou),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: _searching ? null : _searchForLargeScreen,
+                tooltip: _searching ? null : localizations.search,
+              ),
+            ],
           ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
-        tooltip: localizations.addAMemo,
-        child: const Icon(Icons.add),
-      ),
+          body: Row(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  minWidth: 0.0,
+                  maxWidth: drawerWidth,
+                ),
+                child: Consumer<MemoStore>(
+                  builder: (context, memoStore, child) {
+                    _updateShownMemos();
+                    return _drawerListView(false);
+                  },
+                ),
+              ),
+              Expanded(
+                child: rightPaneWidget,
+              ),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
+            tooltip: localizations.addAMemo,
+            child: const Icon(Icons.add),
+          ),
+        );
+      },
     );
   }
 
