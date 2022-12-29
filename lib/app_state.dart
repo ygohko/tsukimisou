@@ -20,23 +20,17 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart';
 
-import 'app.dart';
-import 'app_state.dart';
-import 'factories.dart';
-import 'memo_store.dart';
+class AppState extends ChangeNotifier {
+  var _mergingWithGoogleDrive = false;
 
-void main() async {
-  Factories.init(FactoriesType.app);
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
-        ChangeNotifierProvider<AppState>(create: (context) => AppState()),
-      ],
-      child: const App(),
-    ),
-  );
+  /// Whether merging with Google Drive.
+  bool get mergingWithGoogleDrive => _mergingWithGoogleDrive;
+
+  /// Whether merging with Google Drive.
+  void set mergingWithGoogleDrive(bool mergingWithGoogleDrive) {
+    _mergingWithGoogleDrive = mergingWithGoogleDrive;
+    notifyListeners();
+  }
 }

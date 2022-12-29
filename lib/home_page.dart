@@ -32,6 +32,7 @@ import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
   var _commonUiInitialized = false;
   var _licenseAdded = false;
   // TODO: Move to app state?
-  var _mergingWithGoogleDrive = false;
+  // var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
   var _fileLockedCount = 0;
@@ -182,9 +183,8 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
     }
     final localizations = AppLocalizations.of(context)!;
-    setState(() {
-      _mergingWithGoogleDrive = true;
-    });
+    final appState = Provider.of<AppState>(context, listen: false);
+    appState.mergingWithGoogleDrive = true;
     _showSynchronizingBanner();
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
@@ -199,18 +199,14 @@ class _HomePageState extends State<HomePage> {
       _fileLockedCount++;
       if (_fileLockedCount < 3) {
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-        setState(() {
-          _mergingWithGoogleDrive = false;
-        });
+        appState.mergingWithGoogleDrive = false;
         await common_uis.showErrorDialog(context, localizations.error,
             localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
         return;
       } else {
         // Confirm to force unlock
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-        setState(() {
-          _mergingWithGoogleDrive = false;
-        });
+        appState.mergingWithGoogleDrive = false;
         final accepted = await common_uis.showConfirmationDialog(
             context,
             localizations.confirm,
@@ -226,9 +222,7 @@ class _HomePageState extends State<HomePage> {
     } on Exception catch (exception) {
       // Other failure.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-      setState(() {
-        _mergingWithGoogleDrive = false;
-      });
+      appState.mergingWithGoogleDrive = false;
       await common_uis.showErrorDialog(
           context,
           localizations.error,
@@ -248,17 +242,13 @@ class _HomePageState extends State<HomePage> {
     } on FileSystemException catch (exception) {
       // Saving failed.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-      setState(() {
-        _mergingWithGoogleDrive = false;
-      });
+      appState.mergingWithGoogleDrive = false;
       await common_uis.showErrorDialog(context, localizations.error,
           localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
       return;
     }
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-    setState(() {
-      _mergingWithGoogleDrive = false;
-    });
+    appState.mergingWithGoogleDrive = false;
 
     setState(() {
       _savingToGoogleDrive = true;
@@ -360,6 +350,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildForSmallScreen(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final appState = Provider.of<AppState>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.tsukimisou),
@@ -380,7 +371,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _mergingWithGoogleDrive ? null : _addMemo,
+        onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
@@ -397,6 +388,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildForLargeScreen(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final appState = Provider.of<AppState>(context, listen: false);
     late double drawerWidth;
     final windowWidth = MediaQuery.of(context).size.width;
     if (windowWidth > 512.0) {
@@ -452,7 +444,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _mergingWithGoogleDrive ? null : _addMemo,
+        onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
         tooltip: localizations.addAMemo,
         child: const Icon(Icons.add),
       ),
@@ -463,6 +455,7 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
       itemCount: _shownMemos.length,
       itemBuilder: (context, i) {
+        final appState = Provider.of<AppState>(context, listen: false);
         final localizations = AppLocalizations.of(context)!;
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
@@ -502,7 +495,7 @@ class _HomePageState extends State<HomePage> {
               children: contents,
             ),
           ),
-          onTap: _mergingWithGoogleDrive ? null : () {
+          onTap: appState.mergingWithGoogleDrive ? null : () {
             _viewMemo(memo);
           },
         ));
@@ -516,6 +509,7 @@ class _HomePageState extends State<HomePage> {
     const tagsSubtitleIndex = 2;
     const tagsBeginIndex = 3;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final appState = Provider.of<AppState>(context, listen: false);
     final tags = memoStore.tags;
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     final integrationDividerIndex = tagsEndIndex + 1;
@@ -579,7 +573,7 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
-            enabled: !(_mergingWithGoogleDrive || _savingToGoogleDrive),
+            enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
           );
         } else if (i == othersDividerIndex) {
           return const Divider();
