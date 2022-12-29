@@ -344,6 +344,7 @@ class _HomePageState extends State<HomePage> {
             Spacer(),
           ],
         ),
+        backgroundColor: common_uis.TsukimisouColors.primaryLight,
         actions: [
           Text(''),
           TextButton(
