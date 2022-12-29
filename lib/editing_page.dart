@@ -59,6 +59,12 @@ class _EditingPageState extends State<EditingPage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     var title = localizations.addANewMemo;

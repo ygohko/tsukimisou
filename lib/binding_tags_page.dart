@@ -165,6 +165,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
         _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
       }
     }
+    controller.dispose();
   }
 
   Future<bool> _apply() async {
