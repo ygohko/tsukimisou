@@ -398,62 +398,66 @@ class _HomePageState extends State<HomePage> {
     } else {
       drawerWidth = windowWidth / 2.0;
     }
-    return Consumer<AppState>(
-      builder: (context, appState, child) {
-        late Widget rightPaneWidget;
-        if (!_searching) {
-          rightPaneWidget = Consumer<MemoStore>(
-            builder: (context, memoStore, child) {
-              _updateShownMemos();
-              return _memoListView();
-            },
-          );
-        } else {
-          rightPaneWidget = SearchingPageContents();
-        }
-        final platform = LocalPlatform();
-        if (platform.isMobile) {
-          rightPaneWidget = Scrollbar(
-            child: rightPaneWidget,
-          );
-        }
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(localizations.tsukimisou),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: _searching ? null : _searchForLargeScreen,
-                tooltip: _searching ? null : localizations.search,
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localizations.tsukimisou),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _searching ? null : _searchForLargeScreen,
+            tooltip: _searching ? null : localizations.search,
           ),
-          body: Row(
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  minWidth: 0.0,
-                  maxWidth: drawerWidth,
-                ),
-                child: Consumer<MemoStore>(
-                  builder: (context, memoStore, child) {
-                    _updateShownMemos();
-                    return _drawerListView(false);
-                  },
-                ),
-              ),
-              Expanded(
-                child: rightPaneWidget,
-              ),
-            ],
+        ],
+      ),
+      body: Row(
+        children: [
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: 0.0,
+              maxWidth: drawerWidth,
+            ),
+            child: Consumer2<MemoStore, AppState>(
+              builder: (context, memoStore, appStore, child) {
+                _updateShownMemos();
+                return _drawerListView(false);
+              },
+            ),
           ),
-          floatingActionButton: FloatingActionButton(
+          Expanded(
+            child: Consumer<AppState>(
+              builder: (context, appState, child) {
+                late Widget rightPaneWidget;
+                if (!_searching) {
+                  rightPaneWidget = Consumer<MemoStore>(
+                    builder: (context, memoStore, child) {
+                      _updateShownMemos();
+                      return _memoListView();
+                    },
+                  );
+                } else {
+                  rightPaneWidget = SearchingPageContents();
+                }
+                final platform = LocalPlatform();
+                if (platform.isMobile) {
+                  rightPaneWidget = Scrollbar(
+                    child: rightPaneWidget,
+                  );
+                }
+                return rightPaneWidget;
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: Consumer<AppState>(
+        builder: (context, appState, child) {
+          return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
             tooltip: localizations.addAMemo,
             child: const Icon(Icons.add),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
