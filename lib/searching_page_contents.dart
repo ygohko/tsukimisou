@@ -47,6 +47,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final lastMerged = DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
     final appState = Provider.of<AppState>(context, listen: false);
     return  Column(
       children: [
@@ -75,14 +77,23 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           child: ListView.builder(
             itemCount: _memos.length,
             itemBuilder: (context, i) {
+              final memo = _memos[i];
+              final lastModified =
+              DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+              late final unsynchronized;
+              if (lastModified.isAfter(lastMerged)) {
+                unsynchronized = true;
+              } else {
+                unsynchronized = false;
+              }
               return Card(
                 child: InkWell(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: common_uis.memoCardContents(context, _memos[i], false),
+                    child: common_uis.memoCardContents(context, memo, unsynchronized),
                   ),
                   onTap: appState.mergingWithGoogleDrive ? null : () async {
-                    await common_uis.viewMemo(_memos[i], context);
+                    await common_uis.viewMemo(memo, context);
                   }
                 ),
               );
