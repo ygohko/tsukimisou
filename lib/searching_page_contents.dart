@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'extensions.dart';
 import 'memo.dart';
@@ -45,8 +46,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Disable viewing memo when synchronizing.
     final localizations = AppLocalizations.of(context)!;
+    final appState = Provider.of<AppState>(context, listen: false);
     return  Column(
       children: [
         Padding(
@@ -80,7 +81,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
                     padding: const EdgeInsets.all(12.0),
                     child: _memoCardContents(_memos[i], context, false),
                   ),
-                  onTap: () async {
+                  onTap: appState.mergingWithGoogleDrive ? null : () async {
                     await _viewMemo(_memos[i], context);
                   }
                 ),
