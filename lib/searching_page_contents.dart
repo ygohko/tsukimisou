@@ -79,7 +79,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
                 child: InkWell(
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: _memoCardContents(_memos[i], context, false),
+                    child: common_uis.memoCardContents(context, _memos[i], false),
                   ),
                   onTap: appState.mergingWithGoogleDrive ? null : () async {
                     await _viewMemo(_memos[i], context);
@@ -111,42 +111,6 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
       }
     });
   }
-}
-
-Widget _memoCardContents(Memo memo, BuildContext context, bool unsynchronized) {
-  // TODO: Move to common_uis.
-  final localizations = AppLocalizations.of(context)!;
-  final attributeStyle =
-  common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
-  final lastModified =
-  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-  final updated = lastModified.toSmartString();
-  final contents = [
-    Text(memo.text),
-    Align(
-      alignment: Alignment.centerRight,
-      child: Text(
-        localizations.updated(updated),
-        style: attributeStyle,
-      ),
-    ),
-  ];
-  if (unsynchronized) {
-    contents.add(
-      Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          localizations.unsynchronized,
-          style: attributeStyle,
-        ),
-      ),
-    );
-  }
-
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: contents,
-  );
 }
 
 Future<void> _viewMemo(Memo memo, BuildContext context) async {

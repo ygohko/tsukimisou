@@ -24,9 +24,11 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
 
 import 'extensions.dart';
+import 'memo.dart';
 
 typedef DialogTransitionBuilder = AnimatedWidget Function(
     Animation<double> animation,
@@ -373,3 +375,40 @@ bool hasLargeScreen() {
 
   return false;
 }
+
+/// Returns contents of memo cards.
+Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
+  final localizations = AppLocalizations.of(context)!;
+  final attributeStyle =
+  TsukimisouTextStyles.homePageMemoAttribute(context);
+  final lastModified =
+  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+  final updated = lastModified.toSmartString();
+  final contents = [
+    Text(memo.text),
+    Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        localizations.updated(updated),
+        style: attributeStyle,
+      ),
+    ),
+  ];
+  if (unsynchronized) {
+    contents.add(
+      Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          localizations.unsynchronized,
+          style: attributeStyle,
+        ),
+      ),
+    );
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: contents,
+  );
+}
+
