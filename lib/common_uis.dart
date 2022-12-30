@@ -29,6 +29,7 @@ import 'package:platform/platform.dart';
 
 import 'extensions.dart';
 import 'memo.dart';
+import 'viewing_page.dart';
 
 typedef DialogTransitionBuilder = AnimatedWidget Function(
     Animation<double> animation,
@@ -344,6 +345,37 @@ Future<T?> showTransitiningDialog<T>({
       return transitionBuilder(animation, curve, alignment, child);
     },
   );
+}
+
+Future<void> viewMemo(Memo memo, BuildContext context) async {
+  if (!hasLargeScreen()) {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return ViewingPage(memo: memo);
+        },
+      ),
+    );
+  } else {
+    await showTransitiningDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: SizedBox(
+            width: 600.0,
+            height: 600.0,
+            child: Dialog(
+              child: ViewingPage(memo: memo),
+            ),
+          ),
+        );
+      },
+      barrierDismissible: false,
+      transitionBuilder: DialogTransitionBuilders.primary,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(milliseconds: 300),
+    );
+  }
 }
 
 /// Creates a subtitle.

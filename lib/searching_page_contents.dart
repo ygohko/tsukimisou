@@ -82,7 +82,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
                     child: common_uis.memoCardContents(context, _memos[i], false),
                   ),
                   onTap: appState.mergingWithGoogleDrive ? null : () async {
-                    await _viewMemo(_memos[i], context);
+                    await common_uis.viewMemo(_memos[i], context);
                   }
                 ),
               );
@@ -110,37 +110,5 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         }
       }
     });
-  }
-}
-
-Future<void> _viewMemo(Memo memo, BuildContext context) async {
-  // TODO: Move to common_uis.
-  if (!common_uis.hasLargeScreen()) {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (context) {
-          return ViewingPage(memo: memo);
-        },
-      ),
-    );
-  } else {
-    await common_uis.showTransitiningDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: SizedBox(
-            width: 600.0,
-            height: 600.0,
-            child: Dialog(
-              child: ViewingPage(memo: memo),
-            ),
-          ),
-        );
-      },
-      barrierDismissible: false,
-      transitionBuilder: common_uis.DialogTransitionBuilders.primary,
-      curve: Curves.fastOutSlowIn,
-      duration: Duration(milliseconds: 300),
-    );
   }
 }
