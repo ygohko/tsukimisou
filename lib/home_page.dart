@@ -63,8 +63,6 @@ class _HomePageState extends State<HomePage> {
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
   var _licenseAdded = false;
-  // TODO: Move to app state?
-  // var _mergingWithGoogleDrive = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
   var _fileLockedCount = 0;
@@ -273,7 +271,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _searchForSmallScreen() async {
-    await Navigator.of(context).push(MaterialPageRoute(
+    await Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) {
           return SearchingPage();
         },
@@ -349,7 +348,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildForSmallScreen(BuildContext context) {
-    // TODO: Update widgets.
     final localizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
@@ -506,9 +504,11 @@ class _HomePageState extends State<HomePage> {
               children: contents,
             ),
           ),
-          onTap: appState.mergingWithGoogleDrive ? null : () {
-            _viewMemo(memo);
-          },
+          onTap: appState.mergingWithGoogleDrive
+              ? null
+              : () {
+                  _viewMemo(memo);
+                },
         ));
       },
     );
