@@ -351,42 +351,42 @@ class _HomePageState extends State<HomePage> {
   Widget _buildForSmallScreen(BuildContext context) {
     // TODO: Update widgets.
     final localizations = AppLocalizations.of(context)!;
-    return Consumer<AppState>(
-      builder: (context, appState, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(localizations.tsukimisou),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: _searchForSmallScreen,
-                tooltip: localizations.search,
-              ),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(localizations.tsukimisou),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: _searchForSmallScreen,
+            tooltip: localizations.search,
           ),
-          body: Scrollbar(
-            child: Consumer<MemoStore>(
-              builder: (context, memoStore, child) {
-                _updateShownMemos();
-                return _memoListView();
-              },
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
+        ],
+      ),
+      body: Scrollbar(
+        child: Consumer2<MemoStore, AppState>(
+          builder: (context, memoStore, appState, child) {
+            _updateShownMemos();
+            return _memoListView();
+          },
+        ),
+      ),
+      floatingActionButton: Consumer<AppState>(
+        builder: (context, appState, child) {
+          return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
             tooltip: localizations.addAMemo,
             child: const Icon(Icons.add),
-          ),
-          drawer: Drawer(
-            child: Consumer<MemoStore>(
-              builder: (context, memoStore, child) {
-                _updateShownMemos();
-                return _drawerListView(true);
-              },
-            ),
-          ),
-        );
-      },
+          );
+        },
+      ),
+      drawer: Drawer(
+        child: Consumer2<MemoStore, AppState>(
+          builder: (context, memoStore, appState, child) {
+            _updateShownMemos();
+            return _drawerListView(true);
+          },
+        ),
+      ),
     );
   }
 
