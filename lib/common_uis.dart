@@ -24,9 +24,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
 
 import 'extensions.dart';
+import 'memo.dart';
+import 'viewing_page.dart';
 
 typedef DialogTransitionBuilder = AnimatedWidget Function(
     Animation<double> animation,
@@ -344,6 +347,37 @@ Future<T?> showTransitiningDialog<T>({
   );
 }
 
+Future<void> viewMemo(Memo memo, BuildContext context) async {
+  if (!hasLargeScreen()) {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) {
+          return ViewingPage(memo: memo);
+        },
+      ),
+    );
+  } else {
+    await showTransitiningDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: SizedBox(
+            width: 600.0,
+            height: 600.0,
+            child: Dialog(
+              child: ViewingPage(memo: memo),
+            ),
+          ),
+        );
+      },
+      barrierDismissible: false,
+      transitionBuilder: DialogTransitionBuilders.primary,
+      curve: Curves.fastOutSlowIn,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+}
+
 /// Creates a subtitle.
 Container subtitle(BuildContext context, String text) {
   return Container(
@@ -373,3 +407,40 @@ bool hasLargeScreen() {
 
   return false;
 }
+
+/// Returns contents of memo cards.
+Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
+  final localizations = AppLocalizations.of(context)!;
+  final attributeStyle =
+  TsukimisouTextStyles.homePageMemoAttribute(context);
+  final lastModified =
+  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+  final updated = lastModified.toSmartString();
+  final contents = [
+    Text(memo.text),
+    Align(
+      alignment: Alignment.centerRight,
+      child: Text(
+        localizations.updated(updated),
+        style: attributeStyle,
+      ),
+    ),
+  ];
+  if (unsynchronized) {
+    contents.add(
+      Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          localizations.unsynchronized,
+          style: attributeStyle,
+        ),
+      ),
+    );
+  }
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: contents,
+  );
+}
+

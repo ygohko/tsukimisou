@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:tsukimisou/app_state.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/home_page.dart';
 import 'package:tsukimisou/memo_store.dart';
 
 Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(
-    ChangeNotifierProvider(
-      create: (context) => MemoStore(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
+        ChangeNotifierProvider<AppState>(create: (context) => AppState()),
+      ],
       child: MaterialApp(
         localizationsDelegates: [
           AppLocalizations.delegate,
