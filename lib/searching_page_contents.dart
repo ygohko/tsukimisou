@@ -41,8 +41,22 @@ class SearchingPageContents extends StatefulWidget {
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
+  late final _focusNode;
   // TODO: Update search result when memo store is updated.
   final _memos = <Memo>[];
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +75,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
                 icon: Icon(Icons.cancel),
-                onPressed: () {
-                  _controller.clear();
-                },
+                onPressed: _clear,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -71,6 +83,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
               hintText: localizations.searchMemos,
             ),
             controller: _controller,
+            focusNode: _focusNode,
             onSubmitted: _search,
           ),
         ),
@@ -107,12 +120,6 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     );
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   void _search(String query) {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memos = memoStore.memos;
@@ -124,5 +131,10 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         }
       }
     });
+  }
+
+  void _clear() {
+    _controller.clear();
+    _focusNode.requestFocus();
   }
 }
