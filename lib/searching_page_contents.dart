@@ -48,9 +48,10 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final lastMerged = DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
+    final lastMerged =
+        DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
     final appState = Provider.of<AppState>(context, listen: false);
-    return  Column(
+    return Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(4.0),
@@ -79,7 +80,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             itemBuilder: (context, i) {
               final memo = _memos[i];
               final lastModified =
-              DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+                  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
               late final unsynchronized;
               if (lastModified.isAfter(lastMerged)) {
                 unsynchronized = true;
@@ -88,14 +89,16 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
               }
               return Card(
                 child: InkWell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: common_uis.memoCardContents(context, memo, unsynchronized),
-                  ),
-                  onTap: appState.mergingWithGoogleDrive ? null : () async {
-                    await common_uis.viewMemo(memo, context);
-                  }
-                ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: common_uis.memoCardContents(
+                          context, memo, unsynchronized),
+                    ),
+                    onTap: appState.mergingWithGoogleDrive
+                        ? null
+                        : () async {
+                            await common_uis.viewMemo(memo, context);
+                          }),
               );
             },
           ),

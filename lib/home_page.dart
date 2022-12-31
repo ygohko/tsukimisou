@@ -271,7 +271,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _searchForSmallScreen() async {
-    await Navigator.of(context).push(MaterialPageRoute(
+    await Navigator.of(context).push(
+      MaterialPageRoute(
         builder: (context) {
           return SearchingPage();
         },
@@ -503,9 +504,11 @@ class _HomePageState extends State<HomePage> {
               children: contents,
             ),
           ),
-          onTap: appState.mergingWithGoogleDrive ? null : () {
-            _viewMemo(memo);
-          },
+          onTap: appState.mergingWithGoogleDrive
+              ? null
+              : () {
+                  _viewMemo(memo);
+                },
         ));
       },
     );

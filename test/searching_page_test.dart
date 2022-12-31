@@ -30,9 +30,9 @@ void main() {
 
   group('SearchingPage', () {
     testWidgets('SearchingPage shoud have specified widgets.',
-      (WidgetTester tester) async {
-        await init(tester);
-        expect(find.text('Search memos'), findsWidgets);
-      });
+        (WidgetTester tester) async {
+      await init(tester);
+      expect(find.text('Search memos'), findsWidgets);
+    });
   });
 }

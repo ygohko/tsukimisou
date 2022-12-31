@@ -411,10 +411,8 @@ bool hasLargeScreen() {
 /// Returns contents of memo cards.
 Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final localizations = AppLocalizations.of(context)!;
-  final attributeStyle =
-  TsukimisouTextStyles.homePageMemoAttribute(context);
-  final lastModified =
-  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+  final attributeStyle = TsukimisouTextStyles.homePageMemoAttribute(context);
+  final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
   final updated = lastModified.toSmartString();
   final contents = [
     Text(memo.text),
@@ -443,4 +441,3 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
     children: contents,
   );
 }
-
