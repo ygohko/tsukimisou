@@ -349,6 +349,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildForSmallScreen(BuildContext context) {
+    // TODO: Update widgets.
     final localizations = AppLocalizations.of(context)!;
     return Consumer<AppState>(
       builder: (context, appState, child) {
