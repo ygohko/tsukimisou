@@ -468,6 +468,7 @@ class _HomePageState extends State<HomePage> {
         final localizations = AppLocalizations.of(context)!;
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
+        // TODO: Do not revert here?
         final memo = _shownMemos[(_shownMemos.length - 1) - i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);

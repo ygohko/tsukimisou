@@ -22,6 +22,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
@@ -41,8 +42,22 @@ class SearchingPageContents extends StatefulWidget {
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
+  late final _focusNode;
   // TODO: Update search result when memo store is updated.
   final _memos = <Memo>[];
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +66,39 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final lastMerged =
         DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
     final appState = Provider.of<AppState>(context, listen: false);
+    Widget contents = ListView.builder(
+      itemCount: _memos.length,
+      itemBuilder: (context, i) {
+        final memo = _memos[i];
+        final lastModified =
+        DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+        late final unsynchronized;
+        if (lastModified.isAfter(lastMerged)) {
+          unsynchronized = true;
+        } else {
+          unsynchronized = false;
+        }
+        return Card(
+          child: InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: common_uis.memoCardContents(
+                context, memo, unsynchronized),
+            ),
+            onTap: appState.mergingWithGoogleDrive
+            ? null
+            : () async {
+              await common_uis.viewMemo(memo, context);
+          }),
+        );
+      },
+    );
+    final platform = LocalPlatform();
+    if (platform.isMobile) {
+      contents = Scrollbar(
+        child: contents,
+      );
+    }
     return Column(
       children: [
         Padding(
@@ -61,9 +109,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
                 icon: Icon(Icons.cancel),
-                onPressed: () {
-                  _controller.clear();
-                },
+                onPressed: _clear,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30.0),
@@ -71,46 +117,15 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
               hintText: localizations.searchMemos,
             ),
             controller: _controller,
+            focusNode: _focusNode,
             onSubmitted: _search,
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: _memos.length,
-            itemBuilder: (context, i) {
-              final memo = _memos[i];
-              final lastModified =
-                  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-              late final unsynchronized;
-              if (lastModified.isAfter(lastMerged)) {
-                unsynchronized = true;
-              } else {
-                unsynchronized = false;
-              }
-              return Card(
-                child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: common_uis.memoCardContents(
-                          context, memo, unsynchronized),
-                    ),
-                    onTap: appState.mergingWithGoogleDrive
-                        ? null
-                        : () async {
-                            await common_uis.viewMemo(memo, context);
-                          }),
-              );
-            },
-          ),
+          child: contents,
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 
   void _search(String query) {
@@ -123,6 +138,12 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           _memos.add(memo);
         }
       }
+      _memos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
     });
+  }
+
+  void _clear() {
+    _controller.clear();
+    _focusNode.requestFocus();
   }
 }
