@@ -22,6 +22,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
@@ -65,6 +66,39 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final lastMerged =
         DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
     final appState = Provider.of<AppState>(context, listen: false);
+    Widget contents = ListView.builder(
+      itemCount: _memos.length,
+      itemBuilder: (context, i) {
+        final memo = _memos[i];
+        final lastModified =
+        DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+        late final unsynchronized;
+        if (lastModified.isAfter(lastMerged)) {
+          unsynchronized = true;
+        } else {
+          unsynchronized = false;
+        }
+        return Card(
+          child: InkWell(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: common_uis.memoCardContents(
+                context, memo, unsynchronized),
+            ),
+            onTap: appState.mergingWithGoogleDrive
+            ? null
+            : () async {
+              await common_uis.viewMemo(memo, context);
+          }),
+        );
+      },
+    );
+    final platform = LocalPlatform();
+    if (platform.isMobile) {
+      contents = Scrollbar(
+        child: contents,
+      );
+    }
     return Column(
       children: [
         Padding(
@@ -88,33 +122,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           ),
         ),
         Expanded(
-          child: ListView.builder(
-            itemCount: _memos.length,
-            itemBuilder: (context, i) {
-              final memo = _memos[i];
-              final lastModified =
-                  DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-              late final unsynchronized;
-              if (lastModified.isAfter(lastMerged)) {
-                unsynchronized = true;
-              } else {
-                unsynchronized = false;
-              }
-              return Card(
-                child: InkWell(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: common_uis.memoCardContents(
-                          context, memo, unsynchronized),
-                    ),
-                    onTap: appState.mergingWithGoogleDrive
-                        ? null
-                        : () async {
-                            await common_uis.viewMemo(memo, context);
-                          }),
-              );
-            },
-          ),
+          child: contents,
         ),
       ],
     );
@@ -130,6 +138,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           _memos.add(memo);
         }
       }
+      _memos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
     });
   }
 
