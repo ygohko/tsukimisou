@@ -42,10 +42,7 @@ class MemoStoreSearcher {
       }
     }
     _results.clear();
-    print(keywords.length);
-    print(keywords);
     if (keywords.length < 1) {
-      print('kyanseruuuu');
       return;
     }
     for (final memo in _memoStore.memos) {
