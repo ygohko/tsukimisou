@@ -33,9 +33,32 @@ class MemoStoreSearcher {
 
   /// Executes search
   void execute() {
+    final split = _query.split(RegExp(r'( |　+)'));
+    final keywords = <String>[];
+    for (var string in split) {
+      string = string.toLowerCase();
+      if (string != '' && keywords.indexOf(string) < 0) {
+        keywords.add(string.toLowerCase());
+      }
+    }
     _results.clear();
+    print(keywords.length);
+    print(keywords);
+    if (keywords.length < 1) {
+      print('kyanseruuuu');
+      return;
+    }
     for (final memo in _memoStore.memos) {
-      if (memo.text.indexOf(_query) >= 0) {
+      final text = memo.text.toLowerCase();
+      var found = true;
+      for (final keyword in keywords) {
+        if (text.indexOf(keyword) < 0) {
+          found = false;
+          break;
+        }
+      }
+
+      if (found) {
         _results.add(memo);
       }
     }
