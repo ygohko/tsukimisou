@@ -30,6 +30,7 @@ import 'common_uis.dart' as common_uis;
 import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_searcher.dart';
 import 'viewing_page.dart';
 
 class SearchingPageContents extends StatefulWidget {
@@ -43,8 +44,7 @@ class SearchingPageContents extends StatefulWidget {
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
   late final _focusNode;
-  // TODO: Update search result when memo store is updated.
-  final _memos = <Memo>[];
+  var _memos = <Memo>[];
 
   @override
   void initState() {
@@ -126,15 +126,10 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
 
   void _search(String query) {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memos = memoStore.memos;
+    final searcher = MemoStoreSearcher(memoStore, query);
+    searcher.execute();
     setState(() {
-      _memos.clear();
-      for (final memo in memos) {
-        if (memo.text.indexOf(query) >= 0) {
-          _memos.add(memo);
-        }
-      }
-      _memos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
+      _memos = [...searcher.results];
     });
   }
 
