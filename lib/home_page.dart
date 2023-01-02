@@ -449,10 +449,10 @@ class _HomePageState extends State<HomePage> {
           child: InkWell(
             child: common_uis.memoCardContents(context, memo, unsynchronized),
             onTap: appState.mergingWithGoogleDrive
-            ? null
-            : () {
-              common_uis.viewMemo(context, memo);
-            },
+                ? null
+                : () {
+                    common_uis.viewMemo(context, memo);
+                  },
           ),
         );
       },
