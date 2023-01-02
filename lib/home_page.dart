@@ -145,37 +145,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _viewMemo(Memo memo) async {
-    if (!common_uis.hasLargeScreen()) {
-      await Navigator.of(context).push(
-        MaterialPageRoute<void>(
-          builder: (context) {
-            return ViewingPage(memo: memo);
-          },
-        ),
-      );
-    } else {
-      await common_uis.showTransitiningDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: SizedBox(
-              width: 600.0,
-              height: 600.0,
-              child: Dialog(
-                child: ViewingPage(memo: memo),
-              ),
-            ),
-          );
-        },
-        barrierDismissible: false,
-        transitionBuilder: common_uis.DialogTransitionBuilders.primary,
-        curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 300),
-      );
-    }
-  }
-
   Future<void> _mergeWithGoogleDrive() async {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
@@ -468,49 +437,23 @@ class _HomePageState extends State<HomePage> {
         final localizations = AppLocalizations.of(context)!;
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
-        // TODO: Do not revert here?
-        final memo = _shownMemos[(_shownMemos.length - 1) - i];
+        final memo = _shownMemos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final updated = lastModified.toSmartString();
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
-        final contents = [
-          Text(memo.text),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              localizations.updated(updated),
-              style: attributeStyle,
-            ),
-          ),
-        ];
-        if (lastModified.isAfter(lastMerged)) {
-          contents.add(
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                localizations.unsynchronized,
-                style: attributeStyle,
-              ),
-            ),
-          );
-        }
+        final unsynchronized = lastModified.isAfter(lastMerged);
         return Card(
-            child: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: contents,
-            ),
+          child: InkWell(
+            child: common_uis.memoCardContents(context, memo, unsynchronized),
+            onTap: appState.mergingWithGoogleDrive
+                ? null
+                : () {
+                    common_uis.viewMemo(context, memo);
+                  },
           ),
-          onTap: appState.mergingWithGoogleDrive
-              ? null
-              : () {
-                  _viewMemo(memo);
-                },
-        ));
+        );
       },
     );
   }
@@ -646,7 +589,7 @@ class _HomePageState extends State<HomePage> {
       _filteringEnabled = false;
       _shownMemos = [...memos];
     }
-    _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+    _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
   }
 
   void _addLicenses() async {

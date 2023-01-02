@@ -347,7 +347,8 @@ Future<T?> showTransitiningDialog<T>({
   );
 }
 
-Future<void> viewMemo(Memo memo, BuildContext context) async {
+/// Views this memo.
+Future<void> viewMemo(BuildContext context, Memo memo) async {
   if (!hasLargeScreen()) {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -436,8 +437,11 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
     );
   }
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: contents,
+  return Padding(
+    padding: const EdgeInsets.all(12.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: contents,
+    ),
   );
 }

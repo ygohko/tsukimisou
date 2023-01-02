@@ -71,7 +71,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
       itemBuilder: (context, i) {
         final memo = _memos[i];
         final lastModified =
-        DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+            DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         late final unsynchronized;
         if (lastModified.isAfter(lastMerged)) {
           unsynchronized = true;
@@ -80,16 +80,12 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         }
         return Card(
           child: InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: common_uis.memoCardContents(
-                context, memo, unsynchronized),
-            ),
-            onTap: appState.mergingWithGoogleDrive
-            ? null
-            : () async {
-              await common_uis.viewMemo(memo, context);
-          }),
+              child: common_uis.memoCardContents(context, memo, unsynchronized),
+              onTap: appState.mergingWithGoogleDrive
+                  ? null
+                  : () async {
+                      await common_uis.viewMemo(context, memo);
+                    }),
         );
       },
     );
