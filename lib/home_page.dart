@@ -108,8 +108,11 @@ class _HomePageState extends State<HomePage> {
     } on FileNotCompatibleException catch (exception) {
       // Not compatible error.
       final localizations = AppLocalizations.of(context)!;
-      await common_uis.showErrorDialog(context, localizations.error,
-        localizations.memoStoreInTheLocalStorageIsNotCompatible, localizations.ok);
+      await common_uis.showErrorDialog(
+          context,
+          localizations.error,
+          localizations.memoStoreInTheLocalStorageIsNotCompatible,
+          localizations.ok);
     } on IOException catch (exception) {
       // Load error
       // Do nothing for now
@@ -196,8 +199,11 @@ class _HomePageState extends State<HomePage> {
       // Not compatible error.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
-      await common_uis.showErrorDialog(context, localizations.error,
-        localizations.memoStoreOnTheGoogleDriveIsNotCompatible, localizations.ok);
+      await common_uis.showErrorDialog(
+          context,
+          localizations.error,
+          localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
+          localizations.ok);
       return;
     } on Exception catch (exception) {
       // Other failure.
