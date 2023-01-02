@@ -437,8 +437,7 @@ class _HomePageState extends State<HomePage> {
         final localizations = AppLocalizations.of(context)!;
         final attributeStyle =
             common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
-        // TODO: Do not revert here?
-        final memo = _shownMemos[(_shownMemos.length - 1) - i];
+        final memo = _shownMemos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final updated = lastModified.toSmartString();
@@ -590,7 +589,7 @@ class _HomePageState extends State<HomePage> {
       _filteringEnabled = false;
       _shownMemos = [...memos];
     }
-    _shownMemos.sort((a, b) => a.lastModified.compareTo(b.lastModified));
+    _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
   }
 
   void _addLicenses() async {
