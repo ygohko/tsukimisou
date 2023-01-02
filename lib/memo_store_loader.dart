@@ -35,6 +35,9 @@ class MemoStoreLoader {
   void deserialize(String serialized) {
     final decoded = jsonDecode(serialized);
     final version = decoded['version'];
+    if (version > 1) {
+      throw FileNotCompatibleException('File not compatible.');
+    }
     _memoStore.clearMemos();
     _memoStore.lastMerged = decoded['lastMerged'];
     final deserializedIds = decoded['removedMemoIds'];
@@ -64,4 +67,10 @@ class MemoStoreLoader {
       _memoStore.addMemo(memo);
     }
   }
+}
+
+class FileNotCompatibleException implements Exception {
+  final String message;
+
+  FileNotCompatibleException(this.message);
 }

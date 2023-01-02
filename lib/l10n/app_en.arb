@@ -91,6 +91,14 @@
     "@savingMemoStoreToGoogleDriveFailed": {
         "description": "Error text when saving to local storage failed"
     },
+    "memoStoreInTheLocalStorageIsNotCompatible": "Memo store in the local storage is not compatible. Updating this app may solve the issue.",
+    "@memoStoreInTheLocalStorageIsNotCompatible": {
+        "description": "Error text when memo store in the local storage is not compatible"
+    },
+    "memoStoreOnTheGoogleDriveIsNotCompatible": "Memo store on the Google Drive is not compatible. Updating this app may solve the issue.",
+    "@memoStoreInTheGoogleDriveIsNotCompatible": {
+        "description": "Error text when memo store in the local storage is not compatible"
+    },
     "memoAtDateTime": "Memo at {dateTime}",
     "@memoAtDateTime": {
         "description": "Title for viewing page app bar",

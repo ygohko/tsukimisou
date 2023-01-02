@@ -20,6 +20,8 @@
     "loadingMemoStoreFromGoogleDriveFailed": "メモストアのGoogle Driveからの読み込みに失敗しました。",
     "savingMemoStoreToGoogleDriveFailed": "メモストアのGoogle Driveへの保存に失敗しました。",
     "savingMemoStoreToLocalStorageFailed": "メモストアのローカルストレージへの保存に失敗しました。",
+    "memoStoreInTheLocalStorageIsNotCompatible": "ローカルストレージ内のメモストアに互換性がありません。このアプリをアップデートすることで問題が解決するかもしれません。",
+    "memoStoreOnTheGoogleDriveIsNotCompatible": "Google Drive上のメモストアに互換性がありません。このアプリをアップデートすることで問題が解決するかもしれません。",
     "memoAtDateTime": "{dateTime}のメモ",
     "boundTags": "タグ: {tags}",
     "share": "共有",

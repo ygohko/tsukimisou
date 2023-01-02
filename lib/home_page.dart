@@ -42,6 +42,7 @@ import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
+import 'memo_store_loader.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
@@ -104,6 +105,11 @@ class _HomePageState extends State<HomePage> {
         memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
+    } on FileNotCompatibleException catch (exception) {
+      // Not compatible error.
+      final localizations = AppLocalizations.of(context)!;
+      await common_uis.showErrorDialog(context, localizations.error,
+        localizations.memoStoreInTheLocalStorageIsNotCompatible, localizations.ok);
     } on IOException catch (exception) {
       // Load error
       // Do nothing for now
@@ -186,6 +192,13 @@ class _HomePageState extends State<HomePage> {
         }
         return;
       }
+    } on FileNotCompatibleException catch (exception) {
+      // Not compatible error.
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      appState.mergingWithGoogleDrive = false;
+      await common_uis.showErrorDialog(context, localizations.error,
+        localizations.memoStoreOnTheGoogleDriveIsNotCompatible, localizations.ok);
+      return;
     } on Exception catch (exception) {
       // Other failure.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
