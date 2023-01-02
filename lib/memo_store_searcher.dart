@@ -49,7 +49,10 @@ class MemoStoreSearcher {
       return;
     }
     for (final memo in _memoStore.memos) {
-      final text = memo.text.toLowerCase();
+      var text = memo.text.toLowerCase();
+      for (final tag in memo.tags) {
+        text += " ${tag.toLowerCase()}";
+      }
       var found = true;
       for (final keyword in keywords) {
         if (text.indexOf(keyword) < 0) {
