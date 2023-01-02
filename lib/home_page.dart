@@ -446,17 +446,15 @@ class _HomePageState extends State<HomePage> {
             Provider.of<MemoStore>(context, listen: false).lastMerged);
         final unsynchronized = lastModified.isAfter(lastMerged);
         return Card(
-            child: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
+          child: InkWell(
             child: common_uis.memoCardContents(context, memo, unsynchronized),
+            onTap: appState.mergingWithGoogleDrive
+            ? null
+            : () {
+              common_uis.viewMemo(context, memo);
+            },
           ),
-          onTap: appState.mergingWithGoogleDrive
-              ? null
-              : () {
-                  common_uis.viewMemo(context, memo);
-                },
-        ));
+        );
       },
     );
   }

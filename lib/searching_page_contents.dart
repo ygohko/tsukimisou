@@ -80,11 +80,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         }
         return Card(
           child: InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: common_uis.memoCardContents(
-                context, memo, unsynchronized),
-            ),
+            child: common_uis.memoCardContents(
+              context, memo, unsynchronized),
             onTap: appState.mergingWithGoogleDrive
             ? null
             : () async {

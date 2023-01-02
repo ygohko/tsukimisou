@@ -437,8 +437,11 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
     );
   }
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: contents,
+  return Padding(
+    padding: const EdgeInsets.all(12.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: contents,
+    ),
   );
 }
