@@ -88,7 +88,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             onTap: appState.mergingWithGoogleDrive
             ? null
             : () async {
-              await common_uis.viewMemo(memo, context);
+              await common_uis.viewMemo(context, memo);
           }),
         );
       },

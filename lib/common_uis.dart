@@ -347,7 +347,8 @@ Future<T?> showTransitiningDialog<T>({
   );
 }
 
-Future<void> viewMemo(Memo memo, BuildContext context) async {
+/// Views this memo.
+Future<void> viewMemo(BuildContext context, Memo memo) async {
   if (!hasLargeScreen()) {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
