@@ -160,8 +160,8 @@ class _ViewingPageState extends State<ViewingPage> {
     final localizations = AppLocalizations.of(context)!;
     final accepted = await common_uis.showConfirmationDialog(
         context,
-        "Delete this memo?",
-        "This action cannot be undone.",
+        localizations.deleteThisMemo,
+        localizations.thisActionCannotBeUndone,
         localizations.ok,
         localizations.cancel,
         true);
