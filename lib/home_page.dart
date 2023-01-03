@@ -110,7 +110,7 @@ class _HomePageState extends State<HomePage> {
       final localizations = AppLocalizations.of(context)!;
       await common_uis.showErrorDialog(
           context,
-          localizations.error,
+          localizations.memoStoreIsNotCompatible,
           localizations.memoStoreInTheLocalStorageIsNotCompatible,
           localizations.ok);
     } on IOException catch (exception) {
@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
       if (_fileLockedCount < 3) {
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         appState.mergingWithGoogleDrive = false;
-        await common_uis.showErrorDialog(context, localizations.error,
+        await common_uis.showErrorDialog(context, localizations.memoStoreIsLocked,
             localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
         return;
       } else {
@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
         appState.mergingWithGoogleDrive = false;
         final accepted = await common_uis.showConfirmationDialog(
             context,
-            localizations.confirm,
+            localizations.memoStoreIsLocked,
             localizations.memoStoreIsStillLocked,
             localizations.unlock,
             localizations.cancel,
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
       appState.mergingWithGoogleDrive = false;
       await common_uis.showErrorDialog(
           context,
-          localizations.error,
+          localizations.memoStoreIsNotCompatible,
           localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
           localizations.ok);
       return;

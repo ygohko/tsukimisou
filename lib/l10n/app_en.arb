@@ -67,20 +67,22 @@
     "@dismiss": {
         "description": "Button text for dismiss button in synchronizing banner."
     },
+    "memoStoreIsLocked": "Memo store is locked",
+    "@memoStoreIsLocked": {
+        "description": "Title for memo store locked error dialog."
+    },
     "memoStoreIsLockedByOtherDevice": "Memo store is locked by other device. Please try again later.",
     "@memoStoreIsLockedByOtherDevice": {
-        "description": "Error text when loading from Google Drive failed because memo store is locked"
+        "description": "Text for memo store locked error dialog."
     },
     "memoStoreIsStillLocked": "Memo store is still locked but if there are no synchronizing devices you can also force unlock. Do you want to unlock?",
     "@memoStoreIsStillLocked": {
-        "description": "Confirmation text when user can unlock memo store"
+        "description": "Text for memo store unlocking confirmation dialog"
     },
     "unlock": "Unlock",
     "@unlock": {
         "description": "Text for unlock button"
     },
-
-
     "loadingWasFailed": "Loading was failed",
     "@loadingWasFailed": {
         "description": "Title for loading error dialog."
@@ -89,8 +91,6 @@
     "@couldNotLoadMemoStoreFromGoogleDrive": {
         "description": "Text for Google Drive loading error dialog."
     },
-
-
     "savingWasFailed": "Saving was failed",
     "@savingWasFailed": {
         "description": "Title for saving error dialog."
@@ -103,13 +103,17 @@
     "@couldNotSaveMemoStoreToGoogleDrive": {
         "description": "Text for Google Drive saving error dialog."
     },
+    "memoStoreIsNotCompatible": "Memo store is not compatible",
+    "@memoStoreIsNotCompatible": {
+        "description": "Title for local version error dialog."
+    },
     "memoStoreInTheLocalStorageIsNotCompatible": "Memo store in the local storage is not compatible. Updating this app may solve the issue.",
     "@memoStoreInTheLocalStorageIsNotCompatible": {
-        "description": "Error text when memo store in the local storage is not compatible"
+        "description": "Text for local version error dialog."
     },
     "memoStoreOnTheGoogleDriveIsNotCompatible": "Memo store on the Google Drive is not compatible. Updating this app may solve the issue.",
     "@memoStoreInTheGoogleDriveIsNotCompatible": {
-        "description": "Error text when memo store in the local storage is not compatible"
+        "description": "Text for Google Drive version error dialog."
     },
     "memoAtDateTime": "Memo at {dateTime}",
     "@memoAtDateTime": {
