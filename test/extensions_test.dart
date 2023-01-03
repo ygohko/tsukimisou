@@ -14,7 +14,7 @@ void main() {
       var dateTime = DateTime(now.year, now.month, now.day, 3, 4);
       expect(dateTime.toSmartString(), '03:04');
 
-      if (now.month != 1 && now.day != 2) {
+      if (now.month != 1 || now.day != 2) {
         dateTime = DateTime(now.year, 1, 2, 3, 4);
         expect(dateTime.toSmartString(), '01/02 03:04');
       } else {

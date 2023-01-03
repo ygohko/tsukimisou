@@ -128,8 +128,8 @@ class _EditingPageState extends State<EditingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await showErrorDialog(context, localizations.error,
-          localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
+      await showErrorDialog(context, localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
     }
     Navigator.of(context).pop();
   }
@@ -148,8 +148,8 @@ class _EditingPageState extends State<EditingPage> {
     }
     final accepted = await showConfirmationDialog(
         context,
-        localizations.confirm,
-        localizations.doYouReallyWantToDiscardTheChanges,
+        localizations.discardThisChanges,
+        localizations.thisActionCannotBeUndone,
         localizations.ok,
         localizations.cancel,
         true);

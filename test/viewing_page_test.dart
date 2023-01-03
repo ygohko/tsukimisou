@@ -48,7 +48,7 @@ void main() {
       await init(tester, memo);
       await tester.tap(find.byIcon(Icons.delete));
       await tester.pump();
-      expect(find.text('Confirm'), findsOneWidget);
+      expect(find.text('Delete this memo?'), findsOneWidget);
     });
 
     testWidgets(
