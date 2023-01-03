@@ -178,7 +178,8 @@ class _ViewingPageState extends State<ViewingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed, localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
     }
     Navigator.of(context).pop();
   }

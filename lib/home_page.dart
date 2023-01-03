@@ -176,8 +176,11 @@ class _HomePageState extends State<HomePage> {
       if (_fileLockedCount < 3) {
         ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
         appState.mergingWithGoogleDrive = false;
-        await common_uis.showErrorDialog(context, localizations.memoStoreIsLocked,
-            localizations.memoStoreIsLockedByOtherDevice, localizations.ok);
+        await common_uis.showErrorDialog(
+            context,
+            localizations.memoStoreIsLocked,
+            localizations.memoStoreIsLockedByOtherDevice,
+            localizations.ok);
         return;
       } else {
         // Confirm to force unlock
@@ -209,11 +212,8 @@ class _HomePageState extends State<HomePage> {
       // Other failure.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
-      await common_uis.showErrorDialog(
-          context,
-          localizations.loadingWasFailed,
-          localizations.couldNotLoadMemoStoreFromGoogleDrive,
-          localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.loadingWasFailed,
+          localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
       return;
     }
     _fileLockedCount = 0;
@@ -229,7 +229,8 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed, localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
       return;
     }
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
