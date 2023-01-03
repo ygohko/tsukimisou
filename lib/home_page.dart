@@ -211,8 +211,8 @@ class _HomePageState extends State<HomePage> {
       appState.mergingWithGoogleDrive = false;
       await common_uis.showErrorDialog(
           context,
-          localizations.error,
-          localizations.loadingMemoStoreFromGoogleDriveFailed,
+          localizations.loadingWasFailed,
+          localizations.couldNotLoadMemoStoreFromGoogleDrive,
           localizations.ok);
       return;
     }
@@ -229,8 +229,7 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
-      await common_uis.showErrorDialog(context, localizations.error,
-          localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.savingWasFailed, localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
       return;
     }
     ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
@@ -245,8 +244,8 @@ class _HomePageState extends State<HomePage> {
       await saver.execute();
     } on Exception catch (exception) {
       // Saving failed.
-      await common_uis.showErrorDialog(context, localizations.error,
-          localizations.savingMemoStoreToGoogleDriveFailed, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
     }
     setState(() {
       _savingToGoogleDrive = false;

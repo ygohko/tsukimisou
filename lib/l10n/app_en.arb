@@ -79,17 +79,29 @@
     "@unlock": {
         "description": "Text for unlock button"
     },
-    "loadingMemoStoreFromGoogleDriveFailed": "Loading memo store from Google Drive failed.",
-    "@loadingMemoStoreFromGoogleDriveFailed": {
-        "description": "Error text when loading from Google Drive failed"
+
+
+    "loadingWasFailed": "Loading was failed",
+    "@loadingWasFailed": {
+        "description": "Title for loading error dialog."
     },
-    "savingMemoStoreToGoogleDriveFailed": "Saving memo store to Google Drive failed.",
-    "@savingMemoStoreToGoogleDriveFailed": {
-        "description": "Error text when saving to Google Drive failed"
+    "couldNotLoadMemoStoreFromGoogleDrive": "Could not load memo store from Google Drive.",
+    "@couldNotLoadMemoStoreFromGoogleDrive": {
+        "description": "Text for Google Drive loading error dialog."
     },
-    "savingMemoStoreToLocalStorageFailed": "Saving memo store to local storage failed.",
-    "@savingMemoStoreToGoogleDriveFailed": {
-        "description": "Error text when saving to local storage failed"
+
+
+    "savingWasFailed": "Saving was failed",
+    "@savingWasFailed": {
+        "description": "Title for saving error dialog."
+    },
+    "couldNotSaveMemoStoreToLocalStorage": "Could not save memo store to local storage.",
+    "@couldNotSaveMemoStoreToLocalStorage": {
+        "description": "Text for local saving error dialog."
+    },
+    "couldNotSaveMemoStoreToGoogleDrive": "Could not save memo store to Google Drive.",
+    "@couldNotSaveMemoStoreToGoogleDrive": {
+        "description": "Text for Google Drive saving error dialog."
     },
     "memoStoreInTheLocalStorageIsNotCompatible": "Memo store in the local storage is not compatible. Updating this app may solve the issue.",
     "@memoStoreInTheLocalStorageIsNotCompatible": {
@@ -133,9 +145,13 @@
     "@confirm": {
         "description": "Title for confirmation dialog"
     },
-    "doYouReallyWantToDeleteThisMemo": "Do you really want to delete this memo?",
-    "@doYouReallyWantToDeleteThisMemo": {
-        "description": "Text for delete confirmation dialog"
+    "deleteThisMemo": "Delete this memo?",
+    "@deleteThisMemo": {
+        "description": "Title for delete confirmation dialog."
+    },
+    "thisActionCannotBeUndone": "This action cannot be undone.",
+    "@thisActionCannotBeUndone": {
+        "description": "Text for dialog when showing before destructive actions."
     },
     "cancel": "Cancel",
     "@cancel": {
@@ -161,9 +177,9 @@
     "@save": {
         "description": "Tooltip for Save button"
     },
-    "doYouReallyWantToDiscardTheChanges": "Do you really want to discard the changes?",
-    "@doYouReallyWantToDiscardTheChanges": {
-        "description": "Text for discard confirmation dialog"
+    "discardThisChanges": "Discard this changes?",
+    "@discardThisChanges": {
+        "description": "Title for discard confirmation dialog"
     },
     "bindTags": "Bind tags",
     "@bindTags": {

@@ -160,8 +160,8 @@ class _ViewingPageState extends State<ViewingPage> {
     final localizations = AppLocalizations.of(context)!;
     final accepted = await common_uis.showConfirmationDialog(
         context,
-        localizations.confirm,
-        localizations.doYouReallyWantToDeleteThisMemo,
+        "Delete this memo?",
+        "This action cannot be undone.",
         localizations.ok,
         localizations.cancel,
         true);
@@ -178,8 +178,7 @@ class _ViewingPageState extends State<ViewingPage> {
       memoStoreSaver.execute();
     } on IOException catch (exception) {
       // Save error
-      await common_uis.showErrorDialog(context, localizations.error,
-          localizations.savingMemoStoreToLocalStorageFailed, localizations.ok);
+      await common_uis.showErrorDialog(context, localizations.savingWasFailed, localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
     }
     Navigator.of(context).pop();
   }

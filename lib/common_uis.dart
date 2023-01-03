@@ -280,7 +280,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
         builder: (context) {
           return AlertDialog(
               title: Text(title),
-              content: Text(content),
+              content: content != '' ? Text(content) : null,
               actions: [
                 TextButton(
                     child: Text(acceptingText),
