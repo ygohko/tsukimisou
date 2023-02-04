@@ -93,6 +93,7 @@ class _HomePageState extends State<HomePage> {
     if (platform.isAndroid) {
       final initialText = await ReceiveSharingIntent.getInitialText();
       if (initialText != null) {
+        ReceiveSharingIntent.reset();
         _addMemo(initialText: initialText);
       }
     }
