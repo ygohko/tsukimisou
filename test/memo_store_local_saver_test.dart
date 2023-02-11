@@ -1,12 +1,14 @@
 import "dart:convert";
 import 'dart:io';
 
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_local_saver.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('MemoStoreLocalSaver', () {
     test('MemoStoreLocalSaver should be created from memo store and path', () {
       expect(MemoStoreLocalSaver(MemoStore(), './test.json'), isNotNull);
