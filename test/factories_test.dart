@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:path_provider_linux/path_provider_linux.dart';
 import 'package:path_provider_windows/path_provider_windows.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo_store.dart';
@@ -11,6 +12,9 @@ import 'package:tsukimisou/memo_store_google_drive_saver.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isLinux) {
+    PathProviderLinux.registerWith();
+  }
   if (Platform.isWindows) {
     PathProviderWindows.registerWith();
   }
