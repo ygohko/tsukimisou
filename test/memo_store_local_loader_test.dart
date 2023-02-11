@@ -1,10 +1,12 @@
 import 'dart:io';
 
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_local_loader.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('MemoStoreLocalLoader', () {
     test('MemoStoreLocalLoader should be created from memo store and path', () {
       expect(MemoStoreLocalLoader(MemoStore(), './test.json'), isNotNull);

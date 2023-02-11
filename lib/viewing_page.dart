@@ -27,6 +27,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
@@ -93,7 +94,30 @@ class _ViewingPageState extends State<ViewingPage> {
               width: double.infinity,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: SelectableText(widget.memo.text, style: textStyle),
+                child: SelectableText(
+                  widget.memo.text,
+                  style: textStyle,
+                  contextMenuBuilder: (context, editableTextState) {
+                    final value = editableTextState.textEditingValue;
+                    final items = editableTextState.contextMenuButtonItems;
+                    final string = value.selection.textInside(value.text);
+                    if (string.startsWith('http') && string.contains('://')) {
+                      items.insert(
+                        0,
+                        ContextMenuButtonItem(
+                          label: localizations.openAsUrl,
+                          onPressed: () {
+                            launch(string);
+                          }
+                        )
+                      );
+                    }
+                    return AdaptiveTextSelectionToolbar.buttonItems(
+                      anchors: editableTextState.contextMenuAnchors,
+                      buttonItems: items
+                    );
+                  },
+                ),
               ),
             ),
           ),
