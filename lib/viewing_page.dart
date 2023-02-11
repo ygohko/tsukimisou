@@ -101,11 +101,11 @@ class _ViewingPageState extends State<ViewingPage> {
                     final value = editableTextState.textEditingValue;
                     final items = editableTextState.contextMenuButtonItems;
                     final string = value.selection.textInside(value.text);
-                    if (string.startsWith('http')) {
+                    if (string.startsWith('http') && string.contains('://')) {
                       items.insert(
                         0,
                         ContextMenuButtonItem(
-                          label: 'Open as URL',
+                          label: localizations.openAsUrl,
                           onPressed: () {
                             launch(string);
                           }

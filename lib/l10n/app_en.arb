@@ -216,5 +216,9 @@
     "searchTitle": "Search",
     "@searchTitle": {
         "description": "App bar title for searching page"
+    },
+    "openAsUrl": "Open as URL",
+    "@openAsUrl": {
+        "description": "Text for Open as URL context menu item"
     }
 }
