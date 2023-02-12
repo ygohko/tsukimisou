@@ -107,6 +107,7 @@ class _ViewingPageState extends State<ViewingPage> {
                         ContextMenuButtonItem(
                           label: localizations.openAsUrl,
                           onPressed: () {
+                            ContextMenuController.removeAny();
                             launch(string);
                           }
                         )
