@@ -310,26 +310,36 @@ class _HomePageState extends State<HomePage> {
         content: Row(
           children: [
             Spacer(),
-            const SizedBox(
-              child: const CircularProgressIndicator(),
+            SizedBox(
+              child: CircularProgressIndicator(
+                color: common_uis.TsukimisouColors.scheme.primaryContainer,
+              ),
               width: 17.0,
               height: 17.0,
             ),
             SizedBox(
               width: 10.0,
             ),
-            Text(localizations.synchronizing),
+            Text(localizations.synchronizing,
+              style: TextStyle(
+                color: common_uis.TsukimisouColors.scheme.onSecondary,
+              )
+            ),
             Spacer(),
           ],
         ),
-        backgroundColor: common_uis.TsukimisouColors.scheme.primaryContainer,
+        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
         actions: [
           Text(''),
           TextButton(
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
             },
-            child: Text(localizations.dismiss),
+            child: Text(localizations.dismiss,
+              style: TextStyle(
+              color: common_uis.TsukimisouColors.scheme.primaryContainer,
+              )
+            ),
           ),
         ],
       ),
