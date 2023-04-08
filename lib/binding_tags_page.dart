@@ -94,7 +94,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
                   title: Text(tag),
                   trailing: Icon(
                     bound ? Icons.check_circle : Icons.check_circle_outline,
-                    color: bound ? Colors.blue : null,
+                    color: bound ? TsukimisouColors.scheme.primary : null,
                   ),
                   onTap: () {
                     if (bound) {

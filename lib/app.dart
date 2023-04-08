@@ -39,11 +39,6 @@ class App extends StatelessWidget {
     if (Platform.isWindows) {
       textTheme = textTheme.apply(fontFamily: 'Noto Sans JP');
     }
-    // TODO: Move to common_ui
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: TsukimisouColors.primary,
-      background: Color(0xFFF7F7FF),
-    );
     return MaterialApp(
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -54,10 +49,10 @@ class App extends StatelessWidget {
       theme: ThemeData(
         textTheme: textTheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: colorScheme.primaryContainer,
-          foregroundColor: colorScheme.onPrimaryContainer,
+          backgroundColor: TsukimisouColors.scheme.primaryContainer,
+          foregroundColor: TsukimisouColors.scheme.onPrimaryContainer,
         ),
-        colorScheme: colorScheme,
+        colorScheme: TsukimisouColors.scheme,
         useMaterial3: true,
       ),
       color: TsukimisouColors.primary,

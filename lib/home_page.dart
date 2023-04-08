@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage> {
             Spacer(),
           ],
         ),
-        backgroundColor: common_uis.TsukimisouColors.primaryLight,
+        backgroundColor: common_uis.TsukimisouColors.scheme.primaryContainer,
         actions: [
           Text(''),
           TextButton(
@@ -496,12 +496,6 @@ class _HomePageState extends State<HomePage> {
     final privacyPolicyIndex = aboutIndex + 1;
     final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
-
-    // TODO: Place on common_uis.
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: common_uis.TsukimisouColors.primary,
-    );
-
     return ListView.builder(
       primary: primary,
       itemCount: drawerItemCount,
@@ -511,7 +505,7 @@ class _HomePageState extends State<HomePage> {
             height: 120,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                color: colorScheme.primaryContainer,
+                color: common_uis.TsukimisouColors.scheme.primaryContainer,
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
@@ -519,7 +513,7 @@ class _HomePageState extends State<HomePage> {
                   localizations.showingMemos(_shownMemos.length,
                      memoStore.memos.length, tags.length),
                   style: TextStyle(
-                    color: colorScheme.onPrimaryContainer,
+                    color: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
                   ),
                 ),
               ),
@@ -530,8 +524,8 @@ class _HomePageState extends State<HomePage> {
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
             selected: !_filteringEnabled && !_searching,
-            selectedColor: colorScheme.onPrimaryContainer,
-            selectedTileColor: colorScheme.primaryContainer,
+            selectedColor: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+            selectedTileColor: common_uis.TsukimisouColors.scheme.primaryContainer,
           );
         } else if (i == tagsSubtitleIndex) {
           return common_uis.subtitle(context, localizations.tags);
