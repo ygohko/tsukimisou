@@ -48,12 +48,6 @@ class TsukimisouColors {
 
   /// Primary color for this application.
   static const primary = Color(0xFF00003F);
-
-  /// On primary color for this application.
-  static const onPrimary = Color(0xFFEFEFFF);
-
-  /// Primary light color for this application.
-  static const primaryLight = Color(0xFFE7E7FF);
 }
 
 class TsukimisouTextStyles {

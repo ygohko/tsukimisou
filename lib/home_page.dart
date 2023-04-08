@@ -537,8 +537,8 @@ class _HomePageState extends State<HomePage> {
               _filter(tag);
             },
             selected: _filteringEnabled && _filteringTag == tag && !_searching,
-            selectedColor: common_uis.TsukimisouColors.primary,
-            selectedTileColor: common_uis.TsukimisouColors.primaryLight,
+            selectedColor: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+            selectedTileColor: common_uis.TsukimisouColors.scheme.primaryContainer,
           );
         } else if (i == integrationDividerIndex) {
           return const Divider();
