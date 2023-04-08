@@ -496,6 +496,12 @@ class _HomePageState extends State<HomePage> {
     final privacyPolicyIndex = aboutIndex + 1;
     final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
+
+    // TODO: Place on common_uis.
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: common_uis.TsukimisouColors.primary,
+    );
+
     return ListView.builder(
       primary: primary,
       itemCount: drawerItemCount,
@@ -504,17 +510,18 @@ class _HomePageState extends State<HomePage> {
           return SizedBox(
             height: 120,
             child: DrawerHeader(
-              decoration: const BoxDecoration(
-                color: common_uis.TsukimisouColors.primary,
+              decoration: BoxDecoration(
+                color: colorScheme.primaryContainer,
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
-                // TODO: Show test for seaching
                 child: Text(
-                    localizations.showingMemos(_shownMemos.length,
-                        memoStore.memos.length, tags.length),
-                    style: const TextStyle(
-                        color: common_uis.TsukimisouColors.onPrimary)),
+                  localizations.showingMemos(_shownMemos.length,
+                     memoStore.memos.length, tags.length),
+                  style: TextStyle(
+                    color: colorScheme.onPrimaryContainer,
+                  ),
+                ),
               ),
             ),
           );
@@ -523,8 +530,8 @@ class _HomePageState extends State<HomePage> {
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
             selected: !_filteringEnabled && !_searching,
-            selectedColor: common_uis.TsukimisouColors.primary,
-            selectedTileColor: common_uis.TsukimisouColors.primaryLight,
+            selectedColor: colorScheme.onPrimaryContainer,
+            selectedTileColor: colorScheme.primaryContainer,
           );
         } else if (i == tagsSubtitleIndex) {
           return common_uis.subtitle(context, localizations.tags);
