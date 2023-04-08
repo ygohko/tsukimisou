@@ -42,7 +42,7 @@ class App extends StatelessWidget {
     // TODO: Move to common_ui
     final colorScheme = ColorScheme.fromSeed(
       seedColor: TsukimisouColors.primary,
-      background: Color(0xFFF1F1FF),
+      background: Color(0xFFF7F7FF),
     );
     return MaterialApp(
       localizationsDelegates: [
