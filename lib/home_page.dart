@@ -483,6 +483,7 @@ class _HomePageState extends State<HomePage> {
                     common_uis.viewMemo(context, memo);
                   },
           ),
+          elevation: 2.0,
         );
       },
     );
