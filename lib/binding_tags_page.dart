@@ -24,9 +24,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
+import 'extensions.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -35,10 +37,11 @@ import 'memo_store_local_saver.dart';
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
   final List<String> additinalTags;
+  final bool fullScreen;
 
   /// Creates a binding tags page.
   const BindingTagsPage(
-      {Key? key, required this.memo, required this.additinalTags})
+      {Key? key, required this.memo, required this.additinalTags, this.fullScreen = true})
       : super(key: key);
 
   @override
@@ -66,31 +69,39 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     final localizations = AppLocalizations.of(context)!;
     final listCount = _candidateTags.length + 1;
     final itemCount = listCount * 2;
+    final size = MediaQuery.of(context).size;
+    final platform = LocalPlatform();
+    // TODO: Add constants for dialog size.
+    final width = widget.fullScreen ? size.width : 520.0;
+    final height = (widget.fullScreen || !platform.isDesktop) ? size.height : 555.0;
     return WillPopScope(
       onWillPop: _apply,
       child: ScaffoldMessenger(
         key: _scaffoldMessengerKey,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(localizations.bindTags),
-          ),
-          body: ListView.builder(
-            itemCount: itemCount,
-            itemBuilder: (context, i) {
-              if (i.isOdd) {
-                return const Divider();
-              }
+        child: Container(
+          width: width,
+          height: height,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(localizations.bindTags),
+            ),
+            body: ListView.builder(
+              itemCount: itemCount,
+              itemBuilder: (context, i) {
+                if (i.isOdd) {
+                  return const Divider();
+                }
 
-              final index = i ~/ 2;
-              if (index == listCount - 1) {
+                final index = i ~/ 2;
+                if (index == listCount - 1) {
+                  return ListTile(
+                    title: Text(localizations.addANewTag),
+                    onTap: _addTag,
+                  );
+                }
+                final tag = _candidateTags[index];
+                final bound = _boundTags.contains(tag);
                 return ListTile(
-                  title: Text(localizations.addANewTag),
-                  onTap: _addTag,
-                );
-              }
-              final tag = _candidateTags[index];
-              final bound = _boundTags.contains(tag);
-              return ListTile(
                   title: Text(tag),
                   trailing: Icon(
                     bound ? Icons.check_circle : Icons.check_circle_outline,
@@ -102,8 +113,9 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
                     } else {
                       _bindTag(tag);
                     }
-                  });
-            },
+                });
+              },
+            ),
           ),
         ),
       ),
