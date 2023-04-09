@@ -76,6 +76,37 @@ class _ViewingPageState extends State<ViewingPage> {
     final size = MediaQuery.of(context).size;
     final width = _fullScreen ? size.width : 520.0;
     final height = _fullScreen ? size.height : 555.0;
+    var actions = <Widget>[];
+    if (common_uis.hasLargeScreen()) {
+      actions.add(
+        IconButton(
+          icon: _fullScreen ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
+          onPressed: () {
+            setState(() {
+                _fullScreen = !_fullScreen;
+            });
+          },
+          tooltip: _fullScreen ? 'Exit full screen' : 'Full screen',
+        ),
+      );
+    }
+    actions.addAll([
+        IconButton(
+          icon: const Icon(Icons.share),
+          onPressed: _share,
+          tooltip: localizations.share,
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: _delete,
+          tooltip: localizations.delete,
+        ),
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: _edit,
+          tooltip: localizations.edit,
+        ),
+    ]);
     return AnimatedContainer(
       duration: Duration(milliseconds: 100),
       curve: Curves.easeOut,
@@ -85,32 +116,7 @@ class _ViewingPageState extends State<ViewingPage> {
         appBar: AppBar(
           leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
           title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
-          actions: [
-            IconButton(
-              icon: _fullScreen ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
-              onPressed: () {
-                setState(() {
-                    _fullScreen = !_fullScreen;
-                });
-              },
-              tooltip: _fullScreen ? 'Exit full screen' : 'Full screen',
-            ),
-            IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: _share,
-              tooltip: localizations.share,
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: _delete,
-              tooltip: localizations.delete,
-            ),
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: _edit,
-              tooltip: localizations.edit,
-            ),
-          ],
+          actions: actions,
         ),
         body: ListView(
           children: [
