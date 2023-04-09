@@ -137,13 +137,10 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           final platform = LocalPlatform();
           return Center(
-            child: SizedBox(
-              width: 600.0,
-              height: platform.isDesktop ? 600.0 : null,
-              child: Dialog(
-                child: EditingPage(initialText: initialText),
-                elevation: 24,
-              ),
+            child: Dialog(
+              child: EditingPage(initialText: initialText, fullScreen: false),
+              insetPadding: EdgeInsets.all(0.0),
+              elevation: 24,
             ),
           );
         },
