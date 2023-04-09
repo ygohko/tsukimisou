@@ -53,9 +53,6 @@ class TsukimisouColors {
     seedColor: Color(0xFF00003F),
     background: Color(0xFFF7F7FF),
   );
-
-  /// Primary color for this application.
-  static const primary = Color(0xFF00003F);
 }
 
 class TsukimisouTextStyles {
