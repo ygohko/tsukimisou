@@ -28,6 +28,8 @@
     "memoStoreOnTheGoogleDriveIsNotCompatible": "Google Drive上のメモストアに互換性がありません。このアプリをアップデートすることで問題が解決するかもしれません。",
     "memoAtDateTime": "{dateTime}のメモ",
     "boundTags": "タグ: {tags}",
+    "fullScreen": "フルスクリーン",
+    "exitFullScreen": "フルスクリーンを終了",
     "share": "共有",
     "delete": "削除",
     "edit": "編集",

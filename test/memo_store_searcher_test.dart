@@ -5,7 +5,9 @@ import 'package:tsukimisou/memo_store_searcher.dart';
 
 void main() {
   group('MemoStoreSearcher', () {
-    test('MemoStoreSearcher should find a memo that its text contains keywords.', () {
+    test(
+        'MemoStoreSearcher should find a memo that its text contains keywords.',
+        () {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.text = 'This is a test. これはテストです。';
@@ -23,7 +25,9 @@ void main() {
       expect(searcher.results.length, 1);
     });
 
-    test('MemoStoreSearcher should find a memo that its text contains keywords.', () {
+    test(
+        'MemoStoreSearcher should find a memo that its text contains keywords.',
+        () {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.text = '';

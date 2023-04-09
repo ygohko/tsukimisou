@@ -55,7 +55,7 @@ class App extends StatelessWidget {
         colorScheme: TsukimisouColors.scheme,
         useMaterial3: true,
       ),
-      color: TsukimisouColors.primary,
+      color: TsukimisouColors.scheme.primaryContainer,
       supportedLocales: [
         Locale('en', ''),
         Locale('ja', ''),

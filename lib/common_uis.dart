@@ -39,15 +39,20 @@ typedef DialogTransitionBuilder = AnimatedWidget Function(
 
 late Size _size;
 
+class MemoDialogsSize {
+  /// Width of memo dialogs.
+  static const width = 520.0;
+
+  /// Height of memo dialogs.
+  static const height = 555.0;
+}
+
 class TsukimisouColors {
   /// Color scheme for this application.
   static final scheme = ColorScheme.fromSeed(
     seedColor: Color(0xFF00003F),
     background: Color(0xFFF7F7FF),
   );
-
-  /// Primary color for this application.
-  static const primary = Color(0xFF00003F);
 }
 
 class TsukimisouTextStyles {
