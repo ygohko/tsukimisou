@@ -35,9 +35,10 @@ import 'memo_store_local_saver.dart';
 class EditingPage extends StatefulWidget {
   final Memo? memo;
   final String? initialText;
+  final bool fullScreen;
 
   /// Creates a editing page.
-  const EditingPage({Key? key, this.memo, this.initialText}) : super(key: key);
+  const EditingPage({Key? key, this.memo, this.initialText, this.fullScreen = true}) : super(key: key);
 
   @override
   State<EditingPage> createState() => _EditingPageState();
@@ -77,29 +78,37 @@ class _EditingPageState extends State<EditingPage> {
     } else {
       leading = CloseButton();
     }
+    final size = MediaQuery.of(context).size;
+    // TODO: Add constants for dialog size.
+    final width = widget.fullScreen ? size.width : 520.0;
+    final height = widget.fullScreen ? size.height : 555.0;
     return WillPopScope(
       onWillPop: _confirm,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: leading,
-          title: Text(title),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: _save,
-              tooltip: localizations.save,
-            ),
-          ],
-        ),
-        body: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: TextField(
-              controller: _controller,
-              autofocus: true,
-              expands: true,
-              maxLines: null,
-              minLines: null,
+      child: Container(
+        width: width,
+        height: height,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: leading,
+            title: Text(title),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.done),
+                onPressed: _save,
+                tooltip: localizations.save,
+              ),
+            ],
+          ),
+          body: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: TextField(
+                controller: _controller,
+                autofocus: true,
+                expands: true,
+                maxLines: null,
+                minLines: null,
+              ),
             ),
           ),
         ),

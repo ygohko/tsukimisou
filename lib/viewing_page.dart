@@ -40,20 +40,28 @@ import 'memo_store_local_saver.dart';
 
 class ViewingPage extends StatefulWidget {
   final Memo memo;
+  final bool fullScreen;
 
   /// Creates a viewing page.
-  const ViewingPage({Key? key, required this.memo}) : super(key: key);
+  const ViewingPage({Key? key, required this.memo, this.fullScreen = true}) : super(key: key);
 
   @override
   State<ViewingPage> createState() => _ViewingPageState();
 }
 
 class _ViewingPageState extends State<ViewingPage> {
+  var _fullScreen = true;
+
+  @override
+  void initState() {
+    _fullScreen = widget.fullScreen;
+  }
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final dateTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
+    DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
     var tagsString = '';
     for (final tag in widget.memo.tags) {
       tagsString += tag + ', ';
@@ -62,79 +70,97 @@ class _ViewingPageState extends State<ViewingPage> {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
     final textStyle =
-        common_uis.TsukimisouTextStyles.viewingPageMemoText(context);
+    common_uis.TsukimisouTextStyles.viewingPageMemoText(context);
     final attributeStyle =
-        common_uis.TsukimisouTextStyles.viewingPageMemoAttribute(context);
-    return Scaffold(
-      appBar: AppBar(
-        leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
-        title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: _share,
-            tooltip: localizations.share,
-          ),
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _delete,
-            tooltip: localizations.delete,
-          ),
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _edit,
-            tooltip: localizations.edit,
-          ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          Card(
-            child: SizedBox(
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: SelectableText(
-                  widget.memo.text,
-                  style: textStyle,
-                  contextMenuBuilder: (context, editableTextState) {
-                    final value = editableTextState.textEditingValue;
-                    final items = editableTextState.contextMenuButtonItems;
-                    final string = value.selection.textInside(value.text);
-                    if (string.startsWith('http') && string.contains('://')) {
-                      items.insert(
-                        0,
-                        ContextMenuButtonItem(
-                          label: localizations.openAsUrl,
-                          onPressed: () {
-                            ContextMenuController.removeAny();
-                            launch(string);
-                          }
-                        )
+    common_uis.TsukimisouTextStyles.viewingPageMemoAttribute(context);
+    final size = MediaQuery.of(context).size;
+    final width = _fullScreen ? size.width : 520.0;
+    final height = _fullScreen ? size.height : 555.0;
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeOut,
+      width: width,
+      height: height,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
+          title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
+          actions: [
+            IconButton(
+              icon: _fullScreen ? const Icon(Icons.fullscreen_exit) : const Icon(Icons.fullscreen),
+              onPressed: () {
+                setState(() {
+                    _fullScreen = !_fullScreen;
+                });
+              },
+              tooltip: _fullScreen ? 'Exit full screen' : 'Full screen',
+            ),
+            IconButton(
+              icon: const Icon(Icons.share),
+              onPressed: _share,
+              tooltip: localizations.share,
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: _delete,
+              tooltip: localizations.delete,
+            ),
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: _edit,
+              tooltip: localizations.edit,
+            ),
+          ],
+        ),
+        body: ListView(
+          children: [
+            Card(
+              child: SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: SelectableText(
+                    widget.memo.text,
+                    style: textStyle,
+                    contextMenuBuilder: (context, editableTextState) {
+                      final value = editableTextState.textEditingValue;
+                      final items = editableTextState.contextMenuButtonItems;
+                      final string = value.selection.textInside(value.text);
+                      if (string.startsWith('http') && string.contains('://')) {
+                        items.insert(
+                          0,
+                          ContextMenuButtonItem(
+                            label: localizations.openAsUrl,
+                            onPressed: () {
+                              ContextMenuController.removeAny();
+                              launch(string);
+                            }
+                          )
+                        );
+                      }
+                      return AdaptiveTextSelectionToolbar.buttonItems(
+                        anchors: editableTextState.contextMenuAnchors,
+                        buttonItems: items
                       );
-                    }
-                    return AdaptiveTextSelectionToolbar.buttonItems(
-                      anchors: editableTextState.contextMenuAnchors,
-                      buttonItems: items
-                    );
-                  },
+                    },
+                  ),
                 ),
               ),
+              elevation: 2.0,
             ),
-            elevation: 2.0,
-          ),
-          ListTile(
-            title: Text(localizations.updated(dateTime.toDetailedString()),
+            ListTile(
+              title: Text(localizations.updated(dateTime.toDetailedString()),
                 style: attributeStyle),
-          ),
-          const Divider(),
-          ListTile(
-            title: Text(localizations.boundTags(tagsString),
+            ),
+            const Divider(),
+            ListTile(
+              title: Text(localizations.boundTags(tagsString),
                 style: attributeStyle),
-            onTap: _bindTags,
-          ),
-          const Divider(),
-        ],
+              onTap: _bindTags,
+            ),
+            const Divider(),
+          ],
+        ),
       ),
     );
   }
@@ -156,21 +182,18 @@ class _ViewingPageState extends State<ViewingPage> {
         builder: (context) {
           final platform = LocalPlatform();
           return Center(
-            child: SizedBox(
-              width: 600.0,
-              height: platform.isDesktop ? 600.0 : null,
               child: Dialog(
-                child: EditingPage(memo: widget.memo),
+                child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
+                insetPadding: EdgeInsets.all(0.0),
                 elevation: platform.isDesktop ? 0 : 24,
               ),
-            ),
-          );
-        },
-        barrierDismissible: false,
-        barrierColor: Color(0x00000000),
-        transitionBuilder: common_uis.DialogTransitionBuilders.editing,
-        curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 300),
+            );
+          },
+          barrierDismissible: false,
+          barrierColor: Color(0x00000000),
+          transitionBuilder: common_uis.DialogTransitionBuilders.editing,
+          curve: Curves.fastOutSlowIn,
+          duration: Duration(milliseconds: 300),
       );
     }
     setState(() {});
@@ -224,15 +247,12 @@ class _ViewingPageState extends State<ViewingPage> {
         context: context,
         builder: (context) {
           return Center(
-            child: SizedBox(
-              width: 600.0,
-              height: 600.0,
-              child: Dialog(
-                child: BindingTagsPage(
-                    memo: widget.memo, additinalTags: memoStore.tags),
-                elevation: 0,
-              ),
-            ),
+            child:  Dialog(
+              child: BindingTagsPage(
+                memo: widget.memo, additinalTags: memoStore.tags, fullScreen: _fullScreen),
+              insetPadding: EdgeInsets.all(0.0),
+              elevation: 0,
+           ),
           );
         },
         barrierDismissible: false,
