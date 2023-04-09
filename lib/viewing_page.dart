@@ -75,8 +75,8 @@ class _ViewingPageState extends State<ViewingPage> {
     final attributeStyle =
         common_uis.TsukimisouTextStyles.viewingPageMemoAttribute(context);
     final size = MediaQuery.of(context).size;
-    final width = _fullScreen ? size.width : 520.0;
-    final height = _fullScreen ? size.height : 555.0;
+    final width = _fullScreen ? size.width : common_uis.MemoDialogsSize.width;
+    final height = _fullScreen ? size.height : common_uis.MemoDialogsSize.height;
     var actions = <Widget>[];
     if (common_uis.hasLargeScreen()) {
       actions.add(
@@ -114,7 +114,7 @@ class _ViewingPageState extends State<ViewingPage> {
     ]);
     return AnimatedContainer(
       duration: Duration(milliseconds: 100),
-      curve: Curves.easeOut,
+      curve: Curves.easeOutCubic,
       width: width,
       height: height,
       child: Scaffold(

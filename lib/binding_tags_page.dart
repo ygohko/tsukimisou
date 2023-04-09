@@ -24,7 +24,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
@@ -73,11 +72,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     final listCount = _candidateTags.length + 1;
     final itemCount = listCount * 2;
     final size = MediaQuery.of(context).size;
-    final platform = LocalPlatform();
-    // TODO: Add constants for dialog size.
-    final width = widget.fullScreen ? size.width : 520.0;
-    final height =
-        (widget.fullScreen || !platform.isDesktop) ? size.height : 555.0;
+    final width = widget.fullScreen ? size.width : MemoDialogsSize.width;
+    final height = widget.fullScreen ? size.height : MemoDialogsSize.height;
     return WillPopScope(
       onWillPop: _apply,
       child: ScaffoldMessenger(

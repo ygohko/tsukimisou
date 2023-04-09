@@ -81,9 +81,8 @@ class _EditingPageState extends State<EditingPage> {
       leading = CloseButton();
     }
     final size = MediaQuery.of(context).size;
-    // TODO: Add constants for dialog size.
-    final width = widget.fullScreen ? size.width : 520.0;
-    final height = widget.fullScreen ? size.height : 555.0;
+    final width = widget.fullScreen ? size.width : MemoDialogsSize.width;
+    final height = widget.fullScreen ? size.height : MemoDialogsSize.height;
     return WillPopScope(
       onWillPop: _confirm,
       child: Container(
