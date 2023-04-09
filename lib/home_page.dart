@@ -321,10 +321,9 @@ class _HomePageState extends State<HomePage> {
               width: 10.0,
             ),
             Text(localizations.synchronizing,
-              style: TextStyle(
-                color: common_uis.TsukimisouColors.scheme.onSecondary,
-              )
-            ),
+                style: TextStyle(
+                  color: common_uis.TsukimisouColors.scheme.onSecondary,
+                )),
             Spacer(),
           ],
         ),
@@ -336,10 +335,9 @@ class _HomePageState extends State<HomePage> {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
             },
             child: Text(localizations.dismiss,
-              style: TextStyle(
-              color: common_uis.TsukimisouColors.scheme.primaryContainer,
-              )
-            ),
+                style: TextStyle(
+                  color: common_uis.TsukimisouColors.scheme.primaryContainer,
+                )),
           ),
         ],
       ),
@@ -521,10 +519,11 @@ class _HomePageState extends State<HomePage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  localizations.showingMemos(_shownMemos.length,
-                     memoStore.memos.length, tags.length),
+                  localizations.showingMemos(
+                      _shownMemos.length, memoStore.memos.length, tags.length),
                   style: TextStyle(
-                    color: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+                    color:
+                        common_uis.TsukimisouColors.scheme.onPrimaryContainer,
                   ),
                 ),
               ),
@@ -535,8 +534,10 @@ class _HomePageState extends State<HomePage> {
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
             selected: !_filteringEnabled && !_searching,
-            selectedColor: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-            selectedTileColor: common_uis.TsukimisouColors.scheme.primaryContainer,
+            selectedColor:
+                common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+            selectedTileColor:
+                common_uis.TsukimisouColors.scheme.primaryContainer,
           );
         } else if (i == tagsSubtitleIndex) {
           return common_uis.subtitle(context, localizations.tags);
@@ -548,8 +549,10 @@ class _HomePageState extends State<HomePage> {
               _filter(tag);
             },
             selected: _filteringEnabled && _filteringTag == tag && !_searching,
-            selectedColor: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-            selectedTileColor: common_uis.TsukimisouColors.scheme.primaryContainer,
+            selectedColor:
+                common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+            selectedTileColor:
+                common_uis.TsukimisouColors.scheme.primaryContainer,
           );
         } else if (i == integrationDividerIndex) {
           return const Divider();

@@ -41,7 +41,10 @@ class BindingTagsPage extends StatefulWidget {
 
   /// Creates a binding tags page.
   const BindingTagsPage(
-      {Key? key, required this.memo, required this.additinalTags, this.fullScreen = true})
+      {Key? key,
+      required this.memo,
+      required this.additinalTags,
+      this.fullScreen = true})
       : super(key: key);
 
   @override
@@ -73,7 +76,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     final platform = LocalPlatform();
     // TODO: Add constants for dialog size.
     final width = widget.fullScreen ? size.width : 520.0;
-    final height = (widget.fullScreen || !platform.isDesktop) ? size.height : 555.0;
+    final height =
+        (widget.fullScreen || !platform.isDesktop) ? size.height : 555.0;
     return WillPopScope(
       onWillPop: _apply,
       child: ScaffoldMessenger(
@@ -102,18 +106,18 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
                 final tag = _candidateTags[index];
                 final bound = _boundTags.contains(tag);
                 return ListTile(
-                  title: Text(tag),
-                  trailing: Icon(
-                    bound ? Icons.check_circle : Icons.check_circle_outline,
-                    color: bound ? TsukimisouColors.scheme.primary : null,
-                  ),
-                  onTap: () {
-                    if (bound) {
-                      _unbindTag(tag);
-                    } else {
-                      _bindTag(tag);
-                    }
-                });
+                    title: Text(tag),
+                    trailing: Icon(
+                      bound ? Icons.check_circle : Icons.check_circle_outline,
+                      color: bound ? TsukimisouColors.scheme.primary : null,
+                    ),
+                    onTap: () {
+                      if (bound) {
+                        _unbindTag(tag);
+                      } else {
+                        _bindTag(tag);
+                      }
+                    });
               },
             ),
           ),
