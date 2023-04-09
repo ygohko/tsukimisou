@@ -121,6 +121,7 @@ class _ViewingPageState extends State<ViewingPage> {
                 ),
               ),
             ),
+            elevation: 2.0,
           ),
           ListTile(
             title: Text(localizations.updated(dateTime.toDetailedString()),

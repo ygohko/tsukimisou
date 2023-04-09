@@ -48,11 +48,12 @@ class App extends StatelessWidget {
       ],
       theme: ThemeData(
         textTheme: textTheme,
-        primarySwatch: Colors.blue,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: TsukimisouColors.primary,
-          foregroundColor: TsukimisouColors.onPrimary,
+        appBarTheme: AppBarTheme(
+          backgroundColor: TsukimisouColors.scheme.primaryContainer,
+          foregroundColor: TsukimisouColors.scheme.onPrimaryContainer,
         ),
+        colorScheme: TsukimisouColors.scheme,
+        useMaterial3: true,
       ),
       color: TsukimisouColors.primary,
       supportedLocales: [

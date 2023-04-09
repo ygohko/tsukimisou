@@ -86,6 +86,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
                   : () async {
                       await common_uis.viewMemo(context, memo);
                     }),
+          elevation: 2.0,
         );
       },
     );
