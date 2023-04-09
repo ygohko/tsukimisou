@@ -129,6 +129,14 @@
             "tags": {}
         }
     },
+    "fullScreen": "Full screen",
+    "@fullScreen": {
+        "description": "Tooltip for Full screen button"
+    },
+    "exitFullScreen": "Exit full screen",
+    "@exitFullScreen": {
+        "description": "Tooltip for Exit full screen button"
+    },
     "share": "Share",
     "@share": {
         "description": "Tooltip for Share button"

@@ -86,7 +86,7 @@ class _ViewingPageState extends State<ViewingPage> {
                 _fullScreen = !_fullScreen;
             });
           },
-          tooltip: _fullScreen ? 'Exit full screen' : 'Full screen',
+          tooltip: _fullScreen ? localizations.exitFullScreen : localizations.fullScreen,
         ),
       );
     }
