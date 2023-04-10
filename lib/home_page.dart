@@ -502,6 +502,11 @@ class _HomePageState extends State<HomePage> {
     final privacyPolicyIndex = aboutIndex + 1;
     final drawerItemCount = privacyPolicyIndex + 1;
     final localizations = AppLocalizations.of(context)!;
+    const border = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(40.0),
+      ),
+    );
     return ListView.builder(
       primary: primary,
       itemCount: drawerItemCount,
@@ -535,6 +540,7 @@ class _HomePageState extends State<HomePage> {
                 common_uis.TsukimisouColors.scheme.onPrimaryContainer,
             selectedTileColor:
                 common_uis.TsukimisouColors.scheme.primaryContainer,
+            shape: border,
           );
         } else if (i == tagsSubtitleIndex) {
           return common_uis.subtitle(context, localizations.tags);
@@ -550,6 +556,7 @@ class _HomePageState extends State<HomePage> {
                 common_uis.TsukimisouColors.scheme.onPrimaryContainer,
             selectedTileColor:
                 common_uis.TsukimisouColors.scheme.primaryContainer,
+            shape: border,
           );
         } else if (i == integrationDividerIndex) {
           return const Divider();
@@ -561,6 +568,7 @@ class _HomePageState extends State<HomePage> {
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
             enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
+            shape: border,
           );
         } else if (i == othersDividerIndex) {
           return const Divider();
@@ -570,11 +578,13 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.about),
             onTap: _showAbout,
+            shape: border,
           );
         } else {
           return ListTile(
             title: Text(localizations.privacyPolicy),
             onTap: _showPrivacyPolicy,
+            shape: border,
           );
         }
       },
