@@ -507,6 +507,11 @@ class _HomePageState extends State<HomePage> {
         Radius.circular(40.0),
       ),
     );
+    var style = Theme.of(context).textTheme.bodyText2;
+    if (style == null) {
+      style = TextStyle();
+    }
+    style = style.apply(color: Colors.black.withOpacity(0.6));
     return ListView.builder(
       primary: primary,
       itemCount: drawerItemCount,
@@ -516,17 +521,26 @@ class _HomePageState extends State<HomePage> {
             height: 120,
             child: DrawerHeader(
               decoration: BoxDecoration(
+                /*
                 color: common_uis.TsukimisouColors.scheme.primaryContainer,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                ),
+                */
               ),
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   localizations.showingMemos(
-                      _shownMemos.length, memoStore.memos.length, tags.length),
+                    _shownMemos.length, memoStore.memos.length, tags.length),
+                  /*
                   style: TextStyle(
                     color:
-                        common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+                    common_uis.TsukimisouColors.scheme.onPrimaryContainer,
                   ),
+                  */
+                  style: style,
                 ),
               ),
             ),
