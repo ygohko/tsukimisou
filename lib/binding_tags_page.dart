@@ -172,7 +172,12 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       }
       if (!added) {
         final snackBar = SnackBar(
-          content: Text(snackBarText),
+          content: Text(snackBarText,
+            style: TextStyle(
+              color: TsukimisouColors.scheme.onSecondary,
+            ),
+          ),
+          backgroundColor: TsukimisouColors.scheme.secondary,
         );
         _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
       }
