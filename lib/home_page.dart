@@ -488,7 +488,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   ListView _drawerListView(bool primary) {
-    // const headerIndex = 0;
     const allMemosIndex = 0;
     const tagsSubtitleIndex = 1;
     const tagsBeginIndex = 2;
@@ -503,7 +502,6 @@ class _HomePageState extends State<HomePage> {
     final othersSubtitleIndex = othersDividerIndex + 1;
     final aboutIndex = othersSubtitleIndex + 1;
     final privacyPolicyIndex = aboutIndex + 1;
-    // final footerDividerIndex = privacyPolicyIndex + 1;
     final footerIndex = privacyPolicyIndex + 1;
     final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
@@ -512,12 +510,6 @@ class _HomePageState extends State<HomePage> {
         Radius.circular(40.0),
       ),
     );
-    // TODO: Move to common_uis.
-    var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = TextStyle();
-    }
-    style = style.apply(color: Colors.black.withOpacity(0.6));
     return ListView.builder(
       padding: const EdgeInsets.all(10.0),
       primary: primary,
@@ -585,7 +577,7 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 localizations.showingMemos(
                   _shownMemos.length, memoStore.memos.length, tags.length),
-                style: style,
+                style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
               ),
             ),
             padding: const EdgeInsets.all(16.0),

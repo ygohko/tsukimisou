@@ -67,6 +67,17 @@ class TsukimisouTextStyles {
     return style;
   }
 
+  /// Text style for drawer footer on home page.
+  static TextStyle homePageDrawerFooter(BuildContext context) {
+    var style = Theme.of(context).textTheme.bodyText2;
+    if (style == null) {
+      style = TextStyle();
+    }
+    style = style.apply(color: Colors.black.withOpacity(0.6));
+
+    return style;
+  }
+
   /// Text style for memo text on vieweing page.
   static TextStyle viewingPageMemoText(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
