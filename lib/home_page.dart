@@ -519,7 +519,7 @@ class _HomePageState extends State<HomePage> {
     }
     style = style.apply(color: Colors.black.withOpacity(0.6));
     return ListView.builder(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.all(10.0),
       primary: primary,
       itemCount: drawerItemCount,
       itemBuilder: (context, i) {
