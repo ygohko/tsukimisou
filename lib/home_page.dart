@@ -500,7 +500,9 @@ class _HomePageState extends State<HomePage> {
     final othersSubtitleIndex = othersDividerIndex + 1;
     final aboutIndex = othersSubtitleIndex + 1;
     final privacyPolicyIndex = aboutIndex + 1;
-    final drawerItemCount = privacyPolicyIndex + 1;
+    final footerDividerIndex = privacyPolicyIndex + 1;
+    final footerIndex = footerDividerIndex + 1;
+    final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     const border = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
@@ -594,11 +596,25 @@ class _HomePageState extends State<HomePage> {
             onTap: _showAbout,
             shape: border,
           );
-        } else {
+        } else if (i == privacyPolicyIndex){
           return ListTile(
             title: Text(localizations.privacyPolicy),
             onTap: _showPrivacyPolicy,
             shape: border,
+          );
+        } else if (i == footerDividerIndex) {
+          return Divider();
+        } else {
+          return Container(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                localizations.showingMemos(
+                  _shownMemos.length, memoStore.memos.length, tags.length),
+                style: style,
+              ),
+            ),
+            padding: EdgeInsets.all(16.0),
           );
         }
       },
