@@ -371,12 +371,15 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      drawer: Drawer(
-        child: Consumer2<MemoStore, AppState>(
-          builder: (context, memoStore, appState, child) {
-            _updateShownMemos();
-            return _drawerListView(true);
-          },
+      drawer: SafeArea(
+        bottom: false,
+        child: Drawer(
+          child: Consumer2<MemoStore, AppState>(
+            builder: (context, memoStore, appState, child) {
+              _updateShownMemos();
+              return _drawerListView(true);
+            },
+          ),
         ),
       ),
     );
