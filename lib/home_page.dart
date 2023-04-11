@@ -509,6 +509,7 @@ class _HomePageState extends State<HomePage> {
         Radius.circular(40.0),
       ),
     );
+    // TODO: Move to common_uis.
     var style = Theme.of(context).textTheme.bodyText2;
     if (style == null) {
       style = TextStyle();
@@ -519,6 +520,7 @@ class _HomePageState extends State<HomePage> {
       itemCount: drawerItemCount,
       itemBuilder: (context, i) {
         if (i == headerIndex) {
+          // TODO: Remove this.
           return SizedBox(
             height: 120,
             child: DrawerHeader(
