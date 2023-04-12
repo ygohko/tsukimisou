@@ -371,12 +371,15 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      drawer: Drawer(
-        child: Consumer2<MemoStore, AppState>(
-          builder: (context, memoStore, appState, child) {
-            _updateShownMemos();
-            return _drawerListView(true);
-          },
+      drawer: SafeArea(
+        bottom: false,
+        child: Drawer(
+          child: Consumer2<MemoStore, AppState>(
+            builder: (context, memoStore, appState, child) {
+              _updateShownMemos();
+              return _drawerListView(true);
+            },
+          ),
         ),
       ),
     );
@@ -485,10 +488,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   ListView _drawerListView(bool primary) {
-    const headerIndex = 0;
-    const allMemosIndex = 1;
-    const tagsSubtitleIndex = 2;
-    const tagsBeginIndex = 3;
+    const allMemosIndex = 0;
+    const tagsSubtitleIndex = 1;
+    const tagsBeginIndex = 2;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final appState = Provider.of<AppState>(context, listen: false);
     final tags = memoStore.tags;
@@ -500,33 +502,20 @@ class _HomePageState extends State<HomePage> {
     final othersSubtitleIndex = othersDividerIndex + 1;
     final aboutIndex = othersSubtitleIndex + 1;
     final privacyPolicyIndex = aboutIndex + 1;
-    final drawerItemCount = privacyPolicyIndex + 1;
+    final footerIndex = privacyPolicyIndex + 1;
+    final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
+    const border = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(40.0),
+      ),
+    );
     return ListView.builder(
+      padding: const EdgeInsets.all(10.0),
       primary: primary,
       itemCount: drawerItemCount,
       itemBuilder: (context, i) {
-        if (i == headerIndex) {
-          return SizedBox(
-            height: 120,
-            child: DrawerHeader(
-              decoration: BoxDecoration(
-                color: common_uis.TsukimisouColors.scheme.primaryContainer,
-              ),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  localizations.showingMemos(
-                      _shownMemos.length, memoStore.memos.length, tags.length),
-                  style: TextStyle(
-                    color:
-                        common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else if (i == allMemosIndex) {
+        if (i == allMemosIndex) {
           return ListTile(
             title: Text(localizations.allMemos),
             onTap: _disableFiltering,
@@ -535,6 +524,7 @@ class _HomePageState extends State<HomePage> {
                 common_uis.TsukimisouColors.scheme.onPrimaryContainer,
             selectedTileColor:
                 common_uis.TsukimisouColors.scheme.primaryContainer,
+            shape: border,
           );
         } else if (i == tagsSubtitleIndex) {
           return common_uis.subtitle(context, localizations.tags);
@@ -550,6 +540,7 @@ class _HomePageState extends State<HomePage> {
                 common_uis.TsukimisouColors.scheme.onPrimaryContainer,
             selectedTileColor:
                 common_uis.TsukimisouColors.scheme.primaryContainer,
+            shape: border,
           );
         } else if (i == integrationDividerIndex) {
           return const Divider();
@@ -561,6 +552,7 @@ class _HomePageState extends State<HomePage> {
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
             enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
+            shape: border,
           );
         } else if (i == othersDividerIndex) {
           return const Divider();
@@ -570,11 +562,25 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.about),
             onTap: _showAbout,
+            shape: border,
           );
-        } else {
+        } else if (i == privacyPolicyIndex){
           return ListTile(
             title: Text(localizations.privacyPolicy),
             onTap: _showPrivacyPolicy,
+            shape: border,
+          );
+        } else {
+          return Container(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                localizations.showingMemos(
+                  _shownMemos.length, memoStore.memos.length, tags.length),
+                style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
+              ),
+            ),
+            padding: const EdgeInsets.all(16.0),
           );
         }
       },
