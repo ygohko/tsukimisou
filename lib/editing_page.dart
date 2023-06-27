@@ -109,6 +109,13 @@ class _EditingPageState extends State<EditingPage> {
                 expands: true,
                 maxLines: null,
                 minLines: null,
+                // adhoc
+                style: TsukimisouTextStyles.viewingPageMemoText(context),
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                ),
               ),
             ),
           ),
