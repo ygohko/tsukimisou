@@ -99,6 +99,21 @@ class TsukimisouTextStyles {
 
     return style;
   }
+
+  /// Text style for text field on editing page.
+  static TextStyle editingPageTextField(BuildContext context) {
+    var style = Theme.of(context).textTheme.bodyText2;
+    if (style == null) {
+      style = TextStyle();
+    }
+    style = style.apply(
+      fontSizeFactor: 1.1,
+      heightFactor: 1.1,
+    );
+
+    return style;
+  }
+
 }
 
 class DialogTransitionBuilders {
