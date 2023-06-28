@@ -112,7 +112,6 @@ class TsukimisouTextStyles {
 
     return style;
   }
-
 }
 
 class DialogTransitionBuilders {
