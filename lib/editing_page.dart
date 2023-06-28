@@ -109,6 +109,12 @@ class _EditingPageState extends State<EditingPage> {
                 expands: true,
                 maxLines: null,
                 minLines: null,
+                style: TsukimisouTextStyles.editingPageTextField(context),
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide.none,
+                  ),
+                ),
               ),
             ),
           ),
