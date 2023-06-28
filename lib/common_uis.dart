@@ -108,7 +108,6 @@ class TsukimisouTextStyles {
     }
     style = style.apply(
       fontSizeFactor: 1.1,
-      heightFactor: 1.1,
     );
 
     return style;
