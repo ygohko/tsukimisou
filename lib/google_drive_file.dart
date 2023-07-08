@@ -43,7 +43,7 @@ class GoogleDriveFile {
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
     _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    final platform = const LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
@@ -75,7 +75,7 @@ class GoogleDriveFile {
   /// Reads contents as a string.
   Future<String> readAsString() async {
     _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    final platform = const LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
@@ -85,9 +85,9 @@ class GoogleDriveFile {
     final driveApi = DriveApi(client);
     // Find a file
     final fileIds = await _fileIds(driveApi, _fileName);
-    if (fileIds.length < 1) {
+    if (fileIds.isEmpty) {
       // File not found.
-      throw HttpException('File not found.');
+      throw const HttpException('File not found.');
     }
 
     final media = await driveApi.files
@@ -105,7 +105,7 @@ class GoogleDriveFile {
   /// Reads contents as a string with locking.
   Future<String> readAsStringLocked() async {
     _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    final platform = const LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {

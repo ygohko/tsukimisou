@@ -50,8 +50,8 @@ class MemoDialogsSize {
 class TsukimisouColors {
   /// Color scheme for this application.
   static final scheme = ColorScheme.fromSeed(
-    seedColor: Color(0xFF00003F),
-    background: Color(0xFFF7F7FF),
+    seedColor: const Color(0xFF00003F),
+    background: const Color(0xFFF7F7FF),
   );
 }
 
@@ -192,7 +192,7 @@ void init(BuildContext context) {
 
 /// Shows dialogs to indicate progressing.
 void showProgressIndicatorDialog(BuildContext context) {
-  final platform = LocalPlatform();
+  final platform = const LocalPlatform();
   late final Widget indicator;
   if (!platform.isApple) {
     indicator = const CircularProgressIndicator();
@@ -221,7 +221,7 @@ Future<bool> showConfirmationDialog(
     String acceptingText,
     String rejectingText,
     bool destructive) async {
-  final platform = LocalPlatform();
+  final platform = const LocalPlatform();
   var accepted = false;
   if (!platform.isIOS) {
     await showDialog(
@@ -393,14 +393,14 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
         return Center(
           child: Dialog(
             child: ViewingPage(memo: memo, fullScreen: false),
-            insetPadding: EdgeInsets.all(0.0),
+            insetPadding: const EdgeInsets.all(0.0),
           ),
         );
       },
       barrierDismissible: false,
       transitionBuilder: DialogTransitionBuilders.primary,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
   }
 }

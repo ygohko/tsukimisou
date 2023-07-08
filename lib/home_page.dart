@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _initAsync() async {
     await _load();
-    final platform = LocalPlatform();
+    final platform = const LocalPlatform();
     if (platform.isAndroid) {
       final initialText = await ReceiveSharingIntent.getInitialText();
       if (initialText != null) {
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
           return EditingPage(initialText: initialText);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+          return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
       ));
@@ -135,11 +135,11 @@ class _HomePageState extends State<HomePage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          final platform = LocalPlatform();
+          final platform = const LocalPlatform();
           return Center(
             child: Dialog(
               child: EditingPage(initialText: initialText, fullScreen: false),
-              insetPadding: EdgeInsets.all(0.0),
+              insetPadding: const EdgeInsets.all(0.0),
               elevation: 24,
             ),
           );
@@ -314,19 +314,19 @@ class _HomePageState extends State<HomePage> {
               width: 17.0,
               height: 17.0,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10.0,
             ),
             Text(localizations.synchronizing,
                 style: TextStyle(
                   color: common_uis.TsukimisouColors.scheme.onSecondary,
                 )),
-            Spacer(),
+            const Spacer(),
           ],
         ),
         backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
         actions: [
-          Text(''),
+          const Text(''),
           TextButton(
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
@@ -431,9 +431,9 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 } else {
-                  rightPaneWidget = SearchingPageContents();
+                  rightPaneWidget = const SearchingPageContents();
                 }
-                final platform = LocalPlatform();
+                final platform = const LocalPlatform();
                 if (platform.isMobile) {
                   rightPaneWidget = Scrollbar(
                     child: rightPaneWidget,

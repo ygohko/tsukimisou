@@ -76,9 +76,9 @@ class _EditingPageState extends State<EditingPage> {
     }
     late Widget leading;
     if (hasLargeScreen() && widget.memo != null) {
-      leading = BackButton();
+      leading = const BackButton();
     } else {
-      leading = CloseButton();
+      leading = const CloseButton();
     }
     final size = MediaQuery.of(context).size;
     final width = widget.fullScreen ? size.width : MemoDialogsSize.width;
@@ -110,8 +110,8 @@ class _EditingPageState extends State<EditingPage> {
                 maxLines: null,
                 minLines: null,
                 style: TsukimisouTextStyles.editingPageTextField(context),
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(
+                decoration: const InputDecoration(
+                  border: const UnderlineInputBorder(
                     borderSide: BorderSide.none,
                   ),
                 ),

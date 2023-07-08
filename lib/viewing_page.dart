@@ -113,13 +113,13 @@ class _ViewingPageState extends State<ViewingPage> {
       ),
     ]);
     return AnimatedContainer(
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
       curve: Curves.easeOutCubic,
       width: width,
       height: height,
       child: Scaffold(
         appBar: AppBar(
-          leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
+          leading: common_uis.hasLargeScreen() ? const CloseButton() : const BackButton(),
           title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
           actions: actions,
         ),
@@ -180,7 +180,7 @@ class _ViewingPageState extends State<ViewingPage> {
           return EditingPage(memo: widget.memo);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+          return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
       ));
@@ -188,20 +188,20 @@ class _ViewingPageState extends State<ViewingPage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          final platform = LocalPlatform();
+          final platform = const LocalPlatform();
           return Center(
             child: Dialog(
               child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
-              insetPadding: EdgeInsets.all(0.0),
+              insetPadding: const EdgeInsets.all(0.0),
               elevation: platform.isDesktop ? 0 : 24,
             ),
           );
         },
         barrierDismissible: false,
-        barrierColor: Color(0x00000000),
+        barrierColor: const Color(0x00000000),
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
       );
     }
     setState(() {});
@@ -260,16 +260,16 @@ class _ViewingPageState extends State<ViewingPage> {
                   memo: widget.memo,
                   additinalTags: memoStore.tags,
                   fullScreen: _fullScreen),
-              insetPadding: EdgeInsets.all(0.0),
+              insetPadding: const EdgeInsets.all(0.0),
               elevation: 0,
             ),
           );
         },
         barrierDismissible: false,
-        barrierColor: Color(0x00000000),
+        barrierColor: const Color(0x00000000),
         transitionBuilder: common_uis.DialogTransitionBuilders.dialogToDialog,
         curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 150),
       );
     }
     setState(() {});
