@@ -29,7 +29,7 @@ void main() {
 
   group('AbstructProviding', () {
     test('Platform should return whether platform is desktop or not.', () {
-      final platform = LocalPlatform();
+      final platform = const LocalPlatform();
       expect(platform.isDesktop, true);
     });
 

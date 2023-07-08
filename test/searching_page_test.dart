@@ -15,7 +15,7 @@ Future<void> init(WidgetTester tester) async {
         ChangeNotifierProvider<AppState>(create: (context) => AppState()),
       ],
       child: MaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
         ],
         home: const SearchingPage(),

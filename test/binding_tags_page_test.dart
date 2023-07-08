@@ -7,10 +7,10 @@ import 'package:tsukimisou/memo.dart';
 
 Future<void> init(WidgetTester tester, Memo memo) async {
   await tester.pumpWidget(MaterialApp(
-    localizationsDelegates: [
+    localizationsDelegates: const [
       AppLocalizations.delegate,
     ],
-    home: BindingTagsPage(memo: memo, additinalTags: ['d', 'e', 'f']),
+    home: BindingTagsPage(memo: memo, additinalTags: const ['d', 'e', 'f']),
   ));
 }
 

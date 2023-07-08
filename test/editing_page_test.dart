@@ -12,7 +12,7 @@ Future<void> init(WidgetTester tester, Memo? memo) async {
     ChangeNotifierProvider(
       create: (context) => MemoStore(),
       child: MaterialApp(
-        localizationsDelegates: [
+        localizationsDelegates: const [
           AppLocalizations.delegate,
         ],
         home: EditingPage(memo: memo),
