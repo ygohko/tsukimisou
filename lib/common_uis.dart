@@ -79,9 +79,7 @@ class TsukimisouTextStyles {
   /// Text style for memo text on vieweing page.
   static TextStyle viewingPageMemoText(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = const TextStyle();
-    }
+    style ??= const TextStyle();
     style = style.apply(fontSizeFactor: 1.1);
 
     return style;

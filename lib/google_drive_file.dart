@@ -336,7 +336,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
 }
 
 class _AuthenticatableMobileClient extends _AuthenticatableClient {
-  static GoogleSignIn? _signIn = null;
+  static GoogleSignIn? _signIn;
 
   /// Authenticates this client.
   @override
