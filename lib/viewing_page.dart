@@ -54,6 +54,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
   @override
   void initState() {
+    super.initState();
     _fullScreen = widget.fullScreen;
   }
 
