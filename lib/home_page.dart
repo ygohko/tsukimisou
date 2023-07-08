@@ -40,15 +40,10 @@ import 'factories.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_google_drive_loader.dart';
-import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
-import 'memo_store_local_loader.dart';
-import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
-import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
   /// Creates a home page.
@@ -89,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _initAsync() async {
     await _load();
-    final platform = const LocalPlatform();
+    const platform = LocalPlatform();
     if (platform.isAndroid) {
       final initialText = await ReceiveSharingIntent.getInitialText();
       if (initialText != null) {
@@ -260,7 +255,7 @@ class _HomePageState extends State<HomePage> {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return SearchingPage();
+          return const SearchingPage();
         },
       ),
     );

@@ -30,7 +30,6 @@ import 'common_uis.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_local_saver.dart';
 
 class EditingPage extends StatefulWidget {
   final Memo? memo;

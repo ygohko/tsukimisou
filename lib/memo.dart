@@ -32,7 +32,7 @@ class Memo {
 
   /// Creates a memo.
   Memo() {
-    final uuid = Uuid();
+    const uuid = Uuid();
     _id = uuid.v4();
   }
 

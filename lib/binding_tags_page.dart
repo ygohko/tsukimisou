@@ -27,11 +27,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
-import 'extensions.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_local_saver.dart';
 
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;

@@ -31,7 +31,6 @@ import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_searcher.dart';
-import 'viewing_page.dart';
 
 class SearchingPageContents extends StatefulWidget {
   /// Creates a searching page contents.

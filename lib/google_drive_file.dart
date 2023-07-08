@@ -43,7 +43,7 @@ class GoogleDriveFile {
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
     _AuthenticatableClient? client = null;
-    final platform = const LocalPlatform();
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
