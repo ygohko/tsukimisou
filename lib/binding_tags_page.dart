@@ -55,6 +55,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
 
   @override
   void initState() {
+    super.initState();
     _candidateTags = [...widget.memo.tags];
     for (final tag in widget.additinalTags) {
       if (!_candidateTags.contains(tag)) {

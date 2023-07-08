@@ -33,7 +33,7 @@ enum FactoriesType {
 
 abstract class Factories {
   static var _type = FactoriesType.app;
-  static Factories? _instance = null;
+  static Factories? _instance;
 
   /// Ceates memo store local loader.
   Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(

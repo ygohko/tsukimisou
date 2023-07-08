@@ -130,7 +130,6 @@ class _HomePageState extends State<HomePage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          const platform = LocalPlatform();
           return Center(
             child: Dialog(
               child: EditingPage(initialText: initialText, fullScreen: false),
@@ -142,7 +141,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
       );
     }
   }

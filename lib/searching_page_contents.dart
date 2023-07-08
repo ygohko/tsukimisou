@@ -42,7 +42,7 @@ class SearchingPageContents extends StatefulWidget {
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
-  late final _focusNode;
+  late final FocusNode _focusNode;
   var _memos = <Memo>[];
 
   @override
@@ -71,7 +71,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         final memo = _memos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-        late final unsynchronized;
+        late final bool unsynchronized;
         if (lastModified.isAfter(lastMerged)) {
           unsynchronized = true;
         } else {

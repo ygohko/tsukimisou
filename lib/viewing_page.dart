@@ -64,7 +64,7 @@ class _ViewingPageState extends State<ViewingPage> {
         DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
     var tagsString = '';
     for (final tag in widget.memo.tags) {
-      tagsString += tag + ', ';
+      tagsString += '$tag, ';
     }
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
