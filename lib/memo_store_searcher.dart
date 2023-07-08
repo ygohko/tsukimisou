@@ -37,12 +37,12 @@ class MemoStoreSearcher {
     final keywords = <String>[];
     for (var string in split) {
       string = string.toLowerCase();
-      if (string != '' && keywords.indexOf(string) < 0) {
+      if (string != '' && !keywords.contains(string)) {
         keywords.add(string.toLowerCase());
       }
     }
     _results.clear();
-    if (keywords.length < 1) {
+    if (keywords.isEmpty) {
       return;
     }
     for (final memo in _memoStore.memos) {

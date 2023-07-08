@@ -618,7 +618,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
     }
-    if (_shownMemos.length <= 0) {
+    if (_shownMemos.isEmpty) {
       _filteringEnabled = false;
       _shownMemos = [...memos];
     }

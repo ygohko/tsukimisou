@@ -58,7 +58,7 @@ class TsukimisouTextStyles {
   static TextStyle homePageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
     if (style == null) {
-      style = TextStyle();
+      style = const TextStyle();
     }
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
@@ -80,7 +80,7 @@ class TsukimisouTextStyles {
   static TextStyle viewingPageMemoText(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
     if (style == null) {
-      style = TextStyle();
+      style = const TextStyle();
     }
     style = style.apply(fontSizeFactor: 1.1);
 
@@ -91,7 +91,7 @@ class TsukimisouTextStyles {
   static TextStyle viewingPageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.subtitle1;
     if (style == null) {
-      style = TextStyle();
+      style = const TextStyle();
     }
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
@@ -102,7 +102,7 @@ class TsukimisouTextStyles {
   static TextStyle editingPageTextField(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
     if (style == null) {
-      style = TextStyle();
+      style = const TextStyle();
     }
     style = style.apply(
       fontSizeFactor: 1.1,
