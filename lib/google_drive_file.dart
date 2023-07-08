@@ -75,7 +75,7 @@ class GoogleDriveFile {
   /// Reads contents as a string.
   Future<String> readAsString() async {
     _AuthenticatableClient? client = null;
-    final platform = const LocalPlatform();
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
@@ -105,7 +105,8 @@ class GoogleDriveFile {
   /// Reads contents as a string with locking.
   Future<String> readAsStringLocked() async {
     _AuthenticatableClient? client = null;
-    final platform = const LocalPlatform();
+
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
@@ -208,7 +209,7 @@ class GoogleDriveFile {
         q: 'name = "${fileName}" and "${directoryId}" in parents and trashed = false');
     final files = result.files;
     if (files == null) {
-      throw HttpException('API does not return files.');
+      throw const HttpException('API does not return files.');
     }
     var fileIds = <String>[];
     for (final file in files) {

@@ -29,12 +29,12 @@ void main() {
 
   group('AbstructProviding', () {
     test('Platform should return whether platform is desktop or not.', () {
-      final platform = const LocalPlatform();
+      const platform = LocalPlatform();
       expect(platform.isDesktop, true);
     });
 
     test('Platform should return whether platform is mobile or not.', () {
-      final platform = const LocalPlatform();
+      const platform = LocalPlatform();
       expect(platform.isMobile, false);
     });
   });

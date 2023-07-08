@@ -135,7 +135,7 @@ class _HomePageState extends State<HomePage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          final platform = const LocalPlatform();
+          const platform = LocalPlatform();
           return Center(
             child: Dialog(
               child: EditingPage(initialText: initialText, fullScreen: false),
@@ -286,7 +286,7 @@ class _HomePageState extends State<HomePage> {
       context: context,
       applicationName: localizations.tsukimisou,
       applicationVersion: packageInfo.version,
-      applicationIcon: Image(
+      applicationIcon: const Image(
         image: AssetImage('assets/images/about_icon.png'),
       ),
       applicationLegalese: '(c) 2022 Yasuaki Gohko',
@@ -306,7 +306,7 @@ class _HomePageState extends State<HomePage> {
       MaterialBanner(
         content: Row(
           children: [
-            Spacer(),
+            const Spacer(),
             SizedBox(
               child: CircularProgressIndicator(
                 color: common_uis.TsukimisouColors.scheme.primaryContainer,
@@ -433,7 +433,7 @@ class _HomePageState extends State<HomePage> {
                 } else {
                   rightPaneWidget = const SearchingPageContents();
                 }
-                final platform = const LocalPlatform();
+                const platform = LocalPlatform();
                 if (platform.isMobile) {
                   rightPaneWidget = Scrollbar(
                     child: rightPaneWidget,

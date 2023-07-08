@@ -192,7 +192,7 @@ void init(BuildContext context) {
 
 /// Shows dialogs to indicate progressing.
 void showProgressIndicatorDialog(BuildContext context) {
-  final platform = const LocalPlatform();
+  const platform = LocalPlatform();
   late final Widget indicator;
   if (!platform.isApple) {
     indicator = const CircularProgressIndicator();
@@ -221,7 +221,7 @@ Future<bool> showConfirmationDialog(
     String acceptingText,
     String rejectingText,
     bool destructive) async {
-  final platform = const LocalPlatform();
+  const platform = LocalPlatform();
   var accepted = false;
   if (!platform.isIOS) {
     await showDialog(
@@ -302,7 +302,7 @@ Future<bool> showConfirmationDialog(
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String title, String content,
     String acceptingText) async {
-  final platform = LocalPlatform();
+  const platform = LocalPlatform();
   if (!platform.isIOS) {
     await showDialog(
         context: context,
@@ -420,7 +420,7 @@ Container subtitle(BuildContext context, String text) {
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
-  final platform = LocalPlatform();
+  const platform = LocalPlatform();
   if (platform.isDesktop) {
     return true;
   }

@@ -57,8 +57,8 @@ class App extends StatelessWidget {
       ),
       color: TsukimisouColors.scheme.primaryContainer,
       supportedLocales: const [
-        const Locale('en', ''),
-        const Locale('ja', ''),
+        Locale('en', ''),
+        Locale('ja', ''),
       ],
       title: 'Tsukimisou',
       home: const HomePage(),

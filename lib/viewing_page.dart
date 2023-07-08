@@ -188,7 +188,7 @@ class _ViewingPageState extends State<ViewingPage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          final platform = const LocalPlatform();
+          const platform = LocalPlatform();
           return Center(
             child: Dialog(
               child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),

@@ -90,7 +90,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         );
       },
     );
-    final platform = LocalPlatform();
+    const platform = LocalPlatform();
     if (platform.isMobile) {
       contents = Scrollbar(
         child: contents,
@@ -105,7 +105,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
-                icon: Icon(Icons.cancel),
+                icon: const Icon(Icons.cancel),
                 onPressed: _clear,
               ),
               border: OutlineInputBorder(
