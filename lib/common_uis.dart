@@ -99,9 +99,7 @@ class TsukimisouTextStyles {
   /// Text style for text field on editing page.
   static TextStyle editingPageTextField(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = const TextStyle();
-    }
+    style ??= const TextStyle();
     style = style.apply(
       fontSizeFactor: 1.1,
     );

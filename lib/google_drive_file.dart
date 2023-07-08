@@ -225,6 +225,7 @@ class _AuthenticatableClient extends BaseClient {
   final Client _client = Client();
 
   /// Sends a request.
+  @override
   Future<StreamedResponse> send(BaseRequest request) {
     final headers = _headers;
     if (headers != null) {

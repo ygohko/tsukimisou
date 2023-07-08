@@ -99,20 +99,18 @@ class _EditingPageState extends State<EditingPage> {
               ),
             ],
           ),
-          body: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _controller,
-                autofocus: true,
-                expands: true,
-                maxLines: null,
-                minLines: null,
-                style: TsukimisouTextStyles.editingPageTextField(context),
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
+          body:  Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: TextField(
+              controller: _controller,
+              autofocus: true,
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              style: TsukimisouTextStyles.editingPageTextField(context),
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),

@@ -26,7 +26,7 @@ import 'memo_store.dart';
 class MemoStoreSearcher {
   final MemoStore _memoStore;
   final String _query;
-  var _results = <Memo>[];
+  final _results = <Memo>[];
 
   /// Creates a memo store searcher.
   MemoStoreSearcher(this._memoStore, this._query);
@@ -52,7 +52,7 @@ class MemoStoreSearcher {
       }
       var found = true;
       for (final keyword in keywords) {
-        if (text.indexOf(keyword) < 0) {
+        if (!text.contains(keyword)) {
           found = false;
           break;
         }
