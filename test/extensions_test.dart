@@ -34,7 +34,7 @@ void main() {
     });
 
     test('Platform should return whether platform is mobile or not.', () {
-      final platform = LocalPlatform();
+      final platform = const LocalPlatform();
       expect(platform.isMobile, false);
     });
   });

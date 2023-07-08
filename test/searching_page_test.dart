@@ -14,11 +14,11 @@ Future<void> init(WidgetTester tester) async {
         ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
         ChangeNotifierProvider<AppState>(create: (context) => AppState()),
       ],
-      child: MaterialApp(
-        localizationsDelegates: const [
+      child: const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        home: const SearchingPage(),
+        home: SearchingPage(),
       ),
     ),
   );
