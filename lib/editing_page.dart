@@ -133,7 +133,7 @@ class _EditingPageState extends State<EditingPage> {
     } else {
       // Update a memo
       memo.text = _controller.text;
-      memoStore.notifyListeners();
+      memoStore.markAschanged();
     }
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');

@@ -54,6 +54,11 @@ class MemoStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Marks as changed.
+  void markAschanged() {
+    notifyListeners();
+  }
+
   /// Memo that has given ID.
   Memo? memoFromId(String id) {
     for (var memo in memos) {
