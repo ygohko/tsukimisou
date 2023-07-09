@@ -37,7 +37,7 @@ class MemoStore extends ChangeNotifier {
 
   /// Removes a memo from this memo store.
   void removeMemo(Memo memo) {
-    if (_memos.indexOf(memo) < 0) {
+    if (!_memos.contains(memo)) {
       return;
     }
     _removedMemoIds.add(memo.id);
@@ -66,7 +66,7 @@ class MemoStore extends ChangeNotifier {
   List<Memo> get memos => _memos;
 
   /// Memos that are stored in this memo store.
-  void set memos(List<Memo> memos) {
+  set memos(List<Memo> memos) {
     _memos = memos;
   }
 
@@ -74,7 +74,7 @@ class MemoStore extends ChangeNotifier {
   List<String> get removedMemoIds => _removedMemoIds;
 
   /// Memo IDs that are removed.
-  void set removedMemoIds(List<String> removedMemoIds) {
+  set removedMemoIds(List<String> removedMemoIds) {
     _removedMemoIds = removedMemoIds;
   }
 
@@ -82,7 +82,7 @@ class MemoStore extends ChangeNotifier {
   int get lastMerged => _lastMerged;
 
   /// Epoch milliseconds from last merged.
-  void set lastMerged(int lastMerged) {
+  set lastMerged(int lastMerged) {
     _lastMerged = lastMerged;
   }
 
