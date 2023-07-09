@@ -104,7 +104,7 @@ class TsukimisouTextStyles {
 
 class DialogTransitionBuilders {
   /// Primary dialog transition.
-  static final primary = (Animation<double> animation, Curve curve,
+  static AnimatedWidget primary(Animation<double> animation, Curve curve,
       Alignment alignment, Widget child) {
     return ScaleTransition(
       alignment: alignment,
@@ -118,10 +118,10 @@ class DialogTransitionBuilders {
       ),
       child: child,
     );
-  };
+  }
 
   /// Transition for editing dialog.
-  static final editing = (Animation<double> animation, Curve curve,
+  static AnimatedWidget editing(Animation<double> animation, Curve curve,
       Alignment alignment, Widget child) {
     return SlideTransition(
       transformHitTests: false,
@@ -131,10 +131,10 @@ class DialogTransitionBuilders {
       ).chain(CurveTween(curve: curve)).animate(animation),
       child: child,
     );
-  };
+  }
 
   /// Transition when showing dialogs from other dialog.
-  static final dialogToDialog = (Animation<double> animation, Curve curve,
+  static AnimatedWidget dialogToDialog(Animation<double> animation, Curve curve,
       Alignment alignment, Widget child) {
     return DialogToDialogTransition(
       phase: animation,
@@ -144,7 +144,7 @@ class DialogTransitionBuilders {
         child: child,
       ),
     );
-  };
+  }
 }
 
 class DialogToDialogTransition extends AnimatedWidget {
