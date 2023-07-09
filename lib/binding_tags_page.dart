@@ -208,7 +208,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException catch (exception) {
+    } on IOException {
       // Save error
       await showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);

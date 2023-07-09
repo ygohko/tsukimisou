@@ -305,7 +305,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
         _storeCredentials(storage, newCredentials);
 
         return;
-      } on Exception catch (exception) {
+      } on Exception {
         // Refresh failed. Try next step.
       }
     }
@@ -319,7 +319,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
       _accessToken = credentials.accessToken;
       updateHeaders(credentials.accessToken.data);
       _storeCredentials(storage, credentials);
-    } on Exception catch (exception) {
+    } on Exception {
       throw AuthenticationException('Failed to obtain access credentials.');
     }
   }
@@ -375,7 +375,7 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
         throw AuthenticationException('Failed to sign in to Google.');
       }
       updateHeaders(accessToken);
-    } on Exception catch (exception) {
+    } on Exception {
       throw AuthenticationException('Failed to sign in to Google.');
     }
   }

@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
         memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
-    } on FileNotCompatibleException catch (exception) {
+    } on FileNotCompatibleException {
       // Not compatible error.
       final localizations = AppLocalizations.of(context)!;
       await common_uis.showErrorDialog(
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
           localizations.memoStoreIsNotCompatible,
           localizations.memoStoreInTheLocalStorageIsNotCompatible,
           localizations.ok);
-    } on IOException catch (exception) {
+    } on IOException {
       // Load error
       // Do nothing for now
     }
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
         }
         return;
       }
-    } on FileNotCompatibleException catch (exception) {
+    } on FileNotCompatibleException {
       // Not compatible error.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
           localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
           localizations.ok);
       return;
-    } on Exception catch (exception) {
+    } on Exception {
       // Other failure.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
         toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on FileSystemException {
       // Saving failed.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -235,7 +235,7 @@ class _HomePageState extends State<HomePage> {
         factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
-    } on Exception catch (exception) {
+    } on Exception {
       // Saving failed.
       await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
