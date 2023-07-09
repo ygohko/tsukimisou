@@ -84,7 +84,7 @@ class _EditingPageState extends State<EditingPage> {
     final height = widget.fullScreen ? size.height : MemoDialogsSize.height;
     return WillPopScope(
       onWillPop: _confirm,
-      child: Container(
+      child: SizedBox(
         width: width,
         height: height,
         child: Scaffold(

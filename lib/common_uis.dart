@@ -384,8 +384,8 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       builder: (context) {
         return Center(
           child: Dialog(
-            child: ViewingPage(memo: memo, fullScreen: false),
             insetPadding: const EdgeInsets.all(0.0),
+            child: ViewingPage(memo: memo, fullScreen: false),
           ),
         );
       },

@@ -77,7 +77,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       onWillPop: _apply,
       child: ScaffoldMessenger(
         key: _scaffoldMessengerKey,
-        child: Container(
+        child: SizedBox(
           width: width,
           height: height,
           child: Scaffold(

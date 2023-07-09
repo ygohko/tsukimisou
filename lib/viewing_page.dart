@@ -126,6 +126,7 @@ class _ViewingPageState extends State<ViewingPage> {
         body: ListView(
           children: [
             Card(
+              elevation: 2.0,
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -154,7 +155,6 @@ class _ViewingPageState extends State<ViewingPage> {
                   ),
                 ),
               ),
-              elevation: 2.0,
             ),
             ListTile(
               title: Text(localizations.updated(dateTime.toDetailedString()),
@@ -191,9 +191,9 @@ class _ViewingPageState extends State<ViewingPage> {
           const platform = LocalPlatform();
           return Center(
             child: Dialog(
-              child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
               insetPadding: const EdgeInsets.all(0.0),
               elevation: platform.isDesktop ? 0 : 24,
+              child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
             ),
           );
         },
@@ -256,12 +256,12 @@ class _ViewingPageState extends State<ViewingPage> {
         builder: (context) {
           return Center(
             child: Dialog(
+              insetPadding: const EdgeInsets.all(0.0),
+              elevation: 0,
               child: BindingTagsPage(
                   memo: widget.memo,
                   additinalTags: memoStore.tags,
                   fullScreen: _fullScreen),
-              insetPadding: const EdgeInsets.all(0.0),
-              elevation: 0,
             ),
           );
         },

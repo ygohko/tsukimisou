@@ -78,14 +78,15 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           unsynchronized = false;
         }
         return Card(
-          child: InkWell(
-              child: common_uis.memoCardContents(context, memo, unsynchronized),
-              onTap: appState.mergingWithGoogleDrive
-                  ? null
-                  : () async {
-                      await common_uis.viewMemo(context, memo);
-                    }),
           elevation: 2.0,
+          child: InkWell(
+            onTap: appState.mergingWithGoogleDrive
+            ? null
+            : () async {
+              await common_uis.viewMemo(context, memo);
+            },
+            child: common_uis.memoCardContents(context, memo, unsynchronized),
+          ),
         );
       },
     );

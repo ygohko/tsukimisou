@@ -132,9 +132,9 @@ class _HomePageState extends State<HomePage> {
         builder: (context) {
           return Center(
             child: Dialog(
-              child: EditingPage(initialText: initialText, fullScreen: false),
               insetPadding: const EdgeInsets.all(0.0),
               elevation: 24,
+              child: EditingPage(initialText: initialText, fullScreen: false),
             ),
           );
         },
@@ -302,11 +302,11 @@ class _HomePageState extends State<HomePage> {
           children: [
             const Spacer(),
             SizedBox(
+              width: 17.0,
+              height: 17.0,
               child: CircularProgressIndicator(
                 color: common_uis.TsukimisouColors.scheme.primaryContainer,
               ),
-              width: 17.0,
-              height: 17.0,
             ),
             const SizedBox(
               width: 10.0,
@@ -459,20 +459,19 @@ class _HomePageState extends State<HomePage> {
         final memo = _shownMemos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-        final updated = lastModified.toSmartString();
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
         final unsynchronized = lastModified.isAfter(lastMerged);
         return Card(
+          elevation: 2.0,
           child: InkWell(
-            child: common_uis.memoCardContents(context, memo, unsynchronized),
             onTap: appState.mergingWithGoogleDrive
                 ? null
                 : () {
                     common_uis.viewMemo(context, memo);
                   },
+            child: common_uis.memoCardContents(context, memo, unsynchronized),
           ),
-          elevation: 2.0,
         );
       },
     );
@@ -563,6 +562,7 @@ class _HomePageState extends State<HomePage> {
           );
         } else {
           return Container(
+            padding: const EdgeInsets.all(16.0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -571,7 +571,6 @@ class _HomePageState extends State<HomePage> {
                 style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
               ),
             ),
-            padding: const EdgeInsets.all(16.0),
           );
         }
       },
