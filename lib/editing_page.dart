@@ -30,7 +30,6 @@ import 'common_uis.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_local_saver.dart';
 
 class EditingPage extends StatefulWidget {
   final Memo? memo;
@@ -76,16 +75,16 @@ class _EditingPageState extends State<EditingPage> {
     }
     late Widget leading;
     if (hasLargeScreen() && widget.memo != null) {
-      leading = BackButton();
+      leading = const BackButton();
     } else {
-      leading = CloseButton();
+      leading = const CloseButton();
     }
     final size = MediaQuery.of(context).size;
     final width = widget.fullScreen ? size.width : MemoDialogsSize.width;
     final height = widget.fullScreen ? size.height : MemoDialogsSize.height;
     return WillPopScope(
       onWillPop: _confirm,
-      child: Container(
+      child: SizedBox(
         width: width,
         height: height,
         child: Scaffold(
@@ -100,20 +99,18 @@ class _EditingPageState extends State<EditingPage> {
               ),
             ],
           ),
-          body: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: TextField(
-                controller: _controller,
-                autofocus: true,
-                expands: true,
-                maxLines: null,
-                minLines: null,
-                style: TsukimisouTextStyles.editingPageTextField(context),
-                decoration: InputDecoration(
-                  border: UnderlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
+          body:  Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: TextField(
+              controller: _controller,
+              autofocus: true,
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              style: TsukimisouTextStyles.editingPageTextField(context),
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(
+                  borderSide: BorderSide.none,
                 ),
               ),
             ),
@@ -136,18 +133,22 @@ class _EditingPageState extends State<EditingPage> {
     } else {
       // Update a memo
       memo.text = _controller.text;
-      memoStore.notifyListeners();
+      memoStore.markAschanged();
     }
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
-      await showErrorDialog(context, localizations.savingWasFailed,
+    } on IOException {
+      if (context.mounted) {
+        // Save error
+        await showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      }
     }
-    Navigator.of(context).pop();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   Future<bool> _confirm() async {

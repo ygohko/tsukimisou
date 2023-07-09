@@ -41,7 +41,7 @@ class _SearchingPageState extends State<SearchingPage> {
       appBar: AppBar(
         title: Text(localizations.searchTitle),
       ),
-      body: SearchingPageContents(),
+      body: const SearchingPageContents(),
     );
   }
 }

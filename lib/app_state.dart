@@ -29,7 +29,7 @@ class AppState extends ChangeNotifier {
   bool get mergingWithGoogleDrive => _mergingWithGoogleDrive;
 
   /// Whether merging with Google Drive.
-  void set mergingWithGoogleDrive(bool mergingWithGoogleDrive) {
+  set mergingWithGoogleDrive(bool mergingWithGoogleDrive) {
     _mergingWithGoogleDrive = mergingWithGoogleDrive;
     notifyListeners();
   }

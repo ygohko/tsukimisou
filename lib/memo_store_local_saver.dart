@@ -55,7 +55,7 @@ class MemoStoreLocalSaver extends MemoStoreAbstractLocalSaver {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
-    path = path + Platform.pathSeparator + 'Tsukimisou';
+    path = '$path${Platform.pathSeparator}Tsukimisou';
     Directory(path).create();
     path = path + Platform.pathSeparator + fileName;
 
@@ -79,7 +79,7 @@ class MemoStoreMockLocalSaver extends MemoStoreAbstractLocalSaver {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
-    path = path + Platform.pathSeparator + 'Tsukimisou';
+    path = '$path${Platform.pathSeparator}Tsukimisou';
     Directory(path).create();
     path = path + Platform.pathSeparator + fileName;
 

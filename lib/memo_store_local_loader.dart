@@ -55,8 +55,8 @@ class MemoStoreLocalLoader extends MemoStoreAbstractLocalLoader {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
-    path = path + Platform.pathSeparator + 'Tsukimisou';
-    path = path + Platform.pathSeparator + fileName;
+    path = '$path${Platform.pathSeparator}Tsukimisou';
+    path = '$path${Platform.pathSeparator}$fileName';
 
     return MemoStoreLocalLoader(memoStore, path);
   }
@@ -78,8 +78,8 @@ class MemoStoreMockLocalLoader extends MemoStoreAbstractLocalLoader {
     final applicationDocumentsDirectory =
         await getApplicationDocumentsDirectory();
     var path = applicationDocumentsDirectory.path;
-    path = path + Platform.pathSeparator + 'Tsukimisou';
-    path = path + Platform.pathSeparator + fileName;
+    path = '$path${Platform.pathSeparator}Tsukimisou';
+    path = '$path${Platform.pathSeparator}$fileName';
 
     return MemoStoreMockLocalLoader(memoStore, path);
   }

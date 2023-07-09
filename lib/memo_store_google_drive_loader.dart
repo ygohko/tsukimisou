@@ -20,11 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import "dart:convert";
-import 'dart:io';
-
 import 'google_drive_file.dart';
-import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 

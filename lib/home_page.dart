@@ -40,15 +40,10 @@ import 'factories.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_google_drive_loader.dart';
-import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
-import 'memo_store_local_loader.dart';
-import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
-import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
   /// Creates a home page.
@@ -89,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _initAsync() async {
     await _load();
-    final platform = LocalPlatform();
+    const platform = LocalPlatform();
     if (platform.isAndroid) {
       final initialText = await ReceiveSharingIntent.getInitialText();
       if (initialText != null) {
@@ -106,15 +101,17 @@ class _HomePageState extends State<HomePage> {
         memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
-    } on FileNotCompatibleException catch (exception) {
-      // Not compatible error.
-      final localizations = AppLocalizations.of(context)!;
-      await common_uis.showErrorDialog(
+    } on FileNotCompatibleException {
+      if (context.mounted) {
+        // Not compatible error.
+        final localizations = AppLocalizations.of(context)!;
+        await common_uis.showErrorDialog(
           context,
           localizations.memoStoreIsNotCompatible,
           localizations.memoStoreInTheLocalStorageIsNotCompatible,
           localizations.ok);
-    } on IOException catch (exception) {
+      }
+    } on IOException {
       // Load error
       // Do nothing for now
     }
@@ -127,7 +124,7 @@ class _HomePageState extends State<HomePage> {
           return EditingPage(initialText: initialText);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+          return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
       ));
@@ -135,19 +132,18 @@ class _HomePageState extends State<HomePage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          final platform = LocalPlatform();
           return Center(
             child: Dialog(
-              child: EditingPage(initialText: initialText, fullScreen: false),
-              insetPadding: EdgeInsets.all(0.0),
+              insetPadding: const EdgeInsets.all(0.0),
               elevation: 24,
+              child: EditingPage(initialText: initialText, fullScreen: false),
             ),
           );
         },
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
       );
     }
   }
@@ -196,7 +192,7 @@ class _HomePageState extends State<HomePage> {
         }
         return;
       }
-    } on FileNotCompatibleException catch (exception) {
+    } on FileNotCompatibleException {
       // Not compatible error.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -206,7 +202,7 @@ class _HomePageState extends State<HomePage> {
           localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
           localizations.ok);
       return;
-    } on Exception catch (exception) {
+    } on Exception {
       // Other failure.
       ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -215,23 +211,32 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     _fileLockedCount = 0;
-    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
-    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
-    merger.execute();
+    late final MemoStore toMemoStore;
+    if (context.mounted) {
+      toMemoStore = Provider.of<MemoStore>(context, listen: false);
+      final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      merger.execute();
+    }
 
     final localSaver = await factories.memoStoreLocalSaverFromFileName(
         toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
-    } on FileSystemException catch (exception) {
+    } on FileSystemException {
       // Saving failed.
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      }
       appState.mergingWithGoogleDrive = false;
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+      if (context.mounted) {
+        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      }
       return;
     }
-    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    }
     appState.mergingWithGoogleDrive = false;
 
     setState(() {
@@ -241,10 +246,12 @@ class _HomePageState extends State<HomePage> {
         factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
-    } on Exception catch (exception) {
+    } on Exception {
       // Saving failed.
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+      if (context.mounted) {
+        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
+      }
     }
     setState(() {
       _savingToGoogleDrive = false;
@@ -260,7 +267,7 @@ class _HomePageState extends State<HomePage> {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return SearchingPage();
+          return const SearchingPage();
         },
       ),
     );
@@ -280,23 +287,29 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
     if (!common_uis.hasLargeScreen()) {
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
-    showAboutDialog(
-      context: context,
-      applicationName: localizations.tsukimisou,
-      applicationVersion: packageInfo.version,
-      applicationIcon: Image(
-        image: AssetImage('assets/images/about_icon.png'),
-      ),
-      applicationLegalese: '(c) 2022 Yasuaki Gohko',
-    );
+    if (context.mounted) {
+      showAboutDialog(
+        context: context,
+        applicationName: localizations.tsukimisou,
+        applicationVersion: packageInfo.version,
+        applicationIcon: const Image(
+          image: AssetImage('assets/images/about_icon.png'),
+        ),
+        applicationLegalese: '(c) 2022 Yasuaki Gohko',
+      );
+    }
   }
 
   void _showPrivacyPolicy() async {
-    await launch('https://sites.gonypage.jp/home/tsukimisou/privacy-policy');
+    await launchUrl(Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
     if (!common_uis.hasLargeScreen()) {
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -306,27 +319,27 @@ class _HomePageState extends State<HomePage> {
       MaterialBanner(
         content: Row(
           children: [
-            Spacer(),
+            const Spacer(),
             SizedBox(
+              width: 17.0,
+              height: 17.0,
               child: CircularProgressIndicator(
                 color: common_uis.TsukimisouColors.scheme.primaryContainer,
               ),
-              width: 17.0,
-              height: 17.0,
             ),
-            SizedBox(
+            const SizedBox(
               width: 10.0,
             ),
             Text(localizations.synchronizing,
                 style: TextStyle(
                   color: common_uis.TsukimisouColors.scheme.onSecondary,
                 )),
-            Spacer(),
+            const Spacer(),
           ],
         ),
         backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
         actions: [
-          Text(''),
+          const Text(''),
           TextButton(
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
@@ -431,9 +444,9 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 } else {
-                  rightPaneWidget = SearchingPageContents();
+                  rightPaneWidget = const SearchingPageContents();
                 }
-                final platform = LocalPlatform();
+                const platform = LocalPlatform();
                 if (platform.isMobile) {
                   rightPaneWidget = Scrollbar(
                     child: rightPaneWidget,
@@ -462,26 +475,22 @@ class _HomePageState extends State<HomePage> {
       itemCount: _shownMemos.length,
       itemBuilder: (context, i) {
         final appState = Provider.of<AppState>(context, listen: false);
-        final localizations = AppLocalizations.of(context)!;
-        final attributeStyle =
-            common_uis.TsukimisouTextStyles.homePageMemoAttribute(context);
         final memo = _shownMemos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-        final updated = lastModified.toSmartString();
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
         final unsynchronized = lastModified.isAfter(lastMerged);
         return Card(
+          elevation: 2.0,
           child: InkWell(
-            child: common_uis.memoCardContents(context, memo, unsynchronized),
             onTap: appState.mergingWithGoogleDrive
                 ? null
                 : () {
                     common_uis.viewMemo(context, memo);
                   },
+            child: common_uis.memoCardContents(context, memo, unsynchronized),
           ),
-          elevation: 2.0,
         );
       },
     );
@@ -572,6 +581,7 @@ class _HomePageState extends State<HomePage> {
           );
         } else {
           return Container(
+            padding: const EdgeInsets.all(16.0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -580,7 +590,6 @@ class _HomePageState extends State<HomePage> {
                 style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
               ),
             ),
-            padding: const EdgeInsets.all(16.0),
           );
         }
       },
@@ -623,7 +632,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
     }
-    if (_shownMemos.length <= 0) {
+    if (_shownMemos.isEmpty) {
       _filteringEnabled = false;
       _shownMemos = [...memos];
     }

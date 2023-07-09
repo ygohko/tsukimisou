@@ -23,80 +23,52 @@
 import 'package:uuid/uuid.dart';
 
 class Memo {
-  var _id = '';
-  var _lastModified = 0;
+  /// A ID of this memo.
+  var id = '';
+  /// Epoch milliseconds from last modified.
+  var lastModified = 0;
+  /// Revision of this memo.
+  var revision = 0;
+  /// Revision when last merged.
+  var lastMergedRevision = 0;
   var _text = '';
   var _tags = <String>[];
-  var _revision = 0;
-  var _lastMergedRevision = 0;
 
   /// Creates a memo.
   Memo() {
-    final uuid = Uuid();
-    _id = uuid.v4();
+    const uuid = Uuid();
+    id = uuid.v4();
   }
 
   /// Returns a JSON serializable object.
   dynamic toSerializable() {
     return {
-      'id': _id,
-      'lastModified': _lastModified,
+      'id': id,
+      'lastModified': lastModified,
       'text': _text,
       'tags': _tags,
-      'revision': _revision,
-      'lastMergedRevision': _lastMergedRevision
+      'revision': revision,
+      'lastMergedRevision': lastMergedRevision
     };
-  }
-
-  /// A ID of this memo.
-  String get id => _id;
-
-  /// A ID of this memo.
-  void set id(String id) {
-    _id = id;
-  }
-
-  /// Epoch milliseconds from last modified.
-  int get lastModified => _lastModified;
-
-  /// Epoch milliseconds from last modified.
-  void set lastModified(int lastModified) {
-    _lastModified = lastModified;
   }
 
   /// Text of this memo.
   String get text => _text;
 
   /// Text of this memo.
-  void set text(String text) {
+  set text(String text) {
     _text = text;
-    _lastModified = DateTime.now().millisecondsSinceEpoch;
-    _revision++;
+    lastModified = DateTime.now().millisecondsSinceEpoch;
+    revision++;
   }
 
   /// Tags added to this memo.
   List<String> get tags => _tags;
 
   /// Tags added to this memo.
-  void set tags(List<String> tags) {
+  set tags(List<String> tags) {
     _tags = tags;
-    _lastModified = DateTime.now().millisecondsSinceEpoch;
-    _revision++;
-  }
-
-  /// Revision of this memo.
-  int get revision => _revision;
-
-  /// Revision of this memo.
-  void set revision(int revision) {
-    _revision = revision;
-  }
-
-  /// Revision when last merged.
-  int get lastMergedRevision => _lastMergedRevision;
-
-  /// Revision when last merged.
-  void set lastMergedRevision(int lastMergedRevision) {
-    _lastMergedRevision = lastMergedRevision;
+    lastModified = DateTime.now().millisecondsSinceEpoch;
+    revision++;
   }
 }

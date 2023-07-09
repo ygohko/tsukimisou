@@ -27,11 +27,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
-import 'extensions.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_local_saver.dart';
 
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
@@ -57,6 +55,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
 
   @override
   void initState() {
+    super.initState();
     _candidateTags = [...widget.memo.tags];
     for (final tag in widget.additinalTags) {
       if (!_candidateTags.contains(tag)) {
@@ -78,7 +77,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       onWillPop: _apply,
       child: ScaffoldMessenger(
         key: _scaffoldMessengerKey,
-        child: Container(
+        child: SizedBox(
           width: width,
           height: height,
           child: Scaffold(
@@ -204,15 +203,17 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       return true;
     }
     widget.memo.tags = [..._boundTags];
-    memoStore.notifyListeners();
+    memoStore.markAschanged();
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
-      await showErrorDialog(context, localizations.savingWasFailed,
+    } on IOException {
+      if (context.mounted) {
+        // Save error
+        await showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      }
     }
 
     return true;

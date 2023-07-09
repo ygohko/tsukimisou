@@ -20,8 +20,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,18 +48,16 @@ class MemoDialogsSize {
 class TsukimisouColors {
   /// Color scheme for this application.
   static final scheme = ColorScheme.fromSeed(
-    seedColor: Color(0xFF00003F),
-    background: Color(0xFFF7F7FF),
+    seedColor: const Color(0xFF00003F),
+    background: const Color(0xFFF7F7FF),
   );
 }
 
 class TsukimisouTextStyles {
   /// Text style for memo attributes on home page.
   static TextStyle homePageMemoAttribute(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = TextStyle();
-    }
+    var style = Theme.of(context).textTheme.bodyMedium;
+    style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
@@ -69,10 +65,8 @@ class TsukimisouTextStyles {
 
   /// Text style for drawer footer on home page.
   static TextStyle homePageDrawerFooter(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = TextStyle();
-    }
+    var style = Theme.of(context).textTheme.bodyMedium;
+    style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
@@ -80,10 +74,8 @@ class TsukimisouTextStyles {
 
   /// Text style for memo text on vieweing page.
   static TextStyle viewingPageMemoText(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = TextStyle();
-    }
+    var style = Theme.of(context).textTheme.bodyMedium;
+    style ??= const TextStyle();
     style = style.apply(fontSizeFactor: 1.1);
 
     return style;
@@ -91,10 +83,8 @@ class TsukimisouTextStyles {
 
   /// Text style for memo attributes on vieweing page.
   static TextStyle viewingPageMemoAttribute(BuildContext context) {
-    var style = Theme.of(context).textTheme.subtitle1;
-    if (style == null) {
-      style = TextStyle();
-    }
+    var style = Theme.of(context).textTheme.titleMedium;
+    style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
@@ -102,10 +92,8 @@ class TsukimisouTextStyles {
 
   /// Text style for text field on editing page.
   static TextStyle editingPageTextField(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = TextStyle();
-    }
+    var style = Theme.of(context).textTheme.bodyMedium;
+    style ??= const TextStyle();
     style = style.apply(
       fontSizeFactor: 1.1,
     );
@@ -116,7 +104,7 @@ class TsukimisouTextStyles {
 
 class DialogTransitionBuilders {
   /// Primary dialog transition.
-  static final primary = (Animation<double> animation, Curve curve,
+  static AnimatedWidget primary(Animation<double> animation, Curve curve,
       Alignment alignment, Widget child) {
     return ScaleTransition(
       alignment: alignment,
@@ -130,10 +118,10 @@ class DialogTransitionBuilders {
       ),
       child: child,
     );
-  };
+  }
 
   /// Transition for editing dialog.
-  static final editing = (Animation<double> animation, Curve curve,
+  static AnimatedWidget editing(Animation<double> animation, Curve curve,
       Alignment alignment, Widget child) {
     return SlideTransition(
       transformHitTests: false,
@@ -143,10 +131,10 @@ class DialogTransitionBuilders {
       ).chain(CurveTween(curve: curve)).animate(animation),
       child: child,
     );
-  };
+  }
 
   /// Transition when showing dialogs from other dialog.
-  static final dialogToDialog = (Animation<double> animation, Curve curve,
+  static AnimatedWidget dialogToDialog(Animation<double> animation, Curve curve,
       Alignment alignment, Widget child) {
     return DialogToDialogTransition(
       phase: animation,
@@ -156,7 +144,7 @@ class DialogTransitionBuilders {
         child: child,
       ),
     );
-  };
+  }
 }
 
 class DialogToDialogTransition extends AnimatedWidget {
@@ -164,7 +152,7 @@ class DialogToDialogTransition extends AnimatedWidget {
   final Widget child;
 
   /// Creates a dialog to dialog transition.
-  DialogToDialogTransition(
+  const DialogToDialogTransition(
       {Key? key,
       required Animation<double> phase,
       this.alignment = Alignment.center,
@@ -192,7 +180,7 @@ void init(BuildContext context) {
 
 /// Shows dialogs to indicate progressing.
 void showProgressIndicatorDialog(BuildContext context) {
-  final platform = LocalPlatform();
+  const platform = LocalPlatform();
   late final Widget indicator;
   if (!platform.isApple) {
     indicator = const CircularProgressIndicator();
@@ -221,7 +209,7 @@ Future<bool> showConfirmationDialog(
     String acceptingText,
     String rejectingText,
     bool destructive) async {
-  final platform = LocalPlatform();
+  const platform = LocalPlatform();
   var accepted = false;
   if (!platform.isIOS) {
     await showDialog(
@@ -302,7 +290,7 @@ Future<bool> showConfirmationDialog(
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String title, String content,
     String acceptingText) async {
-  final platform = LocalPlatform();
+  const platform = LocalPlatform();
   if (!platform.isIOS) {
     await showDialog(
         context: context,
@@ -392,15 +380,15 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       builder: (context) {
         return Center(
           child: Dialog(
+            insetPadding: const EdgeInsets.all(0.0),
             child: ViewingPage(memo: memo, fullScreen: false),
-            insetPadding: EdgeInsets.all(0.0),
           ),
         );
       },
       barrierDismissible: false,
       transitionBuilder: DialogTransitionBuilders.primary,
       curve: Curves.fastOutSlowIn,
-      duration: Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 300),
     );
   }
 }
@@ -412,7 +400,7 @@ Container subtitle(BuildContext context, String text) {
     child: Align(
       alignment: AlignmentDirectional.centerStart,
       child: Text(text,
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
           textAlign: TextAlign.start),
     ),
   );
@@ -420,7 +408,7 @@ Container subtitle(BuildContext context, String text) {
 
 /// Returns whether this device has a large screen.
 bool hasLargeScreen() {
-  final platform = LocalPlatform();
+  const platform = LocalPlatform();
   if (platform.isDesktop) {
     return true;
   }

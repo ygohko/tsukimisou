@@ -25,35 +25,43 @@ import 'package:flutter/foundation.dart';
 import 'memo.dart';
 
 class MemoStore extends ChangeNotifier {
-  var _memos = <Memo>[];
-  var _removedMemoIds = <String>[];
-  var _lastMerged = 0;
+  /// Memos that are stored in this memo store.
+  var memos = <Memo>[];
+  /// Memo IDs that are removed.
+  var removedMemoIds = <String>[];
+  /// Epoch milliseconds from last merged.
+  var lastMerged = 0;
 
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
-    _memos.add(memo);
+    memos.add(memo);
     notifyListeners();
   }
 
   /// Removes a memo from this memo store.
   void removeMemo(Memo memo) {
-    if (_memos.indexOf(memo) < 0) {
+    if (!memos.contains(memo)) {
       return;
     }
-    _removedMemoIds.add(memo.id);
-    _memos.remove(memo);
+    removedMemoIds.add(memo.id);
+    memos.remove(memo);
     notifyListeners();
   }
 
   /// Clears memos from this memo store.
   void clearMemos() {
-    _memos.clear();
+    memos.clear();
+    notifyListeners();
+  }
+
+  /// Marks as changed.
+  void markAschanged() {
     notifyListeners();
   }
 
   /// Memo that has given ID.
   Memo? memoFromId(String id) {
-    for (var memo in _memos) {
+    for (var memo in memos) {
       if (memo.id == id) {
         return memo;
       }
@@ -62,34 +70,10 @@ class MemoStore extends ChangeNotifier {
     return null;
   }
 
-  /// Memos that are stored in this memo store.
-  List<Memo> get memos => _memos;
-
-  /// Memos that are stored in this memo store.
-  void set memos(List<Memo> memos) {
-    _memos = memos;
-  }
-
-  /// Memo IDs that are removed.
-  List<String> get removedMemoIds => _removedMemoIds;
-
-  /// Memo IDs that are removed.
-  void set removedMemoIds(List<String> removedMemoIds) {
-    _removedMemoIds = removedMemoIds;
-  }
-
-  /// Epoch milliseconds from last merged.
-  int get lastMerged => _lastMerged;
-
-  /// Epoch milliseconds from last merged.
-  void set lastMerged(int lastMerged) {
-    _lastMerged = lastMerged;
-  }
-
   /// Tags bound for memos
   List<String> get tags {
     var tags = <String>[];
-    for (final memo in _memos) {
+    for (final memo in memos) {
       for (final tag in memo.tags) {
         if (!tags.contains(tag)) {
           tags.add(tag);

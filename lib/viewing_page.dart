@@ -36,7 +36,6 @@ import 'extensions.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_local_saver.dart';
 
 class ViewingPage extends StatefulWidget {
   final Memo memo;
@@ -55,6 +54,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
   @override
   void initState() {
+    super.initState();
     _fullScreen = widget.fullScreen;
   }
 
@@ -65,7 +65,7 @@ class _ViewingPageState extends State<ViewingPage> {
         DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
     var tagsString = '';
     for (final tag in widget.memo.tags) {
-      tagsString += tag + ', ';
+      tagsString += '$tag, ';
     }
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
@@ -113,19 +113,20 @@ class _ViewingPageState extends State<ViewingPage> {
       ),
     ]);
     return AnimatedContainer(
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
       curve: Curves.easeOutCubic,
       width: width,
       height: height,
       child: Scaffold(
         appBar: AppBar(
-          leading: common_uis.hasLargeScreen() ? CloseButton() : BackButton(),
+          leading: common_uis.hasLargeScreen() ? const CloseButton() : const BackButton(),
           title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
           actions: actions,
         ),
         body: ListView(
           children: [
             Card(
+              elevation: 2.0,
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(
@@ -144,7 +145,7 @@ class _ViewingPageState extends State<ViewingPage> {
                                 label: localizations.openAsUrl,
                                 onPressed: () {
                                   ContextMenuController.removeAny();
-                                  launch(string);
+                                  launchUrl(Uri.parse(string));
                                 }));
                       }
                       return AdaptiveTextSelectionToolbar.buttonItems(
@@ -154,7 +155,6 @@ class _ViewingPageState extends State<ViewingPage> {
                   ),
                 ),
               ),
-              elevation: 2.0,
             ),
             ListTile(
               title: Text(localizations.updated(dateTime.toDetailedString()),
@@ -180,7 +180,7 @@ class _ViewingPageState extends State<ViewingPage> {
           return EditingPage(memo: widget.memo);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          return OpenUpwardsPageTransitionsBuilder().buildTransitions(
+          return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
       ));
@@ -188,20 +188,20 @@ class _ViewingPageState extends State<ViewingPage> {
       await common_uis.showTransitiningDialog(
         context: context,
         builder: (context) {
-          final platform = LocalPlatform();
+          const platform = LocalPlatform();
           return Center(
             child: Dialog(
-              child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
-              insetPadding: EdgeInsets.all(0.0),
+              insetPadding: const EdgeInsets.all(0.0),
               elevation: platform.isDesktop ? 0 : 24,
+              child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
             ),
           );
         },
         barrierDismissible: false,
-        barrierColor: Color(0x00000000),
+        barrierColor: const Color(0x00000000),
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
       );
     }
     setState(() {});
@@ -227,18 +227,25 @@ class _ViewingPageState extends State<ViewingPage> {
     }
 
     final factories = Factories.instance();
-    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    late final MemoStore memoStore;
+    if (context.mounted) {
+      memoStore = Provider.of<MemoStore>(context, listen: false);
+    }
     memoStore.removeMemo(widget.memo);
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException catch (exception) {
-      // Save error
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+    } on IOException {
+      if (context.mounted) {
+        // Save error
+        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      }
     }
-    Navigator.of(context).pop();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _bindTags() async {
@@ -256,20 +263,20 @@ class _ViewingPageState extends State<ViewingPage> {
         builder: (context) {
           return Center(
             child: Dialog(
+              insetPadding: const EdgeInsets.all(0.0),
+              elevation: 0,
               child: BindingTagsPage(
                   memo: widget.memo,
                   additinalTags: memoStore.tags,
                   fullScreen: _fullScreen),
-              insetPadding: EdgeInsets.all(0.0),
-              elevation: 0,
             ),
           );
         },
         barrierDismissible: false,
-        barrierColor: Color(0x00000000),
+        barrierColor: const Color(0x00000000),
         transitionBuilder: common_uis.DialogTransitionBuilders.dialogToDialog,
         curve: Curves.fastOutSlowIn,
-        duration: Duration(milliseconds: 150),
+        duration: const Duration(milliseconds: 150),
       );
     }
     setState(() {});

@@ -40,7 +40,7 @@ class App extends StatelessWidget {
       textTheme = textTheme.apply(fontFamily: 'Noto Sans JP');
     }
     return MaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -56,7 +56,7 @@ class App extends StatelessWidget {
         useMaterial3: true,
       ),
       color: TsukimisouColors.scheme.primaryContainer,
-      supportedLocales: [
+      supportedLocales: const [
         Locale('en', ''),
         Locale('ja', ''),
       ],

@@ -99,7 +99,7 @@ class MemoStoreMerger {
     // Copy memos that are only in from memo store.
     for (var memo in fromMemoStore.memos) {
       final toMemo = toMemoStore.memoFromId(memo.id);
-      if (toMemo == null && toMemoStore.removedMemoIds.indexOf(memo.id) == -1) {
+      if (toMemo == null && !toMemoStore.removedMemoIds.contains(memo.id)) {
         toMemoStore.addMemo(memo);
       }
     }
@@ -110,6 +110,6 @@ class MemoStoreMerger {
     }
     toMemoStore.removedMemoIds = <String>[];
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
-    toMemoStore.notifyListeners();
+    toMemoStore.markAschanged();
   }
 }

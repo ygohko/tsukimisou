@@ -42,8 +42,8 @@ class GoogleDriveFile {
 
   /// Writes contents as a string.
   Future<void> writeAsString(String contents) async {
-    _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    late _AuthenticatableClient client;
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
@@ -52,10 +52,8 @@ class GoogleDriveFile {
     await client.authenticate();
     final driveApi = DriveApi(client);
     var directoryId = await _directoryId(driveApi);
-    if (directoryId == null) {
-      // Make a directory.
-      directoryId = await _createDirectory(driveApi);
-    }
+    // Make a directory if it is not found.
+    directoryId ??= await _createDirectory(driveApi);
     final fileIds = await _fileIds(driveApi, _fileName);
     for (var fileId in fileIds) {
       // Delete old files.
@@ -74,8 +72,8 @@ class GoogleDriveFile {
 
   /// Reads contents as a string.
   Future<String> readAsString() async {
-    _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    late _AuthenticatableClient client;
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
@@ -85,9 +83,9 @@ class GoogleDriveFile {
     final driveApi = DriveApi(client);
     // Find a file
     final fileIds = await _fileIds(driveApi, _fileName);
-    if (fileIds.length < 1) {
+    if (fileIds.isEmpty) {
       // File not found.
-      throw HttpException('File not found.');
+      throw const HttpException('File not found.');
     }
 
     final media = await driveApi.files
@@ -104,22 +102,22 @@ class GoogleDriveFile {
 
   /// Reads contents as a string with locking.
   Future<String> readAsStringLocked() async {
-    _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    late _AuthenticatableClient client;
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
       client = _AuthenticatableMobileClient();
     }
     await client.authenticate();
-    final lockedFileName = _fileName + '.locked';
+    final lockedFileName = '$_fileName.locked';
     final driveApi = DriveApi(client);
     // Find a file.
     final fileIds = await _fileIds(driveApi, _fileName);
-    if (fileIds.length < 1) {
+    if (fileIds.isEmpty) {
       // Find a locked file.
       final lockedFileIds = await _fileIds(driveApi, lockedFileName);
-      if (lockedFileIds.length < 1) {
+      if (lockedFileIds.isEmpty) {
         // File not found.
         throw FileNotFoundException('File not found.');
       } else {
@@ -148,19 +146,19 @@ class GoogleDriveFile {
 
   /// Unlock this file.
   Future<void> unlock() async {
-    _AuthenticatableClient? client = null;
-    final platform = LocalPlatform();
+    late _AuthenticatableClient client;
+    const platform = LocalPlatform();
     if (platform.isDesktop) {
       client = _AuthenticatableDesktopClient();
     } else {
       client = _AuthenticatableMobileClient();
     }
     await client.authenticate();
-    final lockedFileName = _fileName + '.locked';
+    final lockedFileName = '$_fileName.locked';
     final driveApi = DriveApi(client);
     // Find a file.
     final lockedFileIds = await _fileIds(driveApi, lockedFileName);
-    if (lockedFileIds.length < 1) {
+    if (lockedFileIds.isEmpty) {
       // File not found.
       throw FileNotFoundException('File not found.');
     }
@@ -185,9 +183,9 @@ class GoogleDriveFile {
         q: 'name = "Tsukimisou" and "root" in parents and trashed = false');
     var files = result.files;
     if (files == null) {
-      throw HttpException('API does not return directories.');
+      throw const HttpException('API does not return directories.');
     }
-    if (files.length < 1) {
+    if (files.isEmpty) {
       return null;
     }
     final directoryId = files[0].id;
@@ -205,10 +203,10 @@ class GoogleDriveFile {
       return <String>[];
     }
     final result = await driveApi.files.list(
-        q: 'name = "${fileName}" and "${directoryId}" in parents and trashed = false');
+        q: 'name = "$fileName" and "$directoryId" in parents and trashed = false');
     final files = result.files;
     if (files == null) {
-      throw HttpException('API does not return files.');
+      throw const HttpException('API does not return files.');
     }
     var fileIds = <String>[];
     for (final file in files) {
@@ -223,10 +221,11 @@ class GoogleDriveFile {
 }
 
 class _AuthenticatableClient extends BaseClient {
-  Map<String, String>? _headers = null;
+  Map<String, String>? _headers;
   final Client _client = Client();
 
   /// Sends a request.
+  @override
   Future<StreamedResponse> send(BaseRequest request) {
     final headers = _headers;
     if (headers != null) {
@@ -244,19 +243,19 @@ class _AuthenticatableClient extends BaseClient {
   /// Updates headers
   void updateHeaders(String accessTokenData) {
     _headers = {
-      'Authorization': 'Bearer ${accessTokenData}',
+      'Authorization': 'Bearer $accessTokenData',
       'X-Goog-AuthUser': '0'
     };
   }
 
   /// Headers that is added when request is sent.
-  void set headers(Map<String, String> headers) {
+  set headers(Map<String, String> headers) {
     _headers = headers;
   }
 }
 
 class _AuthenticatableDesktopClient extends _AuthenticatableClient {
-  static AccessToken? _accessToken = null;
+  static AccessToken? _accessToken;
 
   /// Authenticates this client.
   @override
@@ -272,7 +271,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
       }
     }
 
-    final storage = FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     final savedData = await storage.read(key: 'accessTokenData');
     final savedExpiry = await storage.read(key: 'accessTokenExpiry');
     if (savedData != null && savedExpiry != null) {
@@ -306,7 +305,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
         _storeCredentials(storage, newCredentials);
 
         return;
-      } on Exception catch (exception) {
+      } on Exception {
         // Refresh failed. Try next step.
       }
     }
@@ -315,12 +314,12 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
     try {
       final credentials = await obtainAccessCredentialsViaUserConsent(
           id, scopes, this, (url) async {
-        await launch(url);
+        await launchUrl(Uri.parse(url));
       });
       _accessToken = credentials.accessToken;
       updateHeaders(credentials.accessToken.data);
       _storeCredentials(storage, credentials);
-    } on Exception catch (exception) {
+    } on Exception {
       throw AuthenticationException('Failed to obtain access credentials.');
     }
   }
@@ -338,7 +337,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
 }
 
 class _AuthenticatableMobileClient extends _AuthenticatableClient {
-  static GoogleSignIn? _signIn = null;
+  static GoogleSignIn? _signIn;
 
   /// Authenticates this client.
   @override
@@ -366,9 +365,7 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
     }
     try {
       var account = await signIn.signInSilently();
-      if (account == null) {
-        account = await signIn.signIn();
-      }
+      account ??= await signIn.signIn();
       if (account == null) {
         throw AuthenticationException('Failed to sign in to Google.');
       }
@@ -378,7 +375,7 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
         throw AuthenticationException('Failed to sign in to Google.');
       }
       updateHeaders(accessToken);
-    } on Exception catch (exception) {
+    } on Exception {
       throw AuthenticationException('Failed to sign in to Google.');
     }
   }

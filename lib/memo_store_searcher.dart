@@ -26,7 +26,7 @@ import 'memo_store.dart';
 class MemoStoreSearcher {
   final MemoStore _memoStore;
   final String _query;
-  var _results = <Memo>[];
+  final _results = <Memo>[];
 
   /// Creates a memo store searcher.
   MemoStoreSearcher(this._memoStore, this._query);
@@ -37,12 +37,12 @@ class MemoStoreSearcher {
     final keywords = <String>[];
     for (var string in split) {
       string = string.toLowerCase();
-      if (string != '' && keywords.indexOf(string) < 0) {
+      if (string != '' && !keywords.contains(string)) {
         keywords.add(string.toLowerCase());
       }
     }
     _results.clear();
-    if (keywords.length < 1) {
+    if (keywords.isEmpty) {
       return;
     }
     for (final memo in _memoStore.memos) {
@@ -52,7 +52,7 @@ class MemoStoreSearcher {
       }
       var found = true;
       for (final keyword in keywords) {
-        if (text.indexOf(keyword) < 0) {
+        if (!text.contains(keyword)) {
           found = false;
           break;
         }

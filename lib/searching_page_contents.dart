@@ -31,7 +31,6 @@ import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_searcher.dart';
-import 'viewing_page.dart';
 
 class SearchingPageContents extends StatefulWidget {
   /// Creates a searching page contents.
@@ -43,7 +42,7 @@ class SearchingPageContents extends StatefulWidget {
 
 class _SearchingPageContentsState extends State<SearchingPageContents> {
   final _controller = TextEditingController();
-  late final _focusNode;
+  late final FocusNode _focusNode;
   var _memos = <Memo>[];
 
   @override
@@ -72,25 +71,26 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         final memo = _memos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-        late final unsynchronized;
+        late final bool unsynchronized;
         if (lastModified.isAfter(lastMerged)) {
           unsynchronized = true;
         } else {
           unsynchronized = false;
         }
         return Card(
-          child: InkWell(
-              child: common_uis.memoCardContents(context, memo, unsynchronized),
-              onTap: appState.mergingWithGoogleDrive
-                  ? null
-                  : () async {
-                      await common_uis.viewMemo(context, memo);
-                    }),
           elevation: 2.0,
+          child: InkWell(
+            onTap: appState.mergingWithGoogleDrive
+            ? null
+            : () async {
+              await common_uis.viewMemo(context, memo);
+            },
+            child: common_uis.memoCardContents(context, memo, unsynchronized),
+          ),
         );
       },
     );
-    final platform = LocalPlatform();
+    const platform = LocalPlatform();
     if (platform.isMobile) {
       contents = Scrollbar(
         child: contents,
@@ -105,7 +105,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
               suffixIcon: IconButton(
-                icon: Icon(Icons.cancel),
+                icon: const Icon(Icons.cancel),
                 onPressed: _clear,
               ),
               border: OutlineInputBorder(
