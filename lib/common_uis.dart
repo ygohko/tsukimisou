@@ -56,7 +56,7 @@ class TsukimisouColors {
 class TsukimisouTextStyles {
   /// Text style for memo attributes on home page.
   static TextStyle homePageMemoAttribute(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
+    var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
@@ -65,7 +65,7 @@ class TsukimisouTextStyles {
 
   /// Text style for drawer footer on home page.
   static TextStyle homePageDrawerFooter(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
+    var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
@@ -74,7 +74,7 @@ class TsukimisouTextStyles {
 
   /// Text style for memo text on vieweing page.
   static TextStyle viewingPageMemoText(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
+    var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
     style = style.apply(fontSizeFactor: 1.1);
 
@@ -83,7 +83,7 @@ class TsukimisouTextStyles {
 
   /// Text style for memo attributes on vieweing page.
   static TextStyle viewingPageMemoAttribute(BuildContext context) {
-    var style = Theme.of(context).textTheme.subtitle1;
+    var style = Theme.of(context).textTheme.titleMedium;
     style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
@@ -92,7 +92,7 @@ class TsukimisouTextStyles {
 
   /// Text style for text field on editing page.
   static TextStyle editingPageTextField(BuildContext context) {
-    var style = Theme.of(context).textTheme.bodyText2;
+    var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
     style = style.apply(
       fontSizeFactor: 1.1,
@@ -400,7 +400,7 @@ Container subtitle(BuildContext context, String text) {
     child: Align(
       alignment: AlignmentDirectional.centerStart,
       child: Text(text,
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
           textAlign: TextAlign.start),
     ),
   );
