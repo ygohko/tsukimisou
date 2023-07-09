@@ -280,30 +280,30 @@ class _HomePageState extends State<HomePage> {
     }
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
+    if (!context.mounted) {
+      return;
+    }
     if (!common_uis.hasLargeScreen()) {
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
+      Navigator.of(context).pop();
     }
-    if (context.mounted) {
-      showAboutDialog(
-        context: context,
-        applicationName: localizations.tsukimisou,
-        applicationVersion: packageInfo.version,
-        applicationIcon: const Image(
-          image: AssetImage('assets/images/about_icon.png'),
-        ),
-        applicationLegalese: '(c) 2022 Yasuaki Gohko',
-      );
-    }
+    showAboutDialog(
+      context: context,
+      applicationName: localizations.tsukimisou,
+      applicationVersion: packageInfo.version,
+      applicationIcon: const Image(
+        image: AssetImage('assets/images/about_icon.png'),
+      ),
+      applicationLegalese: '(c) 2022 Yasuaki Gohko',
+    );
   }
 
   void _showPrivacyPolicy() async {
     await launchUrl(Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
+    if (!context.mounted) {
+      return;
+    }
     if (!common_uis.hasLargeScreen()) {
-      if (context.mounted) {
-        Navigator.of(context).pop();
-      }
+      Navigator.of(context).pop();
     }
   }
 

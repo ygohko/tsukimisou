@@ -215,6 +215,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _delete() async {
     final localizations = AppLocalizations.of(context)!;
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     final accepted = await common_uis.showConfirmationDialog(
         context,
         localizations.deleteThisMemo,
@@ -227,10 +228,6 @@ class _ViewingPageState extends State<ViewingPage> {
     }
 
     final factories = Factories.instance();
-    late final MemoStore memoStore;
-    if (context.mounted) {
-      memoStore = Provider.of<MemoStore>(context, listen: false);
-    }
     memoStore.removeMemo(widget.memo);
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
