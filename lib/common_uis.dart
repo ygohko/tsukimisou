@@ -57,9 +57,7 @@ class TsukimisouTextStyles {
   /// Text style for memo attributes on home page.
   static TextStyle homePageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = const TextStyle();
-    }
+    style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
@@ -86,9 +84,7 @@ class TsukimisouTextStyles {
   /// Text style for memo attributes on vieweing page.
   static TextStyle viewingPageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.subtitle1;
-    if (style == null) {
-      style = const TextStyle();
-    }
+    style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
