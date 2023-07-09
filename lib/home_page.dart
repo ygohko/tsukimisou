@@ -288,7 +288,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showPrivacyPolicy() async {
-    await launch('https://sites.gonypage.jp/home/tsukimisou/privacy-policy');
+    await launchUrl(Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }

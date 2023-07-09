@@ -314,7 +314,7 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
     try {
       final credentials = await obtainAccessCredentialsViaUserConsent(
           id, scopes, this, (url) async {
-        await launch(url);
+        await launchUrl(Uri.parse(url));
       });
       _accessToken = credentials.accessToken;
       updateHeaders(credentials.accessToken.data);

@@ -68,9 +68,7 @@ class TsukimisouTextStyles {
   /// Text style for drawer footer on home page.
   static TextStyle homePageDrawerFooter(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyText2;
-    if (style == null) {
-      style = TextStyle();
-    }
+    style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
 
     return style;
@@ -158,7 +156,7 @@ class DialogToDialogTransition extends AnimatedWidget {
   final Widget child;
 
   /// Creates a dialog to dialog transition.
-  DialogToDialogTransition(
+  const DialogToDialogTransition(
       {Key? key,
       required Animation<double> phase,
       this.alignment = Alignment.center,
