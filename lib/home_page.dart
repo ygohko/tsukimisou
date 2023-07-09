@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
+    final localizations = AppLocalizations.of(context)!;
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(
@@ -104,7 +105,6 @@ class _HomePageState extends State<HomePage> {
     } on FileNotCompatibleException {
       if (context.mounted) {
         // Not compatible error.
-        final localizations = AppLocalizations.of(context)!;
         await common_uis.showErrorDialog(
           context,
           localizations.memoStoreIsNotCompatible,
@@ -153,9 +153,11 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
     }
     final localizations = AppLocalizations.of(context)!;
+    final messenger = ScaffoldMessenger.of(context);
     final appState = Provider.of<AppState>(context, listen: false);
     appState.mergingWithGoogleDrive = true;
     _showSynchronizingBanner();
+    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
     final loader =
@@ -168,7 +170,7 @@ class _HomePageState extends State<HomePage> {
       // Loading failure caused by locked memo store.
       _fileLockedCount++;
       if (_fileLockedCount < 3) {
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        messenger.hideCurrentMaterialBanner();
         appState.mergingWithGoogleDrive = false;
         await common_uis.showErrorDialog(
             context,
@@ -178,7 +180,7 @@ class _HomePageState extends State<HomePage> {
         return;
       } else {
         // Confirm to force unlock
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+        messenger.hideCurrentMaterialBanner();
         appState.mergingWithGoogleDrive = false;
         final accepted = await common_uis.showConfirmationDialog(
             context,
@@ -194,7 +196,7 @@ class _HomePageState extends State<HomePage> {
       }
     } on FileNotCompatibleException {
       // Not compatible error.
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
       await common_uis.showErrorDialog(
           context,
@@ -204,19 +206,15 @@ class _HomePageState extends State<HomePage> {
       return;
     } on Exception {
       // Other failure.
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
       await common_uis.showErrorDialog(context, localizations.loadingWasFailed,
           localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
       return;
     }
     _fileLockedCount = 0;
-    late final MemoStore toMemoStore;
-    if (context.mounted) {
-      toMemoStore = Provider.of<MemoStore>(context, listen: false);
-      final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      merger.execute();
-    }
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    merger.execute();
 
     final localSaver = await factories.memoStoreLocalSaverFromFileName(
         toMemoStore, 'MemoStore.json');
@@ -224,9 +222,7 @@ class _HomePageState extends State<HomePage> {
       localSaver.execute();
     } on FileSystemException {
       // Saving failed.
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-      }
+      messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
       if (context.mounted) {
         await common_uis.showErrorDialog(context, localizations.savingWasFailed,
@@ -234,9 +230,7 @@ class _HomePageState extends State<HomePage> {
       }
       return;
     }
-    if (context.mounted) {
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
-    }
+    messenger.hideCurrentMaterialBanner();
     appState.mergingWithGoogleDrive = false;
 
     setState(() {
