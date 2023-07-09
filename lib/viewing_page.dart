@@ -227,18 +227,25 @@ class _ViewingPageState extends State<ViewingPage> {
     }
 
     final factories = Factories.instance();
-    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    late final MemoStore memoStore;
+    if (context.mounted) {
+      memoStore = Provider.of<MemoStore>(context, listen: false);
+    }
     memoStore.removeMemo(widget.memo);
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException {
-      // Save error
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+      if (context.mounted) {
+        // Save error
+        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      }
     }
-    Navigator.of(context).pop();
+    if (context.mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _bindTags() async {

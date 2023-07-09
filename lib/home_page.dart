@@ -102,13 +102,15 @@ class _HomePageState extends State<HomePage> {
     try {
       await memoStoreLoader.execute();
     } on FileNotCompatibleException {
-      // Not compatible error.
-      final localizations = AppLocalizations.of(context)!;
-      await common_uis.showErrorDialog(
+      if (context.mounted) {
+        // Not compatible error.
+        final localizations = AppLocalizations.of(context)!;
+        await common_uis.showErrorDialog(
           context,
           localizations.memoStoreIsNotCompatible,
           localizations.memoStoreInTheLocalStorageIsNotCompatible,
           localizations.ok);
+      }
     } on IOException {
       // Load error
       // Do nothing for now
@@ -209,9 +211,12 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     _fileLockedCount = 0;
-    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
-    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
-    merger.execute();
+    late final MemoStore toMemoStore;
+    if (context.mounted) {
+      toMemoStore = Provider.of<MemoStore>(context, listen: false);
+      final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      merger.execute();
+    }
 
     final localSaver = await factories.memoStoreLocalSaverFromFileName(
         toMemoStore, 'MemoStore.json');
@@ -219,13 +224,19 @@ class _HomePageState extends State<HomePage> {
       localSaver.execute();
     } on FileSystemException {
       // Saving failed.
-      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+      }
       appState.mergingWithGoogleDrive = false;
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+      if (context.mounted) {
+        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+      }
       return;
     }
-    ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).hideCurrentMaterialBanner();
+    }
     appState.mergingWithGoogleDrive = false;
 
     setState(() {
@@ -237,8 +248,10 @@ class _HomePageState extends State<HomePage> {
       await saver.execute();
     } on Exception {
       // Saving failed.
-      await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+      if (context.mounted) {
+        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
+      }
     }
     setState(() {
       _savingToGoogleDrive = false;
@@ -274,23 +287,29 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
     if (!common_uis.hasLargeScreen()) {
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
-    showAboutDialog(
-      context: context,
-      applicationName: localizations.tsukimisou,
-      applicationVersion: packageInfo.version,
-      applicationIcon: const Image(
-        image: AssetImage('assets/images/about_icon.png'),
-      ),
-      applicationLegalese: '(c) 2022 Yasuaki Gohko',
-    );
+    if (context.mounted) {
+      showAboutDialog(
+        context: context,
+        applicationName: localizations.tsukimisou,
+        applicationVersion: packageInfo.version,
+        applicationIcon: const Image(
+          image: AssetImage('assets/images/about_icon.png'),
+        ),
+        applicationLegalese: '(c) 2022 Yasuaki Gohko',
+      );
+    }
   }
 
   void _showPrivacyPolicy() async {
     await launchUrl(Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
     if (!common_uis.hasLargeScreen()) {
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
