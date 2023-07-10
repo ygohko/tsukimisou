@@ -95,7 +95,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final localizations = AppLocalizations.of(context)!;
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(
@@ -105,6 +104,8 @@ class _HomePageState extends State<HomePage> {
     } on FileNotCompatibleException {
       if (context.mounted) {
         // Not compatible error.
+        // TODO: Showing error at here may cause problem. Check this later.
+        final localizations = AppLocalizations.of(context)!;
         await common_uis.showErrorDialog(
           context,
           localizations.memoStoreIsNotCompatible,
