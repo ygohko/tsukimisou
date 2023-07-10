@@ -234,13 +234,13 @@ class _ViewingPageState extends State<ViewingPage> {
     try {
       memoStoreSaver.execute();
     } on IOException {
-      if (context.mounted) {
+      if (mounted) {
         // Save error
         await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
       }
     }
-    if (context.mounted) {
+    if (mounted) {
       Navigator.of(context).pop();
     }
   }
