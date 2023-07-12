@@ -140,13 +140,13 @@ class _EditingPageState extends State<EditingPage> {
     try {
       memoStoreSaver.execute();
     } on IOException {
-      if (context.mounted) {
+      if (mounted) {
         // Save error
         await showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
       }
     }
-    if (context.mounted) {
+    if (mounted) {
       Navigator.of(context).pop();
     }
   }

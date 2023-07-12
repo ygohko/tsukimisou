@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
     try {
       await memoStoreLoader.execute();
     } on FileNotCompatibleException {
-      if (context.mounted) {
+      if (mounted) {
         // Not compatible error.
         // TODO: Showing error at here may cause problem. Check this later.
         final localizations = AppLocalizations.of(context)!;
@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
-      if (context.mounted) {
+      if (mounted) {
         await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
       }
@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
       await saver.execute();
     } on Exception {
       // Saving failed.
-      if (context.mounted) {
+      if (mounted) {
         await common_uis.showErrorDialog(context, localizations.savingWasFailed,
           localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
       }
@@ -281,25 +281,26 @@ class _HomePageState extends State<HomePage> {
     }
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
-    if (context.mounted) {
-      if (!common_uis.hasLargeScreen()) {
-        Navigator.of(context).pop();
-      }
-      showAboutDialog(
-        context: context,
-        applicationName: localizations.tsukimisou,
-        applicationVersion: packageInfo.version,
-        applicationIcon: const Image(
-          image: AssetImage('assets/images/about_icon.png'),
-        ),
-        applicationLegalese: '(c) 2022 Yasuaki Gohko',
-      );
+    if (!mounted) {
+      return;
     }
+    if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
+    showAboutDialog(
+      context: context,
+      applicationName: localizations.tsukimisou,
+      applicationVersion: packageInfo.version,
+      applicationIcon: const Image(
+        image: AssetImage('assets/images/about_icon.png'),
+      ),
+      applicationLegalese: '(c) 2022 Yasuaki Gohko',
+    );
   }
 
   void _showPrivacyPolicy() async {
     await launchUrl(Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
-    if (context.mounted) {
+    if (mounted) {
       if (!common_uis.hasLargeScreen()) {
         Navigator.of(context).pop();
       }
