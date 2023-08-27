@@ -145,7 +145,10 @@ class _ViewingPageState extends State<ViewingPage> {
                                 label: localizations.openAsUrl,
                                 onPressed: () {
                                   ContextMenuController.removeAny();
-                                  launchUrl(Uri.parse(string));
+                                  launchUrl(
+                                    Uri.parse(string),
+                                    mode: LaunchMode.externalApplication,
+                                  );
                                 }));
                       }
                       return AdaptiveTextSelectionToolbar.buttonItems(
