@@ -24,10 +24,24 @@ import 'package:flutter/foundation.dart';
 
 import 'memo.dart';
 
+// TODO: Move to new file.
+class History {
+  var dateTime = 0;
+  var operation = 0;
+  var target = '';
+}
+
+enum OperationKind {
+  removing,
+}
+
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
   var memos = <Memo>[];
+  /// Histories of this memo store.
+  var histories = <History>[];
   /// Memo IDs that are removed.
+  // TODO: Deprecated this.
   var removedMemoIds = <String>[];
   /// Epoch milliseconds from last merged.
   var lastMerged = 0;
