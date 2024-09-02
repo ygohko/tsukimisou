@@ -31,8 +31,11 @@ class History {
   var target = '';
 }
 
+// TODO: Move to new file.
 enum OperationKind {
-  removing,
+  added,
+  modified,
+  removed,
 }
 
 class MemoStore extends ChangeNotifier {
@@ -49,6 +52,9 @@ class MemoStore extends ChangeNotifier {
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
     memos.add(memo);
+
+    // TODO: Update histories.
+
     notifyListeners();
   }
 
@@ -59,6 +65,9 @@ class MemoStore extends ChangeNotifier {
     }
     removedMemoIds.add(memo.id);
     memos.remove(memo);
+
+    // TODO: Update histories.
+
     notifyListeners();
   }
 
@@ -70,6 +79,9 @@ class MemoStore extends ChangeNotifier {
 
   /// Marks as changed.
   void markAschanged() {
+
+    // TODO: Update histories.
+
     notifyListeners();
   }
 
