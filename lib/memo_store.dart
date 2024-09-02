@@ -26,15 +26,17 @@ import 'memo.dart';
 
 // TODO: Move to new file.
 class History {
-  var dateTime = 0;
+  var operated = 0;
   var operation = 0;
   var target = '';
+
+  History(this.operated, this.operation, this.target);
 }
 
 // TODO: Move to new file.
 enum OperationKind {
   added,
-  modified,
+  changed,
   removed,
 }
 
@@ -44,7 +46,7 @@ class MemoStore extends ChangeNotifier {
   /// Histories of this memo store.
   var histories = <History>[];
   /// Memo IDs that are removed.
-  // TODO: Deprecated this.
+  // TODO: Deprecate this.
   var removedMemoIds = <String>[];
   /// Epoch milliseconds from last merged.
   var lastMerged = 0;
@@ -52,9 +54,12 @@ class MemoStore extends ChangeNotifier {
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
     memos.add(memo);
-
-    // TODO: Update histories.
-
+    final history = History(
+      DateTime.now().millisecondsSinceEpoch,
+      OperationKind.added.index,
+      memo.id,
+    );
+    histories.add(history);    
     notifyListeners();
   }
 
@@ -65,9 +70,12 @@ class MemoStore extends ChangeNotifier {
     }
     removedMemoIds.add(memo.id);
     memos.remove(memo);
-
-    // TODO: Update histories.
-
+    final history = History(
+      DateTime.now().millisecondsSinceEpoch,
+      OperationKind.removed.index,
+      memo.id,
+    );
+    histories.add(history);
     notifyListeners();
   }
 
@@ -78,10 +86,13 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Marks as changed.
-  void markAschanged() {
-
-    // TODO: Update histories.
-
+  void markAschanged(Memo memo) {
+    final history = History(
+      DateTime.now().millisecondsSinceEpoch,
+      OperationKind.changed.index,
+      memo.id,
+    );
+    histories.add(history);
     notifyListeners();
   }
 
