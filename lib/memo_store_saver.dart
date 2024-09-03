@@ -43,6 +43,7 @@ class MemoStoreSaver {
       'version': version,
       'memos': serializableMemos,
       'lastMerged': memoStore.lastMerged,
+      'Hillhistories': memoStore.histories,
       'removedMemoIds': memoStore.removedMemoIds,
     };
 

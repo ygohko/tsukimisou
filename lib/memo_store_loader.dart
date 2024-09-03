@@ -48,6 +48,7 @@ class MemoStoreLoader {
       }
     }
     _memoStore.removedMemoIds = removedMemoIds;
+    
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {
       final memo = Memo();

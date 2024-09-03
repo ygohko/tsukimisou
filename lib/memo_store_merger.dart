@@ -110,7 +110,6 @@ class MemoStoreMerger {
     }
     toMemoStore.removedMemoIds = <String>[];
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
-    // ADHOC: Method to notify memo store changed may be needed.
-    // toMemoStore.markAschanged();
+    toMemoStore.markAsChanged();
   }
 }

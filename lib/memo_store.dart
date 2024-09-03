@@ -27,14 +27,23 @@ import 'memo.dart';
 // TODO: Move to new file.
 class History {
   var operated = 0;
-  var operation = 0;
+  var operation = OperationKind.unknown;
   var target = '';
 
   History(this.operated, this.operation, this.target);
+
+  dynamic toSerializable() {
+    return {
+      'operated': operated,
+      'operation': operation.index,
+      'target': target,
+    };
+  }
 }
 
 // TODO: Move to new file.
 enum OperationKind {
+  unknown,
   added,
   changed,
   removed,
@@ -56,7 +65,7 @@ class MemoStore extends ChangeNotifier {
     memos.add(memo);
     final history = History(
       DateTime.now().millisecondsSinceEpoch,
-      OperationKind.added.index,
+      OperationKind.added,
       memo.id,
     );
     histories.add(history);    
@@ -72,7 +81,7 @@ class MemoStore extends ChangeNotifier {
     memos.remove(memo);
     final history = History(
       DateTime.now().millisecondsSinceEpoch,
-      OperationKind.removed.index,
+      OperationKind.removed,
       memo.id,
     );
     histories.add(history);
@@ -85,17 +94,22 @@ class MemoStore extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Marks as changed.
-  void markAschanged(Memo memo) {
+  /// Marks memo as changed.
+  void markMemoAsChanged(Memo memo) {
     final history = History(
       DateTime.now().millisecondsSinceEpoch,
-      OperationKind.changed.index,
+      OperationKind.changed,
       memo.id,
     );
     histories.add(history);
     notifyListeners();
   }
 
+  /// Marks this memo store as changed.
+  void markAsChanged() {
+    notifyListeners();
+  }
+  
   /// Memo that has given ID.
   Memo? memoFromId(String id) {
     for (var memo in memos) {
