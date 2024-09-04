@@ -43,7 +43,7 @@ class MemoStoreSaver {
     for (var i = 0; i < histories.length; i++) {
       serializableHistories.add(histories[i].toSerializable());
     }
-    const version = 1;
+    const version = 2;
     final serializable = {
       'version': version,
       'memos': serializableMemos,

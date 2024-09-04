@@ -35,7 +35,7 @@ class MemoStoreLoader {
   void deserialize(String serialized) {
     final decoded = jsonDecode(serialized);
     final version = decoded['version'];
-    if (version > 1) {
+    if (version > 2) {
       throw FileNotCompatibleException('File not compatible.');
     }
     _memoStore.clearMemos();
@@ -67,6 +67,12 @@ class MemoStoreLoader {
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       _memoStore.addMemo(memo);
     }
+
+    if (version >= 2) {
+      // TODO: Read histories.
+      final deserializedHistories = decoded['histories'];
+    }
+
   }
 }
 
