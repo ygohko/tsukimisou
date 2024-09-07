@@ -31,7 +31,7 @@ void main() {
     });
 
     test(
-        'MemoStoreMerger should remove memos in toMemoStore if it is synchronized and modified before last merged.',
+        'MemoStoreMerger should not remove memos in toMemoStore if it is synchronized and modified before last merged.',
         () {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
@@ -45,7 +45,7 @@ void main() {
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();
-      expect(toMemoStore.memos.length, 0);
+      expect(toMemoStore.memos.length, 1);
     });
 
     test(

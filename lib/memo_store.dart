@@ -45,7 +45,9 @@ class MemoStore extends ChangeNotifier {
     if (!memos.contains(memo)) {
       return;
     }
-    removedMemoIds.add(memo.id);
+    if (!removedMemoIds.contains(memo.id)) {
+      removedMemoIds.add(memo.id);
+    }
     memos.remove(memo);
     notifyListeners();
   }

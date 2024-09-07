@@ -43,7 +43,7 @@ class MemoStoreLoader {
     final deserializedIds = decoded['removedMemoIds'];
     final removedMemoIds = <String>[];
     for (var removedMemoId in deserializedIds) {
-      if (removedMemoIds is String) {
+      if (removedMemoId is String) {
         removedMemoIds.add(removedMemoId);
       }
     }
