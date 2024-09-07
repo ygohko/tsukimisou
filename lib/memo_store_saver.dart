@@ -46,8 +46,6 @@ class MemoStoreSaver {
       'removedMemoIds': memoStore.removedMemoIds,
     };
 
-    print('Saved removedMemoIds: ${memoStore.removedMemoIds}');
-
     return jsonEncode(serializable);
   }
 }

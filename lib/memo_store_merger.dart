@@ -35,38 +35,6 @@ class MemoStoreMerger {
     // Remove memos if it is removed in fromMemoStore.
     final newMemos = <Memo>[];
 
-    // TODO: Remove this.
-    /*
-    for (var memo in toMemoStore.memos) {
-      final fromMemo = fromMemoStore.memoFromId(memo.id);
-      if (fromMemo != null) {
-        // Memo is in fromMemoStore. Do not remove.
-        newMemos.add(memo);
-      } else {
-        final toLastModified =
-            DateTime.fromMillisecondsSinceEpoch(memo.lastModified).toUtc();
-        final toLastMerged =
-            DateTime.fromMillisecondsSinceEpoch(toMemoStore.lastMerged).toUtc();
-        if (toLastModified.isBefore(toLastMerged)) {
-          // Memos is already syncrhonized and removed from fromMemoStore.
-          final fromLastMerged =
-              DateTime.fromMillisecondsSinceEpoch(fromMemoStore.lastMerged)
-                  .toUtc();
-          if (fromLastMerged.isBefore(toLastModified)) {
-            // Memo is updated after last merged. Do not remove.
-            newMemos.add(memo);
-          } else {
-            // Memo is not updated after last merged. Do nothing.
-          }
-        } else {
-          // Memo is not synchronized. Do not remove.
-          newMemos.add(memo);
-        }
-      }
-    }
-    toMemoStore.memos = newMemos;
-    */
-
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
@@ -101,10 +69,6 @@ class MemoStoreMerger {
     }
 
     // Merge removed memo IDs.
-
-    print('toMemoStore.removedMemoIds: ${toMemoStore.removedMemoIds}');
-    print('fromMemoStore.removedMemoIds: ${fromMemoStore.removedMemoIds}');
-
     var removedMemoIds = [...toMemoStore.removedMemoIds];
     for (final removedMemoId in fromMemoStore.removedMemoIds) {
       if (!removedMemoIds.contains(removedMemoId)) {
@@ -112,8 +76,6 @@ class MemoStoreMerger {
       }
     }
 
-    print('removedMemoIds: ${removedMemoIds}');
-    
     // Copy memos that are only in from memo store.
     for (final memo in fromMemoStore.memos) {
       final toMemo = toMemoStore.memoFromId(memo.id);
@@ -131,9 +93,6 @@ class MemoStoreMerger {
     }
     for (final memo in removingMemos) {
       toMemoStore.removeMemo(memo);
-      
-      print('Removed: ${memo.id}');
-
     }
 
     // Update information.

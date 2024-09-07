@@ -41,21 +41,12 @@ class MemoStoreLoader {
     _memoStore.clearMemos();
     _memoStore.lastMerged = decoded['lastMerged'];
     final deserializedIds = decoded['removedMemoIds'];
-
-    print('deserializedIds: ${deserializedIds}');
-
     final removedMemoIds = <String>[];
     for (var removedMemoId in deserializedIds) {
-
-      print('type: ${removedMemoId.runtimeType}');
-
       if (removedMemoId is String) {
         removedMemoIds.add(removedMemoId);
       }
     }
-
-    print('Loaded removedMemoIds: ${removedMemoIds}');
-
     _memoStore.removedMemoIds = removedMemoIds;
     final deserializedMemos = decoded['memos'];
     for (var deserializedMemo in deserializedMemos) {
