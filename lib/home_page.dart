@@ -107,10 +107,10 @@ class _HomePageState extends State<HomePage> {
         // TODO: Showing error at here may cause problem. Check this later.
         final localizations = AppLocalizations.of(context)!;
         await common_uis.showErrorDialog(
-          context,
-          localizations.memoStoreIsNotCompatible,
-          localizations.memoStoreInTheLocalStorageIsNotCompatible,
-          localizations.ok);
+            context,
+            localizations.memoStoreIsNotCompatible,
+            localizations.memoStoreInTheLocalStorageIsNotCompatible,
+            localizations.ok);
       }
     } on IOException {
       // Load error
@@ -226,8 +226,11 @@ class _HomePageState extends State<HomePage> {
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
       if (mounted) {
-        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
       }
       return;
     }
@@ -245,7 +248,7 @@ class _HomePageState extends State<HomePage> {
       // Saving failed.
       if (mounted) {
         await common_uis.showErrorDialog(context, localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
+            localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
       }
     }
     setState(() {
@@ -299,7 +302,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showPrivacyPolicy() async {
-    await launchUrl(Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
+    await launchUrl(
+        Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
     if (mounted) {
       if (!common_uis.hasLargeScreen()) {
         Navigator.of(context).pop();
@@ -567,7 +571,7 @@ class _HomePageState extends State<HomePage> {
             onTap: _showAbout,
             shape: border,
           );
-        } else if (i == privacyPolicyIndex){
+        } else if (i == privacyPolicyIndex) {
           return ListTile(
             title: Text(localizations.privacyPolicy),
             onTap: _showPrivacyPolicy,
@@ -580,8 +584,9 @@ class _HomePageState extends State<HomePage> {
               alignment: Alignment.centerLeft,
               child: Text(
                 localizations.showingMemos(
-                  _shownMemos.length, memoStore.memos.length, tags.length),
-                style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
+                    _shownMemos.length, memoStore.memos.length, tags.length),
+                style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(
+                    context),
               ),
             ),
           );

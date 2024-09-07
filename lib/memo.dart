@@ -25,10 +25,13 @@ import 'package:uuid/uuid.dart';
 class Memo {
   /// A ID of this memo.
   var id = '';
+
   /// Epoch milliseconds from last modified.
   var lastModified = 0;
+
   /// Revision of this memo.
   var revision = 0;
+
   /// Revision when last merged.
   var lastMergedRevision = 0;
   var _text = '';

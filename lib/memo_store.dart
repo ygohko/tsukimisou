@@ -27,8 +27,10 @@ import 'memo.dart';
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
   var memos = <Memo>[];
+
   /// Memo IDs that are removed.
   var removedMemoIds = <String>[];
+
   /// Epoch milliseconds from last merged.
   var lastMerged = 0;
 
@@ -55,7 +57,7 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Marks as changed.
-  void markAschanged() {
+  void markAsChanged() {
     notifyListeners();
   }
 

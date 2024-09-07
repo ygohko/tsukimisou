@@ -81,10 +81,10 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           elevation: 2.0,
           child: InkWell(
             onTap: appState.mergingWithGoogleDrive
-            ? null
-            : () async {
-              await common_uis.viewMemo(context, memo);
-            },
+                ? null
+                : () async {
+                    await common_uis.viewMemo(context, memo);
+                  },
             child: common_uis.memoCardContents(context, memo, unsynchronized),
           ),
         );

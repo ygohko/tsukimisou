@@ -76,7 +76,8 @@ class _ViewingPageState extends State<ViewingPage> {
         common_uis.TsukimisouTextStyles.viewingPageMemoAttribute(context);
     final size = MediaQuery.of(context).size;
     final width = _fullScreen ? size.width : common_uis.MemoDialogsSize.width;
-    final height = _fullScreen ? size.height : common_uis.MemoDialogsSize.height;
+    final height =
+        _fullScreen ? size.height : common_uis.MemoDialogsSize.height;
     var actions = <Widget>[];
     if (common_uis.hasLargeScreen()) {
       actions.add(
@@ -119,7 +120,9 @@ class _ViewingPageState extends State<ViewingPage> {
       height: height,
       child: Scaffold(
         appBar: AppBar(
-          leading: common_uis.hasLargeScreen() ? const CloseButton() : const BackButton(),
+          leading: common_uis.hasLargeScreen()
+              ? const CloseButton()
+              : const BackButton(),
           title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
           actions: actions,
         ),
@@ -239,8 +242,11 @@ class _ViewingPageState extends State<ViewingPage> {
     } on IOException {
       if (mounted) {
         // Save error
-        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
       }
     }
     if (mounted) {

@@ -171,7 +171,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       }
       if (!added) {
         final snackBar = SnackBar(
-          content: Text(snackBarText,
+          content: Text(
+            snackBarText,
             style: TextStyle(
               color: TsukimisouColors.scheme.onSecondary,
             ),
@@ -203,7 +204,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       return true;
     }
     widget.memo.tags = [..._boundTags];
-    memoStore.markAschanged();
+    memoStore.markAsChanged();
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
@@ -211,8 +212,11 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     } on IOException {
       if (mounted) {
         // Save error
-        await showErrorDialog(context, localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+        await showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
       }
     }
 
