@@ -34,6 +34,9 @@ class MemoStoreMerger {
   void execute() {
     // Remove memos if it is removed in fromMemoStore.
     final newMemos = <Memo>[];
+
+    // TODO: Remove this.
+    /*
     for (var memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
@@ -62,6 +65,7 @@ class MemoStoreMerger {
       }
     }
     toMemoStore.memos = newMemos;
+    */
 
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
@@ -96,19 +100,51 @@ class MemoStoreMerger {
       }
     }
 
+    // Merge removed memo IDs.
+
+    print('toMemoStore.removedMemoIds: ${toMemoStore.removedMemoIds}');
+    print('fromMemoStore.removedMemoIds: ${fromMemoStore.removedMemoIds}');
+
+    var removedMemoIds = [...toMemoStore.removedMemoIds];
+    for (final removedMemoId in fromMemoStore.removedMemoIds) {
+      if (!removedMemoIds.contains(removedMemoId)) {
+        removedMemoIds.add(removedMemoId);
+      }
+    }
+
+    print('removedMemoIds: ${removedMemoIds}');
+    
     // Copy memos that are only in from memo store.
-    for (var memo in fromMemoStore.memos) {
+    for (final memo in fromMemoStore.memos) {
       final toMemo = toMemoStore.memoFromId(memo.id);
-      if (toMemo == null && !toMemoStore.removedMemoIds.contains(memo.id)) {
+      if (toMemo == null) {
         toMemoStore.addMemo(memo);
       }
     }
 
+    // Remove memos that are marked as removed.
+    final removingMemos = <Memo>[];
+    for (final memo in toMemoStore.memos) {
+      if (removedMemoIds.contains(memo.id)) {
+        removingMemos.add(memo);
+      }
+    }
+    for (final memo in removingMemos) {
+      toMemoStore.removeMemo(memo);
+      
+      print('Removed: ${memo.id}');
+
+    }
+
     // Update information.
-    for (var memo in toMemoStore.memos) {
+    for (final memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
     }
-    toMemoStore.removedMemoIds = <String>[];
+    final count = removedMemoIds.length;
+    if (count > 100) {
+      removedMemoIds = removedMemoIds.sublist(count - 100);
+    }
+    toMemoStore.removedMemoIds = removedMemoIds;
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
     toMemoStore.markAsChanged();
   }
