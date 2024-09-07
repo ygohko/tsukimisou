@@ -99,7 +99,7 @@ class _EditingPageState extends State<EditingPage> {
               ),
             ],
           ),
-          body:  Padding(
+          body: Padding(
             padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _controller,
@@ -142,8 +142,11 @@ class _EditingPageState extends State<EditingPage> {
     } on IOException {
       if (mounted) {
         // Save error
-        await showErrorDialog(context, localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+        await showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
       }
     }
     if (mounted) {

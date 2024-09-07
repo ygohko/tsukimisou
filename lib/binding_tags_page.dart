@@ -171,7 +171,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       }
       if (!added) {
         final snackBar = SnackBar(
-          content: Text(snackBarText,
+          content: Text(
+            snackBarText,
             style: TextStyle(
               color: TsukimisouColors.scheme.onSecondary,
             ),
@@ -211,8 +212,11 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     } on IOException {
       if (mounted) {
         // Save error
-        await showErrorDialog(context, localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToLocalStorage, localizations.ok);
+        await showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
       }
     }
 
