@@ -55,7 +55,7 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Marks as changed.
-  void markAschanged() {
+  void markAsChanged() {
     notifyListeners();
   }
 

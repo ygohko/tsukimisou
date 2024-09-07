@@ -203,7 +203,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       return true;
     }
     widget.memo.tags = [..._boundTags];
-    memoStore.markAschanged();
+    memoStore.markAsChanged();
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
