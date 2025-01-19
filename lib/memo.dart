@@ -34,6 +34,10 @@ class Memo {
 
   /// Revision when last merged.
   var lastMergedRevision = 0;
+
+  /// Hash when last merged.
+  var lastMergedHash = "";
+
   var _text = '';
   var _tags = <String>[];
 
@@ -51,7 +55,8 @@ class Memo {
       'text': _text,
       'tags': _tags,
       'revision': revision,
-      'lastMergedRevision': lastMergedRevision
+      'lastMergedRevision': lastMergedRevision,
+      'lastMergedHash': lastMergedHash
     };
   }
 
