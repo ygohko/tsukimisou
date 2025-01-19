@@ -64,6 +64,7 @@ class MemoStoreLoader {
       memo.lastModified = deserializedMemo['lastModified'];
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
+      memo.lastMergedHash = deserializedMemo['lastMergedHash'];
       _memoStore.addMemo(memo);
     }
   }
