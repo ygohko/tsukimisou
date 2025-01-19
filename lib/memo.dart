@@ -20,6 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:convert';
+ 
+import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
 class Memo {
@@ -47,6 +50,12 @@ class Memo {
     id = uuid.v4();
   }
 
+  /// Update last merged hash.
+  void updateLastMergedhash() {
+    final values = utf8.encode(_text);
+    lastMergedHash = sha256.convert(values).toString();
+  }
+  
   /// Returns a JSON serializable object.
   dynamic toSerializable() {
     return {

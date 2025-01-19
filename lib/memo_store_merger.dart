@@ -98,6 +98,7 @@ class MemoStoreMerger {
     // Update information.
     for (final memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
+      memo.updateLastMergedhash();
     }
     final count = removedMemoIds.length;
     if (count > 100) {
