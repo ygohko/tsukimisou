@@ -21,7 +21,7 @@
  */
 
 import 'dart:convert';
- 
+
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
@@ -55,7 +55,7 @@ class Memo {
     final values = utf8.encode(_text);
     lastMergedHash = sha256.convert(values).toString();
   }
-  
+
   /// Returns a JSON serializable object.
   dynamic toSerializable() {
     return {
