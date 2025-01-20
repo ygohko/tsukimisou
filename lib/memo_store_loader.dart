@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022, 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -35,7 +35,7 @@ class MemoStoreLoader {
   void deserialize(String serialized) {
     final decoded = jsonDecode(serialized);
     final version = decoded['version'];
-    if (version > 1) {
+    if (version > 2) {
       throw FileNotCompatibleException('File not compatible.');
     }
     _memoStore.clearMemos();
@@ -64,6 +64,9 @@ class MemoStoreLoader {
       memo.lastModified = deserializedMemo['lastModified'];
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
+      if (version > 1) {
+        memo.lastMergedHash = deserializedMemo['lastMergedHash'];
+      }
       _memoStore.addMemo(memo);
     }
   }

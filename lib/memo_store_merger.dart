@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022, 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -98,6 +98,7 @@ class MemoStoreMerger {
     // Update information.
     for (final memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
+      memo.updateLastMergedhash();
     }
     final count = removedMemoIds.length;
     if (count > 100) {

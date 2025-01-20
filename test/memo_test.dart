@@ -8,6 +8,12 @@ void main() {
       expect(memo, isNotNull);
     });
 
+    test('Memo can update lastMergedHash.', () {
+      final memo = Memo();
+      memo.updateLastMergedhash();
+      expect(memo.lastMergedHash, isNot(''));
+    });
+
     test('Memo.id should get and set id.', () {
       final memo = Memo();
       expect(memo.id, isNot(''));
@@ -48,6 +54,13 @@ void main() {
       expect(memo.lastMergedRevision, 0);
       memo.lastMergedRevision = 1;
       expect(memo.lastMergedRevision, 1);
+    });
+
+    test('Memo.lastMergedHash should get and set lastMergedHash.', () {
+      final memo = Memo();
+      expect(memo.lastMergedHash, '');
+      memo.lastMergedHash = 'abc123';
+      expect(memo.lastMergedHash, 'abc123');
     });
   });
 }

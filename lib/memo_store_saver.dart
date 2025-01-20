@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022, 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -38,7 +38,7 @@ class MemoStoreSaver {
     for (var i = 0; i < memos.length; i++) {
       serializableMemos.add(memos[i].toSerializable());
     }
-    const version = 1;
+    const version = 2;
     final serializable = {
       'version': version,
       'memos': serializableMemos,

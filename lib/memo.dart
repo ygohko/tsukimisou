@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022, 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,6 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
 class Memo {
@@ -34,6 +37,10 @@ class Memo {
 
   /// Revision when last merged.
   var lastMergedRevision = 0;
+
+  /// Hash when last merged.
+  var lastMergedHash = "";
+
   var _text = '';
   var _tags = <String>[];
 
@@ -41,6 +48,12 @@ class Memo {
   Memo() {
     const uuid = Uuid();
     id = uuid.v4();
+  }
+
+  /// Update last merged hash.
+  void updateLastMergedhash() {
+    final values = utf8.encode(_text);
+    lastMergedHash = sha256.convert(values).toString();
   }
 
   /// Returns a JSON serializable object.
@@ -51,7 +64,8 @@ class Memo {
       'text': _text,
       'tags': _tags,
       'revision': revision,
-      'lastMergedRevision': lastMergedRevision
+      'lastMergedRevision': lastMergedRevision,
+      'lastMergedHash': lastMergedHash
     };
   }
 
