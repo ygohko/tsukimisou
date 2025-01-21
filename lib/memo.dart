@@ -88,4 +88,15 @@ class Memo {
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;
   }
+
+  /// Hash generated from this memo.
+  String hash() {
+    var string = 'text: $_text\ntags: ';
+    for (final tag in _tags) {
+      string += '$tag, ';
+    }
+    final values = utf8.encode(string);
+
+    return sha256.convert(values).toString();
+  }
 }
