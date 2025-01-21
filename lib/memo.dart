@@ -52,8 +52,7 @@ class Memo {
 
   /// Update last merged hash.
   void updateLastMergedhash() {
-    final values = utf8.encode(_text);
-    lastMergedHash = sha256.convert(values).toString();
+    lastMergedHash = hash;
   }
 
   /// Returns a JSON serializable object.
@@ -90,7 +89,7 @@ class Memo {
   }
 
   /// Hash generated from this memo.
-  String hash() {
+  String get hash {
     var string = 'text: $_text\ntags: ';
     for (final tag in _tags) {
       string += '$tag, ';
