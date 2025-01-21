@@ -38,10 +38,22 @@ class MemoStoreMerger {
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
+      late final bool fromModified;
+      if (fromMemo.hash != fromMemo.lastMergedHash) {
+        fromModified = true;
+      } else {
+        fromModified = false;
+      }
+      late final bool toModified;
+      if (toMemo.hash != toMemo.lastMergedHash) {
+        toModified = true;
+      } else {
+        toModified = false;
+      }
       if (fromMemo != null) {
-        if (fromMemo.revision <= memo.lastMergedRevision) {
+        if (fromMemo.hash == memo.hash) {
           // fromMemo is not modified. Do nothing.
-        } else if (memo.revision <= memo.lastMergedRevision) {
+        } else if (fromMemo.lastMergedHash == memo.hash) {
           // fromMmemo is modified and toMemo is not modified. Update toMemo.
           memo.text = fromMemo.text;
           memo.tags = [...fromMemo.tags];
