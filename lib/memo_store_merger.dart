@@ -32,18 +32,9 @@ class MemoStoreMerger {
 
   /// Executes this memo store manager.
   void execute() {
-    // Remove memos if it is removed in fromMemoStore.
-    final newMemos = <Memo>[];
-
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
-      late final bool toModified;
-      if (memo.hash != memo.lastMergedHash) {
-        toModified = true;
-      } else {
-        toModified = false;
-      }
       if (fromMemo != null) {
         late final bool fromModified;
         if (fromMemo.hash != fromMemo.lastMergedHash) {
