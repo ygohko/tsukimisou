@@ -38,20 +38,20 @@ class MemoStoreMerger {
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
-      late final bool fromModified;
-      if (fromMemo.hash != fromMemo.lastMergedHash) {
-        fromModified = true;
-      } else {
-        fromModified = false;
-      }
       late final bool toModified;
-      if (toMemo.hash != toMemo.lastMergedHash) {
+      if (memo.hash != memo.lastMergedHash) {
         toModified = true;
       } else {
         toModified = false;
       }
       if (fromMemo != null) {
-        if (fromMemo.hash == memo.hash) {
+        late final bool fromModified;
+        if (fromMemo.hash != fromMemo.lastMergedHash) {
+          fromModified = true;
+        } else {
+          fromModified = false;
+        }
+        if (!fromModified) {
           // fromMemo is not modified. Do nothing.
         } else if (fromMemo.lastMergedHash == memo.hash) {
           // fromMmemo is modified and toMemo is not modified. Update toMemo.
@@ -59,8 +59,10 @@ class MemoStoreMerger {
           memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
         } else {
+          // Both modified.
           if (memo.text != fromMemo.text) {
-            // Both modified. Mark as conflicted.
+            // Mark as conflicted.
+            // TODO: Make more smarter diff text.
             var text = 'This memo is conflicted.\nMine --------\n';
             text += memo.text;
             text += '\nTheirs --------\n';
