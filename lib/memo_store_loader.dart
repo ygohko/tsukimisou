@@ -65,7 +65,7 @@ class MemoStoreLoader {
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       if (version > 1) {
-        memo.lastMergedHash = deserializedMemo['lastMergedHash'];
+        memo.beforeModifiedHash = deserializedMemo['beforeModifiedHash'];
       }
       _memoStore.addMemo(memo);
     }

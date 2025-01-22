@@ -38,8 +38,8 @@ class Memo {
   /// Revision when last merged.
   var lastMergedRevision = 0;
 
-  /// Hash when last merged.
-  var lastMergedHash = "";
+  /// Hash before modified.
+  var beforeModifiedHash = "";
 
   var _text = '';
   var _tags = <String>[];
@@ -48,11 +48,6 @@ class Memo {
   Memo() {
     const uuid = Uuid();
     id = uuid.v4();
-  }
-
-  /// Update last merged hash.
-  void updateLastMergedhash() {
-    lastMergedHash = hash;
   }
 
   /// Returns a JSON serializable object.
@@ -64,7 +59,7 @@ class Memo {
       'tags': _tags,
       'revision': revision,
       'lastMergedRevision': lastMergedRevision,
-      'lastMergedHash': lastMergedHash
+      'beforeModifiedHash': beforeModifiedHash
     };
   }
 
@@ -73,6 +68,9 @@ class Memo {
 
   /// Text of this memo.
   set text(String text) {
+    if (lastMergedRevision == revision) {
+      beforeModifiedHash = hash;
+    }
     _text = text;
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;
@@ -83,6 +81,9 @@ class Memo {
 
   /// Tags added to this memo.
   set tags(List<String> tags) {
+    if (lastMergedRevision == revision) {
+      beforeModifiedHash = hash;
+    }
     _tags = tags;
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;

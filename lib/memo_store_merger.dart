@@ -38,7 +38,7 @@ class MemoStoreMerger {
       if (fromMemo != null) {
         late final bool fromModified;
         // FIXME: This code does not work because lastMergedHash was updated when previous merging.
-        if (fromMemo.hash != fromMemo.lastMergedHash) {
+        if (fromMemo.hash != fromMemo.beforeModifiedHash) {
           fromModified = true;
         } else {
           fromModified = false;
@@ -50,12 +50,13 @@ class MemoStoreMerger {
             print('1. ${memo.text}');
           }
           
-        } else if (fromMemo.lastMergedHash == memo.hash) {
+        } else if (fromMemo.beforeModifiedHash == memo.hash) {
           // fromMmemo is modified and toMemo is not modified. Update toMemo.
           memo.text = fromMemo.text;
           memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
-
+          memo.beforeModifiedHash = memo.hash;
+          
           if (memo.text[0] == 'a') {
             print('2. ${memo.text}');
           }
@@ -90,6 +91,8 @@ class MemoStoreMerger {
             }
           }
           memo.tags = tags;
+          memo.lastModified = fromMemo.lastModified;
+          memo.beforeModifiedHash = memo.hash;
         }
       }
     }
@@ -124,7 +127,9 @@ class MemoStoreMerger {
     // Update information.
     for (final memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
-      memo.updateLastMergedhash();
+      // TODO: Update lastMergedHash when first modification?
+      // TODO: Renamed to beforeModifiedHash?
+      // memo.updateLastMergedhash();
     }
     final count = removedMemoIds.length;
     if (count > 100) {
