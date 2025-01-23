@@ -42,12 +42,7 @@ class MemoStoreMerger {
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
-
         final operation = _operation(memo, fromMemo);
-
-
-        // kokokara-----------
-
 
         switch (operation) {
           case _Operation.keep:
