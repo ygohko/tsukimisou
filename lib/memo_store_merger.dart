@@ -23,6 +23,12 @@
 import 'memo.dart';
 import 'memo_store.dart';
 
+enum _Operation {
+  keep,
+  overwrite,
+  makeConflict,
+}
+
 class MemoStoreMerger {
   final MemoStore toMemoStore;
   final MemoStore fromMemoStore;
@@ -36,30 +42,13 @@ class MemoStoreMerger {
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
-        late final bool toModified;
-        if (memo.revision != memo.lastMergedRevision) {
-          toModified = true;
-        } else {
-          toModified = false;
-        }
+
+        final operation = _operation(memo, fromMemo);
 
 
-        if (!toModified) {
-          if (fromMemo.beforeModifiedHash == memo.hash) {
-            // TODO: Overwrite toMemo.
-          } else {
-            // TODO: Make conflict.
-          }
-        } else {
-          if (memo.beforeModifiedHash == fromMemo.hash) {
-            // TODO: Keep toMemo.
-          } else {
-            // TODO: Make conflict.
-          }
-        }
+        // kokokara-----------
 
         
-
         late final bool fromModified;
         // FIXME: This code does not work because lastMergedHash was updated when previous merging.
         // TODO: Use revision to detect it?
@@ -165,5 +154,27 @@ class MemoStoreMerger {
     toMemoStore.removedMemoIds = removedMemoIds;
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
     toMemoStore.markAsChanged();
+  }
+
+  _Operation operation(Memo toMemo, Memo fromMemo) {
+    if (toMemo.hash == fromMemo.hash) {
+      return _Operation.keep;
+    }
+
+    if (memo.revision == memo.lastMergedRevision) {
+      if (fromMemo.beforeModifiedHash == memo.hash) {
+        return _Operation.overwrite;
+      } else {
+        return _Operation.makeConflict;
+      }
+    } else {
+      if (memo.beforeModifiedHash == fromMemo.hash) {
+        return _Operation.keep;
+      } else {
+        return _Operation.makeConflict;
+      }
+    }
+
+    assert(false);
   }
 }
