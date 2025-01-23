@@ -36,6 +36,22 @@ class MemoStoreMerger {
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
+        late final bool toModified;
+        if (memo.revision != memo.lastMergedRevision) {
+          toModified = true;
+        } else {
+          toModified = false;
+        }
+
+
+        if (!toModified) {
+          // TODO: Overwrite toMemo. 
+        } else {
+          // 
+        }
+
+        
+
         late final bool fromModified;
         // FIXME: This code does not work because lastMergedHash was updated when previous merging.
         // TODO: Use revision to detect it?
