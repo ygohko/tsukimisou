@@ -48,7 +48,46 @@ class MemoStoreMerger {
 
         // kokokara-----------
 
-        
+
+        switch (operation) {
+          case _Operation.keep:
+          // Do nothing.
+          break;
+
+          case _Operation.overwrite:
+          memo.text = fromMemo.text;
+          memo.tags = [...fromMemo.tags];
+          memo.lastModified = fromMemo.lastModified;
+          memo.revision = fromMemo.revision;
+          break;
+
+          case _Operation.makeConflict:
+          if (memo.text != fromMemo.text) {
+            // Mark as conflicted.
+            // TODO: Make more smarter diff text.
+            var text = 'This memo is conflicted.\nMine --------\n';
+            text += memo.text;
+            text += '\nTheirs --------\n';
+            text += fromMemo.text;
+            memo.text = text;
+          }
+          var tags = [...memo.tags];
+          for (final tag in fromMemo.tags) {
+            if (!memo.tags.contains(tag)) {
+              tags.add(tag);
+            }
+          }
+          memo.tags = tags;
+          memo.lastModified = fromMemo.lastModified;
+          if (memo.revision > fromMemo.revision) {
+            memo.revision++;
+          } else {
+            memo.revision = fromMemo.revision + 1;
+          }
+          break;
+        }
+
+        /*
         late final bool fromModified;
         // FIXME: This code does not work because lastMergedHash was updated when previous merging.
         // TODO: Use revision to detect it?
@@ -110,6 +149,7 @@ class MemoStoreMerger {
           // TODO: Do not update beforeModifiedHash?
           memo.beforeModifiedHash = memo.hash;
         }
+        */
       }
     }
 
@@ -156,19 +196,19 @@ class MemoStoreMerger {
     toMemoStore.markAsChanged();
   }
 
-  _Operation operation(Memo toMemo, Memo fromMemo) {
+  _Operation _operation(Memo toMemo, Memo fromMemo) {
     if (toMemo.hash == fromMemo.hash) {
       return _Operation.keep;
     }
 
-    if (memo.revision == memo.lastMergedRevision) {
-      if (fromMemo.beforeModifiedHash == memo.hash) {
+    if (toMemo.revision == toMemo.lastMergedRevision) {
+      if (fromMemo.beforeModifiedHash == toMemo.hash) {
         return _Operation.overwrite;
       } else {
         return _Operation.makeConflict;
       }
     } else {
-      if (memo.beforeModifiedHash == fromMemo.hash) {
+      if (toMemo.beforeModifiedHash == fromMemo.hash) {
         return _Operation.keep;
       } else {
         return _Operation.makeConflict;
