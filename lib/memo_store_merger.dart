@@ -38,6 +38,7 @@ class MemoStoreMerger {
       if (fromMemo != null) {
         late final bool fromModified;
         // FIXME: This code does not work because lastMergedHash was updated when previous merging.
+        // TODO: Use revision to detect it?
         if (fromMemo.hash != fromMemo.beforeModifiedHash) {
           fromModified = true;
         } else {
@@ -55,6 +56,7 @@ class MemoStoreMerger {
           memo.text = fromMemo.text;
           memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
+          // TODO: Do not update beforeModifiedHash?
           memo.beforeModifiedHash = memo.hash;
           
           if (memo.text[0] == 'a') {
@@ -92,6 +94,7 @@ class MemoStoreMerger {
           }
           memo.tags = tags;
           memo.lastModified = fromMemo.lastModified;
+          // TODO: Do not update beforeModifiedHash?
           memo.beforeModifiedHash = memo.hash;
         }
       }
