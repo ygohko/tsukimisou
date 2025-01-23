@@ -45,9 +45,17 @@ class MemoStoreMerger {
 
 
         if (!toModified) {
-          // TODO: Overwrite toMemo. 
+          if (fromMemo.beforeModifiedHash == memo.hash) {
+            // TODO: Overwrite toMemo.
+          } else {
+            // TODO: Make conflict.
+          }
         } else {
-          // 
+          if (memo.beforeModifiedHash == fromMemo.hash) {
+            // TODO: Keep toMemo.
+          } else {
+            // TODO: Make conflict.
+          }
         }
 
         
