@@ -44,6 +44,11 @@ class MemoStoreMerger {
       if (fromMemo != null) {
         final operation = _operation(memo, fromMemo);
 
+        // ADHOC
+        if (memo.text.startsWith('abcde')) {
+          print('operation $operation');
+        }
+
         switch (operation) {
           case _Operation.keep:
           // Do nothing.
