@@ -20,6 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:diff_match_patch/diff_match_patch.dart';
+
 import 'memo.dart';
 import 'memo_store.dart';
 
@@ -27,6 +29,13 @@ enum _Operation {
   keep,
   overwrite,
   merge,
+}
+
+class _Line {
+  String text = '';
+  int operation = 0;
+
+  _Line(this.text, this.operation);
 }
 
 class MemoStoreMerger {
@@ -57,13 +66,7 @@ class MemoStoreMerger {
 
           case _Operation.merge:
           if (memo.text != fromMemo.text) {
-            // Mark as conflicted.
-            // TODO: Make more smarter diff text.
-            var text = 'This memo is conflicted.\nMine --------\n';
-            text += memo.text;
-            text += '\nTheirs --------\n';
-            text += fromMemo.text;
-            memo.text = text;
+            memo.text = _diffText(memo.text, fromMemo.text);
           }
           var tags = [...memo.tags];
           for (final tag in fromMemo.tags) {
@@ -143,5 +146,96 @@ class MemoStoreMerger {
     }
 
     assert(false);
+  }
+
+  String _diffText(String toText, String fromText) {
+    final diffMatchPatch = DiffMatchPatch();
+    final diffs = diffMatchPatch.diff(toText, fromText);
+    final lines = <_Line>[];
+    var notModifiedLine = '';
+    var insertedLine = '';
+    var deletedLine = '';
+    var inserted = false;
+    var deleted = false;
+    for (final diff in diffs) {
+      var aLines = _lines(diff.text);
+      for (var line in aLines) {
+        if (diff.operation == DIFF_EQUAL) {
+          notModifiedLine += line;
+          insertedLine += line;
+          deletedLine += line;
+        } else if (diff.operation == DIFF_INSERT) {
+          insertedLine += line;
+          inserted = true;
+        } else if (diff.operation == DIFF_DELETE) {
+          deletedLine += line;
+          deleted = true;
+        }
+
+        if (line.endsWith('\n')) {
+          if (inserted) {
+            lines.add(_Line(insertedLine, 1));
+          }
+          if (deleted) {
+            lines.add(_Line(deletedLine, -1));
+          }
+          if (!inserted && !deleted) {
+            lines.add(_Line(notModifiedLine, 0));
+          }
+          notModifiedLine = '';
+          insertedLine = '';
+          deletedLine = '';
+          inserted = false;
+          deleted = false;
+        }        
+      }
+    }
+    if (inserted) {
+      lines.add(_Line(insertedLine, 1));
+    }
+    if (deleted) {
+      lines.add(_Line(deletedLine, -1));
+    }
+    if (!inserted && !deleted) {
+      lines.add(_Line(notModifiedLine, 0));
+    }
+
+    var result = '';
+    var currentOperation = 0;
+    for (final line in lines) {
+      final operation = line.operation;
+      if (currentOperation == 1 && operation != 1) {
+        result += '<<<<<<\n';
+      }
+      if (currentOperation == -1 && operation != -1) {
+        result += '>>>>>>\n';
+      }
+      if (operation == 1 && currentOperation != 1) {
+        result += '<<< Cloud <<<\n';
+      }
+      if (operation == -1 && currentOperation != -1) {
+        result += '>>> Local >>>\n';
+      }
+      currentOperation = operation;
+      result += line.text;
+    }
+
+    return result;
+  }
+
+  List<String> _lines(String text) {
+    var done = false;
+    final result = <String>[];
+    while (!done) {
+      final index = text.indexOf('\n');
+      if (index < 0) {
+        result.add(text);
+        done = true;
+      }
+      result.add(text.substring(0, index + 1));
+      text = text.substring(index + 1);
+    }
+
+    return result;
   }
 }
