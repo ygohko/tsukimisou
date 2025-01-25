@@ -132,6 +132,7 @@ class _EditingPageState extends State<EditingPage> {
       memoStore.addMemo(newMemo);
     } else {
       // Update a memo
+      memo.beginModification();
       memo.text = _controller.text;
       memoStore.markAsChanged();
     }

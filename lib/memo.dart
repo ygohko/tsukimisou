@@ -50,6 +50,13 @@ class Memo {
     id = uuid.v4();
   }
 
+  /// Begins modification.
+  void beginModification() {
+    if (revision == lastMergedRevision) {
+      beforeModifiedHash = hash;
+    }
+  }
+
   /// Returns a JSON serializable object.
   dynamic toSerializable() {
     return {
@@ -68,9 +75,6 @@ class Memo {
 
   /// Text of this memo.
   set text(String text) {
-    if (lastMergedRevision == revision) {
-      beforeModifiedHash = hash;
-    }
     _text = text;
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;
@@ -81,9 +85,6 @@ class Memo {
 
   /// Tags added to this memo.
   set tags(List<String> tags) {
-    if (lastMergedRevision == revision) {
-      beforeModifiedHash = hash;
-    }
     _tags = tags;
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;

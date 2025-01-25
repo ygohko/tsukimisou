@@ -46,23 +46,15 @@ class MemoStoreMerger {
 
         // ADHOC
         if (memo.text.startsWith('abcde')) {
-          print('operation $operation');
-
-
-          // kokokara-----
           print('memo.hash: ${memo.hash}');
           print('fromMemo.hash: ${fromMemo.hash}');
-    if (toMemo.revision == toMemo.lastMergedRevision) {
-      if (fromMemo.beforeModifiedHash == toMemo.hash) {
-        return _Operation.overwrite;
-      } else {
-        return _Operation.makeConflict;
-      }
-    } else {
-      if (toMemo.beforeModifiedHash == fromMemo.hash) {
-
-
-          
+          print('memo.revision: ${memo.revision}');
+          print('memo.lastMergedRevision: ${memo.lastMergedRevision}');
+          print('fromMemo.beforeModifiedHash: ${fromMemo.beforeModifiedHash}');
+          print('memo.hash: ${memo.hash}');
+          print('memo.beforeModifiedHash: ${memo.beforeModifiedHash}');
+          print('fromMemo.hash: ${fromMemo.hash}');
+          print('operation: $operation');
         }
 
         switch (operation) {
