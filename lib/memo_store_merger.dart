@@ -174,32 +174,53 @@ class MemoStoreMerger {
     var result = '';
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
-    var currentLine = '';
-    var currentOperation = 0;
+    var notModifiedLine = '';
+    var insertedLine = '';
+    var deletedLine = '';
+    var inserted = false;
+    var deleted = false;
     for (final diff in diffs) {
       var lines = _lines(diff.text);
 
       for (var line in lines) {
-
-        currentLine += line;
-        if (diff.operation == DIFF_INSERT) {
-          currentOperation = 1;
+        if (diff.operation == DIFF_EQUAL) {
+          notModifiedLine += line;
+          insertedLine += line;
+          deletedLine += line;
+        } else if (diff.operation == DIFF_INSERT) {
+          insertedLine += line;
+          inserted = true;
         } else if (diff.operation == DIFF_DELETE) {
-          currentOperation = -1;
+          deletedLine += line;
+          deleted = true;
         }
 
-        if (currentLine.endsWith('\n')) {
-          if (currentOperation == 1) {
-            currentLine = '+ ' + currentLine;
-          } else if (currentOperation == -1) {
-            currentLine = '- ' + currentLine;
+        if (line.endsWith('\n')) {
+          if (inserted) {
+            result += '+ ' + insertedLine;
           }
-          print('currentLine: $currentLine');
-          result += currentLine;
-          currentLine = '';
-          currentOperation = 0;
-        }
+          if (deleted) {
+            result += '- ' + deletedLine;
+          }
+          if (!inserted && !deleted) {
+            result += notModifiedLine;;
+          }
+          notModifiedLine = '';
+          insertedLine = '';
+          deletedLine = '';
+          inserted = false;
+          deleted = false;
+        }        
       }
+    }
+    if (inserted) {
+      result += '+ ' + insertedLine;
+    }
+    if (deleted) {
+      result += '- ' + deletedLine;
+    }
+    if (!inserted && !deleted) {
+      result += notModifiedLine;;
     }
 
     return result;
