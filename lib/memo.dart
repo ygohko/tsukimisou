@@ -38,8 +38,8 @@ class Memo {
   /// Revision when last merged.
   var lastMergedRevision = 0;
 
-  /// Hash when last merged.
-  var lastMergedHash = "";
+  /// Hash before modified.
+  var beforeModifiedHash = '';
 
   var _text = '';
   var _tags = <String>[];
@@ -50,10 +50,11 @@ class Memo {
     id = uuid.v4();
   }
 
-  /// Update last merged hash.
-  void updateLastMergedhash() {
-    final values = utf8.encode(_text);
-    lastMergedHash = sha256.convert(values).toString();
+  /// Begins modification by user.
+  void beginModification() {
+    if (revision == lastMergedRevision) {
+      beforeModifiedHash = hash;
+    }
   }
 
   /// Returns a JSON serializable object.
@@ -65,7 +66,7 @@ class Memo {
       'tags': _tags,
       'revision': revision,
       'lastMergedRevision': lastMergedRevision,
-      'lastMergedHash': lastMergedHash
+      'beforeModifiedHash': beforeModifiedHash
     };
   }
 
@@ -87,5 +88,16 @@ class Memo {
     _tags = tags;
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;
+  }
+
+  /// Hash generated from this memo.
+  String get hash {
+    var string = 'text: $_text\ntags: ';
+    for (final tag in _tags) {
+      string += '$tag, ';
+    }
+    final values = utf8.encode(string);
+
+    return sha256.convert(values).toString();
   }
 }

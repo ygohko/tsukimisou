@@ -23,6 +23,12 @@
 import 'memo.dart';
 import 'memo_store.dart';
 
+enum _Operation {
+  keep,
+  overwrite,
+  merge,
+}
+
 class MemoStoreMerger {
   final MemoStore toMemoStore;
   final MemoStore fromMemoStore;
@@ -32,30 +38,32 @@ class MemoStoreMerger {
 
   /// Executes this memo store manager.
   void execute() {
-    // Remove memos if it is removed in fromMemoStore.
-    final newMemos = <Memo>[];
-
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
-        if (fromMemo.revision <= memo.lastMergedRevision) {
-          // fromMemo is not modified. Do nothing.
-        } else if (memo.revision <= memo.lastMergedRevision) {
-          // fromMmemo is modified and toMemo is not modified. Update toMemo.
+        final operation = _operation(memo, fromMemo);
+        switch (operation) {
+          case _Operation.keep:
+          // Do nothing.
+          break;
+
+          case _Operation.overwrite:
           memo.text = fromMemo.text;
           memo.tags = [...fromMemo.tags];
           memo.lastModified = fromMemo.lastModified;
-        } else {
+          memo.revision = fromMemo.revision;
+          break;
+
+          case _Operation.merge:
           if (memo.text != fromMemo.text) {
-            // Both modified. Mark as conflicted.
+            // Mark as conflicted.
+            // TODO: Make more smarter diff text.
             var text = 'This memo is conflicted.\nMine --------\n';
             text += memo.text;
             text += '\nTheirs --------\n';
             text += fromMemo.text;
             memo.text = text;
-          } else {
-            // Both same. Do nothing.
           }
           var tags = [...memo.tags];
           for (final tag in fromMemo.tags) {
@@ -64,6 +72,13 @@ class MemoStoreMerger {
             }
           }
           memo.tags = tags;
+          memo.lastModified = fromMemo.lastModified;
+          if (memo.revision > fromMemo.revision) {
+            memo.revision++;
+          } else {
+            memo.revision = fromMemo.revision + 1;
+          }
+          break;
         }
       }
     }
@@ -98,7 +113,6 @@ class MemoStoreMerger {
     // Update information.
     for (final memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
-      memo.updateLastMergedhash();
     }
     final count = removedMemoIds.length;
     if (count > 100) {
@@ -107,5 +121,27 @@ class MemoStoreMerger {
     toMemoStore.removedMemoIds = removedMemoIds;
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
     toMemoStore.markAsChanged();
+  }
+
+  _Operation _operation(Memo toMemo, Memo fromMemo) {
+    if (toMemo.hash == fromMemo.hash) {
+      return _Operation.keep;
+    }
+
+    if (toMemo.revision == toMemo.lastMergedRevision) {
+      if (fromMemo.beforeModifiedHash == toMemo.hash) {
+        return _Operation.overwrite;
+      } else {
+        return _Operation.merge;
+      }
+    } else {
+      if (toMemo.beforeModifiedHash == fromMemo.hash) {
+        return _Operation.keep;
+      } else {
+        return _Operation.merge;
+      }
+    }
+
+    assert(false);
   }
 }
