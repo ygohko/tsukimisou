@@ -20,6 +20,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:diff_match_patch/diff_match_patch.dart';
+
 import 'memo.dart';
 import 'memo_store.dart';
 
@@ -57,6 +59,7 @@ class MemoStoreMerger {
 
           case _Operation.merge:
           if (memo.text != fromMemo.text) {
+            /*
             // Mark as conflicted.
             // TODO: Make more smarter diff text.
             var text = 'This memo is conflicted.\nMine --------\n';
@@ -64,6 +67,26 @@ class MemoStoreMerger {
             text += '\nTheirs --------\n';
             text += fromMemo.text;
             memo.text = text;
+            */
+
+
+            final diffMatchPatch = DiffMatchPatch();
+            final diffs = diffMatchPatch.diff(memo.text, fromMemo.text);
+            diffMatchPatch.diffCleanupSemantic(diffs);
+            memo.text = '';
+            for (final diff in diffs) {
+              var line = diff.text;
+              if (diff.operation == DIFF_INSERT) {
+                line = '+ ' + line;
+              } else if (diff.operation == DIFF_DELETE) {
+                line = '- ' + line;
+              }
+              if (!line.endsWith('\n')) {
+                line += '\n';
+              }
+              print('line: $line');
+              memo.text += line;
+            }
           }
           var tags = [...memo.tags];
           for (final tag in fromMemo.tags) {
