@@ -43,20 +43,6 @@ class MemoStoreMerger {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
       if (fromMemo != null) {
         final operation = _operation(memo, fromMemo);
-
-        // ADHOC
-        if (memo.text.startsWith('abcde')) {
-          print('memo.hash: ${memo.hash}');
-          print('fromMemo.hash: ${fromMemo.hash}');
-          print('memo.revision: ${memo.revision}');
-          print('memo.lastMergedRevision: ${memo.lastMergedRevision}');
-          print('fromMemo.beforeModifiedHash: ${fromMemo.beforeModifiedHash}');
-          print('memo.hash: ${memo.hash}');
-          print('memo.beforeModifiedHash: ${memo.beforeModifiedHash}');
-          print('fromMemo.hash: ${fromMemo.hash}');
-          print('operation: $operation');
-        }
-
         switch (operation) {
           case _Operation.keep:
           // Do nothing.
@@ -94,70 +80,6 @@ class MemoStoreMerger {
           }
           break;
         }
-
-        /*
-        late final bool fromModified;
-        // FIXME: This code does not work because lastMergedHash was updated when previous merging.
-        // TODO: Use revision to detect it?
-        if (fromMemo.hash != fromMemo.beforeModifiedHash) {
-          fromModified = true;
-        } else {
-          fromModified = false;
-        }
-        if (!fromModified) {
-          // fromMemo is not modified. Do nothing.
-
-          if (memo.text[0] == 'a') {
-            print('1. ${memo.text}');
-          }
-          
-        } else if (fromMemo.beforeModifiedHash == memo.hash) {
-          // fromMmemo is modified and toMemo is not modified. Update toMemo.
-          memo.text = fromMemo.text;
-          memo.tags = [...fromMemo.tags];
-          memo.lastModified = fromMemo.lastModified;
-          // TODO: Do not update beforeModifiedHash?
-          memo.beforeModifiedHash = memo.hash;
-          
-          if (memo.text[0] == 'a') {
-            print('2. ${memo.text}');
-          }
-
-        } else {
-          // Both modified.
-          if (memo.text != fromMemo.text) {
-            // Mark as conflicted.
-            // TODO: Make more smarter diff text.
-            var text = 'This memo is conflicted.\nMine --------\n';
-            text += memo.text;
-            text += '\nTheirs --------\n';
-            text += fromMemo.text;
-            memo.text = text;
-
-            if (memo.text[0] == 'a') {
-              print('3. ${memo.text}');
-            }
-
-          } else {
-            // Both same. Do nothing.
-
-            if (memo.text[0] == 'a') {
-              print('4. ${memo.text}');
-            }
-
-          }
-          var tags = [...memo.tags];
-          for (final tag in fromMemo.tags) {
-            if (!memo.tags.contains(tag)) {
-              tags.add(tag);
-            }
-          }
-          memo.tags = tags;
-          memo.lastModified = fromMemo.lastModified;
-          // TODO: Do not update beforeModifiedHash?
-          memo.beforeModifiedHash = memo.hash;
-        }
-        */
       }
     }
 
@@ -191,9 +113,6 @@ class MemoStoreMerger {
     // Update information.
     for (final memo in toMemoStore.memos) {
       memo.lastMergedRevision = memo.revision;
-      // TODO: Update lastMergedHash when first modification?
-      // TODO: Renamed to beforeModifiedHash?
-      // memo.updateLastMergedhash();
     }
     final count = removedMemoIds.length;
     if (count > 100) {
