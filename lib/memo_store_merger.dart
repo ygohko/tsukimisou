@@ -26,7 +26,7 @@ import 'memo_store.dart';
 enum _Operation {
   keep,
   overwrite,
-  makeConflict,
+  merge,
 }
 
 class MemoStoreMerger {
@@ -55,7 +55,7 @@ class MemoStoreMerger {
           memo.revision = fromMemo.revision;
           break;
 
-          case _Operation.makeConflict:
+          case _Operation.merge:
           if (memo.text != fromMemo.text) {
             // Mark as conflicted.
             // TODO: Make more smarter diff text.
@@ -132,13 +132,13 @@ class MemoStoreMerger {
       if (fromMemo.beforeModifiedHash == toMemo.hash) {
         return _Operation.overwrite;
       } else {
-        return _Operation.makeConflict;
+        return _Operation.merge;
       }
     } else {
       if (toMemo.beforeModifiedHash == fromMemo.hash) {
         return _Operation.keep;
       } else {
-        return _Operation.makeConflict;
+        return _Operation.merge;
       }
     }
 

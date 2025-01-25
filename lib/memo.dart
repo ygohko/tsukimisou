@@ -39,7 +39,7 @@ class Memo {
   var lastMergedRevision = 0;
 
   /// Hash before modified.
-  var beforeModifiedHash = "";
+  var beforeModifiedHash = '';
 
   var _text = '';
   var _tags = <String>[];
@@ -50,7 +50,7 @@ class Memo {
     id = uuid.v4();
   }
 
-  /// Begins modification.
+  /// Begins modification by user.
   void beginModification() {
     if (revision == lastMergedRevision) {
       beforeModifiedHash = hash;
