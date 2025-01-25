@@ -31,6 +31,13 @@ enum _Operation {
   merge,
 }
 
+class _Line {
+  String text = '';
+  int operation = 0;
+
+  _Line(this.text, this.operation);
+}
+
 class MemoStoreMerger {
   final MemoStore toMemoStore;
   final MemoStore fromMemoStore;
@@ -171,18 +178,17 @@ class MemoStoreMerger {
   }
 
   String _diffText(String toText, String fromText) {
-    var result = '';
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
+    final lines = <_Line>[];
     var notModifiedLine = '';
     var insertedLine = '';
     var deletedLine = '';
     var inserted = false;
     var deleted = false;
     for (final diff in diffs) {
-      var lines = _lines(diff.text);
-
-      for (var line in lines) {
+      var aLines = _lines(diff.text);
+      for (var line in aLines) {
         if (diff.operation == DIFF_EQUAL) {
           notModifiedLine += line;
           insertedLine += line;
@@ -197,13 +203,13 @@ class MemoStoreMerger {
 
         if (line.endsWith('\n')) {
           if (inserted) {
-            result += '+ ' + insertedLine;
+            lines.add(_Line(insertedLine, 1));
           }
           if (deleted) {
-            result += '- ' + deletedLine;
+            lines.add(_Line(deletedLine, -1));
           }
           if (!inserted && !deleted) {
-            result += notModifiedLine;;
+            lines.add(_Line(notModifiedLine, 0));
           }
           notModifiedLine = '';
           insertedLine = '';
@@ -214,13 +220,33 @@ class MemoStoreMerger {
       }
     }
     if (inserted) {
-      result += '+ ' + insertedLine;
+      lines.add(_Line(insertedLine, 1));
     }
     if (deleted) {
-      result += '- ' + deletedLine;
+      lines.add(_Line(deletedLine, -1));
     }
     if (!inserted && !deleted) {
-      result += notModifiedLine;;
+      lines.add(_Line(notModifiedLine, 0));
+    }
+
+    var result = '';
+    var currentOperation = 0;
+    for (final line in lines) {
+      final operation = line.operation;
+      if (currentOperation == 1 && operation != 1) {
+        result += '<<<<<<\n';
+      }
+      if (currentOperation == -1 && operation != -1) {
+        result += '>>>>>>\n';
+      }
+      if (operation == 1 && currentOperation != 1) {
+        result += '<<< Cloud <<<\n';
+      }
+      if (operation == -1 && currentOperation != -1) {
+        result += '>>> Local >>>\n';
+      }
+      currentOperation = operation;
+      result += line.text;
     }
 
     return result;
