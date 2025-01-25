@@ -69,7 +69,8 @@ class MemoStoreMerger {
             memo.text = text;
             */
 
-
+            memo.text = _diffText(memo.text, fromMemo.text);
+            /*
             final diffMatchPatch = DiffMatchPatch();
             final diffs = diffMatchPatch.diff(memo.text, fromMemo.text);
             diffMatchPatch.diffCleanupSemantic(diffs);
@@ -87,6 +88,7 @@ class MemoStoreMerger {
               print('line: $line');
               memo.text += line;
             }
+            */
           }
           var tags = [...memo.tags];
           for (final tag in fromMemo.tags) {
@@ -166,5 +168,56 @@ class MemoStoreMerger {
     }
 
     assert(false);
+  }
+
+  String _diffText(String toText, String fromText) {
+    var result = '';
+    final diffMatchPatch = DiffMatchPatch();
+    final diffs = diffMatchPatch.diff(toText, fromText);
+    var currentLine = '';
+    var currentOperation = 0;
+    for (final diff in diffs) {
+      var lines = _lines(diff.text);
+
+      for (var line in lines) {
+
+        currentLine += line;
+        if (diff.operation == DIFF_INSERT) {
+          currentOperation = 1;
+        } else if (diff.operation == DIFF_DELETE) {
+          currentOperation = -1;
+        }
+
+        if (currentLine.endsWith('\n')) {
+          if (currentOperation == 1) {
+            currentLine = '+ ' + currentLine;
+          } else if (currentOperation == -1) {
+            currentLine = '- ' + currentLine;
+          }
+          print('currentLine: $currentLine');
+          result += currentLine;
+          currentLine = '';
+          currentOperation = 0;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  List<String> _lines(String text) {
+    var done = false;
+    final result = <String>[];
+    while (!done) {
+      final index = text.indexOf('\n');
+      if (index < 0) {
+        result.add(text);
+        done = true;
+      }
+      result.add(text.substring(0, index + 1));
+      text = text.substring(index + 1);
+    }
+
+    return result;
   }
 }
