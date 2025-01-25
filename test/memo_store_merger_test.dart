@@ -143,7 +143,7 @@ void main() {
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
-      expect(toMemo.text.contains('This memo is conflicted.'), true);
+      expect(toMemo.text.contains('Local'), true);
     });
 
     test(
