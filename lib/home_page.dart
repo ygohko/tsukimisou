@@ -483,6 +483,7 @@ class _HomePageState extends State<HomePage> {
             Provider.of<MemoStore>(context, listen: false).lastMerged);
         final unsynchronized = lastModified.isAfter(lastMerged);
         return Card(
+          color: common_uis.TsukimisouColors.memoCard,
           elevation: 2.0,
           child: InkWell(
             onTap: appState.mergingWithGoogleDrive
