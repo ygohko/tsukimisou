@@ -92,15 +92,14 @@ void main() {
 
     test('MemoStoreMerger should update memos if from memos are modified.', () {
       final toMemoStore = MemoStore();
-      final fromMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
+      toMemo.lastMergedRevision = toMemo.revision;
       toMemoStore.addMemo(toMemo);
-      final fromMemo = Memo();
+      final fromMemoStore = toMemoStore.copy();
+      final fromMemo = fromMemoStore.memoFromId(toMemo.id)!;
+      fromMemo.beginModification();
       fromMemo.text = "This is a from memo.";
-      fromMemo.text = "This is a from memo.";
-      fromMemo.id = toMemo.id;
-      fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();
@@ -111,15 +110,13 @@ void main() {
     test('MemoStoreMerger should not update memos if toMemos are modified.',
         () {
       final toMemoStore = MemoStore();
-      final fromMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
+      toMemo.lastMergedRevision = toMemo.revision;
+      toMemo.beginModification();
       toMemo.text = "This is a to memo.";
       toMemoStore.addMemo(toMemo);
-      final fromMemo = Memo();
-      fromMemo.text = "This is a from memo.";
-      fromMemo.id = toMemo.id;
-      fromMemoStore.addMemo(fromMemo);
+      final fromMemoStore = toMemoStore.copy();
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();
@@ -130,15 +127,18 @@ void main() {
     test(
         'MemoStoreMerger should make conficted memos if both memos in fromMemoStore and toMemoStore are modified.',
         () {
+
       final toMemoStore = MemoStore();
-      final fromMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
+      toMemo.lastMergedRevision = toMemo.revision;
+      toMemo.beginModification();
+      toMemo.text = "This is a to memo.";
       toMemoStore.addMemo(toMemo);
-      final fromMemo = Memo();
+      final fromMemoStore = toMemoStore.copy();
+      final fromMemo = fromMemoStore.memoFromId(toMemo.id)!;
+      fromMemo.beginModification();
       fromMemo.text = "This is a from memo.";
-      fromMemo.id = toMemo.id;
-      fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
       memoStoreMerger.execute();

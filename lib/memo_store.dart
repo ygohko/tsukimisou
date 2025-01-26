@@ -63,6 +63,18 @@ class MemoStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Copy this memo store.
+  MemoStore copy() {
+    final result = MemoStore();
+    for (final memo in memos) {
+      result.memos.add(memo.copy());
+    }
+    result.removedMemoIds = [...removedMemoIds];
+    result.lastMerged = lastMerged;
+
+    return result;
+  }
+
   /// Memo that has given ID.
   Memo? memoFromId(String id) {
     for (var memo in memos) {

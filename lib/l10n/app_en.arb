@@ -83,6 +83,18 @@
     "@unlock": {
         "description": "Text for unlock button"
     },
+    "thisMemoHasConflicts": "This memo has conflicts.",
+    "@thisMemoHasConflicts": {
+        "description": "Text to indicate this memo has confilicts."
+    },
+    "local": "Local",
+    "@local": {
+        "description": "Text for local markers"
+    },
+    "cloud": "Cloud",
+    "@cloud": {
+        "description": "Text for cloud markers"
+    },
     "loadingWasFailed": "Loading was failed",
     "@loadingWasFailed": {
         "description": "Title for loading error dialog."

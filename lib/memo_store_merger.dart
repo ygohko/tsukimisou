@@ -39,8 +39,15 @@ class _Line {
 }
 
 class MemoStoreMerger {
+  /// Memo store that memos are merged to.
   final MemoStore toMemoStore;
+
+  /// Memo store that memos are merged from.
   final MemoStore fromMemoStore;
+
+  String _conflictWarningText = "This memo has conflicts.";
+  String _localMarkerText = "Local";
+  String _cloudMarkerText = "Cloud";
 
   /// Creates a memo store manager.
   MemoStoreMerger(this.toMemoStore, this.fromMemoStore);
@@ -126,6 +133,21 @@ class MemoStoreMerger {
     toMemoStore.markAsChanged();
   }
 
+  /// Conflict warning text.
+  void set conflictWarningText(String text) {
+    _conflictWarningText = text;
+  }
+
+  /// Local marker text.
+  void set localMarkerText(String text) {
+    _localMarkerText = text;
+  }
+
+  /// Cloud markger text.
+  void set cloudMarkerText(String text) {
+    _cloudMarkerText = text;
+  }
+
   _Operation _operation(Memo toMemo, Memo fromMemo) {
     if (toMemo.hash == fromMemo.hash) {
       return _Operation.keep;
@@ -151,6 +173,18 @@ class MemoStoreMerger {
   String _diffText(String toText, String fromText) {
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
+    diffMatchPatch.diffCleanupSemantic(diffs);
+    if (diffs.length == 0) {
+      return '';
+    }
+    final lastDiffIndex = diffs.length - 1;
+    late final hasLastLf;
+    if (diffs[lastDiffIndex].text.endsWith('\n')) {
+      hasLastLf = true;
+    } else {
+      hasLastLf = false;
+      diffs[lastDiffIndex].text += '\n';
+    }
     final lines = <_Line>[];
     var notModifiedLine = '';
     var insertedLine = '';
@@ -200,24 +234,34 @@ class MemoStoreMerger {
       lines.add(_Line(notModifiedLine, 0));
     }
 
-    var result = '';
+    var result = '$_conflictWarningText\n\n';
     var currentOperation = 0;
     for (final line in lines) {
       final operation = line.operation;
-      if (currentOperation == 1 && operation != 1) {
-        result += '<<<<<<\n';
-      }
       if (currentOperation == -1 && operation != -1) {
-        result += '>>>>>>\n';
+        result += '>>>>>>>>>>\n';
       }
-      if (operation == 1 && currentOperation != 1) {
-        result += '<<< Cloud <<<\n';
+      if (currentOperation == 1 && operation != 1) {
+        result += '<<<<<<<<<<\n';
       }
       if (operation == -1 && currentOperation != -1) {
-        result += '>>> Local >>>\n';
+        result += '>>> $_localMarkerText >>>\n';
+      }
+      if (operation == 1 && currentOperation != 1) {
+        result += '<<< $_cloudMarkerText <<<\n';
       }
       currentOperation = operation;
       result += line.text;
+    }
+    if (currentOperation == -1) {
+      result += '>>>>>>>>>>\n';
+    }
+    if (currentOperation == 1) {
+      result += '<<<<<<<<<<\n';
+    }
+
+    if (!hasLastLf) {
+      result = result.substring(0, result.length - 1);
     }
 
     return result;
@@ -229,11 +273,14 @@ class MemoStoreMerger {
     while (!done) {
       final index = text.indexOf('\n');
       if (index < 0) {
-        result.add(text);
+        if (text != '') {
+          result.add(text);
+        }
         done = true;
+      } else {
+        result.add(text.substring(0, index + 1));
+        text = text.substring(index + 1);
       }
-      result.add(text.substring(0, index + 1));
-      text = text.substring(index + 1);
     }
 
     return result;
