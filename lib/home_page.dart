@@ -215,6 +215,9 @@ class _HomePageState extends State<HomePage> {
     }
     _fileLockedCount = 0;
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    merger.conflictWarningText = localizations.thisMemoHasConflicts;
+    merger.localMarkerText = localizations.local;
+    merger.cloudMarkerText = localizations.cloud;
     merger.execute();
 
     final localSaver = await factories.memoStoreLocalSaverFromFileName(
