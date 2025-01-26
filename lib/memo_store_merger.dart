@@ -39,8 +39,15 @@ class _Line {
 }
 
 class MemoStoreMerger {
+  /// Memo store that memos are merged to.
   final MemoStore toMemoStore;
+
+  /// Memo store that memos are merged from.
   final MemoStore fromMemoStore;
+
+  String _conflictWarningText = "This memo has conflict(s).";
+  String _localMarkerText = "Local";
+  String _cloudMarkerText = "Cloud";
 
   /// Creates a memo store manager.
   MemoStoreMerger(this.toMemoStore, this.fromMemoStore);
@@ -124,6 +131,21 @@ class MemoStoreMerger {
     toMemoStore.removedMemoIds = removedMemoIds;
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
     toMemoStore.markAsChanged();
+  }
+
+  /// Conflict warning text.
+  void set conflictWarningText(String text) {
+    _conflictWarningText = text;
+  }
+
+  /// Local marker text.
+  void set localMarkerText(String text) {
+    _localMarkerText = text;
+  }
+
+  /// Cloud markger text.
+  void set cloudMarkerText(String text) {
+    _cloudMarkerText = text;
   }
 
   _Operation _operation(Memo toMemo, Memo fromMemo) {
@@ -211,7 +233,7 @@ class MemoStoreMerger {
       lines.add(_Line(notModifiedLine, 0));
     }
 
-    var result = 'This memo has conflict(s).\n\n';
+    var result = '$_conflictWarningText\n\n';
     var currentOperation = 0;
     for (final line in lines) {
       final operation = line.operation;
@@ -222,10 +244,10 @@ class MemoStoreMerger {
         result += '>>>>>>>>>>\n';
       }
       if (operation == 1 && currentOperation != 1) {
-        result += '<<< Cloud <<<\n';
+        result += '<<< $_cloudMarkerText <<<\n';
       }
       if (operation == -1 && currentOperation != -1) {
-        result += '>>> Local >>>\n';
+        result += '>>> $_localMarkerText >>>\n';
       }
       currentOperation = operation;
       result += line.text;
