@@ -237,20 +237,26 @@ class MemoStoreMerger {
     var currentOperation = 0;
     for (final line in lines) {
       final operation = line.operation;
-      if (currentOperation == 1 && operation != 1) {
-        result += '<<<<<<<<<<\n';
-      }
       if (currentOperation == -1 && operation != -1) {
         result += '>>>>>>>>>>\n';
       }
-      if (operation == 1 && currentOperation != 1) {
-        result += '<<< $_cloudMarkerText <<<\n';
+      if (currentOperation == 1 && operation != 1) {
+        result += '<<<<<<<<<<\n';
       }
       if (operation == -1 && currentOperation != -1) {
         result += '>>> $_localMarkerText >>>\n';
       }
+      if (operation == 1 && currentOperation != 1) {
+        result += '<<< $_cloudMarkerText <<<\n';
+      }
       currentOperation = operation;
       result += line.text;
+    }
+    if (currentOperation == -1) {
+      result += '>>>>>>>>>>\n';
+    }
+    if (currentOperation == 1) {
+      result += '<<<<<<<<<<\n';
     }
 
     if (!hasLastLf) {
