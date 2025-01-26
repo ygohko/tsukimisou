@@ -150,34 +150,19 @@ class MemoStoreMerger {
 
   _Operation _operation(Memo toMemo, Memo fromMemo) {
     if (toMemo.hash == fromMemo.hash) {
-
-      print('1');
-
       return _Operation.keep;
     }
 
     if (toMemo.revision == toMemo.lastMergedRevision) {
       if (fromMemo.beforeModifiedHash == toMemo.hash) {
-
-        print('2');
-
         return _Operation.overwrite;
       } else {
-
-        print('3');
-
         return _Operation.merge;
       }
     } else {
       if (toMemo.beforeModifiedHash == fromMemo.hash) {
-
-        print('4');
-
         return _Operation.keep;
       } else {
-
-        print('5');
-
         return _Operation.merge;
       }
     }
@@ -189,9 +174,6 @@ class MemoStoreMerger {
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
     diffMatchPatch.diffCleanupSemantic(diffs);
-
-    print('diffs.length: ${diffs.length}');
-    
     if (diffs.length == 0) {
       return '';
     }
@@ -211,9 +193,6 @@ class MemoStoreMerger {
     var deleted = false;
     for (final diff in diffs) {
       var aLines = _lines(diff.text);
-
-      print('aLines: $aLines');
-      
       for (var line in aLines) {
         if (diff.operation == DIFF_EQUAL) {
           notModifiedLine += line;
@@ -281,14 +260,9 @@ class MemoStoreMerger {
       result += '<<<<<<<<<<\n';
     }
 
-    print('result: $result');
-    
     if (!hasLastLf) {
       result = result.substring(0, result.length - 1);
     }
-
-    print('_conflictWarningText: $_conflictWarningText');
-    print('result: $result');
 
     return result;
   }
