@@ -61,34 +61,34 @@ class MemoStoreMerger {
         final operation = _operation(memo, fromMemo);
         switch (operation) {
           case _Operation.keep:
-          // Do nothing.
-          break;
+            // Do nothing.
+            break;
 
           case _Operation.overwrite:
-          memo.text = fromMemo.text;
-          memo.tags = [...fromMemo.tags];
-          memo.lastModified = fromMemo.lastModified;
-          memo.revision = fromMemo.revision;
-          break;
+            memo.text = fromMemo.text;
+            memo.tags = [...fromMemo.tags];
+            memo.lastModified = fromMemo.lastModified;
+            memo.revision = fromMemo.revision;
+            break;
 
           case _Operation.merge:
-          if (memo.text != fromMemo.text) {
-            memo.text = _diffText(memo.text, fromMemo.text);
-          }
-          var tags = [...memo.tags];
-          for (final tag in fromMemo.tags) {
-            if (!memo.tags.contains(tag)) {
-              tags.add(tag);
+            if (memo.text != fromMemo.text) {
+              memo.text = _diffText(memo.text, fromMemo.text);
             }
-          }
-          memo.tags = tags;
-          memo.lastModified = fromMemo.lastModified;
-          if (memo.revision > fromMemo.revision) {
-            memo.revision++;
-          } else {
-            memo.revision = fromMemo.revision + 1;
-          }
-          break;
+            var tags = [...memo.tags];
+            for (final tag in fromMemo.tags) {
+              if (!memo.tags.contains(tag)) {
+                tags.add(tag);
+              }
+            }
+            memo.tags = tags;
+            memo.lastModified = fromMemo.lastModified;
+            if (memo.revision > fromMemo.revision) {
+              memo.revision++;
+            } else {
+              memo.revision = fromMemo.revision + 1;
+            }
+            break;
         }
       }
     }
@@ -221,7 +221,7 @@ class MemoStoreMerger {
           deletedLine = '';
           inserted = false;
           deleted = false;
-        }        
+        }
       }
     }
     if (inserted) {

@@ -127,7 +127,6 @@ void main() {
     test(
         'MemoStoreMerger should make conficted memos if both memos in fromMemoStore and toMemoStore are modified.',
         () {
-
       final toMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
