@@ -150,19 +150,34 @@ class MemoStoreMerger {
 
   _Operation _operation(Memo toMemo, Memo fromMemo) {
     if (toMemo.hash == fromMemo.hash) {
+
+      print('1');
+
       return _Operation.keep;
     }
 
     if (toMemo.revision == toMemo.lastMergedRevision) {
       if (fromMemo.beforeModifiedHash == toMemo.hash) {
+
+        print('2');
+
         return _Operation.overwrite;
       } else {
+
+        print('3');
+
         return _Operation.merge;
       }
     } else {
       if (toMemo.beforeModifiedHash == fromMemo.hash) {
+
+        print('4');
+
         return _Operation.keep;
       } else {
+
+        print('5');
+
         return _Operation.merge;
       }
     }

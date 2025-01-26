@@ -57,6 +57,20 @@ class Memo {
     }
   }
 
+  /// Copy this memo.
+  Memo copy() {
+    final result = Memo();
+    result.id = id;
+    result.lastModified = lastModified;
+    result.revision = revision;
+    result.lastMergedRevision = lastMergedRevision;
+    result.beforeModifiedHash = beforeModifiedHash;
+    result._text = _text;
+    result._tags = [..._tags];
+
+    return result;
+  }
+
   /// Returns a JSON serializable object.
   dynamic toSerializable() {
     return {
