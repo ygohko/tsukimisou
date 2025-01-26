@@ -51,6 +51,9 @@ class TsukimisouColors {
     seedColor: const Color(0xFF00003F),
     background: const Color(0xFFF7F7FF),
   );
+
+  /// Color for memo card.
+  static final memoCard = Color(0xFFFFFFFF);
 }
 
 class TsukimisouTextStyles {

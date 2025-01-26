@@ -129,6 +129,7 @@ class _ViewingPageState extends State<ViewingPage> {
         body: ListView(
           children: [
             Card(
+              color: common_uis.TsukimisouColors.memoCard,
               elevation: 2.0,
               child: SizedBox(
                 width: double.infinity,
