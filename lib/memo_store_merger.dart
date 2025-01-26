@@ -151,6 +151,17 @@ class MemoStoreMerger {
   String _diffText(String toText, String fromText) {
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
+    if (diffs.length == 0) {
+      return '';
+    }
+    final lastDiffIndex = diffs.length - 1;
+    late final hasLastLf;
+    if (diffs[lastDiffIndex].text.endsWith('\n')) {
+      hasLastLf = true;
+    } else {
+      hasLastLf = false;
+      diffs[lastDiffIndex].text += '\n';
+    }
     final lines = <_Line>[];
     var notModifiedLine = '';
     var insertedLine = '';
@@ -200,15 +211,15 @@ class MemoStoreMerger {
       lines.add(_Line(notModifiedLine, 0));
     }
 
-    var result = '';
+    var result = 'This memo has conflict(s).\n\n';
     var currentOperation = 0;
     for (final line in lines) {
       final operation = line.operation;
       if (currentOperation == 1 && operation != 1) {
-        result += '<<<<<<\n';
+        result += '<<<<<<<<<<\n';
       }
       if (currentOperation == -1 && operation != -1) {
-        result += '>>>>>>\n';
+        result += '>>>>>>>>>>\n';
       }
       if (operation == 1 && currentOperation != 1) {
         result += '<<< Cloud <<<\n';
@@ -218,6 +229,10 @@ class MemoStoreMerger {
       }
       currentOperation = operation;
       result += line.text;
+    }
+
+    if (!hasLastLf) {
+      result = result.substring(result.length - 1);
     }
 
     return result;
