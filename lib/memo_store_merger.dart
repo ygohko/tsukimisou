@@ -45,7 +45,7 @@ class MemoStoreMerger {
   /// Memo store that memos are merged from.
   final MemoStore fromMemoStore;
 
-  String _conflictWarningText = "This memo has conflict(s).";
+  String _conflictWarningText = "This memo has conflicts.";
   String _localMarkerText = "Local";
   String _cloudMarkerText = "Cloud";
 
@@ -188,6 +188,10 @@ class MemoStoreMerger {
   String _diffText(String toText, String fromText) {
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
+    diffMatchPatch.diffCleanupSemantic(diffs);
+
+    print('diffs.length: ${diffs.length}');
+    
     if (diffs.length == 0) {
       return '';
     }
@@ -207,6 +211,9 @@ class MemoStoreMerger {
     var deleted = false;
     for (final diff in diffs) {
       var aLines = _lines(diff.text);
+
+      print('aLines: $aLines');
+      
       for (var line in aLines) {
         if (diff.operation == DIFF_EQUAL) {
           notModifiedLine += line;
@@ -274,9 +281,14 @@ class MemoStoreMerger {
       result += '<<<<<<<<<<\n';
     }
 
+    print('result: $result');
+    
     if (!hasLastLf) {
-      result = result.substring(result.length - 1);
+      result = result.substring(0, result.length - 1);
     }
+
+    print('_conflictWarningText: $_conflictWarningText');
+    print('result: $result');
 
     return result;
   }
@@ -287,11 +299,14 @@ class MemoStoreMerger {
     while (!done) {
       final index = text.indexOf('\n');
       if (index < 0) {
-        result.add(text);
+        if (text != '') {
+          result.add(text);
+        }
         done = true;
+      } else {
+        result.add(text.substring(0, index + 1));
+        text = text.substring(index + 1);
       }
-      result.add(text.substring(0, index + 1));
-      text = text.substring(index + 1);
     }
 
     return result;
