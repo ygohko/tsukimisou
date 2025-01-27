@@ -134,17 +134,17 @@ class MemoStoreMerger {
   }
 
   /// Conflict warning text.
-  void set conflictWarningText(String text) {
+  set conflictWarningText(String text) {
     _conflictWarningText = text;
   }
 
   /// Local marker text.
-  void set localMarkerText(String text) {
+  set localMarkerText(String text) {
     _localMarkerText = text;
   }
 
   /// Cloud markger text.
-  void set cloudMarkerText(String text) {
+  set cloudMarkerText(String text) {
     _cloudMarkerText = text;
   }
 
@@ -159,26 +159,23 @@ class MemoStoreMerger {
       } else {
         return _Operation.merge;
       }
-    } else {
-      if (toMemo.beforeModifiedHash == fromMemo.hash) {
-        return _Operation.keep;
-      } else {
-        return _Operation.merge;
-      }
+    }
+    if (toMemo.beforeModifiedHash == fromMemo.hash) {
+      return _Operation.keep;
     }
 
-    assert(false);
+    return _Operation.merge;
   }
 
   String _diffText(String toText, String fromText) {
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(toText, fromText);
     diffMatchPatch.diffCleanupSemantic(diffs);
-    if (diffs.length == 0) {
+    if (diffs.isEmpty) {
       return '';
     }
     final lastDiffIndex = diffs.length - 1;
-    late final hasLastLf;
+    late final bool hasLastLf;
     if (diffs[lastDiffIndex].text.endsWith('\n')) {
       hasLastLf = true;
     } else {
