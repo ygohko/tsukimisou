@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path_provider_linux/path_provider_linux.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path_provider_windows/path_provider_windows.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo_store.dart';

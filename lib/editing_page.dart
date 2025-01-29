@@ -82,8 +82,9 @@ class _EditingPageState extends State<EditingPage> {
     final size = MediaQuery.of(context).size;
     final width = widget.fullScreen ? size.width : MemoDialogsSize.width;
     final height = widget.fullScreen ? size.height : MemoDialogsSize.height;
-    return WillPopScope(
-      onWillPop: _confirm,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _confirm,
       child: SizedBox(
         width: width,
         height: height,
@@ -155,16 +156,24 @@ class _EditingPageState extends State<EditingPage> {
     }
   }
 
-  Future<bool> _confirm() async {
+  void _confirm(bool didPop, Object? result) async {
+    if (didPop) {
+      return;
+    }
+
     final localizations = AppLocalizations.of(context)!;
     final memo = widget.memo;
     if (memo == null) {
       if (_controller.text == '') {
-        return true;
+        Navigator.of(context).pop();
+
+        return;
       }
     } else {
       if (_controller.text == memo.text) {
-        return true;
+        Navigator.of(context).pop();
+
+        return;
       }
     }
     final accepted = await showConfirmationDialog(
@@ -174,7 +183,11 @@ class _EditingPageState extends State<EditingPage> {
         localizations.ok,
         localizations.cancel,
         true);
-
-    return accepted;
+    if (!mounted) {
+      return;
+    }
+    if (accepted) {
+        Navigator.of(context).pop();
+    }
   }
 }

@@ -49,11 +49,11 @@ class TsukimisouColors {
   /// Color scheme for this application.
   static final scheme = ColorScheme.fromSeed(
     seedColor: const Color(0xFF00003F),
-    background: const Color(0xFFF7F7FF),
+    surface: const Color(0xFFF7F7FF),
   );
 
   /// Color for memo card.
-  static final memoCard = Color(0xFFFFFFFF);
+  static const memoCard = Color(0xFFFFFFFF);
 }
 
 class TsukimisouTextStyles {

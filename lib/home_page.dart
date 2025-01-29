@@ -173,16 +173,22 @@ class _HomePageState extends State<HomePage> {
       if (_fileLockedCount < 3) {
         messenger.hideCurrentMaterialBanner();
         appState.mergingWithGoogleDrive = false;
+        if (!mounted) {
+          return;
+        }
         await common_uis.showErrorDialog(
-            context,
-            localizations.memoStoreIsLocked,
-            localizations.memoStoreIsLockedByOtherDevice,
-            localizations.ok);
+          context,
+          localizations.memoStoreIsLocked,
+          localizations.memoStoreIsLockedByOtherDevice,
+          localizations.ok);
         return;
       } else {
         // Confirm to force unlock
         messenger.hideCurrentMaterialBanner();
         appState.mergingWithGoogleDrive = false;
+        if (!mounted) {
+          return;
+        }
         final accepted = await common_uis.showConfirmationDialog(
             context,
             localizations.memoStoreIsLocked,
@@ -199,6 +205,9 @@ class _HomePageState extends State<HomePage> {
       // Not compatible error.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
+      if (!mounted) {
+        return;
+      }
       await common_uis.showErrorDialog(
           context,
           localizations.memoStoreIsNotCompatible,
@@ -209,6 +218,9 @@ class _HomePageState extends State<HomePage> {
       // Other failure.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
+      if (!mounted) {
+        return;
+      }
       await common_uis.showErrorDialog(context, localizations.loadingWasFailed,
           localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
       return;
