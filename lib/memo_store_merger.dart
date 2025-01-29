@@ -61,7 +61,9 @@ class MemoStoreMerger {
         final operation = _operation(memo, fromMemo);
         switch (operation) {
           case _Operation.keep:
-            // Do nothing.
+            if (fromMemo.lastModified > memo.lastModified) {
+              memo.lastModified = fromMemo.lastModified;
+            }
             break;
 
           case _Operation.overwrite:
