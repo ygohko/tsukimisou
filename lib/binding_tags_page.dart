@@ -73,8 +73,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     final size = MediaQuery.of(context).size;
     final width = widget.fullScreen ? size.width : MemoDialogsSize.width;
     final height = widget.fullScreen ? size.height : MemoDialogsSize.height;
-    return WillPopScope(
-      onWillPop: _apply,
+    return PopScope(
+      onPopInvokedWithResult: _apply,
       child: ScaffoldMessenger(
         key: _scaffoldMessengerKey,
         child: SizedBox(
@@ -185,7 +185,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     controller.dispose();
   }
 
-  Future<bool> _apply() async {
+  void _apply(bool didPop, Object? result) async {
     final localizations = AppLocalizations.of(context)!;
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
@@ -201,7 +201,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       }
     }
     if (!applyingNeeded) {
-      return true;
+      return;
     }
     widget.memo.beginModification();
     widget.memo.tags = [..._boundTags];
@@ -220,8 +220,6 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             localizations.ok);
       }
     }
-
-    return true;
   }
 
   void _bindTag(String tag) {
