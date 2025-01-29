@@ -157,6 +157,10 @@ class _EditingPageState extends State<EditingPage> {
   }
 
   void _confirm(bool didPop, Object? result) async {
+    if (didPop) {
+      return;
+    }
+
     final localizations = AppLocalizations.of(context)!;
     final memo = widget.memo;
     if (memo == null) {
