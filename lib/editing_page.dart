@@ -100,7 +100,8 @@ class _EditingPageState extends State<EditingPage> {
               ),
             ],
           ),
-          body: Padding(
+          body: Container(
+            color: TsukimisouColors.memoCard,
             padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _controller,
