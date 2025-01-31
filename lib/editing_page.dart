@@ -110,6 +110,8 @@ class _EditingPageState extends State<EditingPage> {
               minLines: null,
               style: TsukimisouTextStyles.editingPageTextField(context),
               decoration: const InputDecoration(
+                filled: true,
+                fillColor: TsukimisouColors.memoCard,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
