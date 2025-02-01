@@ -100,7 +100,8 @@ class _EditingPageState extends State<EditingPage> {
               ),
             ],
           ),
-          body: Padding(
+          body: Container(
+            color: TsukimisouColors.memoCard,
             padding: const EdgeInsets.all(12.0),
             child: TextField(
               controller: _controller,
@@ -110,6 +111,8 @@ class _EditingPageState extends State<EditingPage> {
               minLines: null,
               style: TsukimisouTextStyles.editingPageTextField(context),
               decoration: const InputDecoration(
+                filled: true,
+                fillColor: TsukimisouColors.memoCard,
                 border: UnderlineInputBorder(
                   borderSide: BorderSide.none,
                 ),
