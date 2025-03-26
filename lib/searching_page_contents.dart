@@ -78,6 +78,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           unsynchronized = false;
         }
         return Card(
+          color: common_uis.TsukimisouColors.memoCard,
           elevation: 2.0,
           child: InkWell(
             onTap: appState.mergingWithGoogleDrive
