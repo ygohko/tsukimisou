@@ -463,3 +463,8 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
     ),
   );
 }
+
+Widget richTextContents(String text) {
+  // TODO: Implement this.
+  return Text(text);
+}
