@@ -433,6 +433,7 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
   final updated = lastModified.toSmartString();
   final contents = [
+    // TODO: Add rich text if this memo is in Markdown mode.
     Text(memo.text),
     Align(
       alignment: Alignment.centerRight,
