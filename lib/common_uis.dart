@@ -433,8 +433,9 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
   final updated = lastModified.toSmartString();
   final contents = [
-    // TODO: Add rich text if this memo is in Markdown mode.
-    Text(memo.text),
+    // ADHOC: Test for rich text.
+    richTextContents(memo.text),
+    // Text(memo.text),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
@@ -465,6 +466,15 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
 }
 
 Widget richTextContents(String text) {
-  // TODO: Implement this.
-  return Text(text);
+  final lines = text.split('\n');
+  final widgets = <Widget>[];
+  for (final line in lines) {
+    widgets.add(Text(line));
+  }
+
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,    
+    children: widgets,
+  );
 }
