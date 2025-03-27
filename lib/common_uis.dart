@@ -434,7 +434,7 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final updated = lastModified.toSmartString();
   final contents = [
     // ADHOC: Test for rich text.
-    richTextContents(memo.text),
+    richTextContents(context, memo.text),
     // Text(memo.text),
     Align(
       alignment: Alignment.centerRight,
@@ -465,11 +465,29 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   );
 }
 
-Widget richTextContents(String text) {
+Widget richTextContents(BuildContext content, String text) {
+  final theme = Theme.of(content).textTheme;
   final lines = text.split('\n');
   final widgets = <Widget>[];
-  for (final line in lines) {
-    widgets.add(Text(line));
+  for (var line in lines) {
+    line = line.replaceFirst('\n', '');
+    TextStyle? style;
+    if (line.startsWith('###')) {
+      style = theme.headlineSmall;
+    }
+    else if (line.startsWith('##')) {
+      style = theme.headlineMedium;
+    }
+    else if (line.startsWith('#')) {
+      style = theme.headlineLarge;
+    }
+    else {
+      style = theme.bodyMedium;
+    }
+    widgets.add(Text(
+        line,
+        style: style,
+    ));
   }
 
   return Column(
