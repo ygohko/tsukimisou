@@ -135,6 +135,7 @@ class _ViewingPageState extends State<ViewingPage> {
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
+                  // TODO: Add rich text support.
                   child: SelectableText(
                     widget.memo.text,
                     style: textStyle,
