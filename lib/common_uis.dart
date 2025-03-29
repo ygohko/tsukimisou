@@ -471,23 +471,72 @@ Widget richTextContents(BuildContext content, String text) {
   final widgets = <Widget>[];
   for (var line in lines) {
     line = line.replaceFirst('\n', '');
+    late final Widget widget;
     TextStyle? style;
-    if (line.startsWith('###')) {
-      style = theme.headlineSmall;
+    if (line.startsWith('### ')) {
+      line = line.replaceFirst('### ', '');
+      widget = Text(
+        line,
+        style: theme.headlineSmall,
+      );
     }
-    else if (line.startsWith('##')) {
-      style = theme.headlineMedium;
+    else if (line.startsWith('## ')) {
+      line = line.replaceFirst('## ', '');
+      widget = Text(
+        line,
+        style: theme.headlineMedium,
+      );
     }
-    else if (line.startsWith('#')) {
-      style = theme.headlineLarge;
+    else if (line.startsWith('# ')) {
+      line = line.replaceFirst('# ', '');
+      widget = Text(
+        line,
+        style: theme.headlineLarge,
+      );
+    }
+    else if (line.startsWith('* ')) {
+      line = line.replaceFirst('* ', '');
+      widget = Row(
+        children: [
+          SizedBox(
+            width: 10.0,
+            child: Text('* '),
+          ),
+          Text(line),
+        ],
+      );
+    }
+    else if (line.startsWith('    * ')) {
+      line = line.replaceFirst('    * ', '');
+      widget = Row(
+        children: [
+          SizedBox(
+            width: 30.0,
+            child: Text('* '),
+          ),
+          Text(line),
+        ],
+      );
+    }
+    else if (line.startsWith('        * ')) {
+      line = line.replaceFirst('        * ', '');
+      widget = Row(
+        children: [
+          SizedBox(
+            width: 50.0,
+            child: Text('* '),
+          ),
+          Text(line),
+        ],
+      );
     }
     else {
-      style = theme.bodyMedium;
-    }
-    widgets.add(Text(
+      widget = Text(
         line,
-        style: style,
-    ));
+        style: theme.bodyMedium,
+      );
+    }
+    widgets.add(widget);
   }
 
   return Column(
