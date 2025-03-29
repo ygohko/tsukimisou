@@ -500,9 +500,14 @@ Widget richTextContents(BuildContext content, String text) {
         children: [
           SizedBox(
             width: 10.0,
-            child: Text('* '),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('• '),
+            ),
           ),
-          Text(line),
+          Flexible(
+            child: Text(line),
+          ),
         ],
       );
     }
@@ -512,9 +517,14 @@ Widget richTextContents(BuildContext content, String text) {
         children: [
           SizedBox(
             width: 30.0,
-            child: Text('* '),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('• '),
+            ),
           ),
-          Text(line),
+          Flexible(
+            child: Text(line),
+          ),
         ],
       );
     }
@@ -524,9 +534,14 @@ Widget richTextContents(BuildContext content, String text) {
         children: [
           SizedBox(
             width: 50.0,
-            child: Text('* '),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('• '),
+            ),
           ),
-          Text(line),
+          Flexible(
+            child: Text(line),
+          ),
         ],
       );
     }
