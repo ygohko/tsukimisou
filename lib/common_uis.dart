@@ -433,7 +433,9 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
   final updated = lastModified.toSmartString();
   final contents = [
-    Text(memo.text),
+    // ADHOC: Test for rich text.
+    richTextContents(context, memo.text),
+    // Text(memo.text),
     Align(
       alignment: Alignment.centerRight,
       child: Text(
@@ -460,5 +462,101 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: contents,
     ),
+  );
+}
+
+Widget richTextContents(BuildContext content, String text) {
+  final theme = Theme.of(content).textTheme;
+  final lines = text.split('\n');
+  final widgets = <Widget>[];
+  for (var line in lines) {
+    line = line.replaceFirst('\n', '');
+    late final Widget widget;
+    TextStyle? style;
+    if (line.startsWith('### ')) {
+      line = line.replaceFirst('### ', '');
+      widget = Text(
+        line,
+        style: theme.headlineSmall,
+      );
+    }
+    else if (line.startsWith('## ')) {
+      line = line.replaceFirst('## ', '');
+      widget = Text(
+        line,
+        style: theme.headlineMedium,
+      );
+    }
+    else if (line.startsWith('# ')) {
+      line = line.replaceFirst('# ', '');
+      widget = Text(
+        line,
+        style: theme.headlineLarge,
+      );
+    }
+    else if (line.startsWith('* ')) {
+      line = line.replaceFirst('* ', '');
+      widget = Row(
+        children: [
+          SizedBox(
+            width: 10.0,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('• '),
+            ),
+          ),
+          Flexible(
+            child: Text(line),
+          ),
+        ],
+      );
+    }
+    else if (line.startsWith('    * ')) {
+      line = line.replaceFirst('    * ', '');
+      widget = Row(
+        children: [
+          SizedBox(
+            width: 30.0,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('• '),
+            ),
+          ),
+          Flexible(
+            child: Text(line),
+          ),
+        ],
+      );
+    }
+    else if (line.startsWith('        * ')) {
+      line = line.replaceFirst('        * ', '');
+      widget = Row(
+        children: [
+          SizedBox(
+            width: 50.0,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text('• '),
+            ),
+          ),
+          Flexible(
+            child: Text(line),
+          ),
+        ],
+      );
+    }
+    else {
+      widget = Text(
+        line,
+        style: theme.bodyMedium,
+      );
+    }
+    widgets.add(widget);
+  }
+
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,    
+    children: widgets,
   );
 }
