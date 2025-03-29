@@ -113,6 +113,39 @@ class _ViewingPageState extends State<ViewingPage> {
         tooltip: localizations.edit,
       ),
     ]);
+    late final Widget textContents;
+    // TODO: Add a field to store viewing mode.
+    if (true) {
+      textContents = SelectionArea(
+        child: common_uis.richTextContents(context, widget.memo.text),
+      );
+    } else {
+      textContents = SelectableText(
+        widget.memo.text,
+        style: textStyle,
+        contextMenuBuilder: (context, editableTextState) {
+          final value = editableTextState.textEditingValue;
+          final items = editableTextState.contextMenuButtonItems;
+          final string = value.selection.textInside(value.text);
+          if (string.startsWith('http') && string.contains('://')) {
+            items.insert(
+              0,
+              ContextMenuButtonItem(
+                label: localizations.openAsUrl,
+                onPressed: () {
+                  ContextMenuController.removeAny();
+                  launchUrl(
+                    Uri.parse(string),
+                    mode: LaunchMode.externalApplication,
+                  );
+            }));
+          }
+          return AdaptiveTextSelectionToolbar.buttonItems(
+            anchors: editableTextState.contextMenuAnchors,
+            buttonItems: items);
+        },
+      );
+    }
     return AnimatedContainer(
       duration: const Duration(milliseconds: 100),
       curve: Curves.easeOutCubic,
@@ -135,32 +168,7 @@ class _ViewingPageState extends State<ViewingPage> {
                 width: double.infinity,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  // TODO: Add rich text support.
-                  child: SelectableText(
-                    widget.memo.text,
-                    style: textStyle,
-                    contextMenuBuilder: (context, editableTextState) {
-                      final value = editableTextState.textEditingValue;
-                      final items = editableTextState.contextMenuButtonItems;
-                      final string = value.selection.textInside(value.text);
-                      if (string.startsWith('http') && string.contains('://')) {
-                        items.insert(
-                            0,
-                            ContextMenuButtonItem(
-                                label: localizations.openAsUrl,
-                                onPressed: () {
-                                  ContextMenuController.removeAny();
-                                  launchUrl(
-                                    Uri.parse(string),
-                                    mode: LaunchMode.externalApplication,
-                                  );
-                                }));
-                      }
-                      return AdaptiveTextSelectionToolbar.buttonItems(
-                          anchors: editableTextState.contextMenuAnchors,
-                          buttonItems: items);
-                    },
-                  ),
+                  child: textContents,
                 ),
               ),
             ),
