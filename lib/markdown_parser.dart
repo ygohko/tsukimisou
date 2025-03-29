@@ -22,10 +22,21 @@
 
 import 'package:flutter/material.dart';
 
+enum _State {
+  body,
+  headlineLarge,
+  headlineMedium,
+  headlineSmall,
+  unorderedList1,
+  unorderedList2,
+  unorderedList3,
+}
+
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
   late final Widget _contents;
+  var _state = _State.body;
 
   MarkdownParser(BuildContext context, String text) {
     _context = context;
@@ -33,37 +44,68 @@ class MarkdownParser {
   }
 
   void execute() {
-    // TODO: Implement this.
-    
     final theme = Theme.of(_context).textTheme;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
-      late final Widget widget;
+      _state = _State.body;
       if (line.startsWith('### ')) {
         line = line.replaceFirst('### ', '');
-        widget = Text(
-          line,
-          style: theme.headlineSmall,
-        );
+        _state = _State.headlineSmall;
       }
       else if (line.startsWith('## ')) {
         line = line.replaceFirst('## ', '');
-        widget = Text(
-          line,
-          style: theme.headlineMedium,
-        );
+        _state = _State.headlineMedium;
       }
       else if (line.startsWith('# ')) {
         line = line.replaceFirst('# ', '');
+        _state = _State.headlineLarge;
+      }
+      else if (line.startsWith('* ')) {
+        line = line.replaceFirst('* ', '');
+        _state = _State.unorderedList1;
+      }
+      else if (line.startsWith('    * ')) {
+        line = line.replaceFirst('    * ', '');
+        _state = _State.unorderedList2;
+      }
+      else if (line.startsWith('        * ')) {
+        line = line.replaceFirst('        * ', '');
+        _state = _State.unorderedList3;
+      }
+
+      late final Widget widget;
+      switch (_state) {
+      case _State.body:
+        widget = Text(
+          line,
+          style: theme.bodyMedium,
+        );
+        break;
+
+      case _State.headlineLarge:
         widget = Text(
           line,
           style: theme.headlineLarge,
         );
-      }
-      else if (line.startsWith('* ')) {
-        line = line.replaceFirst('* ', '');
+        break;
+
+      case _State.headlineMedium:
+        widget = Text(
+          line,
+          style: theme.headlineMedium,
+        );
+        break;
+
+      case _State.headlineSmall:
+        widget = Text(
+          line,
+          style: theme.headlineSmall,
+        );
+        break;
+        
+      case _State.unorderedList1:
         widget = Row(
           children: [
             const SizedBox(
@@ -78,9 +120,9 @@ class MarkdownParser {
             ),
           ],
         );
-      }
-      else if (line.startsWith('    * ')) {
-        line = line.replaceFirst('    * ', '');
+        break;
+
+      case _State.unorderedList2:
         widget = Row(
           children: [
             const SizedBox(
@@ -95,9 +137,9 @@ class MarkdownParser {
             ),
           ],
         );
-      }
-      else if (line.startsWith('        * ')) {
-        line = line.replaceFirst('        * ', '');
+        break;
+
+      case _State.unorderedList3:
         widget = Row(
           children: [
             const SizedBox(
@@ -112,12 +154,7 @@ class MarkdownParser {
             ),
           ],
         );
-      }
-      else {
-        widget = Text(
-          line,
-          style: theme.bodyMedium,
-        );
+        break;
       }
       widgets.add(widget);
     }
