@@ -105,6 +105,28 @@ class MarkdownParser {
             }
             _spanState = _SpanState.normal;
           }
+        } else if (line.startsWith('[x]')) {
+          line = line.replaceFirst('[x]', '');
+          spans.add(
+            WidgetSpan(
+              child: Icon(
+                Icons.check_box_rounded,
+                size: 20.0,
+                color: Colors.green,
+              ),
+            ),
+          );
+        } else if (line.startsWith('[ ]')) {
+          line = line.replaceFirst('[ ]', '');
+          spans.add(
+            WidgetSpan(
+              child: Icon(
+                Icons.check_box_outline_blank_rounded,
+                size: 20.0,
+                color: Colors.red,
+              ),
+            ),
+          );
         } else {
           done = true;
         }
