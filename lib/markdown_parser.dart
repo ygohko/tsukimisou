@@ -32,11 +32,17 @@ enum _State {
   unorderedList3,
 }
 
+enum _SpanState {
+  normal,
+  strikethroughStarted,
+}
+
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
   late final Widget _contents;
   var _state = _State.body;
+  var _spanState = _SpanState.normal;
 
   MarkdownParser(BuildContext context, String text) {
     _context = context;
@@ -75,33 +81,73 @@ class MarkdownParser {
         _state = _State.unorderedList3;
       }
 
+      var done = false;
+      _spanState = _SpanState.normal;
+      final spans = <InlineSpan>[];
+      while (!done) {
+        final index = line.indexOf('~~');
+        if (index != -1) {
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 2);
+          if (_spanState == _SpanState.normal) {
+            if (aLine.length > 0) {
+              spans.add(TextSpan(text: aLine));
+            }
+            _spanState = _SpanState.strikethroughStarted;
+          } else {
+            if (aLine.length > 0) {
+              spans.add(TextSpan(
+                  text: aLine,
+                  style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                  ),
+              ));
+            }
+            _spanState = _SpanState.normal;
+          }
+        } else {
+          done = true;
+        }
+      }
+      if (line.length > 0) {
+        spans.add(TextSpan(text: line));
+      }
+      
       late final Widget widget;
       switch (_state) {
       case _State.body:
-        widget = Text(
-          line,
-          style: theme.bodyMedium,
+        widget = RichText(
+          text: TextSpan(
+            style: theme.bodyMedium,
+            children: spans,
+          )
         );
         break;
 
       case _State.headlineLarge:
-        widget = Text(
-          line,
-          style: theme.headlineLarge,
+        widget = RichText(
+          text: TextSpan(
+            style: theme.headlineLarge,
+            children: spans,
+          ),
         );
         break;
 
       case _State.headlineMedium:
-        widget = Text(
-          line,
-          style: theme.headlineMedium,
+        widget = RichText(
+          text: TextSpan(
+            style: theme.headlineMedium,
+            children: spans,
+          ),
         );
         break;
 
       case _State.headlineSmall:
-        widget = Text(
-          line,
-          style: theme.headlineSmall,
+        widget = RichText(
+          text: TextSpan(
+            style: theme.headlineSmall,
+            children: spans,
+          ),
         );
         break;
         
@@ -116,7 +162,11 @@ class MarkdownParser {
               ),
             ),
             Flexible(
-              child: Text(line),
+              child: RichText(
+                text: TextSpan(
+                  children: spans
+                ),
+              ),
             ),
           ],
         );
@@ -133,7 +183,11 @@ class MarkdownParser {
               ),
             ),
             Flexible(
-              child: Text(line),
+              child: RichText(
+                text: TextSpan(
+                  children: spans,
+                ),
+              ),
             ),
           ],
         );
@@ -150,7 +204,11 @@ class MarkdownParser {
               ),
             ),
             Flexible(
-              child: Text(line),
+              child: RichText(
+                text :TextSpan(
+                  children: spans,
+                ),
+              ),
             ),
           ],
         );
