@@ -26,6 +26,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
 
 import 'extensions.dart';
+import 'markdown_parser.dart';
 import 'memo.dart';
 import 'viewing_page.dart';
 
@@ -465,98 +466,9 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   );
 }
 
-Widget richTextContents(BuildContext content, String text) {
-  final theme = Theme.of(content).textTheme;
-  final lines = text.split('\n');
-  final widgets = <Widget>[];
-  for (var line in lines) {
-    line = line.replaceFirst('\n', '');
-    late final Widget widget;
-    TextStyle? style;
-    if (line.startsWith('### ')) {
-      line = line.replaceFirst('### ', '');
-      widget = Text(
-        line,
-        style: theme.headlineSmall,
-      );
-    }
-    else if (line.startsWith('## ')) {
-      line = line.replaceFirst('## ', '');
-      widget = Text(
-        line,
-        style: theme.headlineMedium,
-      );
-    }
-    else if (line.startsWith('# ')) {
-      line = line.replaceFirst('# ', '');
-      widget = Text(
-        line,
-        style: theme.headlineLarge,
-      );
-    }
-    else if (line.startsWith('* ')) {
-      line = line.replaceFirst('* ', '');
-      widget = Row(
-        children: [
-          SizedBox(
-            width: 10.0,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text('• '),
-            ),
-          ),
-          Flexible(
-            child: Text(line),
-          ),
-        ],
-      );
-    }
-    else if (line.startsWith('    * ')) {
-      line = line.replaceFirst('    * ', '');
-      widget = Row(
-        children: [
-          SizedBox(
-            width: 30.0,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text('• '),
-            ),
-          ),
-          Flexible(
-            child: Text(line),
-          ),
-        ],
-      );
-    }
-    else if (line.startsWith('        * ')) {
-      line = line.replaceFirst('        * ', '');
-      widget = Row(
-        children: [
-          SizedBox(
-            width: 50.0,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text('• '),
-            ),
-          ),
-          Flexible(
-            child: Text(line),
-          ),
-        ],
-      );
-    }
-    else {
-      widget = Text(
-        line,
-        style: theme.bodyMedium,
-      );
-    }
-    widgets.add(widget);
-  }
+Widget richTextContents(BuildContext context, String text) {
+  final parser = MarkdownParser(context, text);
+  parser.execute();
 
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,    
-    children: widgets,
-  );
+  return parser.contents;
 }

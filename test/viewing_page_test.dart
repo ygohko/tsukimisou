@@ -35,7 +35,12 @@ void main() {
       expect(find.byIcon(Icons.delete), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsOneWidget);
       expect(find.textContaining('Memo at'), findsOneWidget);
-      expect(find.text('This is a test.'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (widget) => widget is RichText && widget.text.toPlainText() == 'This is a test.',
+        ),
+        findsOneWidget,
+      );
       expect(find.textContaining('Updated:'), findsOneWidget);
       expect(find.textContaining('Tags:'), findsOneWidget);
     });
