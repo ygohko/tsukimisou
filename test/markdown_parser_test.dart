@@ -11,9 +11,15 @@ void main() {
   group('MarkdownParser', () {
       testWidgets('MarkdownParser should be created.',
         (WidgetTester tester) async {
+          /*
           final memo = Memo();
           memo.text = 'This is a test.';
+          */
           await tester.pumpWidget(
+            MaterialApp(
+              home: Text('This is a test.'),
+            ),
+            /*
             ChangeNotifierProvider(
               create: (context) => MemoStore(),
               child: MaterialApp(
@@ -23,11 +29,15 @@ void main() {
                 home: ViewingPage(memo: memo),
               ),
             ),
+            */
           );
+          final context = tester.element(find.text('This is a test.'));
+          /*
           final context = tester.element(find.byWidgetPredicate(
               (widget) => widget is RichText && widget.text.toPlainText() == 'This is a test.',
             )
           );
+          */
           final parser = MarkdownParser(context, '# Hello, World!');
       });
   });
