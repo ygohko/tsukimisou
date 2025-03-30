@@ -90,12 +90,12 @@ class MarkdownParser {
           final aLine = line.substring(0, index);
           line = line.substring(index + 2);
           if (_spanState == _SpanState.normal) {
-            if (aLine.length > 0) {
+            if (aLine.isNotEmpty) {
               spans.add(TextSpan(text: aLine));
             }
             _spanState = _SpanState.strikethroughStarted;
           } else {
-            if (aLine.length > 0) {
+            if (aLine.isNotEmpty) {
               spans.add(TextSpan(
                   text: aLine,
                   style: TextStyle(
@@ -164,7 +164,8 @@ class MarkdownParser {
             Flexible(
               child: RichText(
                 text: TextSpan(
-                  children: spans
+                  style: theme.bodyMedium,
+                  children: spans,
                 ),
               ),
             ),
@@ -185,6 +186,7 @@ class MarkdownParser {
             Flexible(
               child: RichText(
                 text: TextSpan(
+                  style: theme.bodyMedium,
                   children: spans,
                 ),
               ),
@@ -206,6 +208,7 @@ class MarkdownParser {
             Flexible(
               child: RichText(
                 text :TextSpan(
+                  style: theme.bodyMedium,
                   children: spans,
                 ),
               ),
