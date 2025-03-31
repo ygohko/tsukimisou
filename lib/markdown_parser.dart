@@ -35,6 +35,8 @@ enum _State {
 enum _SpanState {
   normal,
   strikethroughStarted,
+  linkTextStarted,
+  linkTargetStarted,
 }
 
 class MarkdownParser {
@@ -51,6 +53,7 @@ class MarkdownParser {
 
   void execute() {
     final theme = Theme.of(_context).textTheme;
+    final scheme = Theme.of(_context).colorScheme;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
     for (var line in lines) {
@@ -127,7 +130,34 @@ class MarkdownParser {
               ),
             ),
           );
-        } else {
+        } else if (line.indexOf('[') != -1) {
+          final index = line.indexOf('[');
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 2);
+          if (_spanState == _SpanState.normal) {
+            if (aLine.isNotEmpty) {
+              spans.add(TextSpan(text: aLine));
+            }
+            _spanState = _SpanState.linkTextStarted;
+          }
+        } else if (line.indexOf(']') != -1) {
+          final index = line.indexOf(']');
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 2);
+          if (_spanState == _SpanState.linkTextStarted) {
+            if (aLine.isNotEmpty) {
+              spans.add(TextSpan(
+                  text: aLine,
+                  style: TextStyle(
+                    color: scheme.primary,
+                    decoration: TextDecoration.underline,
+                  ),
+              ));
+            }
+            _spanState = _SpanState.normal;
+          }
+        }
+        else {
           done = true;
         }
       }
