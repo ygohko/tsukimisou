@@ -133,7 +133,7 @@ class MarkdownParser {
         } else if (line.indexOf('[') != -1) {
           final index = line.indexOf('[');
           final aLine = line.substring(0, index);
-          line = line.substring(index + 2);
+          line = line.substring(index + 1);
           if (_spanState == _SpanState.normal) {
             if (aLine.isNotEmpty) {
               spans.add(TextSpan(text: aLine));
@@ -143,7 +143,7 @@ class MarkdownParser {
         } else if (line.indexOf(']') != -1) {
           final index = line.indexOf(']');
           final aLine = line.substring(0, index);
-          line = line.substring(index + 2);
+          line = line.substring(index + 1);
           if (_spanState == _SpanState.linkTextStarted) {
             if (aLine.isNotEmpty) {
               spans.add(TextSpan(
