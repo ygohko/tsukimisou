@@ -45,6 +45,7 @@ class MarkdownParser {
   late final Widget _contents;
   var _state = _State.body;
   var _spanState = _SpanState.normal;
+  var _linkText = '';
 
   MarkdownParser(BuildContext context, String text) {
     _context = context;
@@ -140,14 +141,34 @@ class MarkdownParser {
             }
             _spanState = _SpanState.linkTextStarted;
           }
-        } else if (line.indexOf(']') != -1) {
-          final index = line.indexOf(']');
+        } else if (line.indexOf('](') != -1) {
+          final index = line.indexOf('](');
           final aLine = line.substring(0, index);
-          line = line.substring(index + 1);
+          line = line.substring(index + 2);
           if (_spanState == _SpanState.linkTextStarted) {
             if (aLine.isNotEmpty) {
+              _linkText = aLine;
+              /*
               spans.add(TextSpan(
                   text: aLine,
+                  style: TextStyle(
+                    color: scheme.primary,
+                    decoration: TextDecoration.underline,
+                  ),
+              ));
+              */
+            }
+            _spanState = _SpanState.linkTargetStarted;
+          }
+        } else if (line.indexOf(')') != -1) {
+          final index = line.indexOf(')');
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 1);
+          if (_spanState == _SpanState.linkTargetStarted) {
+            if (aLine.isNotEmpty) {
+              // TODO: Add tapped handler.
+              spans.add(TextSpan(
+                  text: _linkText,
                   style: TextStyle(
                     color: scheme.primary,
                     decoration: TextDecoration.underline,
