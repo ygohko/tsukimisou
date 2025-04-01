@@ -150,15 +150,6 @@ class MarkdownParser {
           if (_spanState == _SpanState.linkTextStarted) {
             if (aLine.isNotEmpty) {
               _linkText = aLine;
-              /*
-              spans.add(TextSpan(
-                  text: aLine,
-                  style: TextStyle(
-                    color: scheme.primary,
-                    decoration: TextDecoration.underline,
-                  ),
-              ));
-              */
             }
             _spanState = _SpanState.linkTargetStarted;
           }
