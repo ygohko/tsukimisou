@@ -21,6 +21,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum _State {
   body,
@@ -35,6 +37,8 @@ enum _State {
 enum _SpanState {
   normal,
   strikethroughStarted,
+  linkTextStarted,
+  linkTargetStarted,
 }
 
 class MarkdownParser {
@@ -43,6 +47,7 @@ class MarkdownParser {
   late final Widget _contents;
   var _state = _State.body;
   var _spanState = _SpanState.normal;
+  var _linkText = '';
 
   MarkdownParser(BuildContext context, String text) {
     _context = context;
@@ -51,6 +56,7 @@ class MarkdownParser {
 
   void execute() {
     final theme = Theme.of(_context).textTheme;
+    final scheme = Theme.of(_context).colorScheme;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
     for (var line in lines) {
@@ -127,7 +133,50 @@ class MarkdownParser {
               ),
             ),
           );
-        } else {
+        } else if (line.indexOf('[') != -1) {
+          final index = line.indexOf('[');
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 1);
+          if (_spanState == _SpanState.normal) {
+            if (aLine.isNotEmpty) {
+              spans.add(TextSpan(text: aLine));
+            }
+            _spanState = _SpanState.linkTextStarted;
+          }
+        } else if (line.indexOf('](') != -1) {
+          final index = line.indexOf('](');
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 2);
+          if (_spanState == _SpanState.linkTextStarted) {
+            if (aLine.isNotEmpty) {
+              _linkText = aLine;
+            }
+            _spanState = _SpanState.linkTargetStarted;
+          }
+        } else if (line.indexOf(')') != -1) {
+          final index = line.indexOf(')');
+          final aLine = line.substring(0, index);
+          line = line.substring(index + 1);
+          if (_spanState == _SpanState.linkTargetStarted) {
+            if (aLine.isNotEmpty) {
+              spans.add(TextSpan(
+                  text: _linkText,
+                  style: TextStyle(
+                    color: scheme.primary,
+                    decoration: TextDecoration.underline,
+                  ),
+                  recognizer: TapGestureRecognizer()..onTap = () {
+                    launchUrl(
+                      Uri.parse(aLine),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  },
+              ));
+            }
+            _spanState = _SpanState.normal;
+          }
+        }
+        else {
           done = true;
         }
       }
