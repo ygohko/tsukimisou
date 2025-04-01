@@ -21,6 +21,8 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum _State {
   body,
@@ -166,13 +168,18 @@ class MarkdownParser {
           line = line.substring(index + 1);
           if (_spanState == _SpanState.linkTargetStarted) {
             if (aLine.isNotEmpty) {
-              // TODO: Add tapped handler.
               spans.add(TextSpan(
                   text: _linkText,
                   style: TextStyle(
                     color: scheme.primary,
                     decoration: TextDecoration.underline,
                   ),
+                  recognizer: TapGestureRecognizer()..onTap = () {
+                    launchUrl(
+                      Uri.parse(aLine),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  },
               ));
             }
             _spanState = _SpanState.normal;
