@@ -64,6 +64,8 @@ class MarkdownParser {
 
     final parsers = [
       _parseHeadlineLarge,
+      _parseHeadlineMedium,
+      _parseHeadlineSmall,
     ];
     
     for (var line in lines) {
@@ -78,21 +80,19 @@ class MarkdownParser {
         }
       }
 
+      /*
       if (line.startsWith('### ')) {
         line = line.replaceFirst('### ', '');
         _state = _State.headlineSmall;
       }
+      */
+      /*
       else if (line.startsWith('## ')) {
         line = line.replaceFirst('## ', '');
         _state = _State.headlineMedium;
       }
-      /*
-      else if (line.startsWith('# ')) {
-        line = line.replaceFirst('# ', '');
-        _state = _State.headlineLarge;
-      }
       */
-      else if (line.startsWith('* ')) {
+      if (line.startsWith('* ')) {
         line = line.replaceFirst('* ', '');
         _state = _State.unorderedList1;
       }
@@ -322,6 +322,28 @@ class MarkdownParser {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
       _state = _State.headlineLarge;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseHeadlineMedium(String line) {
+    if (line.startsWith('## ')) {
+      line = line.replaceFirst('## ', '');
+      _state = _State.headlineMedium;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseHeadlineSmall(String line) {
+    if (line.startsWith('### ')) {
+      line = line.replaceFirst('### ', '');
+      _state = _State.headlineSmall;
 
       return (line, true);
     }
