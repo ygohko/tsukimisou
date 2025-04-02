@@ -24,7 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-typedef _Parser = bool Function();
+typedef _Parser = (String, bool) Function(String);
 
 enum _State {
   body,
@@ -61,9 +61,23 @@ class MarkdownParser {
     final scheme = Theme.of(_context).colorScheme;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
+
+    final parsers = [
+      _parseHeadlineLarge,
+    ];
+    
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
       _state = _State.body;
+
+      for (final parser in parsers) {
+        final (aLine, parsed) = parser(line);
+        line = aLine;
+        if (parsed) {
+          break;
+        }
+      }
+
       if (line.startsWith('### ')) {
         line = line.replaceFirst('### ', '');
         _state = _State.headlineSmall;
@@ -72,10 +86,12 @@ class MarkdownParser {
         line = line.replaceFirst('## ', '');
         _state = _State.headlineMedium;
       }
+      /*
       else if (line.startsWith('# ')) {
         line = line.replaceFirst('# ', '');
         _state = _State.headlineLarge;
       }
+      */
       else if (line.startsWith('* ')) {
         line = line.replaceFirst('* ', '');
         _state = _State.unorderedList1;
