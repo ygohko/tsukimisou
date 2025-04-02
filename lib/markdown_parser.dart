@@ -24,6 +24,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+typedef _Parser = bool Function();
+
 enum _State {
   body,
   headlineLarge,
@@ -299,4 +301,15 @@ class MarkdownParser {
   }
 
   Widget get contents => _contents;
+
+  (String, bool) _parseHeadlineLarge(String line) {
+    if (line.startsWith('# ')) {
+      line = line.replaceFirst('# ', '');
+      _state = _State.headlineLarge;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
 }
