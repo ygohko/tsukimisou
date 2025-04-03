@@ -80,11 +80,16 @@ class MarkdownParser {
       _spanState = _SpanState.normal;
       _spans = <InlineSpan>[];
       
-      for (final parser in parsers) {
-        final (aLine, parsed) = parser(line);
-        line = aLine;
-        if (parsed) {
-          break;
+      var aDone = false;
+      while (!aDone) {
+        aDone = true;
+        for (final parser in parsers) {
+          final (aLine, parsed) = parser(line);
+          line = aLine;
+          if (parsed) {
+            aDone = false;
+            break;
+          }
         }
       }
 
