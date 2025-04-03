@@ -26,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 typedef _Parser = (String, bool) Function(String);
 
+// TODO: Rename to LineKind?
 enum _State {
   body,
   headlineLarge,
@@ -49,6 +50,7 @@ class MarkdownParser {
   late final Widget _contents;
   var _state = _State.body;
   var _spanState = _SpanState.normal;
+  var _spans = <InlineSpan>[];
   var _linkText = '';
 
   MarkdownParser(BuildContext context, String text) {
@@ -74,7 +76,9 @@ class MarkdownParser {
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
       _state = _State.body;
-
+      _spanState = _SpanState.normal;
+      _spans = <InlineSpan>[];
+      
       for (final parser in parsers) {
         final (aLine, parsed) = parser(line);
         line = aLine;
@@ -83,24 +87,7 @@ class MarkdownParser {
         }
       }
 
-      /*
-      if (line.startsWith('* ')) {
-        line = line.replaceFirst('* ', '');
-        _state = _State.unorderedList1;
-      }
-      else if (line.startsWith('    * ')) {
-        line = line.replaceFirst('    * ', '');
-        _state = _State.unorderedList2;
-      }
-      else if (line.startsWith('        * ')) {
-        line = line.replaceFirst('        * ', '');
-        _state = _State.unorderedList3;
-      }
-      */
-
       var done = false;
-      _spanState = _SpanState.normal;
-      final spans = <InlineSpan>[];
       while (!done) {
         final index = line.indexOf('~~');
         if (index != -1) {
@@ -108,12 +95,12 @@ class MarkdownParser {
           line = line.substring(index + 2);
           if (_spanState == _SpanState.normal) {
             if (aLine.isNotEmpty) {
-              spans.add(TextSpan(text: aLine));
+              _spans.add(TextSpan(text: aLine));
             }
             _spanState = _SpanState.strikethroughStarted;
           } else {
             if (aLine.isNotEmpty) {
-              spans.add(TextSpan(
+              _spans.add(TextSpan(
                   text: aLine,
                   style: TextStyle(
                     decoration: TextDecoration.lineThrough,
@@ -124,7 +111,7 @@ class MarkdownParser {
           }
         } else if (line.startsWith('[x]')) {
           line = line.replaceFirst('[x]', '');
-          spans.add(
+          _spans.add(
             WidgetSpan(
               child: Icon(
                 Icons.check_box_rounded,
@@ -135,7 +122,7 @@ class MarkdownParser {
           );
         } else if (line.startsWith('[ ]')) {
           line = line.replaceFirst('[ ]', '');
-          spans.add(
+          _spans.add(
             WidgetSpan(
               child: Icon(
                 Icons.check_box_outline_blank_rounded,
@@ -150,7 +137,7 @@ class MarkdownParser {
           line = line.substring(index + 1);
           if (_spanState == _SpanState.normal) {
             if (aLine.isNotEmpty) {
-              spans.add(TextSpan(text: aLine));
+              _spans.add(TextSpan(text: aLine));
             }
             _spanState = _SpanState.linkTextStarted;
           }
@@ -170,7 +157,7 @@ class MarkdownParser {
           line = line.substring(index + 1);
           if (_spanState == _SpanState.linkTargetStarted) {
             if (aLine.isNotEmpty) {
-              spans.add(TextSpan(
+              _spans.add(TextSpan(
                   text: _linkText,
                   style: TextStyle(
                     color: scheme.primary,
@@ -192,7 +179,7 @@ class MarkdownParser {
         }
       }
       if (line.length > 0) {
-        spans.add(TextSpan(text: line));
+        _spans.add(TextSpan(text: line));
       }
       
       late final Widget widget;
@@ -201,7 +188,7 @@ class MarkdownParser {
         widget = RichText(
           text: TextSpan(
             style: theme.bodyMedium,
-            children: spans,
+            children: _spans,
           )
         );
         break;
@@ -210,7 +197,7 @@ class MarkdownParser {
         widget = RichText(
           text: TextSpan(
             style: theme.headlineLarge,
-            children: spans,
+            children: _spans,
           ),
         );
         break;
@@ -219,7 +206,7 @@ class MarkdownParser {
         widget = RichText(
           text: TextSpan(
             style: theme.headlineMedium,
-            children: spans,
+            children: _spans,
           ),
         );
         break;
@@ -228,7 +215,7 @@ class MarkdownParser {
         widget = RichText(
           text: TextSpan(
             style: theme.headlineSmall,
-            children: spans,
+            children: _spans,
           ),
         );
         break;
@@ -247,7 +234,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: theme.bodyMedium,
-                  children: spans,
+                  children: _spans,
                 ),
               ),
             ),
@@ -269,7 +256,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: theme.bodyMedium,
-                  children: spans,
+                  children: _spans,
                 ),
               ),
             ),
@@ -291,7 +278,7 @@ class MarkdownParser {
               child: RichText(
                 text :TextSpan(
                   style: theme.bodyMedium,
-                  children: spans,
+                  children: _spans,
                 ),
               ),
             ),
