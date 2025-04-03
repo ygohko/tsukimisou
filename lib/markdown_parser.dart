@@ -66,6 +66,9 @@ class MarkdownParser {
       _parseHeadlineLarge,
       _parseHeadlineMedium,
       _parseHeadlineSmall,
+      _parseUnorderdList1,
+      _parseUnorderdList2,
+      _parseUnorderdList3,
     ];
     
     for (var line in lines) {
@@ -81,17 +84,6 @@ class MarkdownParser {
       }
 
       /*
-      if (line.startsWith('### ')) {
-        line = line.replaceFirst('### ', '');
-        _state = _State.headlineSmall;
-      }
-      */
-      /*
-      else if (line.startsWith('## ')) {
-        line = line.replaceFirst('## ', '');
-        _state = _State.headlineMedium;
-      }
-      */
       if (line.startsWith('* ')) {
         line = line.replaceFirst('* ', '');
         _state = _State.unorderedList1;
@@ -104,6 +96,7 @@ class MarkdownParser {
         line = line.replaceFirst('        * ', '');
         _state = _State.unorderedList3;
       }
+      */
 
       var done = false;
       _spanState = _SpanState.normal;
@@ -204,7 +197,7 @@ class MarkdownParser {
       
       late final Widget widget;
       switch (_state) {
-      case _State.body:
+        case _State.body:
         widget = RichText(
           text: TextSpan(
             style: theme.bodyMedium,
@@ -213,7 +206,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.headlineLarge:
+        case _State.headlineLarge:
         widget = RichText(
           text: TextSpan(
             style: theme.headlineLarge,
@@ -222,7 +215,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.headlineMedium:
+        case _State.headlineMedium:
         widget = RichText(
           text: TextSpan(
             style: theme.headlineMedium,
@@ -231,7 +224,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.headlineSmall:
+        case _State.headlineSmall:
         widget = RichText(
           text: TextSpan(
             style: theme.headlineSmall,
@@ -240,7 +233,7 @@ class MarkdownParser {
         );
         break;
         
-      case _State.unorderedList1:
+        case _State.unorderedList1:
         widget = Row(
           children: [
             const SizedBox(
@@ -262,7 +255,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.unorderedList2:
+        case _State.unorderedList2:
         widget = Row(
           children: [
             const SizedBox(
@@ -284,7 +277,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.unorderedList3:
+        case _State.unorderedList3:
         widget = Row(
           children: [
             const SizedBox(
@@ -349,5 +342,36 @@ class MarkdownParser {
     }
 
     return (line, false);
+  }
+
+  (String, bool) _parseUnorderdList1(String line) {
+    if (line.startsWith('* ')) {
+      line = line.replaceFirst('* ', '');
+      _state = _State.unorderedList1;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseUnorderdList2(String line) {
+    if (line.startsWith('    * ')) {
+      line = line.replaceFirst('    * ', '');
+      _state = _State.unorderedList2;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseUnorderdList3(String line) {
+    if (line.startsWith('        * ')) {
+      line = line.replaceFirst('        * ', '');
+      _state = _State.unorderedList3;
+    }
+
+    return (line, true);
   }
 }
