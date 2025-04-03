@@ -71,6 +71,7 @@ class MarkdownParser {
       _parseUnorderdList1,
       _parseUnorderdList2,
       _parseUnorderdList3,
+      _parseStrikethrough,
     ];
     
     for (var line in lines) {
@@ -89,6 +90,7 @@ class MarkdownParser {
 
       var done = false;
       while (!done) {
+        /*
         final index = line.indexOf('~~');
         if (index != -1) {
           final aLine = line.substring(0, index);
@@ -109,7 +111,9 @@ class MarkdownParser {
             }
             _spanState = _SpanState.normal;
           }
-        } else if (line.startsWith('[x]')) {
+        } else
+        */
+        if (line.startsWith('[x]')) {
           line = line.replaceFirst('[x]', '');
           _spans.add(
             WidgetSpan(
@@ -357,8 +361,38 @@ class MarkdownParser {
     if (line.startsWith('        * ')) {
       line = line.replaceFirst('        * ', '');
       _state = _State.unorderedList3;
+
+      return (line, true);
     }
 
-    return (line, true);
+    return (line, false);
+  }
+
+  (String, bool) _parseStrikethrough(String line) {
+    final index = line.indexOf('~~');
+    if (index != -1) {
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 2);
+      if (_spanState == _SpanState.normal) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.strikethroughStarted;
+      } else {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(
+              text: aLine,
+              style: TextStyle(
+                decoration: TextDecoration.lineThrough,
+              ),
+          ));
+        }
+        _spanState = _SpanState.normal;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
   }
 }
