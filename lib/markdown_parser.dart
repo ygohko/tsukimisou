@@ -97,54 +97,6 @@ class MarkdownParser {
 
       var done = false;
       while (!done) {
-        /*
-        final index = line.indexOf('~~');
-        if (index != -1) {
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 2);
-          if (_spanState == _SpanState.normal) {
-            if (aLine.isNotEmpty) {
-              _spans.add(TextSpan(text: aLine));
-            }
-            _spanState = _SpanState.strikethroughStarted;
-          } else {
-            if (aLine.isNotEmpty) {
-              _spans.add(TextSpan(
-                  text: aLine,
-                  style: TextStyle(
-                    decoration: TextDecoration.lineThrough,
-                  ),
-              ));
-            }
-            _spanState = _SpanState.normal;
-          }
-        } else
-        */
-        /*
-        if (line.startsWith('[x]')) {
-          line = line.replaceFirst('[x]', '');
-          _spans.add(
-            WidgetSpan(
-              child: Icon(
-                Icons.check_box_rounded,
-                size: 20.0,
-                color: Colors.green,
-              ),
-            ),
-          );
-        } else if (line.startsWith('[ ]')) {
-          line = line.replaceFirst('[ ]', '');
-          _spans.add(
-            WidgetSpan(
-              child: Icon(
-                Icons.check_box_outline_blank_rounded,
-                size: 20.0,
-                color: Colors.red,
-              ),
-            ),
-          );
-        }
-        */
         if (line.indexOf('[') != -1) {
           final index = line.indexOf('[');
           final aLine = line.substring(0, index);
