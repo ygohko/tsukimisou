@@ -75,6 +75,7 @@ class MarkdownParser {
       _parseChechboxChecked,
       _parseChechboxUnchecked,
       _parseLinkTextStarted,
+      _parseLinkTargetStarted,
     ];
     
     for (var line in lines) {
@@ -111,6 +112,7 @@ class MarkdownParser {
           }
         } else
         */
+        /*
         if (line.indexOf('](') != -1) {
           final index = line.indexOf('](');
           final aLine = line.substring(0, index);
@@ -121,7 +123,9 @@ class MarkdownParser {
             }
             _spanState = _SpanState.linkTargetStarted;
           }
-        } else if (line.indexOf(')') != -1) {
+        } else
+        */
+        if (line.indexOf(')') != -1) {
           final index = line.indexOf(')');
           final aLine = line.substring(0, index);
           line = line.substring(index + 1);
@@ -410,6 +414,24 @@ class MarkdownParser {
           _spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.linkTextStarted;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseLinkTargetStarted(String line) {
+    if (line.indexOf('](') != -1) {
+      final index = line.indexOf('](');
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 2);
+      if (_spanState == _SpanState.linkTextStarted) {
+        if (aLine.isNotEmpty) {
+          _linkText = aLine;
+        }
+        _spanState = _SpanState.linkTargetStarted;
       }
 
       return (line, true);
