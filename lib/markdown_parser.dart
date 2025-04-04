@@ -74,6 +74,7 @@ class MarkdownParser {
       _parseStrikethrough,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
+      _parseLinkTextStarted,
     ];
     
     for (var line in lines) {
@@ -97,6 +98,7 @@ class MarkdownParser {
 
       var done = false;
       while (!done) {
+        /*
         if (line.indexOf('[') != -1) {
           final index = line.indexOf('[');
           final aLine = line.substring(0, index);
@@ -107,7 +109,9 @@ class MarkdownParser {
             }
             _spanState = _SpanState.linkTextStarted;
           }
-        } else if (line.indexOf('](') != -1) {
+        } else
+        */
+        if (line.indexOf('](') != -1) {
           final index = line.indexOf('](');
           final aLine = line.substring(0, index);
           line = line.substring(index + 2);
@@ -389,6 +393,24 @@ class MarkdownParser {
           ),
         ),
       );
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseLinkTextStarted(String line) {
+    if (line.indexOf('[') != -1) {
+      final index = line.indexOf('[');
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.normal) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.linkTextStarted;
+      }
 
       return (line, true);
     }
