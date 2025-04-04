@@ -72,6 +72,8 @@ class MarkdownParser {
       _parseUnorderdList2,
       _parseUnorderdList3,
       _parseStrikethrough,
+      _parseChechboxChecked,
+      _parseChechboxUnchecked,
     ];
     
     for (var line in lines) {
@@ -118,6 +120,7 @@ class MarkdownParser {
           }
         } else
         */
+        /*
         if (line.startsWith('[x]')) {
           line = line.replaceFirst('[x]', '');
           _spans.add(
@@ -140,7 +143,9 @@ class MarkdownParser {
               ),
             ),
           );
-        } else if (line.indexOf('[') != -1) {
+        }
+        */
+        if (line.indexOf('[') != -1) {
           final index = line.indexOf('[');
           final aLine = line.substring(0, index);
           line = line.substring(index + 1);
@@ -394,6 +399,44 @@ class MarkdownParser {
         }
         _spanState = _SpanState.normal;
       }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseChechboxChecked(String line) {
+    if (line.startsWith('[x]')) {
+      line = line.replaceFirst('[x]', '');
+      _spans.add(
+        WidgetSpan(
+          child: Icon(
+            Icons.check_box_rounded,
+            size: 20.0,
+            color: Colors.green,
+          ),
+        ),
+      );
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseChechboxUnchecked(String line) {
+    if (line.startsWith('[ ]')) {
+      line = line.replaceFirst('[ ]', '');
+      _spans.add(
+        WidgetSpan(
+          child: Icon(
+            Icons.check_box_outline_blank_rounded,
+            size: 20.0,
+            color: Colors.red,
+          ),
+        ),
+      );
 
       return (line, true);
     }
