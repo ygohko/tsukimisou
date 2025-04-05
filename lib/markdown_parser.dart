@@ -97,61 +97,6 @@ class MarkdownParser {
           }
         }
       }
-
-      /*
-      var done = false;
-      while (!done) {
-        if (line.indexOf('[') != -1) {
-          final index = line.indexOf('[');
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 1);
-          if (_spanState == _SpanState.normal) {
-            if (aLine.isNotEmpty) {
-              _spans.add(TextSpan(text: aLine));
-            }
-            _spanState = _SpanState.linkTextStarted;
-          }
-        } else
-        if (line.indexOf('](') != -1) {
-          final index = line.indexOf('](');
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 2);
-          if (_spanState == _SpanState.linkTextStarted) {
-            if (aLine.isNotEmpty) {
-              _linkText = aLine;
-            }
-            _spanState = _SpanState.linkTargetStarted;
-          }
-        } else
-        if (line.indexOf(')') != -1) {
-          final index = line.indexOf(')');
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 1);
-          if (_spanState == _SpanState.linkTargetStarted) {
-            if (aLine.isNotEmpty) {
-              _spans.add(TextSpan(
-                  text: _linkText,
-                  style: TextStyle(
-                    color: scheme.primary,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = () {
-                    launchUrl(
-                      Uri.parse(aLine),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  },
-              ));
-            }
-            _spanState = _SpanState.normal;
-          }
-        }
-        else {
-          done = true;
-        }
-      }
-      */
-
       if (line.length > 0) {
         _spans.add(TextSpan(text: line));
       }
