@@ -76,7 +76,7 @@ class MarkdownParser {
       _parseChechboxUnchecked,
       _parseLinkTextStarted,
       _parseLinkTargetStarted,
-      _parseLinkTextEnded,
+      _parseLinkTargetEnded,
     ];
     
     for (var line in lines) {
@@ -440,7 +440,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseLinkTextEnded(String line) {
+  (String, bool) _parseLinkTargetEnded(String line) {
     if (line.indexOf(')') != -1) {
       final scheme = Theme.of(_context).colorScheme;
       final index = line.indexOf(')');
