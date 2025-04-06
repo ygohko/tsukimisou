@@ -24,6 +24,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+typedef _Parser = (String, bool) Function(String);
+
+// TODO: Rename to LineKind?
 enum _State {
   body,
   headlineLarge,
@@ -47,6 +50,7 @@ class MarkdownParser {
   late final Widget _contents;
   var _state = _State.body;
   var _spanState = _SpanState.normal;
+  var _spans = <InlineSpan>[];
   var _linkText = '';
 
   MarkdownParser(BuildContext context, String text) {
@@ -59,170 +63,83 @@ class MarkdownParser {
     final scheme = Theme.of(_context).colorScheme;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
+
+    final parsers = [
+      _parseHeadlineLarge,
+      _parseHeadlineMedium,
+      _parseHeadlineSmall,
+      _parseUnorderdList1,
+      _parseUnorderdList2,
+      _parseUnorderdList3,
+      _parseStrikethrough,
+      _parseChechboxChecked,
+      _parseChechboxUnchecked,
+      _parseLinkTextStarted,
+      _parseLinkTargetStarted,
+      _parseLinkTargetEnded,
+    ];
+    
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
       _state = _State.body;
-      if (line.startsWith('### ')) {
-        line = line.replaceFirst('### ', '');
-        _state = _State.headlineSmall;
-      }
-      else if (line.startsWith('## ')) {
-        line = line.replaceFirst('## ', '');
-        _state = _State.headlineMedium;
-      }
-      else if (line.startsWith('# ')) {
-        line = line.replaceFirst('# ', '');
-        _state = _State.headlineLarge;
-      }
-      else if (line.startsWith('* ')) {
-        line = line.replaceFirst('* ', '');
-        _state = _State.unorderedList1;
-      }
-      else if (line.startsWith('    * ')) {
-        line = line.replaceFirst('    * ', '');
-        _state = _State.unorderedList2;
-      }
-      else if (line.startsWith('        * ')) {
-        line = line.replaceFirst('        * ', '');
-        _state = _State.unorderedList3;
-      }
-
-      var done = false;
       _spanState = _SpanState.normal;
-      final spans = <InlineSpan>[];
-      while (!done) {
-        final index = line.indexOf('~~');
-        if (index != -1) {
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 2);
-          if (_spanState == _SpanState.normal) {
-            if (aLine.isNotEmpty) {
-              spans.add(TextSpan(text: aLine));
-            }
-            _spanState = _SpanState.strikethroughStarted;
-          } else {
-            if (aLine.isNotEmpty) {
-              spans.add(TextSpan(
-                  text: aLine,
-                  style: TextStyle(
-                    decoration: TextDecoration.lineThrough,
-                  ),
-              ));
-            }
-            _spanState = _SpanState.normal;
+      _spans = <InlineSpan>[];
+      
+      var aDone = false;
+      while (!aDone) {
+        aDone = true;
+        for (final parser in parsers) {
+          final (aLine, parsed) = parser(line);
+          line = aLine;
+          if (parsed) {
+            aDone = false;
+            break;
           }
-        } else if (line.startsWith('[x]')) {
-          line = line.replaceFirst('[x]', '');
-          spans.add(
-            WidgetSpan(
-              child: Icon(
-                Icons.check_box_rounded,
-                size: 20.0,
-                color: Colors.green,
-              ),
-            ),
-          );
-        } else if (line.startsWith('[ ]')) {
-          line = line.replaceFirst('[ ]', '');
-          spans.add(
-            WidgetSpan(
-              child: Icon(
-                Icons.check_box_outline_blank_rounded,
-                size: 20.0,
-                color: Colors.red,
-              ),
-            ),
-          );
-        } else if (line.indexOf('[') != -1) {
-          final index = line.indexOf('[');
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 1);
-          if (_spanState == _SpanState.normal) {
-            if (aLine.isNotEmpty) {
-              spans.add(TextSpan(text: aLine));
-            }
-            _spanState = _SpanState.linkTextStarted;
-          }
-        } else if (line.indexOf('](') != -1) {
-          final index = line.indexOf('](');
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 2);
-          if (_spanState == _SpanState.linkTextStarted) {
-            if (aLine.isNotEmpty) {
-              _linkText = aLine;
-            }
-            _spanState = _SpanState.linkTargetStarted;
-          }
-        } else if (line.indexOf(')') != -1) {
-          final index = line.indexOf(')');
-          final aLine = line.substring(0, index);
-          line = line.substring(index + 1);
-          if (_spanState == _SpanState.linkTargetStarted) {
-            if (aLine.isNotEmpty) {
-              spans.add(TextSpan(
-                  text: _linkText,
-                  style: TextStyle(
-                    color: scheme.primary,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = () {
-                    launchUrl(
-                      Uri.parse(aLine),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  },
-              ));
-            }
-            _spanState = _SpanState.normal;
-          }
-        }
-        else {
-          done = true;
         }
       }
       if (line.length > 0) {
-        spans.add(TextSpan(text: line));
+        _spans.add(TextSpan(text: line));
       }
       
       late final Widget widget;
       switch (_state) {
-      case _State.body:
+        case _State.body:
         widget = RichText(
           text: TextSpan(
             style: theme.bodyMedium,
-            children: spans,
+            children: _spans,
           )
         );
         break;
 
-      case _State.headlineLarge:
+        case _State.headlineLarge:
         widget = RichText(
           text: TextSpan(
             style: theme.headlineLarge,
-            children: spans,
+            children: _spans,
           ),
         );
         break;
 
-      case _State.headlineMedium:
+        case _State.headlineMedium:
         widget = RichText(
           text: TextSpan(
             style: theme.headlineMedium,
-            children: spans,
+            children: _spans,
           ),
         );
         break;
 
-      case _State.headlineSmall:
+        case _State.headlineSmall:
         widget = RichText(
           text: TextSpan(
             style: theme.headlineSmall,
-            children: spans,
+            children: _spans,
           ),
         );
         break;
         
-      case _State.unorderedList1:
+        case _State.unorderedList1:
         widget = Row(
           children: [
             const SizedBox(
@@ -236,7 +153,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: theme.bodyMedium,
-                  children: spans,
+                  children: _spans,
                 ),
               ),
             ),
@@ -244,7 +161,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.unorderedList2:
+        case _State.unorderedList2:
         widget = Row(
           children: [
             const SizedBox(
@@ -258,7 +175,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: theme.bodyMedium,
-                  children: spans,
+                  children: _spans,
                 ),
               ),
             ),
@@ -266,7 +183,7 @@ class MarkdownParser {
         );
         break;
 
-      case _State.unorderedList3:
+        case _State.unorderedList3:
         widget = Row(
           children: [
             const SizedBox(
@@ -280,7 +197,7 @@ class MarkdownParser {
               child: RichText(
                 text :TextSpan(
                   style: theme.bodyMedium,
-                  children: spans,
+                  children: _spans,
                 ),
               ),
             ),
@@ -299,4 +216,203 @@ class MarkdownParser {
   }
 
   Widget get contents => _contents;
+
+  (String, bool) _parseHeadlineLarge(String line) {
+    if (line.startsWith('# ')) {
+      line = line.replaceFirst('# ', '');
+      _state = _State.headlineLarge;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseHeadlineMedium(String line) {
+    if (line.startsWith('## ')) {
+      line = line.replaceFirst('## ', '');
+      _state = _State.headlineMedium;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseHeadlineSmall(String line) {
+    if (line.startsWith('### ')) {
+      line = line.replaceFirst('### ', '');
+      _state = _State.headlineSmall;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseUnorderdList1(String line) {
+    if (line.startsWith('* ')) {
+      line = line.replaceFirst('* ', '');
+      _state = _State.unorderedList1;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseUnorderdList2(String line) {
+    if (line.startsWith('    * ')) {
+      line = line.replaceFirst('    * ', '');
+      _state = _State.unorderedList2;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseUnorderdList3(String line) {
+    if (line.startsWith('        * ')) {
+      line = line.replaceFirst('        * ', '');
+      _state = _State.unorderedList3;
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseStrikethrough(String line) {
+    final index = line.indexOf('~~');
+    if (index != -1) {
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 2);
+      if (_spanState == _SpanState.normal) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.strikethroughStarted;
+      } else {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(
+              text: aLine,
+              style: TextStyle(
+                decoration: TextDecoration.lineThrough,
+              ),
+          ));
+        }
+        _spanState = _SpanState.normal;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseChechboxChecked(String line) {
+    if (line.startsWith('[x]')) {
+      line = line.replaceFirst('[x]', '');
+      _spans.add(
+        WidgetSpan(
+          child: Icon(
+            Icons.check_box_rounded,
+            size: 20.0,
+            color: Colors.green,
+          ),
+        ),
+      );
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseChechboxUnchecked(String line) {
+    if (line.startsWith('[ ]')) {
+      line = line.replaceFirst('[ ]', '');
+      _spans.add(
+        WidgetSpan(
+          child: Icon(
+            Icons.check_box_outline_blank_rounded,
+            size: 20.0,
+            color: Colors.red,
+          ),
+        ),
+      );
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseLinkTextStarted(String line) {
+    if (line.indexOf('[') != -1) {
+      final index = line.indexOf('[');
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.normal) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.linkTextStarted;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseLinkTargetStarted(String line) {
+    if (line.indexOf('](') != -1) {
+      final index = line.indexOf('](');
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 2);
+      if (_spanState == _SpanState.linkTextStarted) {
+        if (aLine.isNotEmpty) {
+          _linkText = aLine;
+        }
+        _spanState = _SpanState.linkTargetStarted;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseLinkTargetEnded(String line) {
+    if (line.indexOf(')') != -1) {
+      final scheme = Theme.of(_context).colorScheme;
+      final index = line.indexOf(')');
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.linkTargetStarted) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(
+              text: _linkText,
+              style: TextStyle(
+                color: scheme.primary,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()..onTap = () {
+                launchUrl(
+                  Uri.parse(aLine),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ));
+        }
+        _spanState = _SpanState.normal;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
 }
