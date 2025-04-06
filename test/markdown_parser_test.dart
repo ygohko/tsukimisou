@@ -125,7 +125,6 @@ void main() {
         (WidgetTester tester) async {
           await init(tester);
           final context = tester.element(find.text('This is a test.'));
-          final textTheme = Theme.of(context).textTheme;
           final parser = MarkdownParser(context, '---');
           parser.execute();
           final contents = parser.contents;
