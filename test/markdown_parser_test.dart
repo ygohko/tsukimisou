@@ -4,7 +4,7 @@ import 'package:tsukimisou/markdown_parser.dart';
 
 Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(
-    MaterialApp(
+    const MaterialApp(
       home: Text('This is a test.'),
     ),
   );
@@ -15,8 +15,6 @@ void main() {
       testWidgets('MarkdownParser should be created.',
         (WidgetTester tester) async {
           await init(tester);
-          final context = tester.element(find.text('This is a test.'));
-          final parser = MarkdownParser(context, '# Hello, World!');
       });
 
       testWidgets('MarkdownParser should be executable.',
