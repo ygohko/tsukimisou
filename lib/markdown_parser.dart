@@ -390,6 +390,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetEnded(String line) {
+    if (_spanState != _SpanState.linkTargetStarted) {
+      return (line, false);
+    }
+
     final index = line.indexOf(')');
     if (index != -1) {
       final aLine = line.substring(0, index);
