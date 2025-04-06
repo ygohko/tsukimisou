@@ -120,5 +120,25 @@ void main() {
           expect(span.style, textTheme.bodyMedium);
           expect(span.toPlainText(), 'https://www.google.com');
       });
+
+      testWidgets('MarkdownParser should create widgets for thematic breaks.',
+        (WidgetTester tester) async {
+          await init(tester);
+          final context = tester.element(find.text('This is a test.'));
+          final textTheme = Theme.of(context).textTheme;
+          final parser = MarkdownParser(context, '---');
+          parser.execute();
+          final contents = parser.contents;
+          final column = contents as Column;
+          final widget = column.children[0];
+          final richText = widget as RichText;
+          final span = richText.text as TextSpan;
+          final children = span.children!;
+          final widgetSpan = children[0] as WidgetSpan;
+          final row = widgetSpan.child as Row;
+          expect(row.children[0] is SizedBox, true);
+          expect(row.children[1] is Expanded, true);
+          expect(row.children[2] is SizedBox, true);
+      });
   });
 }
