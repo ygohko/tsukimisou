@@ -256,8 +256,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseUnorderdList1(String line) {
-    if (line.startsWith('* ')) {
-      line = line.replaceFirst('* ', '');
+    final regExp = RegExp(r'^[\+\-\*] ');
+    final match = regExp.firstMatch(line);
+    if (match != null) {
+      line = line.replaceFirst(regExp, '');
       _state = _State.unorderedList1;
 
       return (line, true);
@@ -267,8 +269,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseUnorderdList2(String line) {
-    if (line.startsWith('    * ')) {
-      line = line.replaceFirst('    * ', '');
+    final regExp = RegExp(r'^    [\+\-\*] ');
+    final match = regExp.firstMatch(line);
+    if (match != null) {
+      line = line.replaceFirst(regExp, '');
       _state = _State.unorderedList2;
 
       return (line, true);
@@ -278,8 +282,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseUnorderdList3(String line) {
-    if (line.startsWith('        * ')) {
-      line = line.replaceFirst('        * ', '');
+    final regExp = RegExp(r'^        [\+\-\*] ');
+    final match = regExp.firstMatch(line);
+    if (match != null) {
+      line = line.replaceFirst(regExp, '');
       _state = _State.unorderedList3;
 
       return (line, true);
