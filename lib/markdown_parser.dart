@@ -24,8 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-typedef _Parser = (String, bool) Function(String);
-
 // TODO: Rename to LineKind?
 enum _State {
   body,
@@ -42,12 +40,15 @@ enum _SpanState {
   strikethroughStarted,
   linkTextStarted,
   linkTargetStarted,
+  autolinkStarted,
 }
 
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
   late final Widget _contents;
+  late final TextTheme _textTheme;
+  late final ColorScheme _colorScheme;
   var _state = _State.body;
   var _spanState = _SpanState.normal;
   var _spans = <InlineSpan>[];
@@ -56,11 +57,12 @@ class MarkdownParser {
   MarkdownParser(BuildContext context, String text) {
     _context = context;
     _text = text;
+    final theme = Theme.of(_context);
+    _textTheme = theme.textTheme;
+    _colorScheme = theme.colorScheme;
   }
 
   void execute() {
-    final theme = Theme.of(_context).textTheme;
-    final scheme = Theme.of(_context).colorScheme;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
 
@@ -77,6 +79,9 @@ class MarkdownParser {
       _parseLinkTextStarted,
       _parseLinkTargetStarted,
       _parseLinkTargetEnded,
+      _parseAutolinkStarted,
+      _parseAutolinkEnded,
+      _parseThemeticBreak,
     ];
     
     for (var line in lines) {
@@ -97,7 +102,7 @@ class MarkdownParser {
           }
         }
       }
-      if (line.length > 0) {
+      if (line.isNotEmpty) {
         _spans.add(TextSpan(text: line));
       }
       
@@ -106,7 +111,7 @@ class MarkdownParser {
         case _State.body:
         widget = RichText(
           text: TextSpan(
-            style: theme.bodyMedium,
+            style: _textTheme.bodyMedium,
             children: _spans,
           )
         );
@@ -115,7 +120,7 @@ class MarkdownParser {
         case _State.headlineLarge:
         widget = RichText(
           text: TextSpan(
-            style: theme.headlineLarge,
+            style: _textTheme.headlineLarge,
             children: _spans,
           ),
         );
@@ -124,7 +129,7 @@ class MarkdownParser {
         case _State.headlineMedium:
         widget = RichText(
           text: TextSpan(
-            style: theme.headlineMedium,
+            style: _textTheme.headlineMedium,
             children: _spans,
           ),
         );
@@ -133,7 +138,7 @@ class MarkdownParser {
         case _State.headlineSmall:
         widget = RichText(
           text: TextSpan(
-            style: theme.headlineSmall,
+            style: _textTheme.headlineSmall,
             children: _spans,
           ),
         );
@@ -152,7 +157,7 @@ class MarkdownParser {
             Flexible(
               child: RichText(
                 text: TextSpan(
-                  style: theme.bodyMedium,
+                  style: _textTheme.bodyMedium,
                   children: _spans,
                 ),
               ),
@@ -174,7 +179,7 @@ class MarkdownParser {
             Flexible(
               child: RichText(
                 text: TextSpan(
-                  style: theme.bodyMedium,
+                  style: _textTheme.bodyMedium,
                   children: _spans,
                 ),
               ),
@@ -196,7 +201,7 @@ class MarkdownParser {
             Flexible(
               child: RichText(
                 text :TextSpan(
-                  style: theme.bodyMedium,
+                  style: _textTheme.bodyMedium,
                   children: _spans,
                 ),
               ),
@@ -297,7 +302,7 @@ class MarkdownParser {
         if (aLine.isNotEmpty) {
           _spans.add(TextSpan(
               text: aLine,
-              style: TextStyle(
+              style: const TextStyle(
                 decoration: TextDecoration.lineThrough,
               ),
           ));
@@ -315,7 +320,7 @@ class MarkdownParser {
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
       _spans.add(
-        WidgetSpan(
+        const WidgetSpan(
           child: Icon(
             Icons.check_box_rounded,
             size: 20.0,
@@ -334,7 +339,7 @@ class MarkdownParser {
     if (line.startsWith('[ ]')) {
       line = line.replaceFirst('[ ]', '');
       _spans.add(
-        WidgetSpan(
+        const WidgetSpan(
           child: Icon(
             Icons.check_box_outline_blank_rounded,
             size: 20.0,
@@ -350,8 +355,8 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTextStarted(String line) {
-    if (line.indexOf('[') != -1) {
-      final index = line.indexOf('[');
+    final index = line.indexOf('[');
+    if (index != -1) {
       final aLine = line.substring(0, index);
       line = line.substring(index + 1);
       if (_spanState == _SpanState.normal) {
@@ -368,8 +373,8 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetStarted(String line) {
-    if (line.indexOf('](') != -1) {
-      final index = line.indexOf('](');
+    final index = line.indexOf('](');
+    if (index != -1) {
       final aLine = line.substring(0, index);
       line = line.substring(index + 2);
       if (_spanState == _SpanState.linkTextStarted) {
@@ -386,9 +391,12 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetEnded(String line) {
-    if (line.indexOf(')') != -1) {
-      final scheme = Theme.of(_context).colorScheme;
-      final index = line.indexOf(')');
+    if (_spanState != _SpanState.linkTargetStarted) {
+      return (line, false);
+    }
+
+    final index = line.indexOf(')');
+    if (index != -1) {
       final aLine = line.substring(0, index);
       line = line.substring(index + 1);
       if (_spanState == _SpanState.linkTargetStarted) {
@@ -396,7 +404,7 @@ class MarkdownParser {
           _spans.add(TextSpan(
               text: _linkText,
               style: TextStyle(
-                color: scheme.primary,
+                color: _colorScheme.primary,
                 decoration: TextDecoration.underline,
               ),
               recognizer: TapGestureRecognizer()..onTap = () {
@@ -409,6 +417,84 @@ class MarkdownParser {
         }
         _spanState = _SpanState.normal;
       }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseAutolinkStarted(String line) {
+    final index = line.indexOf('<');
+    if (index != -1) {
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.normal) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.autolinkStarted;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseAutolinkEnded(String line) {
+    final index = line.indexOf('>');
+    if (index != -1) {
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.autolinkStarted) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(
+              text: aLine,
+              style: TextStyle(
+                color: _colorScheme.primary,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()..onTap = () {
+                launchUrl(
+                  Uri.parse(aLine),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ));
+        }
+        _spanState = _SpanState.normal;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseThemeticBreak(String line) {
+    if (line.startsWith('---')) {
+      line = '';
+      _spans.add(
+        WidgetSpan(
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Container(
+                  height: 3.0,
+                  color: _colorScheme.surfaceDim,
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+            ],
+          )
+        ),
+      );
 
       return (line, true);
     }
