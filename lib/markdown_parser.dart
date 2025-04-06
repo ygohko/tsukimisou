@@ -81,6 +81,7 @@ class MarkdownParser {
       _parseLinkTargetEnded,
       _parseAutolinkStarted,
       _parseAutolinkEnded,
+      _parseThemeticBreak,
     ];
     
     for (var line in lines) {
@@ -464,6 +465,36 @@ class MarkdownParser {
         }
         _spanState = _SpanState.normal;
       }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseThemeticBreak(String line) {
+    if (line.startsWith('---')) {
+      line = '';
+      _spans.add(
+        WidgetSpan(
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 10.0,
+              ),
+              Expanded(
+                child: Container(
+                  height: 3.0,
+                  color: _colorScheme.surfaceDim,
+                ),
+              ),
+              const SizedBox(
+                width: 10.0,
+              ),
+            ],
+          )
+        ),
+      );
 
       return (line, true);
     }
