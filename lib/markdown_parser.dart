@@ -42,6 +42,7 @@ enum _SpanState {
   strikethroughStarted,
   linkTextStarted,
   linkTargetStarted,
+  autolinkStarted,
 }
 
 class MarkdownParser {
@@ -77,6 +78,8 @@ class MarkdownParser {
       _parseLinkTextStarted,
       _parseLinkTargetStarted,
       _parseLinkTargetEnded,
+      _parseAutolinkStarted,
+      _parseAutolinkEnded,
     ];
     
     for (var line in lines) {
@@ -395,6 +398,56 @@ class MarkdownParser {
         if (aLine.isNotEmpty) {
           _spans.add(TextSpan(
               text: _linkText,
+              style: TextStyle(
+                color: scheme.primary,
+                decoration: TextDecoration.underline,
+              ),
+              recognizer: TapGestureRecognizer()..onTap = () {
+                launchUrl(
+                  Uri.parse(aLine),
+                  mode: LaunchMode.externalApplication,
+                );
+              },
+          ));
+        }
+        _spanState = _SpanState.normal;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseAutolinkStarted(String line) {
+    final index = line.indexOf('<');
+    if (index != -1) {
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.normal) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.autolinkStarted;
+      }
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseAutolinkEnded(String line) {
+    final index = line.indexOf('>');
+    if (index != -1) {
+      // TODO: Add to field.
+      final scheme = Theme.of(_context).colorScheme;
+      final aLine = line.substring(0, index);
+      line = line.substring(index + 1);
+      if (_spanState == _SpanState.autolinkStarted) {
+        if (aLine.isNotEmpty) {
+          _spans.add(TextSpan(
+              text: aLine,
               style: TextStyle(
                 color: scheme.primary,
                 decoration: TextDecoration.underline,
