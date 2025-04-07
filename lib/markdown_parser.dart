@@ -517,7 +517,11 @@ class MarkdownParser {
   }
 
   (String, bool) _parseParagraphStarted(String line) {
-    if (line.isEmpty && !_paragraphStarted) {
+    if (_paragraphStarted || _spans.isNotEmpty) {
+      return (line, false);
+    }
+
+    if (line.isEmpty) {
       _paragraphStarted = true;
 
       return (line, true);
