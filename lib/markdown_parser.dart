@@ -53,6 +53,7 @@ class MarkdownParser {
   var _spanState = _SpanState.normal;
   var _spans = <InlineSpan>[];
   var _linkText = '';
+  var _paragraphStarted = false;
 
   MarkdownParser(BuildContext context, String text) {
     _context = context;
@@ -501,6 +502,16 @@ class MarkdownParser {
           )
         ),
       );
+
+      return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseParagraphStarted(String line) {
+    if (line == '') {
+      _paragraphStarted = true;
 
       return (line, true);
     }
