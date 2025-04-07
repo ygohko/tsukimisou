@@ -83,6 +83,7 @@ class MarkdownParser {
       _parseAutolinkStarted,
       _parseAutolinkEnded,
       _parseThemeticBreak,
+      _parseParagraphStarted,
     ];
     
     for (var line in lines) {
@@ -210,6 +211,10 @@ class MarkdownParser {
           ],
         );
         break;
+      }
+      if (_paragraphStarted) {
+        widgets.add(const SizedBox(height: 10.0));
+        _paragraphStarted = false;
       }
       widgets.add(widget);
     }
