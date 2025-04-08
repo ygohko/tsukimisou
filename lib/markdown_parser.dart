@@ -126,7 +126,7 @@ class MarkdownParser {
 
           case _State.headlineLarge:
           widget = Container(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: RichText(
               text: TextSpan(
                 style: _textTheme.headlineLarge,
@@ -138,7 +138,7 @@ class MarkdownParser {
 
           case _State.headlineMedium:
           widget = Container(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: RichText(
               text: TextSpan(
                 style: _textTheme.headlineMedium,
@@ -150,7 +150,7 @@ class MarkdownParser {
 
           case _State.headlineSmall:
           widget = Container(
-            padding: EdgeInsets.symmetric(vertical: 10.0),
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: RichText(
               text: TextSpan(
                 style: _textTheme.headlineSmall,
