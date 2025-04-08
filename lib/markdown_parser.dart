@@ -120,33 +120,42 @@ class MarkdownParser {
             text: TextSpan(
               style: _textTheme.bodyMedium,
               children: _spans,
-            )
+            ),
           );
           break;
 
           case _State.headlineLarge:
-          widget = RichText(
-            text: TextSpan(
-              style: _textTheme.headlineLarge,
-              children: _spans,
+          widget = Container(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: RichText(
+              text: TextSpan(
+                style: _textTheme.headlineLarge,
+                children: _spans,
+              ),
             ),
           );
           break;
 
           case _State.headlineMedium:
-          widget = RichText(
-            text: TextSpan(
-              style: _textTheme.headlineMedium,
-              children: _spans,
+          widget = Container(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: RichText(
+              text: TextSpan(
+                style: _textTheme.headlineMedium,
+                children: _spans,
+              ),
             ),
           );
           break;
 
           case _State.headlineSmall:
-          widget = RichText(
-            text: TextSpan(
-              style: _textTheme.headlineSmall,
-              children: _spans,
+          widget = Container(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: RichText(
+              text: TextSpan(
+                style: _textTheme.headlineSmall,
+                children: _spans,
+              ),
             ),
           );
           break;
