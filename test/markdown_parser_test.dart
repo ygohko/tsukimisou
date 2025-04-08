@@ -181,5 +181,17 @@ void main() {
           expect(row.children[1] is Expanded, true);
           expect(row.children[2] is SizedBox, true);
       });
+
+      testWidgets('MarkdownParser should create widgets for paragraphs.',
+        (WidgetTester tester) async {
+          await init(tester);
+          final context = tester.element(find.text('This is a test.'));
+          final parser = MarkdownParser(context, 'Hello, World!\n\nHello, World!');
+          parser.execute();
+          final contents = parser.contents;
+          final column = contents as Column;
+          expect(column.children.length, 3);
+          expect(column.children[1] is SizedBox, true);
+      });
   });
 }
