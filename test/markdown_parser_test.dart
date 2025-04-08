@@ -51,7 +51,8 @@ void main() {
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
-          final richText = widget as RichText;
+          final container = widget as Container;
+          final richText = container.child as RichText;
           final span = richText.text as TextSpan;
           expect(span.style, textTheme.headlineLarge);
           expect(span.toPlainText(), 'Hello, World!');
@@ -67,7 +68,8 @@ void main() {
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
-          final richText = widget as RichText;
+          final container = widget as Container;
+          final richText = container.child as RichText;
           final span = richText.text as TextSpan;
           expect(span.style, textTheme.headlineMedium);
           expect(span.toPlainText(), 'Hello, World!');
@@ -83,7 +85,8 @@ void main() {
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
-          final richText = widget as RichText;
+          final container = widget as Container;
+          final richText = container.child as RichText;
           final span = richText.text as TextSpan;
           expect(span.style, textTheme.headlineSmall);
           expect(span.toPlainText(), 'Hello, World!');
