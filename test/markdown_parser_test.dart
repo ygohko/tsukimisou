@@ -29,9 +29,9 @@ void main() {
         (WidgetTester tester) async {
           await init(tester);
           final context = tester.element(find.text('This is a test.'));
-          final textTheme = Theme.of(context).textTheme;
           final parser = MarkdownParser(context, 'Hello, World!');
           parser.execute();
+          final textTheme = parser.textTheme;
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
@@ -45,9 +45,9 @@ void main() {
         (WidgetTester tester) async {
           await init(tester);
           final context = tester.element(find.text('This is a test.'));
-          final textTheme = Theme.of(context).textTheme;
           final parser = MarkdownParser(context, '# Hello, World!');
           parser.execute();
+          final textTheme = parser.textTheme;
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
@@ -62,9 +62,9 @@ void main() {
         (WidgetTester tester) async {
           await init(tester);
           final context = tester.element(find.text('This is a test.'));
-          final textTheme = Theme.of(context).textTheme;
           final parser = MarkdownParser(context, '## Hello, World!');
           parser.execute();
+          final textTheme = parser.textTheme;
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
@@ -79,9 +79,9 @@ void main() {
         (WidgetTester tester) async {
           await init(tester);
           final context = tester.element(find.text('This is a test.'));
-          final textTheme = Theme.of(context).textTheme;
           final parser = MarkdownParser(context, '### Hello, World!');
           parser.execute();
+          final textTheme = parser.textTheme;
           final contents = parser.contents;
           final column = contents as Column;
           final widget = column.children[0];
