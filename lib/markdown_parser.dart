@@ -26,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 // TODO: Rename to LineKind?
 enum _LineKind {
+  none,
   body,
   headlineLarge,
   headlineMedium,
@@ -49,6 +50,7 @@ class MarkdownParser {
   late final Widget _contents;
   late final ColorScheme _colorScheme;
   var _lineKind = _LineKind.body;
+  var _previousLineKind = _LineKind.none;
   var _spanState = _SpanState.normal;
   var _spans = <InlineSpan>[];
   var _linkText = '';
@@ -260,8 +262,12 @@ class MarkdownParser {
               ],
             );
             break;
-        }
+
+          default:
+            break;
+          }
         widgets.add(widget);
+        _previousLineKind = _lineKind;
       }
     }
 
@@ -571,8 +577,10 @@ class MarkdownParser {
     }
 
     if (line.isEmpty) {
-      _paragraphStarted = true;
-
+      if (_previousLineKind == _LineKind.body) {
+        _paragraphStarted = true;
+      }
+        
       return (line, true);
     }
 
