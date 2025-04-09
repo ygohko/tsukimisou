@@ -47,7 +47,6 @@ class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
   late final Widget _contents;
-  late final TextTheme _textTheme;
   late final ColorScheme _colorScheme;
   var _state = _State.body;
   var _spanState = _SpanState.normal;
@@ -55,41 +54,46 @@ class MarkdownParser {
   var _linkText = '';
   var _paragraphStarted = false;
 
+  static TextTheme? _textTheme;
+
   MarkdownParser(BuildContext context, String text) {
     _context = context;
     _text = text;
     final theme = Theme.of(_context);
     // TODO: Store text theme into static variable.
-    var headlineLargeStyle = theme.textTheme.headlineLarge;
-    if (headlineLargeStyle != null) {
-      final fontSize = headlineLargeStyle.fontSize;
-      if (fontSize != null) {
-        headlineLargeStyle = headlineLargeStyle.copyWith(fontSize: fontSize * 0.7);
+    if (_textTheme == null) {
+      var headlineLargeStyle = theme.textTheme.headlineLarge;
+      if (headlineLargeStyle != null) {
+        final fontSize = headlineLargeStyle.fontSize;
+        if (fontSize != null) {
+          headlineLargeStyle = headlineLargeStyle.copyWith(fontSize: fontSize * 0.7);
+        }
       }
-    }
-    var headlineMediumStyle = theme.textTheme.headlineMedium;
-    if (headlineMediumStyle != null) {
-      final fontSize = headlineMediumStyle.fontSize;
-      if (fontSize != null) {
-        headlineMediumStyle = headlineMediumStyle.copyWith(fontSize: fontSize * 0.7);
+      var headlineMediumStyle = theme.textTheme.headlineMedium;
+      if (headlineMediumStyle != null) {
+        final fontSize = headlineMediumStyle.fontSize;
+        if (fontSize != null) {
+          headlineMediumStyle = headlineMediumStyle.copyWith(fontSize: fontSize * 0.7);
+        }
       }
-    }
-    var headlineSmallStyle = theme.textTheme.headlineSmall;
-    if (headlineSmallStyle != null) {
-      final fontSize = headlineSmallStyle.fontSize;
-      if (fontSize != null) {
-        headlineSmallStyle = headlineSmallStyle.copyWith(fontSize: fontSize * 0.7);
+      var headlineSmallStyle = theme.textTheme.headlineSmall;
+      if (headlineSmallStyle != null) {
+        final fontSize = headlineSmallStyle.fontSize;
+        if (fontSize != null) {
+          headlineSmallStyle = headlineSmallStyle.copyWith(fontSize: fontSize * 0.7);
+        }
       }
+      _textTheme = theme.textTheme.copyWith(
+        headlineLarge: headlineLargeStyle,
+        headlineMedium: headlineMediumStyle,
+        headlineSmall: headlineSmallStyle,
+      );
     }
-    _textTheme = theme.textTheme.copyWith(
-      headlineLarge: headlineLargeStyle,
-      headlineMedium: headlineMediumStyle,
-      headlineSmall: headlineSmallStyle,
-    );
     _colorScheme = theme.colorScheme;
   }
 
   void execute() {
+    final textTheme = _textTheme!;
     final lines = _text.split('\n');
     final widgets = <Widget>[];
 
@@ -144,7 +148,7 @@ class MarkdownParser {
           case _State.body:
           widget = RichText(
             text: TextSpan(
-              style: _textTheme.bodyMedium,
+              style: textTheme.bodyMedium,
               children: _spans,
             ),
           );
@@ -155,7 +159,7 @@ class MarkdownParser {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: RichText(
               text: TextSpan(
-                style: _textTheme.headlineLarge,
+                style: textTheme.headlineLarge,
                 children: _spans,
               ),
             ),
@@ -167,7 +171,7 @@ class MarkdownParser {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: RichText(
               text: TextSpan(
-                style: _textTheme.headlineMedium,
+                style: textTheme.headlineMedium,
                 children: _spans,
               ),
             ),
@@ -179,7 +183,7 @@ class MarkdownParser {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: RichText(
               text: TextSpan(
-                style: _textTheme.headlineSmall,
+                style: textTheme.headlineSmall,
                 children: _spans,
               ),
             ),
@@ -199,7 +203,7 @@ class MarkdownParser {
               Flexible(
                 child: RichText(
                   text: TextSpan(
-                    style: _textTheme.bodyMedium,
+                    style: textTheme.bodyMedium,
                     children: _spans,
                   ),
                 ),
@@ -221,7 +225,7 @@ class MarkdownParser {
               Flexible(
                 child: RichText(
                   text: TextSpan(
-                    style: _textTheme.bodyMedium,
+                    style: textTheme.bodyMedium,
                     children: _spans,
                   ),
                 ),
@@ -243,7 +247,7 @@ class MarkdownParser {
               Flexible(
                 child: RichText(
                   text :TextSpan(
-                    style: _textTheme.bodyMedium,
+                    style: textTheme.bodyMedium,
                     children: _spans,
                   ),
                 ),
@@ -265,6 +269,8 @@ class MarkdownParser {
 
   Widget get contents => _contents;
 
+  TextTheme get textTheme => _textTheme!;
+  
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
