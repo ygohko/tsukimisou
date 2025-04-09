@@ -59,7 +59,33 @@ class MarkdownParser {
     _context = context;
     _text = text;
     final theme = Theme.of(_context);
-    _textTheme = theme.textTheme;
+    // TODO: Store text theme into static variable.
+    var headlineLargeStyle = theme.textTheme.headlineLarge;
+    if (headlineLargeStyle != null) {
+      final fontSize = headlineLargeStyle.fontSize;
+      if (fontSize != null) {
+        headlineLargeStyle = headlineLargeStyle.copyWith(fontSize: fontSize * 0.7);
+      }
+    }
+    var headlineMediumStyle = theme.textTheme.headlineMedium;
+    if (headlineMediumStyle != null) {
+      final fontSize = headlineMediumStyle.fontSize;
+      if (fontSize != null) {
+        headlineMediumStyle = headlineMediumStyle.copyWith(fontSize: fontSize * 0.7);
+      }
+    }
+    var headlineSmallStyle = theme.textTheme.headlineSmall;
+    if (headlineSmallStyle != null) {
+      final fontSize = headlineSmallStyle.fontSize;
+      if (fontSize != null) {
+        headlineSmallStyle = headlineSmallStyle.copyWith(fontSize: fontSize * 0.7);
+      }
+    }
+    _textTheme = theme.textTheme.copyWith(
+      headlineLarge: headlineLargeStyle,
+      headlineMedium: headlineMediumStyle,
+      headlineSmall: headlineSmallStyle,
+    );
     _colorScheme = theme.colorScheme;
   }
 
