@@ -190,7 +190,7 @@ class _EditingPageState extends State<EditingPage> {
       return;
     }
     if (accepted) {
-        Navigator.of(context).pop();
+      Navigator.of(context).pop();
     }
   }
 }

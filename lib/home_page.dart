@@ -177,10 +177,10 @@ class _HomePageState extends State<HomePage> {
           return;
         }
         await common_uis.showErrorDialog(
-          context,
-          localizations.memoStoreIsLocked,
-          localizations.memoStoreIsLockedByOtherDevice,
-          localizations.ok);
+            context,
+            localizations.memoStoreIsLocked,
+            localizations.memoStoreIsLockedByOtherDevice,
+            localizations.ok);
         return;
       } else {
         // Confirm to force unlock
