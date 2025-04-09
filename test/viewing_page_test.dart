@@ -37,7 +37,9 @@ void main() {
       expect(find.textContaining('Memo at'), findsOneWidget);
       expect(
         find.byWidgetPredicate(
-          (widget) => widget is RichText && widget.text.toPlainText() == 'This is a test.',
+          (widget) =>
+              widget is RichText &&
+              widget.text.toPlainText() == 'This is a test.',
         ),
         findsOneWidget,
       );

@@ -66,21 +66,24 @@ class MarkdownParser {
       if (headlineLargeStyle != null) {
         final fontSize = headlineLargeStyle.fontSize;
         if (fontSize != null) {
-          headlineLargeStyle = headlineLargeStyle.copyWith(fontSize: fontSize * 0.7);
+          headlineLargeStyle =
+              headlineLargeStyle.copyWith(fontSize: fontSize * 0.7);
         }
       }
       var headlineMediumStyle = theme.textTheme.headlineMedium;
       if (headlineMediumStyle != null) {
         final fontSize = headlineMediumStyle.fontSize;
         if (fontSize != null) {
-          headlineMediumStyle = headlineMediumStyle.copyWith(fontSize: fontSize * 0.7);
+          headlineMediumStyle =
+              headlineMediumStyle.copyWith(fontSize: fontSize * 0.7);
         }
       }
       var headlineSmallStyle = theme.textTheme.headlineSmall;
       if (headlineSmallStyle != null) {
         final fontSize = headlineSmallStyle.fontSize;
         if (fontSize != null) {
-          headlineSmallStyle = headlineSmallStyle.copyWith(fontSize: fontSize * 0.7);
+          headlineSmallStyle =
+              headlineSmallStyle.copyWith(fontSize: fontSize * 0.7);
         }
       }
       _textTheme = theme.textTheme.copyWith(
@@ -115,13 +118,13 @@ class MarkdownParser {
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
-    
+
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
       _state = _State.body;
       _spanState = _SpanState.normal;
       _spans = <InlineSpan>[];
-      
+
       var aDone = false;
       while (!aDone) {
         aDone = true;
@@ -146,115 +149,115 @@ class MarkdownParser {
         late final Widget widget;
         switch (_state) {
           case _State.body:
-          widget = RichText(
-            text: TextSpan(
-              style: textTheme.bodyMedium,
-              children: _spans,
-            ),
-          );
-          break;
+            widget = RichText(
+              text: TextSpan(
+                style: textTheme.bodyMedium,
+                children: _spans,
+              ),
+            );
+            break;
 
           case _State.headlineLarge:
-          widget = Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: RichText(
-              text: TextSpan(
-                style: textTheme.headlineLarge,
-                children: _spans,
+            widget = Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: RichText(
+                text: TextSpan(
+                  style: textTheme.headlineLarge,
+                  children: _spans,
+                ),
               ),
-            ),
-          );
-          break;
+            );
+            break;
 
           case _State.headlineMedium:
-          widget = Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: RichText(
-              text: TextSpan(
-                style: textTheme.headlineMedium,
-                children: _spans,
+            widget = Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: RichText(
+                text: TextSpan(
+                  style: textTheme.headlineMedium,
+                  children: _spans,
+                ),
               ),
-            ),
-          );
-          break;
+            );
+            break;
 
           case _State.headlineSmall:
-          widget = Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: RichText(
-              text: TextSpan(
-                style: textTheme.headlineSmall,
-                children: _spans,
-              ),
-            ),
-          );
-          break;
-          
-          case _State.unorderedList1:
-          widget = Row(
-            children: [
-              const SizedBox(
-                width: 10.0,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('• '),
+            widget = Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: RichText(
+                text: TextSpan(
+                  style: textTheme.headlineSmall,
+                  children: _spans,
                 ),
               ),
-              Flexible(
-                child: RichText(
-                  text: TextSpan(
-                    style: textTheme.bodyMedium,
-                    children: _spans,
+            );
+            break;
+
+          case _State.unorderedList1:
+            widget = Row(
+              children: [
+                const SizedBox(
+                  width: 10.0,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('• '),
                   ),
                 ),
-              ),
-            ],
-          );
-          break;
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: _spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
 
           case _State.unorderedList2:
-          widget = Row(
-            children: [
-              const SizedBox(
-                width: 30.0,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('• '),
-                ),
-              ),
-              Flexible(
-                child: RichText(
-                  text: TextSpan(
-                    style: textTheme.bodyMedium,
-                    children: _spans,
+            widget = Row(
+              children: [
+                const SizedBox(
+                  width: 30.0,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('• '),
                   ),
                 ),
-              ),
-            ],
-          );
-          break;
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: _spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
 
           case _State.unorderedList3:
-          widget = Row(
-            children: [
-              const SizedBox(
-                width: 50.0,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('• '),
-                ),
-              ),
-              Flexible(
-                child: RichText(
-                  text :TextSpan(
-                    style: textTheme.bodyMedium,
-                    children: _spans,
+            widget = Row(
+              children: [
+                const SizedBox(
+                  width: 50.0,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('• '),
                   ),
                 ),
-              ),
-            ],
-          );
-          break;
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: _spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
         }
         widgets.add(widget);
       }
@@ -262,7 +265,7 @@ class MarkdownParser {
 
     _contents = Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,    
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: widgets,
     );
   }
@@ -270,7 +273,7 @@ class MarkdownParser {
   Widget get contents => _contents;
 
   TextTheme get textTheme => _textTheme!;
-  
+
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
@@ -356,10 +359,10 @@ class MarkdownParser {
       } else {
         if (aLine.isNotEmpty) {
           _spans.add(TextSpan(
-              text: aLine,
-              style: const TextStyle(
-                decoration: TextDecoration.lineThrough,
-              ),
+            text: aLine,
+            style: const TextStyle(
+              decoration: TextDecoration.lineThrough,
+            ),
           ));
         }
         _spanState = _SpanState.normal;
@@ -457,12 +460,13 @@ class MarkdownParser {
       if (_spanState == _SpanState.linkTargetStarted) {
         if (aLine.isNotEmpty) {
           _spans.add(TextSpan(
-              text: _linkText,
-              style: TextStyle(
-                color: _colorScheme.primary,
-                decoration: TextDecoration.underline,
-              ),
-              recognizer: TapGestureRecognizer()..onTap = () {
+            text: _linkText,
+            style: TextStyle(
+              color: _colorScheme.primary,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
                 launchUrl(
                   Uri.parse(aLine),
                   mode: LaunchMode.externalApplication,
@@ -505,12 +509,13 @@ class MarkdownParser {
       if (_spanState == _SpanState.autolinkStarted) {
         if (aLine.isNotEmpty) {
           _spans.add(TextSpan(
-              text: aLine,
-              style: TextStyle(
-                color: _colorScheme.primary,
-                decoration: TextDecoration.underline,
-              ),
-              recognizer: TapGestureRecognizer()..onTap = () {
+            text: aLine,
+            style: TextStyle(
+              color: _colorScheme.primary,
+              decoration: TextDecoration.underline,
+            ),
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
                 launchUrl(
                   Uri.parse(aLine),
                   mode: LaunchMode.externalApplication,
@@ -532,23 +537,22 @@ class MarkdownParser {
       line = '';
       _spans.add(
         WidgetSpan(
-          child: Row(
-            children: [
-              const SizedBox(
-                width: 10.0,
+            child: Row(
+          children: [
+            const SizedBox(
+              width: 10.0,
+            ),
+            Expanded(
+              child: Container(
+                height: 3.0,
+                color: _colorScheme.surfaceDim,
               ),
-              Expanded(
-                child: Container(
-                  height: 3.0,
-                  color: _colorScheme.surfaceDim,
-                ),
-              ),
-              const SizedBox(
-                width: 10.0,
-              ),
-            ],
-          )
-        ),
+            ),
+            const SizedBox(
+              width: 10.0,
+            ),
+          ],
+        )),
       );
 
       return (line, true);

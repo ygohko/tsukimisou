@@ -129,20 +129,20 @@ class _ViewingPageState extends State<ViewingPage> {
           final string = value.selection.textInside(value.text);
           if (string.startsWith('http') && string.contains('://')) {
             items.insert(
-              0,
-              ContextMenuButtonItem(
-                label: localizations.openAsUrl,
-                onPressed: () {
-                  ContextMenuController.removeAny();
-                  launchUrl(
-                    Uri.parse(string),
-                    mode: LaunchMode.externalApplication,
-                  );
-            }));
+                0,
+                ContextMenuButtonItem(
+                    label: localizations.openAsUrl,
+                    onPressed: () {
+                      ContextMenuController.removeAny();
+                      launchUrl(
+                        Uri.parse(string),
+                        mode: LaunchMode.externalApplication,
+                      );
+                    }));
           }
           return AdaptiveTextSelectionToolbar.buttonItems(
-            anchors: editableTextState.contextMenuAnchors,
-            buttonItems: items);
+              anchors: editableTextState.contextMenuAnchors,
+              buttonItems: items);
         },
       );
     }
