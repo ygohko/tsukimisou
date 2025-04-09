@@ -25,7 +25,7 @@ import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // TODO: Rename to LineKind?
-enum _State {
+enum _LineKind {
   body,
   headlineLarge,
   headlineMedium,
@@ -48,7 +48,7 @@ class MarkdownParser {
   late final String _text;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
-  var _state = _State.body;
+  var _state = _LineKind.body;
   var _spanState = _SpanState.normal;
   var _spans = <InlineSpan>[];
   var _linkText = '';
@@ -123,7 +123,7 @@ class MarkdownParser {
 
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
-      _state = _State.body;
+      _state = _LineKind.body;
       _spanState = _SpanState.normal;
       _spans = <InlineSpan>[];
 
@@ -150,7 +150,7 @@ class MarkdownParser {
       if (_spans.isNotEmpty) {
         late final Widget widget;
         switch (_state) {
-          case _State.body:
+          case _LineKind.body:
             widget = RichText(
               text: TextSpan(
                 style: textTheme.bodyMedium,
@@ -159,7 +159,7 @@ class MarkdownParser {
             );
             break;
 
-          case _State.headlineLarge:
+          case _LineKind.headlineLarge:
             widget = Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: RichText(
@@ -171,7 +171,7 @@ class MarkdownParser {
             );
             break;
 
-          case _State.headlineMedium:
+          case _LineKind.headlineMedium:
             widget = Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: RichText(
@@ -183,7 +183,7 @@ class MarkdownParser {
             );
             break;
 
-          case _State.headlineSmall:
+          case _LineKind.headlineSmall:
             widget = Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: RichText(
@@ -195,7 +195,7 @@ class MarkdownParser {
             );
             break;
 
-          case _State.unorderedList1:
+          case _LineKind.unorderedList1:
             widget = Row(
               children: [
                 const SizedBox(
@@ -217,7 +217,7 @@ class MarkdownParser {
             );
             break;
 
-          case _State.unorderedList2:
+          case _LineKind.unorderedList2:
             widget = Row(
               children: [
                 const SizedBox(
@@ -239,7 +239,7 @@ class MarkdownParser {
             );
             break;
 
-          case _State.unorderedList3:
+          case _LineKind.unorderedList3:
             widget = Row(
               children: [
                 const SizedBox(
@@ -281,7 +281,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
-      _state = _State.headlineLarge;
+      _state = _LineKind.headlineLarge;
 
       return (line, true);
     }
@@ -292,7 +292,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineMedium(String line) {
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
-      _state = _State.headlineMedium;
+      _state = _LineKind.headlineMedium;
 
       return (line, true);
     }
@@ -303,7 +303,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineSmall(String line) {
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
-      _state = _State.headlineSmall;
+      _state = _LineKind.headlineSmall;
 
       return (line, true);
     }
@@ -316,7 +316,7 @@ class MarkdownParser {
     final match = regExp.firstMatch(line);
     if (match != null) {
       line = line.replaceFirst(regExp, '');
-      _state = _State.unorderedList1;
+      _state = _LineKind.unorderedList1;
 
       return (line, true);
     }
@@ -329,7 +329,7 @@ class MarkdownParser {
     final match = regExp.firstMatch(line);
     if (match != null) {
       line = line.replaceFirst(regExp, '');
-      _state = _State.unorderedList2;
+      _state = _LineKind.unorderedList2;
 
       return (line, true);
     }
@@ -342,7 +342,7 @@ class MarkdownParser {
     final match = regExp.firstMatch(line);
     if (match != null) {
       line = line.replaceFirst(regExp, '');
-      _state = _State.unorderedList3;
+      _state = _LineKind.unorderedList3;
 
       return (line, true);
     }
