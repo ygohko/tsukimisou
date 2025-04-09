@@ -48,7 +48,7 @@ class MarkdownParser {
   late final String _text;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
-  var _state = _LineKind.body;
+  var _lineKind = _LineKind.body;
   var _spanState = _SpanState.normal;
   var _spans = <InlineSpan>[];
   var _linkText = '';
@@ -123,7 +123,7 @@ class MarkdownParser {
 
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
-      _state = _LineKind.body;
+      _lineKind = _LineKind.body;
       _spanState = _SpanState.normal;
       _spans = <InlineSpan>[];
 
@@ -149,7 +149,7 @@ class MarkdownParser {
       }
       if (_spans.isNotEmpty) {
         late final Widget widget;
-        switch (_state) {
+        switch (_lineKind) {
           case _LineKind.body:
             widget = RichText(
               text: TextSpan(
@@ -281,7 +281,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
-      _state = _LineKind.headlineLarge;
+      _lineKind = _LineKind.headlineLarge;
 
       return (line, true);
     }
@@ -292,7 +292,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineMedium(String line) {
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
-      _state = _LineKind.headlineMedium;
+      _lineKind = _LineKind.headlineMedium;
 
       return (line, true);
     }
@@ -303,7 +303,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineSmall(String line) {
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
-      _state = _LineKind.headlineSmall;
+      _lineKind = _LineKind.headlineSmall;
 
       return (line, true);
     }
@@ -316,7 +316,7 @@ class MarkdownParser {
     final match = regExp.firstMatch(line);
     if (match != null) {
       line = line.replaceFirst(regExp, '');
-      _state = _LineKind.unorderedList1;
+      _lineKind = _LineKind.unorderedList1;
 
       return (line, true);
     }
@@ -329,7 +329,7 @@ class MarkdownParser {
     final match = regExp.firstMatch(line);
     if (match != null) {
       line = line.replaceFirst(regExp, '');
-      _state = _LineKind.unorderedList2;
+      _lineKind = _LineKind.unorderedList2;
 
       return (line, true);
     }
@@ -342,7 +342,7 @@ class MarkdownParser {
     final match = regExp.firstMatch(line);
     if (match != null) {
       line = line.replaceFirst(regExp, '');
-      _state = _LineKind.unorderedList3;
+      _lineKind = _LineKind.unorderedList3;
 
       return (line, true);
     }
