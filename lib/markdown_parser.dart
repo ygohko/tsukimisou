@@ -145,7 +145,7 @@ class MarkdownParser {
         _spans.add(TextSpan(text: line));
       }
 
-      if (_paragraphStarted) {
+      if (_paragraphStarted && _previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
         _paragraphStarted = false;
       }
@@ -577,9 +577,7 @@ class MarkdownParser {
     }
 
     if (line.isEmpty) {
-      if (_previousLineKind == _LineKind.body) {
-        _paragraphStarted = true;
-      }
+      _paragraphStarted = true;
         
       return (line, true);
     }
