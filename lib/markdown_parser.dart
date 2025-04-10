@@ -265,7 +265,7 @@ class MarkdownParser {
 
           default:
             break;
-          }
+        }
         widgets.add(widget);
         _previousLineKind = _lineKind;
       }
@@ -578,7 +578,7 @@ class MarkdownParser {
 
     if (line.isEmpty) {
       _paragraphStarted = true;
-        
+
       return (line, true);
     }
 
