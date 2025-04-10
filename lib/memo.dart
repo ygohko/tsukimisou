@@ -43,6 +43,8 @@ class Memo {
 
   var _text = '';
   var _tags = <String>[];
+  var _name = '';
+  var _viewingMode = 'Plain';
 
   /// Creates a memo.
   Memo() {
@@ -67,7 +69,9 @@ class Memo {
     result.beforeModifiedHash = beforeModifiedHash;
     result._text = _text;
     result._tags = [..._tags];
-
+    result._name = _name;
+    result._viewingMode = _viewingMode;
+    
     return result;
   }
 
@@ -104,8 +108,29 @@ class Memo {
     revision++;
   }
 
+  /// Name of this memo.
+  String get name => _name;
+
+  /// Name of this memo.
+  set name(String name) {
+    _name = name;
+    lastModified = DateTime.now().millisecondsSinceEpoch;
+    revision++;
+  }
+  
+  /// Viewing mode of this memo.
+  String get viewingMode => _viewingMode;
+
+  /// Viewing mode of this memo.
+  set viewingMode(String viewingMode) {
+    _viewingMode = viewingMode;
+    lastModified = DateTime.now().millisecondsSinceEpoch;
+    revision++;
+  }
+
   /// Hash generated from this memo.
   String get hash {
+    // TODO: Consider name and viewing mode?
     var string = 'text: $_text\ntags: ';
     for (final tag in _tags) {
       string += '$tag, ';
