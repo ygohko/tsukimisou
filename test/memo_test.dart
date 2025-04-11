@@ -36,6 +36,20 @@ void main() {
       expect(memo.tags, ['This is a test.']);
     });
 
+    test('Memo.name should be get and set.', () {
+      final memo = Memo();
+      expect(memo.name, '');
+      memo.name = 'Hello, World!';
+      expect(memo.name, 'Hello, World!');
+    });
+
+    test('Memo.viewingMode should be get and set.', () {
+      final memo = Memo();
+      expect(memo.viewingMode, 'Plain');
+      memo.viewingMode = 'TinyMarkdown';
+      expect(memo.viewingMode, 'TinyMarkdown');
+    });
+
     test('Memo.revision should be get and set.', () {
       final memo = Memo();
       expect(memo.revision, 0);
