@@ -82,6 +82,8 @@ class Memo {
       'lastModified': lastModified,
       'text': _text,
       'tags': _tags,
+      'name': _name,
+      'viewingMode': _viewingMode,
       'revision': revision,
       'lastMergedRevision': lastMergedRevision,
       'beforeModifiedHash': beforeModifiedHash
