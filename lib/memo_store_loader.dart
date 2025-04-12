@@ -22,6 +22,7 @@
 
 import "dart:convert";
 
+import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 
@@ -35,9 +36,16 @@ class MemoStoreLoader {
   void deserialize(String serialized) {
     final decoded = jsonDecode(serialized);
     final version = decoded['version'];
-    if (version > 2) {
+    if (version <= 2) {
+      _deserializeV1V2(decoded, version);
+    } else if (version == 3) {
+      _deserializeV3(decoded);
+    } else {
       throw FileNotCompatibleException('File not compatible.');
     }
+  }
+
+  void _deserializeV1V2(Map decoded, int version) {
     _memoStore.clearMemos();
     _memoStore.lastMerged = decoded['lastMerged'];
     final deserializedIds = decoded['removedMemoIds'];
@@ -61,12 +69,49 @@ class MemoStoreLoader {
         }
       }
       memo.tags = tags;
+      final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+      memo.name = lastModified.toDetailedString();
+      memo.viewingMode = 'Plain';
       memo.lastModified = deserializedMemo['lastModified'];
       memo.revision = deserializedMemo['revision'];
       memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
       if (version > 1) {
         memo.beforeModifiedHash = deserializedMemo['beforeModifiedHash'];
       }
+      _memoStore.addMemo(memo);
+    }
+  }
+
+  void _deserializeV3(Map decoded) {
+    _memoStore.clearMemos();
+    _memoStore.lastMerged = decoded['lastMerged'];
+    final deserializedIds = decoded['removedMemoIds'];
+    final removedMemoIds = <String>[];
+    for (var removedMemoId in deserializedIds) {
+      if (removedMemoId is String) {
+        removedMemoIds.add(removedMemoId);
+      }
+    }
+    _memoStore.removedMemoIds = removedMemoIds;
+    final deserializedMemos = decoded['memos'];
+    for (var deserializedMemo in deserializedMemos) {
+      final memo = Memo();
+      memo.id = deserializedMemo['id'];
+      memo.text = deserializedMemo['text'];
+      final deserializedTags = deserializedMemo['tags'];
+      final tags = <String>[];
+      for (var tag in deserializedTags) {
+        if (tag is String) {
+          tags.add(tag);
+        }
+      }
+      memo.tags = tags;
+      memo.name = deserializedMemo['name'];
+      memo.viewingMode = deserializedMemo['viewingMode'];
+      memo.lastModified = deserializedMemo['lastModified'];
+      memo.revision = deserializedMemo['revision'];
+      memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
+      memo.beforeModifiedHash = deserializedMemo['beforeModifiedHash'];
       _memoStore.addMemo(memo);
     }
   }

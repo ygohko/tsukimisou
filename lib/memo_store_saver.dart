@@ -38,7 +38,7 @@ class MemoStoreSaver {
     for (var i = 0; i < memos.length; i++) {
       serializableMemos.add(memos[i].toSerializable());
     }
-    const version = 2;
+    const version = 3;
     final serializable = {
       'version': version,
       'memos': serializableMemos,
