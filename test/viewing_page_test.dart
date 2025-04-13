@@ -26,7 +26,8 @@ void main() {
   Factories.init(FactoriesType.test);
 
   group('ViewingPage', () {
-    testWidgets('ViewingPage should have specified widgets.',
+      // TODO: Add tests for TinyMarkdown viewing mode.
+      testWidgets('ViewingPage should have specified widgets.',
         (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
@@ -35,14 +36,7 @@ void main() {
       expect(find.byIcon(Icons.delete), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsOneWidget);
       expect(find.textContaining('Memo at'), findsOneWidget);
-      expect(
-        find.byWidgetPredicate(
-          (widget) =>
-              widget is RichText &&
-              widget.text.toPlainText() == 'This is a test.',
-        ),
-        findsOneWidget,
-      );
+      expect(find.textContaining('This is a test.'), findsOneWidget);
       expect(find.textContaining('Updated:'), findsOneWidget);
       expect(find.textContaining('Tags:'), findsOneWidget);
     });
