@@ -183,6 +183,12 @@ class _ViewingPageState extends State<ViewingPage> {
               onTap: _bindTags,
             ),
             const Divider(),
+            ListTile(
+              title: Text('Viewing mode: ${widget.memo.viewingMode}',
+                  style: attributeStyle),
+              onTap: _chooseViewingMode,
+            ),
+            const Divider(),
           ],
         ),
       ),
@@ -295,6 +301,61 @@ class _ViewingPageState extends State<ViewingPage> {
         duration: const Duration(milliseconds: 150),
       );
     }
+    setState(() {});
+  }
+
+  void _chooseViewingMode() async {
+    // TODO: Implement this.
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SizedBox(
+            width: 200.0,
+            height: 96.0,
+            child: ListView(
+              children: [
+                ListTile(
+                  leading: Radio(
+                    value: 'Plain',
+                    groupValue: widget.memo.viewingMode,
+                    onChanged: (value) {
+                      if (value != null) {
+                        widget.memo.viewingMode = value;
+                      }
+                      Navigator.of(context).pop();
+                    }
+                  ),
+                  title: Text('Plain'),
+                  onTap: () {
+                    widget.memo.viewingMode = 'Plain';
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: Radio(
+                    value: 'TinyMarkdown',
+                    groupValue: widget.memo.viewingMode,
+                    onChanged: (value) {
+                      if (value != null) {
+                        widget.memo.viewingMode = value;
+                      }
+                      Navigator.of(context).pop();
+                    }
+                  ),
+                  title: Text('TinyMarkdown'),
+                  onTap: () {
+                    widget.memo.viewingMode = 'TinyMarkdown';
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
     setState(() {});
   }
 }
