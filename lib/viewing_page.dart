@@ -114,8 +114,8 @@ class _ViewingPageState extends State<ViewingPage> {
       ),
     ]);
     late final Widget textContents;
-    // TODO: Add a field to store viewing mode.
-    if (true) {
+    // TODO: Consider expandable implementation.
+    if (widget.memo.viewingMode == 'TinyMarkdown') {
       textContents = SelectionArea(
         child: common_uis.richTextContents(context, widget.memo.text),
       );
@@ -181,6 +181,12 @@ class _ViewingPageState extends State<ViewingPage> {
               title: Text(localizations.boundTags(tagsString),
                   style: attributeStyle),
               onTap: _bindTags,
+            ),
+            const Divider(),
+            ListTile(
+              title: Text(localizations.viewingMode(widget.memo.viewingMode),
+                  style: attributeStyle),
+              onTap: _chooseViewingMode,
             ),
             const Divider(),
           ],
@@ -296,5 +302,74 @@ class _ViewingPageState extends State<ViewingPage> {
       );
     }
     setState(() {});
+  }
+
+  void _chooseViewingMode() async {
+    const viewingModeNames = [
+      'Plain',
+      'TinyMarkdown'
+    ];
+
+    final tiles = <Widget>[];
+    for (final name in viewingModeNames) {
+      tiles.add(
+        ListTile(
+          leading: Radio(
+            value: name,
+            groupValue: widget.memo.viewingMode,
+            onChanged: (value) async {
+              if (value != null) {
+                await _applyViewingMode(value);
+              }
+              Navigator.of(context).pop();
+            }
+          ),
+          title: Text(name),
+          onTap: () async {
+            await _applyViewingMode(name);
+            Navigator.of(context).pop();
+          },
+        ),
+      );
+    }
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: SizedBox(
+            width: 200.0,
+            height: 96.0,
+            child: ListView(
+              children: tiles,
+            ),
+          ),
+        );
+      },
+    );
+    setState(() {});
+  }
+
+  Future<void> _applyViewingMode(String viewingMode) async {
+    final localizations = AppLocalizations.of(context)!;
+    final factories = Factories.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    widget.memo.beginModification();
+    widget.memo.viewingMode = viewingMode;
+    memoStore.markAsChanged();
+    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+        memoStore, 'MemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on IOException {
+      if (mounted) {
+        // Save error
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
+      }
+    }
   }
 }

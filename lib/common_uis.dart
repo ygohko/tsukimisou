@@ -433,10 +433,14 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final attributeStyle = TsukimisouTextStyles.homePageMemoAttribute(context);
   final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
   final updated = lastModified.toSmartString();
+  late final Widget memoContents;
+  if (memo.viewingMode == 'TinyMarkdown') {
+    memoContents = richTextContents(context, memo.text);
+  } else {
+    memoContents = Text(memo.text);
+  }
   final contents = [
-    // ADHOC: Test for rich text.
-    richTextContents(context, memo.text),
-    // Text(memo.text),
+    memoContents,
     Align(
       alignment: Alignment.centerRight,
       child: Text(
