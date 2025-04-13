@@ -26,7 +26,7 @@ void main() {
   Factories.init(FactoriesType.test);
 
   group('ViewingPage', () {
-      // TODO: Add tests fo
+      // TODO: Add tests fo TinyMarkdown viewing mode.
     testWidgets('ViewingPage should have specified widgets.',
         (WidgetTester tester) async {
       final memo = Memo();
