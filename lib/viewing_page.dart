@@ -114,8 +114,8 @@ class _ViewingPageState extends State<ViewingPage> {
       ),
     ]);
     late final Widget textContents;
-    // TODO: Add a field to store viewing mode.
-    if (true) {
+    // TODO: Consider expandable implementation.
+    if (widget.memo.viewingMode == 'TinyMarkdown') {
       textContents = SelectionArea(
         child: common_uis.richTextContents(context, widget.memo.text),
       );
