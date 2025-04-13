@@ -24,6 +24,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+typedef MemoLinkCallback = void Function(String memoName);
+
 // TODO: Rename to LineKind?
 enum _LineKind {
   none,
@@ -47,6 +49,7 @@ enum _SpanState {
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
+  late final MemoLinkCallback _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
   var _lineKind = _LineKind.body;
@@ -59,7 +62,7 @@ class MarkdownParser {
   static TextTheme? _textTheme;
 
   /// Creates a markdown parser.
-  MarkdownParser(BuildContext context, String text) {
+  MarkdownParser(BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
     _context = context;
     _text = text;
     final theme = Theme.of(_context);
@@ -477,6 +480,7 @@ class MarkdownParser {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
+                // TODO: Add handler for local hyoerlinks.
                 launchUrl(
                   Uri.parse(aLine),
                   mode: LaunchMode.externalApplication,
@@ -526,6 +530,7 @@ class MarkdownParser {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
+                // TODO: Add handler for local hyperlink.
                 launchUrl(
                   Uri.parse(aLine),
                   mode: LaunchMode.externalApplication,
