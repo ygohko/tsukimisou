@@ -141,6 +141,13 @@
             "tags": {}
         }
     },
+    "viewingMode": "Viewing mode: {viewingMode}",
+    "@viewingMode": {
+        "description": "Text for viewing mode list tile",
+        "placeholders": {
+            "viewingMode": {}
+        }
+    },
     "fullScreen": "Full screen",
     "@fullScreen": {
         "description": "Tooltip for Full screen button"

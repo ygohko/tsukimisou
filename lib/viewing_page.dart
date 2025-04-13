@@ -184,7 +184,7 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
             const Divider(),
             ListTile(
-              title: Text('Viewing mode: ${widget.memo.viewingMode}',
+              title: Text(localizations.viewingMode(widget.memo.viewingMode),
                   style: attributeStyle),
               onTap: _chooseViewingMode,
             ),
