@@ -305,7 +305,33 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _chooseViewingMode() async {
-    // TODO: Implement this.
+    const viewingModeNames = [
+      'Plain',
+      'TinyMarkdown'
+    ];
+
+    final tiles = <Widget>[];
+    for (final name in viewingModeNames) {
+      tiles.add(
+        ListTile(
+          leading: Radio(
+            value: name,
+            groupValue: widget.memo.viewingMode,
+            onChanged: (value) async {
+              if (value != null) {
+                await _applyViewingMode(value);
+              }
+              Navigator.of(context).pop();
+            }
+          ),
+          title: Text(name),
+          onTap: () async {
+            await _applyViewingMode(name);
+            Navigator.of(context).pop();
+          },
+        ),
+      );
+    }
 
     await showDialog(
       context: context,
@@ -315,47 +341,35 @@ class _ViewingPageState extends State<ViewingPage> {
             width: 200.0,
             height: 96.0,
             child: ListView(
-              children: [
-                ListTile(
-                  leading: Radio(
-                    value: 'Plain',
-                    groupValue: widget.memo.viewingMode,
-                    onChanged: (value) {
-                      if (value != null) {
-                        widget.memo.viewingMode = value;
-                      }
-                      Navigator.of(context).pop();
-                    }
-                  ),
-                  title: Text('Plain'),
-                  onTap: () {
-                    widget.memo.viewingMode = 'Plain';
-                    Navigator.of(context).pop();
-                  },
-                ),
-                ListTile(
-                  leading: Radio(
-                    value: 'TinyMarkdown',
-                    groupValue: widget.memo.viewingMode,
-                    onChanged: (value) {
-                      if (value != null) {
-                        widget.memo.viewingMode = value;
-                      }
-                      Navigator.of(context).pop();
-                    }
-                  ),
-                  title: Text('TinyMarkdown'),
-                  onTap: () {
-                    widget.memo.viewingMode = 'TinyMarkdown';
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+              children: tiles,
             ),
           ),
         );
       },
     );
     setState(() {});
+  }
+
+  Future<void> _applyViewingMode(String viewingMode) async {
+    final localizations = AppLocalizations.of(context)!;
+    final factories = Factories.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    widget.memo.beginModification();
+    widget.memo.viewingMode = viewingMode;
+    memoStore.markAsChanged();
+    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+        memoStore, 'MemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on IOException {
+      if (mounted) {
+        // Save error
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
+      }
+    }
   }
 }
