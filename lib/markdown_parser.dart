@@ -287,6 +287,19 @@ class MarkdownParser {
   /// Text theme that is used by this markdown parser.
   TextTheme get textTheme => _textTheme!;
 
+  void _showLinked(String link) {
+    final regExp = RegExp(r'^https?://');
+    final matched = regExp.firstMatch(link);
+    if (matched != null) {
+      launchUrl(
+        Uri.parse(link),
+        mode: LaunchMode.externalApplication,
+      );
+    } else {
+      _onMemoLinkRequested(link);
+    }    
+  }
+  
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
@@ -480,13 +493,10 @@ class MarkdownParser {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // TODO: Add handler for local hyoerlinks.
-                launchUrl(
-                  Uri.parse(aLine),
-                  mode: LaunchMode.externalApplication,
-                );
+                _showLinked(aLine);
               },
-          ));
+            )
+          );
         }
         _spanState = _SpanState.normal;
       }
