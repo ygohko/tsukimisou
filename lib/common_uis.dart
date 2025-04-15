@@ -471,7 +471,10 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
 }
 
 Widget richTextContents(BuildContext context, String text) {
-  final parser = MarkdownParser(context, text);
+  // TODO: Set proper handler.
+  final parser = MarkdownParser(context, text, (name) {
+      print('Showing linked memo requested.');
+  });
   parser.execute();
 
   return parser.contents;

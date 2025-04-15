@@ -15,13 +15,15 @@ void main() {
     testWidgets('MarkdownParser should be created.',
         (WidgetTester tester) async {
       await init(tester);
+      final context = tester.element(find.text('This is a test.'));
+      final _ = MarkdownParser(context, '# Hello, World!', (name) {});
     });
 
     testWidgets('MarkdownParser should be executable.',
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '# Hello, World!');
+      final parser = MarkdownParser(context, '# Hello, World!', (name) {});
       parser.execute();
     });
 
@@ -29,7 +31,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, 'Hello, World!');
+      final parser = MarkdownParser(context, 'Hello, World!', (name) {});
       parser.execute();
       final textTheme = parser.textTheme;
       final contents = parser.contents;
@@ -45,7 +47,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '# Hello, World!');
+      final parser = MarkdownParser(context, '# Hello, World!', (name) {});
       parser.execute();
       final textTheme = parser.textTheme;
       final contents = parser.contents;
@@ -62,7 +64,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '## Hello, World!');
+      final parser = MarkdownParser(context, '## Hello, World!', (name) {});
       parser.execute();
       final textTheme = parser.textTheme;
       final contents = parser.contents;
@@ -79,7 +81,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '### Hello, World!');
+      final parser = MarkdownParser(context, '### Hello, World!', (name) {});
       parser.execute();
       final textTheme = parser.textTheme;
       final contents = parser.contents;
@@ -96,7 +98,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '* Hello, World!');
+      final parser = MarkdownParser(context, '* Hello, World!', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
@@ -110,7 +112,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '    * Hello, World!');
+      final parser = MarkdownParser(context, '    * Hello, World!', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
@@ -124,7 +126,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '        * Hello, World!');
+      final parser = MarkdownParser(context, '        * Hello, World!', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
@@ -140,7 +142,7 @@ void main() {
       final context = tester.element(find.text('This is a test.'));
       final textTheme = Theme.of(context).textTheme;
       final parser =
-          MarkdownParser(context, '[Hello, World!](https://www.google.com)');
+          MarkdownParser(context, '[Hello, World!](https://www.google.com)', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
@@ -156,7 +158,7 @@ void main() {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
       final textTheme = Theme.of(context).textTheme;
-      final parser = MarkdownParser(context, '<https://www.google.com>');
+      final parser = MarkdownParser(context, '<https://www.google.com>', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
@@ -171,7 +173,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, '---');
+      final parser = MarkdownParser(context, '---', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
@@ -190,7 +192,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      final parser = MarkdownParser(context, 'Hello, World!\n\nHello, World!');
+      final parser = MarkdownParser(context, 'Hello, World!\n\nHello, World!', (name) {});
       parser.execute();
       final contents = parser.contents;
       final column = contents as Column;
