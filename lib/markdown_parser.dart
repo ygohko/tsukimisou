@@ -65,6 +65,7 @@ class MarkdownParser {
   MarkdownParser(BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
     _context = context;
     _text = text;
+    _onMemoLinkRequested = onMemoLinkRequested;
     final theme = Theme.of(_context);
     // TODO: Store text theme into static variable.
     if (_textTheme == null) {
@@ -540,11 +541,7 @@ class MarkdownParser {
             ),
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                // TODO: Add handler for local hyperlink.
-                launchUrl(
-                  Uri.parse(aLine),
-                  mode: LaunchMode.externalApplication,
-                );
+                _showLinked(aLine);
               },
           ));
         }
