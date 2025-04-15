@@ -184,6 +184,12 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
             const Divider(),
             ListTile(
+              title: Text('Name: ${widget.memo.name}',
+                  style: attributeStyle),
+              onTap: _modifyName,           
+            ),
+            const Divider(),
+            ListTile(
               title: Text(localizations.viewingMode(widget.memo.viewingMode),
                   style: attributeStyle),
               onTap: _chooseViewingMode,
@@ -304,6 +310,37 @@ class _ViewingPageState extends State<ViewingPage> {
     setState(() {});
   }
 
+  void _modifyName() async {
+    final controller = TextEditingController(text: widget.memo.name);
+    final name = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Modify the name'),
+          content: TextField(controller: controller),
+          actions: [
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+            ),
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop(controller.text);
+              },
+            ),
+          ]
+        );
+      },
+    );
+    if (name != null) {
+      widget.memo.name = name;
+      setState(() {});
+    }
+  }
+  
   void _chooseViewingMode() async {
     const viewingModeNames = [
       'Plain',
