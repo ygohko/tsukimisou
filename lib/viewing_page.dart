@@ -338,7 +338,7 @@ class _ViewingPageState extends State<ViewingPage> {
     if (name != null) {
       widget.memo.beginModification();
       widget.memo.name = name;
-      _save();
+      await _save();
       setState(() {});
     }
   }
@@ -358,14 +358,18 @@ class _ViewingPageState extends State<ViewingPage> {
             groupValue: widget.memo.viewingMode,
             onChanged: (value) async {
               if (value != null) {
-                await _applyViewingMode(value);
+                widget.memo.beginModification();
+                widget.memo.viewingMode = value;
+                await _save();
               }
               Navigator.of(context).pop();
             }
           ),
           title: Text(name),
           onTap: () async {
-            await _applyViewingMode(name);
+            widget.memo.beginModification();
+            widget.memo.viewingMode = name;
+            await _save();
             Navigator.of(context).pop();
           },
         ),
@@ -387,29 +391,6 @@ class _ViewingPageState extends State<ViewingPage> {
       },
     );
     setState(() {});
-  }
-
-  Future<void> _applyViewingMode(String viewingMode) async {
-    final localizations = AppLocalizations.of(context)!;
-    final factories = Factories.instance();
-    final memoStore = Provider.of<MemoStore>(context, listen: false);
-    widget.memo.beginModification();
-    widget.memo.viewingMode = viewingMode;
-    memoStore.markAsChanged();
-    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
-        memoStore, 'MemoStore.json');
-    try {
-      memoStoreSaver.execute();
-    } on IOException {
-      if (mounted) {
-        // Save error
-        await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok);
-      }
-    }
   }
 
   Future<void> _save() async {
