@@ -133,6 +133,7 @@ class _EditingPageState extends State<EditingPage> {
       // Add a new memo
       final newMemo = Memo();
       newMemo.text = _controller.text;
+      // TODO: Set initial memo name here?
       memoStore.addMemo(newMemo);
     } else {
       // Update a memo
