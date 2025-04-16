@@ -336,7 +336,9 @@ class _ViewingPageState extends State<ViewingPage> {
       },
     );
     if (name != null) {
+      widget.memo.beginModification();
       widget.memo.name = name;
+      _save();
       setState(() {});
     }
   }
@@ -393,6 +395,27 @@ class _ViewingPageState extends State<ViewingPage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     widget.memo.beginModification();
     widget.memo.viewingMode = viewingMode;
+    memoStore.markAsChanged();
+    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+        memoStore, 'MemoStore.json');
+    try {
+      memoStoreSaver.execute();
+    } on IOException {
+      if (mounted) {
+        // Save error
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
+      }
+    }
+  }
+
+  Future<void> _save() async {
+    final localizations = AppLocalizations.of(context)!;
+    final factories = Factories.instance();
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
     memoStore.markAsChanged();
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
