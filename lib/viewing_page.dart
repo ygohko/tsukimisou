@@ -184,7 +184,7 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
             const Divider(),
             ListTile(
-              title: Text('Name: ${widget.memo.name}',
+              title: Text(localizations.name(widget.memo.name),
                   style: attributeStyle),
               onTap: _modifyName,           
             ),
@@ -311,22 +311,23 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _modifyName() async {
+    final localizations = AppLocalizations.of(context)!;
     final controller = TextEditingController(text: widget.memo.name);
     final name = await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Modify the name'),
+          title: Text(localizations.modifyTheName),
           content: TextField(controller: controller),
           actions: [
             TextButton(
-              child: Text('Cancel'),
+              child: Text(localizations.cancel),
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
             ),
             TextButton(
-              child: Text('OK'),
+              child: Text(localizations.ok),
               onPressed: () {
                 Navigator.of(context).pop(controller.text);
               },
@@ -344,6 +345,7 @@ class _ViewingPageState extends State<ViewingPage> {
   }
   
   void _chooseViewingMode() async {
+    // TODO: Add constants.dart?
     const viewingModeNames = [
       'Plain',
       'TinyMarkdown'

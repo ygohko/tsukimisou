@@ -141,6 +141,13 @@
             "tags": {}
         }
     },
+    "name": "Name: {name}",
+    "@name": {
+        "description": "Text for name list tile",
+        "placeholders": {
+            "name": {}
+        }
+    },
     "viewingMode": "Viewing mode: {viewingMode}",
     "@viewingMode": {
         "description": "Text for viewing mode list tile",
@@ -212,6 +219,10 @@
     "@discardThisChanges": {
         "description": "Title for discard confirmation dialog"
     },
+    "modifyTheName": "Modify the name",
+    "@modifyTheName": {
+        "description": "Title for modify the name dialog"
+    },    
     "bindTags": "Bind tags",
     "@bindTags": {
         "description": "Title for binding tags page"
