@@ -364,7 +364,9 @@ class _ViewingPageState extends State<ViewingPage> {
                 widget.memo.viewingMode = value;
                 await _save();
               }
-              Navigator.of(context).pop();
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
             }
           ),
           title: Text(name),
@@ -372,7 +374,9 @@ class _ViewingPageState extends State<ViewingPage> {
             widget.memo.beginModification();
             widget.memo.viewingMode = name;
             await _save();
-            Navigator.of(context).pop();
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           },
         ),
       );
