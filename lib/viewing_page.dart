@@ -184,6 +184,12 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
             const Divider(),
             ListTile(
+              title: Text(localizations.name(widget.memo.name),
+                  style: attributeStyle),
+              onTap: _modifyName,           
+            ),
+            const Divider(),
+            ListTile(
               title: Text(localizations.viewingMode(widget.memo.viewingMode),
                   style: attributeStyle),
               onTap: _chooseViewingMode,
@@ -304,7 +310,42 @@ class _ViewingPageState extends State<ViewingPage> {
     setState(() {});
   }
 
+  void _modifyName() async {
+    final localizations = AppLocalizations.of(context)!;
+    final controller = TextEditingController(text: widget.memo.name);
+    final name = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(localizations.modifyTheName),
+          content: TextField(controller: controller),
+          actions: [
+            TextButton(
+              child: Text(localizations.cancel),
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+            ),
+            TextButton(
+              child: Text(localizations.ok),
+              onPressed: () {
+                Navigator.of(context).pop(controller.text);
+              },
+            ),
+          ]
+        );
+      },
+    );
+    if (name != null) {
+      widget.memo.beginModification();
+      widget.memo.name = name;
+      await _save();
+      setState(() {});
+    }
+  }
+  
   void _chooseViewingMode() async {
+    // TODO: Add constants.dart?
     const viewingModeNames = [
       'Plain',
       'TinyMarkdown'
@@ -319,15 +360,23 @@ class _ViewingPageState extends State<ViewingPage> {
             groupValue: widget.memo.viewingMode,
             onChanged: (value) async {
               if (value != null) {
-                await _applyViewingMode(value);
+                widget.memo.beginModification();
+                widget.memo.viewingMode = value;
+                await _save();
               }
-              Navigator.of(context).pop();
+              if (mounted) {
+                Navigator.of(context).pop();
+              }
             }
           ),
           title: Text(name),
           onTap: () async {
-            await _applyViewingMode(name);
-            Navigator.of(context).pop();
+            widget.memo.beginModification();
+            widget.memo.viewingMode = name;
+            await _save();
+            if (mounted) {
+              Navigator.of(context).pop();
+            }
           },
         ),
       );
@@ -350,12 +399,10 @@ class _ViewingPageState extends State<ViewingPage> {
     setState(() {});
   }
 
-  Future<void> _applyViewingMode(String viewingMode) async {
+  Future<void> _save() async {
     final localizations = AppLocalizations.of(context)!;
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    widget.memo.beginModification();
-    widget.memo.viewingMode = viewingMode;
     memoStore.markAsChanged();
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
