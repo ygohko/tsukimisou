@@ -50,7 +50,8 @@ class ViewingPage extends StatefulWidget {
 }
 
 class _ViewingPageState extends State<ViewingPage> {
-  var _fullScreen = true;
+  final _previousMemos = <Memo>[];
+  var _fullScreen = false;
 
   @override
   void initState() {
@@ -117,7 +118,7 @@ class _ViewingPageState extends State<ViewingPage> {
     // TODO: Consider expandable implementation.
     if (widget.memo.viewingMode == 'TinyMarkdown') {
       textContents = SelectionArea(
-        child: common_uis.richTextContents(context, widget.memo.text),
+        child: common_uis.richTextContents(context, widget.memo.text, _showLinkedMemo),
       );
     } else {
       textContents = SelectableText(
@@ -413,5 +414,9 @@ class _ViewingPageState extends State<ViewingPage> {
             localizations.ok);
       }
     }
+  }
+
+  void _showLinkedMemo(String memoName) {
+    // TODO: Implement this.
   }
 }
