@@ -27,6 +27,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
+import 'extensions.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -133,7 +134,8 @@ class _EditingPageState extends State<EditingPage> {
       // Add a new memo
       final newMemo = Memo();
       newMemo.text = _controller.text;
-      // TODO: Set initial memo name here?
+      final lastModified = DateTime.fromMillisecondsSinceEpoch(newMemo.lastModified);
+      newMemo.name = lastModified.toDetailedString();
       memoStore.addMemo(newMemo);
     } else {
       // Update a memo
