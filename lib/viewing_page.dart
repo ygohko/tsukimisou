@@ -418,7 +418,16 @@ class _ViewingPageState extends State<ViewingPage> {
     }
   }
 
-  void _showLinkedMemo(String memoName) {
-    // TODO: Implement this.
+  void _showLinkedMemo(String memoName) async {
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final memo = memoStore.memoFromName(memoName);
+    if (memo == null) {
+      // TODO: Show error.
+      return;
+    }
+    _previousMemos.add(_memo);
+    setState(() {
+        _memo = memo;
+    });
   }
 }
