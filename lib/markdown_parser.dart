@@ -62,7 +62,8 @@ class MarkdownParser {
   static TextTheme? _textTheme;
 
   /// Creates a markdown parser.
-  MarkdownParser(BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
+  MarkdownParser(
+      BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
     _context = context;
     _text = text;
     _onMemoLinkRequested = onMemoLinkRequested;
@@ -298,9 +299,9 @@ class MarkdownParser {
       );
     } else {
       _onMemoLinkRequested(link);
-    }    
+    }
   }
-  
+
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
@@ -496,8 +497,7 @@ class MarkdownParser {
               ..onTap = () {
                 _showLinked(aLine);
               },
-            )
-          );
+          ));
         }
         _spanState = _SpanState.normal;
       }

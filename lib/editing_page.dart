@@ -134,7 +134,8 @@ class _EditingPageState extends State<EditingPage> {
       // Add a new memo
       final newMemo = Memo();
       newMemo.text = _controller.text;
-      final lastModified = DateTime.fromMillisecondsSinceEpoch(newMemo.lastModified);
+      final lastModified =
+          DateTime.fromMillisecondsSinceEpoch(newMemo.lastModified);
       newMemo.name = lastModified.toDetailedString();
       memoStore.addMemo(newMemo);
     } else {
