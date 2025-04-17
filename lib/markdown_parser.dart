@@ -26,7 +26,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 typedef MemoLinkCallback = void Function(String memoName);
 
-// TODO: Rename to LineKind?
 enum _LineKind {
   none,
   body,
@@ -68,7 +67,6 @@ class MarkdownParser {
     _text = text;
     _onMemoLinkRequested = onMemoLinkRequested;
     final theme = Theme.of(_context);
-    // TODO: Store text theme into static variable.
     if (_textTheme == null) {
       var headlineLargeStyle = theme.textTheme.headlineLarge;
       if (headlineLargeStyle != null) {
