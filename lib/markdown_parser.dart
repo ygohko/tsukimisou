@@ -26,7 +26,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 typedef MemoLinkCallback = void Function(String memoName);
 
-// TODO: Rename to LineKind?
 enum _LineKind {
   none,
   body,
@@ -62,12 +61,12 @@ class MarkdownParser {
   static TextTheme? _textTheme;
 
   /// Creates a markdown parser.
-  MarkdownParser(BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
+  MarkdownParser(
+      BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
     _context = context;
     _text = text;
     _onMemoLinkRequested = onMemoLinkRequested;
     final theme = Theme.of(_context);
-    // TODO: Store text theme into static variable.
     if (_textTheme == null) {
       var headlineLargeStyle = theme.textTheme.headlineLarge;
       if (headlineLargeStyle != null) {
@@ -298,9 +297,9 @@ class MarkdownParser {
       );
     } else {
       _onMemoLinkRequested(link);
-    }    
+    }
   }
-  
+
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
@@ -496,8 +495,7 @@ class MarkdownParser {
               ..onTap = () {
                 _showLinked(aLine);
               },
-            )
-          );
+          ));
         }
         _spanState = _SpanState.normal;
       }

@@ -186,7 +186,7 @@ class _ViewingPageState extends State<ViewingPage> {
             ListTile(
               title: Text(localizations.name(widget.memo.name),
                   style: attributeStyle),
-              onTap: _modifyName,           
+              onTap: _modifyName,
             ),
             const Divider(),
             ListTile(
@@ -317,23 +317,22 @@ class _ViewingPageState extends State<ViewingPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(localizations.modifyTheName),
-          content: TextField(controller: controller),
-          actions: [
-            TextButton(
-              child: Text(localizations.cancel),
-              onPressed: () {
-                Navigator.of(context).pop(null);
-              },
-            ),
-            TextButton(
-              child: Text(localizations.ok),
-              onPressed: () {
-                Navigator.of(context).pop(controller.text);
-              },
-            ),
-          ]
-        );
+            title: Text(localizations.modifyTheName),
+            content: TextField(controller: controller),
+            actions: [
+              TextButton(
+                child: Text(localizations.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop(null);
+                },
+              ),
+              TextButton(
+                child: Text(localizations.ok),
+                onPressed: () {
+                  Navigator.of(context).pop(controller.text);
+                },
+              ),
+            ]);
       },
     );
     if (name != null) {
@@ -343,32 +342,28 @@ class _ViewingPageState extends State<ViewingPage> {
       setState(() {});
     }
   }
-  
+
   void _chooseViewingMode() async {
     // TODO: Add constants.dart?
-    const viewingModeNames = [
-      'Plain',
-      'TinyMarkdown'
-    ];
+    const viewingModeNames = ['Plain', 'TinyMarkdown'];
 
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
       tiles.add(
         ListTile(
           leading: Radio(
-            value: name,
-            groupValue: widget.memo.viewingMode,
-            onChanged: (value) async {
-              if (value != null) {
-                widget.memo.beginModification();
-                widget.memo.viewingMode = value;
-                await _save();
-              }
-              if (mounted) {
-                Navigator.of(context).pop();
-              }
-            }
-          ),
+              value: name,
+              groupValue: widget.memo.viewingMode,
+              onChanged: (value) async {
+                if (value != null) {
+                  widget.memo.beginModification();
+                  widget.memo.viewingMode = value;
+                  await _save();
+                }
+                if (mounted) {
+                  Navigator.of(context).pop();
+                }
+              }),
           title: Text(name),
           onTap: () async {
             widget.memo.beginModification();

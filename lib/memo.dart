@@ -71,7 +71,7 @@ class Memo {
     result._tags = [..._tags];
     result._name = _name;
     result._viewingMode = _viewingMode;
-    
+
     return result;
   }
 
@@ -119,7 +119,7 @@ class Memo {
     lastModified = DateTime.now().millisecondsSinceEpoch;
     revision++;
   }
-  
+
   /// Viewing mode of this memo.
   String get viewingMode => _viewingMode;
 

@@ -69,7 +69,8 @@ class MemoStoreLoader {
         }
       }
       memo.tags = tags;
-      final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+      final lastModified =
+          DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
       memo.name = lastModified.toDetailedString();
       memo.viewingMode = 'Plain';
       memo.lastModified = deserializedMemo['lastModified'];
