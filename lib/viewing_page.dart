@@ -419,10 +419,18 @@ class _ViewingPageState extends State<ViewingPage> {
   }
 
   void _showLinkedMemo(String memoName) async {
+    final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = memoStore.memoFromName(memoName);
     if (memo == null) {
-      // TODO: Show error.
+      if (mounted) {
+        await common_uis.showErrorDialog(
+            context,
+            'Memo not found',
+            'Linked memo is not found.',
+            localizations.ok);        
+      }
+
       return;
     }
     _previousMemos.add(_memo);
