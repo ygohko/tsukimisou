@@ -184,16 +184,18 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
         ),
         body: ListView(
           children: [
-            SlideTransition(
-              position: _animation,
-              child: Card(
-                color: common_uis.TsukimisouColors.memoCard,
-                elevation: 2.0,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: textContents,
+            ClipRect(
+              child: SlideTransition(
+                position: _animation,
+                child: Card(
+                  color: common_uis.TsukimisouColors.memoCard,
+                  elevation: 2.0,
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: textContents,
+                    ),
                   ),
                 ),
               ),
