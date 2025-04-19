@@ -163,6 +163,10 @@
             "viewingMode": {}
         }
     },
+    "backToPreviousMemo": "Back to previous memo",
+    "@backToPreviousMemo": {
+        "description": "Tooltip for Back to previous memo button"
+    },
     "fullScreen": "Full screen",
     "@fullScreen": {
         "description": "Tooltip for Full screen button"

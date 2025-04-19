@@ -35,6 +35,7 @@
     "boundTags": "タグ: {tags}",
     "name": "名前: {name}",
     "viewingMode": "表示モード: {viewingMode}",
+    "backToPreviousMemo": "前のメモに戻る",
     "fullScreen": "フルスクリーン",
     "exitFullScreen": "フルスクリーンを終了",
     "share": "共有",
