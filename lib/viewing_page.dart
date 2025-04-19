@@ -82,6 +82,15 @@ class _ViewingPageState extends State<ViewingPage> {
     final height =
         _fullScreen ? size.height : common_uis.MemoDialogsSize.height;
     var actions = <Widget>[];
+    if (_previousMemos.isNotEmpty) {
+      actions.add(
+        IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: _showPreviousMemo,
+          tooltip: 'Back to previous memo',
+        ),
+      );
+    }
     if (common_uis.hasLargeScreen()) {
       actions.add(
         IconButton(
@@ -436,6 +445,13 @@ class _ViewingPageState extends State<ViewingPage> {
     _previousMemos.add(_memo);
     setState(() {
         _memo = memo;
+    });
+  }
+
+  void _showPreviousMemo() {
+    setState(() {
+        _memo = _previousMemos.last;
+        _previousMemos.removeLast();
     });
   }
 }
