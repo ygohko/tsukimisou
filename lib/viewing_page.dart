@@ -87,7 +87,7 @@ class _ViewingPageState extends State<ViewingPage> {
         IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: _showPreviousMemo,
-          tooltip: 'Back to previous memo',
+          tooltip: localizations.backToPreviousMemo,
         ),
       );
     }
