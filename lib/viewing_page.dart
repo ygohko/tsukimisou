@@ -49,7 +49,9 @@ class ViewingPage extends StatefulWidget {
   State<ViewingPage> createState() => _ViewingPageState();
 }
 
-class _ViewingPageState extends State<ViewingPage> {
+class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
   late Memo _memo;
   final _previousMemos = <Memo>[];
   var _fullScreen = false;
@@ -57,6 +59,15 @@ class _ViewingPageState extends State<ViewingPage> {
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this
+    );
+    _animation = Tween<Offset>(
+      begin: const Offset(0.0, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(_controller);
+    _controller.value = 0.0;
     _memo = widget.memo;
     _fullScreen = widget.fullScreen;
   }
@@ -173,14 +184,17 @@ class _ViewingPageState extends State<ViewingPage> {
         ),
         body: ListView(
           children: [
-            Card(
-              color: common_uis.TsukimisouColors.memoCard,
-              elevation: 2.0,
-              child: SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: textContents,
+            SlideTransition(
+              position: _animation,
+              child: Card(
+                color: common_uis.TsukimisouColors.memoCard,
+                elevation: 2.0,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: textContents,
+                  ),
                 ),
               ),
             ),
@@ -446,6 +460,15 @@ class _ViewingPageState extends State<ViewingPage> {
     setState(() {
         _memo = memo;
     });
+    _animation = Tween<Offset>(
+      begin: const Offset(0.2, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(_controller);
+    _controller.value = 0.0;
+    _controller.animateTo(
+      1.0,
+      curve: Curves.easeOutCubic,
+    );
   }
 
   void _showPreviousMemo() {
@@ -453,5 +476,14 @@ class _ViewingPageState extends State<ViewingPage> {
         _memo = _previousMemos.last;
         _previousMemos.removeLast();
     });
+    _animation = Tween<Offset>(
+      begin: const Offset(-0.2, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(_controller);
+    _controller.value = 0.0;
+    _controller.animateTo(
+      1.0,
+      curve: Curves.easeOutCubic,
+    );
   }
 }
