@@ -37,6 +37,11 @@ import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 
+enum _Direction {
+  forward,
+  backward,
+}
+
 class ViewingPage extends StatefulWidget {
   final Memo memo;
   final bool fullScreen;
@@ -63,13 +68,15 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 300),
       vsync: this
     );
-    _animation = Tween<Offset>(
-      begin: const Offset(0.0, 0.0),
-      end: const Offset(0.0, 0.0),
-    ).animate(_controller);
-    _controller.value = 0.0;
+    _animation = AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
     _memo = widget.memo;
     _fullScreen = widget.fullScreen;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -459,27 +466,29 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
       return;
     }
     _previousMemos.add(_memo);
+    _animateCard(_Direction.forward);
     setState(() {
         _memo = memo;
     });
-    _animation = Tween<Offset>(
-      begin: const Offset(0.2, 0.0),
-      end: const Offset(0.0, 0.0),
-    ).animate(_controller);
-    _controller.value = 0.0;
-    _controller.animateTo(
-      1.0,
-      curve: Curves.easeOutCubic,
-    );
   }
 
   void _showPreviousMemo() {
+    _animateCard(_Direction.backward);
     setState(() {
         _memo = _previousMemos.last;
         _previousMemos.removeLast();
     });
+  }
+
+  void _animateCard(_Direction direction) {
+    late final Offset offset;
+    if (direction == _Direction.forward) {
+      offset = Offset(0.2, 0.0);
+    } else {
+      offset = Offset(-0.2, 0.0);
+    }
     _animation = Tween<Offset>(
-      begin: const Offset(-0.2, 0.0),
+      begin: offset,
       end: const Offset(0.0, 0.0),
     ).animate(_controller);
     _controller.value = 0.0;
