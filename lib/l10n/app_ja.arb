@@ -29,6 +29,8 @@
     "memoStoreIsNotCompatible": "メモストアに互換性がありません",
     "memoStoreInTheLocalStorageIsNotCompatible": "ローカルストレージ内のメモストアに互換性がありません。このアプリをアップデートすることで問題が解決するかもしれません。",
     "memoStoreOnTheGoogleDriveIsNotCompatible": "Google Drive上のメモストアに互換性がありません。このアプリをアップデートすることで問題が解決するかもしれません。",
+    "memoNotFound": "メモが見つかりません",
+    "linkedMemoIsNotFound": "リンク先のメモが見つかりません。",
     "memoAtDateTime": "{dateTime}のメモ",
     "boundTags": "タグ: {tags}",
     "name": "名前: {name}",

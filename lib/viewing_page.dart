@@ -426,8 +426,8 @@ class _ViewingPageState extends State<ViewingPage> {
       if (mounted) {
         await common_uis.showErrorDialog(
             context,
-            'Memo not found',
-            'Linked memo is not found.',
+            localizations.memoNotFound,
+            localizations.linkedMemoIsNotFound,
             localizations.ok);        
       }
 

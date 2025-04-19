@@ -127,6 +127,14 @@
     "@memoStoreInTheGoogleDriveIsNotCompatible": {
         "description": "Text for Google Drive version error dialog."
     },
+    "memoNotFound": "Memo not found",
+    "@memoNotFound": {
+        "description": "Title for linked memo not found error dialog."
+    },
+    "linkedMemoIsNotFound": "Linked memo is not found.",
+    "@linkedMemoIsNotFound": {
+        "description": "Text for linked memo not found error dialog."
+    },
     "memoAtDateTime": "Memo at {dateTime}",
     "@memoAtDateTime": {
         "description": "Title for viewing page app bar",
