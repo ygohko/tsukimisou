@@ -55,6 +55,16 @@ void main() {
       expect(identical(aMemo, memo), true);
     });
 
+    test('MemoStore.memoFromId should return memo that has given name.', () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memo.text = 'This is a memo.';
+      memo.name = 'TestMemo';
+      memoStore.addMemo(memo);
+      final aMemo = memoStore.memoFromName('TestMemo');
+      expect(identical(aMemo, memo), true);
+    });
+
     test(
         'MemoStore.memos should return and accept memos that is stored by memo store.',
         () {

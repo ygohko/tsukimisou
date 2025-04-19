@@ -435,7 +435,7 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final updated = lastModified.toSmartString();
   late final Widget memoContents;
   if (memo.viewingMode == 'TinyMarkdown') {
-    memoContents = richTextContents(context, memo.text);
+    memoContents = richTextContents(context, memo.text, (name) {});
   } else {
     memoContents = Text(memo.text);
   }
@@ -470,11 +470,8 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   );
 }
 
-Widget richTextContents(BuildContext context, String text) {
-  // TODO: Set proper handler.
-  final parser = MarkdownParser(context, text, (name) {
-    print('Showing linked memo requested.');
-  });
+Widget richTextContents(BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
+  final parser = MarkdownParser(context, text, onMemoLinkRequested);
   parser.execute();
 
   return parser.contents;

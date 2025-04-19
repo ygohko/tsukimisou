@@ -86,6 +86,17 @@ class MemoStore extends ChangeNotifier {
     return null;
   }
 
+  /// Memo that has given name.
+  Memo? memoFromName(String name) {
+    for (var memo in memos) {
+      if (memo.name == name) {
+        return memo;
+      }
+    }
+
+    return null;
+  }
+
   /// Tags bound for memos
   List<String> get tags {
     var tags = <String>[];

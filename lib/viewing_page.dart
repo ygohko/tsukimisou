@@ -50,11 +50,14 @@ class ViewingPage extends StatefulWidget {
 }
 
 class _ViewingPageState extends State<ViewingPage> {
-  var _fullScreen = true;
+  late Memo _memo;
+  final _previousMemos = <Memo>[];
+  var _fullScreen = false;
 
   @override
   void initState() {
     super.initState();
+    _memo = widget.memo;
     _fullScreen = widget.fullScreen;
   }
 
@@ -62,9 +65,9 @@ class _ViewingPageState extends State<ViewingPage> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final dateTime =
-        DateTime.fromMillisecondsSinceEpoch(widget.memo.lastModified);
+        DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
     var tagsString = '';
-    for (final tag in widget.memo.tags) {
+    for (final tag in _memo.tags) {
       tagsString += '$tag, ';
     }
     if (tagsString != '') {
@@ -115,13 +118,13 @@ class _ViewingPageState extends State<ViewingPage> {
     ]);
     late final Widget textContents;
     // TODO: Consider expandable implementation.
-    if (widget.memo.viewingMode == 'TinyMarkdown') {
+    if (_memo.viewingMode == 'TinyMarkdown') {
       textContents = SelectionArea(
-        child: common_uis.richTextContents(context, widget.memo.text),
+        child: common_uis.richTextContents(context, _memo.text, _showLinkedMemo),
       );
     } else {
       textContents = SelectableText(
-        widget.memo.text,
+        _memo.text,
         style: textStyle,
         contextMenuBuilder: (context, editableTextState) {
           final value = editableTextState.textEditingValue;
@@ -184,13 +187,13 @@ class _ViewingPageState extends State<ViewingPage> {
             ),
             const Divider(),
             ListTile(
-              title: Text(localizations.name(widget.memo.name),
+              title: Text(localizations.name(_memo.name),
                   style: attributeStyle),
               onTap: _modifyName,
             ),
             const Divider(),
             ListTile(
-              title: Text(localizations.viewingMode(widget.memo.viewingMode),
+              title: Text(localizations.viewingMode(_memo.viewingMode),
                   style: attributeStyle),
               onTap: _chooseViewingMode,
             ),
@@ -205,7 +208,7 @@ class _ViewingPageState extends State<ViewingPage> {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
-          return EditingPage(memo: widget.memo);
+          return EditingPage(memo: _memo);
         },
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
@@ -221,7 +224,7 @@ class _ViewingPageState extends State<ViewingPage> {
             child: Dialog(
               insetPadding: const EdgeInsets.all(0.0),
               elevation: platform.isDesktop ? 0 : 24,
-              child: EditingPage(memo: widget.memo, fullScreen: _fullScreen),
+              child: EditingPage(memo: _memo, fullScreen: _fullScreen),
             ),
           );
         },
@@ -237,7 +240,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _share() async {
     final localizations = AppLocalizations.of(context)!;
-    await Share.share(widget.memo.text,
+    await Share.share(_memo.text,
         subject: localizations.sharedFromTsukimisou);
   }
 
@@ -256,7 +259,7 @@ class _ViewingPageState extends State<ViewingPage> {
     }
 
     final factories = Factories.instance();
-    memoStore.removeMemo(widget.memo);
+    memoStore.removeMemo(_memo);
     final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
         memoStore, 'MemoStore.json');
     try {
@@ -282,7 +285,7 @@ class _ViewingPageState extends State<ViewingPage> {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
           return BindingTagsPage(
-              memo: widget.memo, additinalTags: memoStore.tags);
+              memo: _memo, additinalTags: memoStore.tags);
         },
       ));
     } else {
@@ -294,7 +297,7 @@ class _ViewingPageState extends State<ViewingPage> {
               insetPadding: const EdgeInsets.all(0.0),
               elevation: 0,
               child: BindingTagsPage(
-                  memo: widget.memo,
+                  memo: _memo,
                   additinalTags: memoStore.tags,
                   fullScreen: _fullScreen),
             ),
@@ -312,7 +315,7 @@ class _ViewingPageState extends State<ViewingPage> {
 
   void _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: widget.memo.name);
+    final controller = TextEditingController(text: _memo.name);
     final name = await showDialog(
       context: context,
       builder: (context) {
@@ -336,8 +339,8 @@ class _ViewingPageState extends State<ViewingPage> {
       },
     );
     if (name != null) {
-      widget.memo.beginModification();
-      widget.memo.name = name;
+      _memo.beginModification();
+      _memo.name = name;
       await _save();
       setState(() {});
     }
@@ -353,11 +356,11 @@ class _ViewingPageState extends State<ViewingPage> {
         ListTile(
           leading: Radio(
               value: name,
-              groupValue: widget.memo.viewingMode,
+              groupValue: _memo.viewingMode,
               onChanged: (value) async {
                 if (value != null) {
-                  widget.memo.beginModification();
-                  widget.memo.viewingMode = value;
+                  _memo.beginModification();
+                  _memo.viewingMode = value;
                   await _save();
                 }
                 if (mounted) {
@@ -366,8 +369,8 @@ class _ViewingPageState extends State<ViewingPage> {
               }),
           title: Text(name),
           onTap: () async {
-            widget.memo.beginModification();
-            widget.memo.viewingMode = name;
+            _memo.beginModification();
+            _memo.viewingMode = name;
             await _save();
             if (mounted) {
               Navigator.of(context).pop();
@@ -413,5 +416,26 @@ class _ViewingPageState extends State<ViewingPage> {
             localizations.ok);
       }
     }
+  }
+
+  void _showLinkedMemo(String memoName) async {
+    final localizations = AppLocalizations.of(context)!;
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final memo = memoStore.memoFromName(memoName);
+    if (memo == null) {
+      if (mounted) {
+        await common_uis.showErrorDialog(
+            context,
+            localizations.memoNotFound,
+            localizations.linkedMemoIsNotFound,
+            localizations.ok);        
+      }
+
+      return;
+    }
+    _previousMemos.add(_memo);
+    setState(() {
+        _memo = memo;
+    });
   }
 }
