@@ -150,7 +150,11 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     // TODO: Consider expandable implementation.
     if (_memo.viewingMode == 'TinyMarkdown') {
       textContents = SelectionArea(
-        child: common_uis.richTextContents(context, _memo.text, _showLinkedMemo),
+        child: common_uis.richTextContents(
+          context,
+          _memo.text,
+          onMemoLinkRequested: _showLinkedMemo
+        ),
       );
     } else {
       textContents = SelectableText(
