@@ -536,16 +536,21 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.autolinkStarted) {
         if (aLine.isNotEmpty) {
+          TapGestureRecognizer? recognizer;
+          if (_onMemoLinkRequested != null) {
+            recognizer = TapGestureRecognizer()
+              ..onTap = () {
+                _showLinked(aLine);
+              }; 
+          }
+
           _spans.add(TextSpan(
             text: aLine,
             style: TextStyle(
               color: _colorScheme.primary,
               decoration: TextDecoration.underline,
             ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                _showLinked(aLine);
-              },
+            recognizer: recognizer,
           ));
         }
         _spanState = _SpanState.normal;
