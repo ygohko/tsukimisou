@@ -55,7 +55,7 @@ class ViewingPage extends StatefulWidget {
 }
 
 class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin {
-  late AnimationController _controller;
+  late final AnimationController _controller;
   late Animation<Offset> _animation;
   late Memo _memo;
   final _previousMemos = <Memo>[];
@@ -68,7 +68,7 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
       duration: const Duration(milliseconds: 300),
       vsync: this
     );
-    _animation = AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
+    _animation = const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
     _memo = widget.memo;
     _fullScreen = widget.fullScreen;
   }
@@ -483,9 +483,9 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
   void _animateCard(_Direction direction) {
     late final Offset offset;
     if (direction == _Direction.forward) {
-      offset = Offset(0.2, 0.0);
+      offset = const Offset(0.2, 0.0);
     } else {
-      offset = Offset(-0.2, 0.0);
+      offset = const Offset(-0.2, 0.0);
     }
     _animation = Tween<Offset>(
       begin: offset,
