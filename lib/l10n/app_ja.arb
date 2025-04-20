@@ -53,6 +53,8 @@
     "save": "保存",
     "discardThisChanges": "この変更を破棄しますか?",
     "modifyTheName": "名前を変更",
+    "enterTheMemoName": "メモの名前を入力",
+    "nameAlreadyExists": "この名前はすでにあります。",
     "bindTags": "タグ付け",
     "addANewTag": "新しいタグを追加...",
     "addANewTagTitle": "新しいタグを追加",
