@@ -353,7 +353,17 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
       builder: (context) {
         return AlertDialog(
             title: Text(localizations.modifyTheName),
-            content: TextField(controller: controller),
+            content: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: 'Enter the memo name',
+                border: OutlineInputBorder(),
+              ),
+              autofocus: true,
+              onSubmitted: (name) {
+                Navigator.of(context).pop(name);
+              }
+            ),
             actions: [
               TextButton(
                 child: Text(localizations.cancel),
