@@ -48,7 +48,7 @@ enum _SpanState {
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
-  late final MemoLinkCallback _onMemoLinkRequested;
+  late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
   var _lineKind = _LineKind.body;
@@ -62,7 +62,7 @@ class MarkdownParser {
 
   /// Creates a markdown parser.
   MarkdownParser(
-      BuildContext context, String text, MemoLinkCallback onMemoLinkRequested) {
+      BuildContext context, String text, { MemoLinkCallback? onMemoLinkRequested }) {
     _context = context;
     _text = text;
     _onMemoLinkRequested = onMemoLinkRequested;
@@ -296,7 +296,7 @@ class MarkdownParser {
         mode: LaunchMode.externalApplication,
       );
     } else {
-      _onMemoLinkRequested(link);
+      _onMemoLinkRequested!(link);
     }
   }
 
@@ -485,16 +485,21 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.linkTargetStarted) {
         if (aLine.isNotEmpty) {
+          TapGestureRecognizer? recognizer;
+          if (_onMemoLinkRequested != null) {
+            recognizer = TapGestureRecognizer()
+              ..onTap = () {
+                _showLinked(aLine);
+              };
+          }
+
           _spans.add(TextSpan(
             text: _linkText,
             style: TextStyle(
               color: _colorScheme.primary,
               decoration: TextDecoration.underline,
             ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                _showLinked(aLine);
-              },
+            recognizer: recognizer,
           ));
         }
         _spanState = _SpanState.normal;
@@ -531,16 +536,21 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.autolinkStarted) {
         if (aLine.isNotEmpty) {
+          TapGestureRecognizer? recognizer;
+          if (_onMemoLinkRequested != null) {
+            recognizer = TapGestureRecognizer()
+              ..onTap = () {
+                _showLinked(aLine);
+              }; 
+          }
+
           _spans.add(TextSpan(
             text: aLine,
             style: TextStyle(
               color: _colorScheme.primary,
               decoration: TextDecoration.underline,
             ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                _showLinked(aLine);
-              },
+            recognizer: recognizer,
           ));
         }
         _spanState = _SpanState.normal;
