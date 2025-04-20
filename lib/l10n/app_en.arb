@@ -234,7 +234,15 @@
     "modifyTheName": "Modify the name",
     "@modifyTheName": {
         "description": "Title for modify the name dialog"
-    },    
+    },
+    "enterTheMemoName": "Enter the memo name",
+    "@enterTheMemoName": {
+        "description": "Hint text for memo name text field"
+    },
+    "nameAlreadyExists": "Name already exists.",
+    "@nameAlreadyExists": {
+        "description": "Error text for memo name text field"
+    },
     "bindTags": "Bind tags",
     "@bindTags": {
         "description": "Title for binding tags page"

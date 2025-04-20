@@ -363,8 +363,8 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
               content: TextField(
                 controller: _textEditingController,
                 decoration: InputDecoration(
-                  hintText: 'Enter the memo name',
-                  errorText: error ? 'Name already exists.' : null,
+                  hintText: localizations.enterTheMemoName,
+                  errorText: error ? localizations.nameAlreadyExists : null,
                   border: const OutlineInputBorder(),
                 ),
                 autofocus: true,
