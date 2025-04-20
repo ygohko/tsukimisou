@@ -55,7 +55,8 @@ class ViewingPage extends StatefulWidget {
 }
 
 class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin {
-  late final AnimationController _controller;
+  late final TextEditingController _textEditingController;
+  late final AnimationController _animationController;
   late Animation<Offset> _animation;
   late Memo _memo;
   final _previousMemos = <Memo>[];
@@ -64,7 +65,8 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _textEditingController = TextEditingController();
+    _animationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this
     );
@@ -75,7 +77,8 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -347,37 +350,58 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
 
   void _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
-    final controller = TextEditingController(text: _memo.name);
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    _textEditingController.text = _memo.name;
+    var error = false;
     final name = await showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-            title: Text(localizations.modifyTheName),
-            content: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: 'Enter the memo name',
-                border: OutlineInputBorder(),
+        return StatefulBuilder(
+          builder: (context, setState) {        
+            return AlertDialog(
+              title: Text(localizations.modifyTheName),
+              content: TextField(
+                controller: _textEditingController,
+                decoration: InputDecoration(
+                  hintText: 'Enter the memo name',
+                  errorText: error ? 'Name already exists.' : null,
+                  border: const OutlineInputBorder(),
+                ),
+                autofocus: true,
+                onSubmitted: (name) {
+                  final memo = memoStore.memoFromName(name);
+                  if (memo != null) {
+                    setState(() {
+                        error = true;
+                    });
+                  } else {
+                    Navigator.of(context).pop(name);
+                  }
+                }
               ),
-              autofocus: true,
-              onSubmitted: (name) {
-                Navigator.of(context).pop(name);
-              }
-            ),
-            actions: [
-              TextButton(
-                child: Text(localizations.cancel),
-                onPressed: () {
-                  Navigator.of(context).pop(null);
-                },
-              ),
-              TextButton(
-                child: Text(localizations.ok),
-                onPressed: () {
-                  Navigator.of(context).pop(controller.text);
-                },
-              ),
+              actions: [
+                TextButton(
+                  child: Text(localizations.cancel),
+                  onPressed: () {
+                    Navigator.of(context).pop(null);
+                  },
+                ),
+                TextButton(
+                  child: Text(localizations.ok),
+                  onPressed: () {
+                    final name = _textEditingController.text;
+                    final memo = memoStore.memoFromName(name);
+                    if (memo != null) {
+                      setState(() {
+                          error = true;
+                      });
+                    } else {
+                      Navigator.of(context).pop(name);
+                    }
+                  }
+                ),
             ]);
+        });
       },
     );
     if (name != null) {
@@ -500,9 +524,9 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     _animation = Tween<Offset>(
       begin: offset,
       end: const Offset(0.0, 0.0),
-    ).animate(_controller);
-    _controller.value = 0.0;
-    _controller.animateTo(
+    ).animate(_animationController);
+    _animationController.value = 0.0;
+    _animationController.animateTo(
       1.0,
       curve: Curves.easeOutCubic,
     );
