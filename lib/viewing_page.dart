@@ -387,9 +387,13 @@ class _ViewingPageState extends State<ViewingPage>
                       final name = _textEditingController.text;
                       final memo = memoStore.memoFromName(name);
                       if (memo != null) {
-                        setState(() {
-                          error = true;
-                        });
+                        if (memo != _memo) {
+                          setState(() {
+                              error = true;
+                          });
+                        } else {
+                          Navigator.of(context).pop(null);
+                        }
                       } else {
                         Navigator.of(context).pop(name);
                       }
