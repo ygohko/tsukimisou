@@ -54,7 +54,8 @@ class ViewingPage extends StatefulWidget {
   State<ViewingPage> createState() => _ViewingPageState();
 }
 
-class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin {
+class _ViewingPageState extends State<ViewingPage>
+    with TickerProviderStateMixin {
   late final TextEditingController _textEditingController;
   late final AnimationController _animationController;
   late Animation<Offset> _animation;
@@ -67,9 +68,7 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     super.initState();
     _textEditingController = TextEditingController();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this
-    );
+        duration: const Duration(milliseconds: 300), vsync: this);
     _animation = const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
     _memo = widget.memo;
     _fullScreen = widget.fullScreen;
@@ -85,8 +84,7 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final dateTime =
-        DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
     var tagsString = '';
     for (final tag in _memo.tags) {
       tagsString += '$tag, ';
@@ -150,11 +148,8 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     // TODO: Consider expandable implementation.
     if (_memo.viewingMode == 'TinyMarkdown') {
       textContents = SelectionArea(
-        child: common_uis.richTextContents(
-          context,
-          _memo.text,
-          onMemoLinkRequested: _showLinkedMemo
-        ),
+        child: common_uis.richTextContents(context, _memo.text,
+            onMemoLinkRequested: _showLinkedMemo),
       );
     } else {
       textContents = SelectableText(
@@ -226,8 +221,8 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
             ),
             const Divider(),
             ListTile(
-              title: Text(localizations.name(_memo.name),
-                  style: attributeStyle),
+              title:
+                  Text(localizations.name(_memo.name), style: attributeStyle),
               onTap: _modifyName,
             ),
             const Divider(),
@@ -279,8 +274,7 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
 
   void _share() async {
     final localizations = AppLocalizations.of(context)!;
-    await Share.share(_memo.text,
-        subject: localizations.sharedFromTsukimisou);
+    await Share.share(_memo.text, subject: localizations.sharedFromTsukimisou);
   }
 
   void _delete() async {
@@ -323,8 +317,7 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
-          return BindingTagsPage(
-              memo: _memo, additinalTags: memoStore.tags);
+          return BindingTagsPage(memo: _memo, additinalTags: memoStore.tags);
         },
       ));
     } else {
@@ -360,29 +353,27 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     final name = await showDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {        
-            return AlertDialog(
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
               title: Text(localizations.modifyTheName),
               content: TextField(
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                  hintText: localizations.enterTheMemoName,
-                  errorText: error ? localizations.nameAlreadyExists : null,
-                  border: const OutlineInputBorder(),
-                ),
-                autofocus: true,
-                onSubmitted: (name) {
-                  final memo = memoStore.memoFromName(name);
-                  if (memo != null) {
-                    setState(() {
+                  controller: _textEditingController,
+                  decoration: InputDecoration(
+                    hintText: localizations.enterTheMemoName,
+                    errorText: error ? localizations.nameAlreadyExists : null,
+                    border: const OutlineInputBorder(),
+                  ),
+                  autofocus: true,
+                  onSubmitted: (name) {
+                    final memo = memoStore.memoFromName(name);
+                    if (memo != null) {
+                      setState(() {
                         error = true;
-                    });
-                  } else {
-                    Navigator.of(context).pop(name);
-                  }
-                }
-              ),
+                      });
+                    } else {
+                      Navigator.of(context).pop(name);
+                    }
+                  }),
               actions: [
                 TextButton(
                   child: Text(localizations.cancel),
@@ -391,20 +382,19 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
                   },
                 ),
                 TextButton(
-                  child: Text(localizations.ok),
-                  onPressed: () {
-                    final name = _textEditingController.text;
-                    final memo = memoStore.memoFromName(name);
-                    if (memo != null) {
-                      setState(() {
+                    child: Text(localizations.ok),
+                    onPressed: () {
+                      final name = _textEditingController.text;
+                      final memo = memoStore.memoFromName(name);
+                      if (memo != null) {
+                        setState(() {
                           error = true;
-                      });
-                    } else {
-                      Navigator.of(context).pop(name);
-                    }
-                  }
-                ),
-            ]);
+                        });
+                      } else {
+                        Navigator.of(context).pop(name);
+                      }
+                    }),
+              ]);
         });
       },
     );
@@ -494,11 +484,8 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     final memo = memoStore.memoFromName(memoName);
     if (memo == null) {
       if (mounted) {
-        await common_uis.showErrorDialog(
-            context,
-            localizations.memoNotFound,
-            localizations.linkedMemoIsNotFound,
-            localizations.ok);        
+        await common_uis.showErrorDialog(context, localizations.memoNotFound,
+            localizations.linkedMemoIsNotFound, localizations.ok);
       }
 
       return;
@@ -506,15 +493,15 @@ class _ViewingPageState extends State<ViewingPage> with TickerProviderStateMixin
     _previousMemos.add(_memo);
     _animateCard(_Direction.forward);
     setState(() {
-        _memo = memo;
+      _memo = memo;
     });
   }
 
   void _showPreviousMemo() {
     _animateCard(_Direction.backward);
     setState(() {
-        _memo = _previousMemos.last;
-        _previousMemos.removeLast();
+      _memo = _previousMemos.last;
+      _previousMemos.removeLast();
     });
   }
 
