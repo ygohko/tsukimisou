@@ -61,8 +61,8 @@ class MarkdownParser {
   static TextTheme? _textTheme;
 
   /// Creates a markdown parser.
-  MarkdownParser(
-      BuildContext context, String text, { MemoLinkCallback? onMemoLinkRequested }) {
+  MarkdownParser(BuildContext context, String text,
+      {MemoLinkCallback? onMemoLinkRequested}) {
     _context = context;
     _text = text;
     _onMemoLinkRequested = onMemoLinkRequested;
@@ -541,7 +541,7 @@ class MarkdownParser {
             recognizer = TapGestureRecognizer()
               ..onTap = () {
                 _showLinked(aLine);
-              }; 
+              };
           }
 
           _spans.add(TextSpan(

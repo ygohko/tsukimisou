@@ -470,12 +470,10 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   );
 }
 
-Widget richTextContents(BuildContext context, String text, { MemoLinkCallback? onMemoLinkRequested }) {
-  final parser = MarkdownParser(
-    context,
-    text,
-    onMemoLinkRequested: onMemoLinkRequested
-  );
+Widget richTextContents(BuildContext context, String text,
+    {MemoLinkCallback? onMemoLinkRequested}) {
+  final parser =
+      MarkdownParser(context, text, onMemoLinkRequested: onMemoLinkRequested);
   parser.execute();
 
   return parser.contents;
