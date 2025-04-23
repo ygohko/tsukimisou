@@ -514,7 +514,7 @@ class MarkdownParser {
   (String, bool) _parseAutolinkStarted(String line) {
     final regExp = RegExp(r'<.*>');
     final matched = regExp.firstMatch(line);
-    if (matched != null) {
+    if (matched != null && _spanState != _SpanState.autolinkStarted) {
       final index = line.indexOf('<');
       final aLine = line.substring(0, index);
       line = line.substring(index + 1);
