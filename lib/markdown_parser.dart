@@ -203,7 +203,7 @@ class MarkdownParser {
               children: [
                 SizedBox(
                   width: 10.0 + _listLevel * 20.0,
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
                   ),
