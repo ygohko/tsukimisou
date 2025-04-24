@@ -32,9 +32,7 @@ enum _LineKind {
   headlineLarge,
   headlineMedium,
   headlineSmall,
-  unorderedList1,
-  unorderedList2,
-  unorderedList3,
+  unorderedList,
 }
 
 enum _SpanState {
@@ -56,6 +54,8 @@ class MarkdownParser {
   var _spanState = _SpanState.normal;
   var _spans = <InlineSpan>[];
   var _linkText = '';
+  var _listLevel = 0;
+  var _previousIndent = 0;
   var _paragraphStarted = false;
 
   static TextTheme? _textTheme;
@@ -111,9 +111,7 @@ class MarkdownParser {
       _parseHeadlineLarge,
       _parseHeadlineMedium,
       _parseHeadlineSmall,
-      _parseUnorderdList1,
-      _parseUnorderdList2,
-      _parseUnorderdList3,
+      _parseUnorderdList,
       _parseStrikethrough,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
@@ -200,56 +198,12 @@ class MarkdownParser {
             );
             break;
 
-          case _LineKind.unorderedList1:
+          case _LineKind.unorderedList:
             widget = Row(
               children: [
-                const SizedBox(
-                  width: 10.0,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text('• '),
-                  ),
-                ),
-                Flexible(
-                  child: RichText(
-                    text: TextSpan(
-                      style: textTheme.bodyMedium,
-                      children: _spans,
-                    ),
-                  ),
-                ),
-              ],
-            );
-            break;
-
-          case _LineKind.unorderedList2:
-            widget = Row(
-              children: [
-                const SizedBox(
-                  width: 30.0,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Text('• '),
-                  ),
-                ),
-                Flexible(
-                  child: RichText(
-                    text: TextSpan(
-                      style: textTheme.bodyMedium,
-                      children: _spans,
-                    ),
-                  ),
-                ),
-              ],
-            );
-            break;
-
-          case _LineKind.unorderedList3:
-            widget = Row(
-              children: [
-                const SizedBox(
-                  width: 50.0,
-                  child: Align(
+                SizedBox(
+                  width: 10.0 + _listLevel * 20.0,
+                  child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
                   ),
@@ -333,40 +287,28 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseUnorderdList1(String line) {
-    final regExp = RegExp(r'^[\+\-\*] ');
+  (String, bool) _parseUnorderdList(String line) {
+    final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
-      line = line.replaceFirst(regExp, '');
-      _lineKind = _LineKind.unorderedList1;
+      final string = match.group(0);
+      if (string != null) {
+        line = line.replaceFirst(regExp, '');
+        final indent = string.length - 2;
+        if (_previousLineKind != _LineKind.unorderedList) {
+          _listLevel = 0;
+        } else {
+          if (indent < _previousIndent && _listLevel > 0) {
+            _listLevel--;
+          } else if (indent > _previousIndent) {
+            _listLevel++;
+          }
+        }
+        _previousIndent = indent;
+        _lineKind = _LineKind.unorderedList;
 
-      return (line, true);
-    }
-
-    return (line, false);
-  }
-
-  (String, bool) _parseUnorderdList2(String line) {
-    final regExp = RegExp(r'^    [\+\-\*] ');
-    final match = regExp.firstMatch(line);
-    if (match != null) {
-      line = line.replaceFirst(regExp, '');
-      _lineKind = _LineKind.unorderedList2;
-
-      return (line, true);
-    }
-
-    return (line, false);
-  }
-
-  (String, bool) _parseUnorderdList3(String line) {
-    final regExp = RegExp(r'^        [\+\-\*] ');
-    final match = regExp.firstMatch(line);
-    if (match != null) {
-      line = line.replaceFirst(regExp, '');
-      _lineKind = _LineKind.unorderedList3;
-
-      return (line, true);
+        return (line, true);
+      }
     }
 
     return (line, false);
