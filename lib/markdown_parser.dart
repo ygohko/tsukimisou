@@ -201,8 +201,8 @@ class MarkdownParser {
           case _LineKind.unorderedList:
             widget = Row(
               children: [
-                const SizedBox(
-                  width: 10.0,
+                SizedBox(
+                  width: 10.0 + _listLevel * 20.0,
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
@@ -291,15 +291,24 @@ class MarkdownParser {
     final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
-      line = line.replaceFirst(regExp, '');
+      final string = match.group(0);
+      if (string != null) {
+        line = line.replaceFirst(regExp, '');
+        final indent = string.length - 2;
+        if (_previousLineKind != _LineKind.unorderedList) {
+          _listLevel = 0;
+        } else {
+          if (indent < _previousIndent && _listLevel > 0) {
+            _listLevel--;
+          } else if (indent > _previousIndent) {
+            _listLevel++;
+          }
+        }
+        _previousIndent = indent;
+        _lineKind = _LineKind.unorderedList;
 
-      // TODO: Get indent and list level.
-      _previousIndent = 0;
-      _listLevel = 0;
-
-      _lineKind = _LineKind.unorderedList;
-
-      return (line, true);
+        return (line, true);
+      }
     }
 
     return (line, false);
