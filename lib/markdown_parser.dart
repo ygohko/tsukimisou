@@ -202,10 +202,11 @@ class MarkdownParser {
             break;
 
           case _LineKind.unorderedList:
+            // TODO: Apply list level.
             widget = Row(
               children: [
                 SizedBox(
-                  width: 10.0 + _listLevel * 20.0,
+                  width: 10.0,
                   child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
@@ -297,17 +298,7 @@ class MarkdownParser {
       final string = match.group(0);
       if (string != null) {
         line = line.replaceFirst(regExp, '');
-        final indent = string.length - 2;
-        if (_previousLineKind != _LineKind.unorderedList) {
-          _listLevel = 0;
-        } else {
-          if (indent < _previousIndent && _listLevel > 0) {
-            _listLevel--;
-          } else if (indent > _previousIndent) {
-            _listLevel++;
-          }
-        }
-        _previousIndent = indent;
+        _processedLine.indent = string.length - 2;
         _lineKind = _LineKind.unorderedList;
 
         return (line, true);
