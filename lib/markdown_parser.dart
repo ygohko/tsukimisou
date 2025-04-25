@@ -43,6 +43,11 @@ enum _SpanState {
   autolinkStarted,
 }
 
+class _ProcessedLine {
+  var indent = 0;
+  var spans = <InlineSpan>[];
+}
+
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
@@ -52,10 +57,8 @@ class MarkdownParser {
   var _lineKind = _LineKind.body;
   var _previousLineKind = _LineKind.none;
   var _spanState = _SpanState.normal;
-  var _spans = <InlineSpan>[];
+  var _processedLine = _ProcessedLine();
   var _linkText = '';
-  var _listLevel = 0;
-  var _previousIndent = 0;
   var _paragraphStarted = false;
 
   static TextTheme? _textTheme;
@@ -128,7 +131,7 @@ class MarkdownParser {
       line = line.replaceFirst('\n', '');
       _lineKind = _LineKind.body;
       _spanState = _SpanState.normal;
-      _spans = <InlineSpan>[];
+      _processedLine = _ProcessedLine();
 
       var aDone = false;
       while (!aDone) {
@@ -143,21 +146,21 @@ class MarkdownParser {
         }
       }
       if (line.isNotEmpty) {
-        _spans.add(TextSpan(text: line));
+        _processedLine.spans.add(TextSpan(text: line));
       }
 
       if (_paragraphStarted && _previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
         _paragraphStarted = false;
       }
-      if (_spans.isNotEmpty) {
+      if (_processedLine.spans.isNotEmpty) {
         late final Widget widget;
         switch (_lineKind) {
           case _LineKind.body:
             widget = RichText(
               text: TextSpan(
                 style: textTheme.bodyMedium,
-                children: _spans,
+                children: _processedLine.spans,
               ),
             );
             break;
@@ -168,7 +171,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: textTheme.headlineLarge,
-                  children: _spans,
+                  children: _processedLine.spans,
                 ),
               ),
             );
@@ -180,7 +183,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: textTheme.headlineMedium,
-                  children: _spans,
+                  children: _processedLine.spans,
                 ),
               ),
             );
@@ -192,7 +195,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: textTheme.headlineSmall,
-                  children: _spans,
+                  children: _processedLine.spans,
                 ),
               ),
             );
@@ -212,7 +215,7 @@ class MarkdownParser {
                   child: RichText(
                     text: TextSpan(
                       style: textTheme.bodyMedium,
-                      children: _spans,
+                      children: _processedLine.spans,
                     ),
                   ),
                 ),
@@ -321,12 +324,12 @@ class MarkdownParser {
       line = line.substring(index + 2);
       if (_spanState == _SpanState.normal) {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(text: aLine));
+          _processedLine.spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.strikethroughStarted;
       } else {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(
+          _processedLine.spans.add(TextSpan(
             text: aLine,
             style: const TextStyle(
               decoration: TextDecoration.lineThrough,
@@ -345,7 +348,7 @@ class MarkdownParser {
   (String, bool) _parseChechboxChecked(String line) {
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
-      _spans.add(
+      _processedLine.spans.add(
         const WidgetSpan(
           child: Icon(
             Icons.check_box_rounded,
@@ -364,7 +367,7 @@ class MarkdownParser {
   (String, bool) _parseChechboxUnchecked(String line) {
     if (line.startsWith('[ ]')) {
       line = line.replaceFirst('[ ]', '');
-      _spans.add(
+      _processedLine.spans.add(
         const WidgetSpan(
           child: Icon(
             Icons.check_box_outline_blank_rounded,
@@ -387,7 +390,7 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.normal) {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(text: aLine));
+          _processedLine.spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.linkTextStarted;
       }
@@ -435,7 +438,7 @@ class MarkdownParser {
               };
           }
 
-          _spans.add(TextSpan(
+          _processedLine.spans.add(TextSpan(
             text: _linkText,
             style: TextStyle(
               color: _colorScheme.primary,
@@ -462,7 +465,7 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.normal) {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(text: aLine));
+          _processedLine.spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.autolinkStarted;
       }
@@ -488,7 +491,7 @@ class MarkdownParser {
               };
           }
 
-          _spans.add(TextSpan(
+          _processedLine.spans.add(TextSpan(
             text: aLine,
             style: TextStyle(
               color: _colorScheme.primary,
@@ -509,7 +512,7 @@ class MarkdownParser {
   (String, bool) _parseThemeticBreak(String line) {
     if (line.startsWith('---')) {
       line = '';
-      _spans.add(
+      _processedLine.spans.add(
         WidgetSpan(
             child: Row(
           children: [
@@ -536,7 +539,7 @@ class MarkdownParser {
   }
 
   (String, bool) _parseParagraphStarted(String line) {
-    if (_paragraphStarted || _spans.isNotEmpty) {
+    if (_paragraphStarted || _processedLine.spans.isNotEmpty) {
       return (line, false);
     }
 
