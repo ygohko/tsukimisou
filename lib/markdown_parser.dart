@@ -27,6 +27,7 @@ import 'package:url_launcher/url_launcher.dart';
 typedef MemoLinkCallback = void Function(String memoName);
 
 enum _LineKind {
+  // TODO: Remove this?
   none,
   body,
   headlineLarge,
@@ -45,7 +46,7 @@ enum _SpanState {
 
 class _ProcessedLine {
   var indent = 0;
-  var lineKind = _LineKind.none;
+  var lineKind = _LineKind.body;
   var spans = <InlineSpan>[];
 }
 
@@ -129,7 +130,7 @@ class MarkdownParser {
 
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
-      _processedLine.lineKind = _LineKind.body;
+      _processedLine = _ProcessedLine();
       _spanState = _SpanState.normal;
       _processedLine = _ProcessedLine();
 
