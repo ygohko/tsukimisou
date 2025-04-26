@@ -45,6 +45,7 @@ enum _SpanState {
 
 class _ProcessedLine {
   var indent = 0;
+  var lineKind = _LineKind.none;
   var spans = <InlineSpan>[];
 }
 
@@ -54,7 +55,7 @@ class MarkdownParser {
   late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
-  var _lineKind = _LineKind.body;
+  // var _lineKind = _LineKind.body;
   var _previousLineKind = _LineKind.none;
   var _spanState = _SpanState.normal;
   var _processedLine = _ProcessedLine();
@@ -108,8 +109,6 @@ class MarkdownParser {
   void execute() {
     final textTheme = _textTheme!;
     final lines = _text.split('\n');
-    final widgets = <Widget>[];
-
     final parsers = [
       _parseHeadlineLarge,
       _parseHeadlineMedium,
@@ -126,10 +125,11 @@ class MarkdownParser {
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
+    final processedLines = [];
 
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
-      _lineKind = _LineKind.body;
+      _processedLine.lineKind = _LineKind.body;
       _spanState = _SpanState.normal;
       _processedLine = _ProcessedLine();
 
@@ -149,6 +149,10 @@ class MarkdownParser {
         _processedLine.spans.add(TextSpan(text: line));
       }
 
+      processedLines.add(_processedLine);
+      _previousLineKind = _processedLine.lineKind;
+
+      /*
       if (_paragraphStarted && _previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
         _paragraphStarted = false;
@@ -230,8 +234,97 @@ class MarkdownParser {
         widgets.add(widget);
         _previousLineKind = _lineKind;
       }
+      */
     }
 
+    // TODO: Calculate list levels from indents.
+
+    // TODO: Create widgets from processed lines.
+
+    final widgets = <Widget>[];
+    for (final processedLine in processedLines) {
+    if (_paragraphStarted && _previousLineKind == _LineKind.body) {
+        widgets.add(const SizedBox(height: 10.0));
+        _paragraphStarted = false;
+      }
+      if (processedLine.spans.isNotEmpty) {
+        late final Widget widget;
+        switch (processedLine.lineKind) {
+          case _LineKind.body:
+            widget = RichText(
+              text: TextSpan(
+                style: textTheme.bodyMedium,
+                children: processedLine.spans,
+              ),
+            );
+            break;
+
+          case _LineKind.headlineLarge:
+            widget = Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: RichText(
+                text: TextSpan(
+                  style: textTheme.headlineLarge,
+                  children: processedLine.spans,
+                ),
+              ),
+            );
+            break;
+
+          case _LineKind.headlineMedium:
+            widget = Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: RichText(
+                text: TextSpan(
+                  style: textTheme.headlineMedium,
+                  children: processedLine.spans,
+                ),
+              ),
+            );
+            break;
+
+          case _LineKind.headlineSmall:
+            widget = Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: RichText(
+                text: TextSpan(
+                  style: textTheme.headlineSmall,
+                  children: processedLine.spans,
+                ),
+              ),
+            );
+            break;
+
+          case _LineKind.unorderedList:
+            // TODO: Apply list level.
+            widget = Row(
+              children: [
+                SizedBox(
+                  width: 10.0,
+                  child: const Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('• '),
+                  ),
+                ),
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: processedLine.spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
+
+          default:
+            break;
+        }
+        widgets.add(widget);
+      }
+    }
+    
     _contents = Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,7 +354,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
-      _lineKind = _LineKind.headlineLarge;
+      _processedLine.lineKind = _LineKind.headlineLarge;
 
       return (line, true);
     }
@@ -272,7 +365,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineMedium(String line) {
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
-      _lineKind = _LineKind.headlineMedium;
+      _processedLine.lineKind = _LineKind.headlineMedium;
 
       return (line, true);
     }
@@ -283,7 +376,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineSmall(String line) {
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
-      _lineKind = _LineKind.headlineSmall;
+      _processedLine.lineKind = _LineKind.headlineSmall;
 
       return (line, true);
     }
@@ -299,7 +392,7 @@ class MarkdownParser {
       if (string != null) {
         line = line.replaceFirst(regExp, '');
         _processedLine.indent = string.length - 2;
-        _lineKind = _LineKind.unorderedList;
+        _processedLine.lineKind = _LineKind.unorderedList;
 
         return (line, true);
       }
