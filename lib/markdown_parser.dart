@@ -126,7 +126,7 @@ class MarkdownParser {
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
-    final processedLines = [];
+    final processedLines = <_ProcessedLine>[];
 
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
@@ -152,95 +152,9 @@ class MarkdownParser {
 
       processedLines.add(_processedLine);
       _previousLineKind = _processedLine.lineKind;
-
-      /*
-      if (_paragraphStarted && _previousLineKind == _LineKind.body) {
-        widgets.add(const SizedBox(height: 10.0));
-        _paragraphStarted = false;
-      }
-      if (_processedLine.spans.isNotEmpty) {
-        late final Widget widget;
-        switch (_lineKind) {
-          case _LineKind.body:
-            widget = RichText(
-              text: TextSpan(
-                style: textTheme.bodyMedium,
-                children: _processedLine.spans,
-              ),
-            );
-            break;
-
-          case _LineKind.headlineLarge:
-            widget = Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: RichText(
-                text: TextSpan(
-                  style: textTheme.headlineLarge,
-                  children: _processedLine.spans,
-                ),
-              ),
-            );
-            break;
-
-          case _LineKind.headlineMedium:
-            widget = Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: RichText(
-                text: TextSpan(
-                  style: textTheme.headlineMedium,
-                  children: _processedLine.spans,
-                ),
-              ),
-            );
-            break;
-
-          case _LineKind.headlineSmall:
-            widget = Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: RichText(
-                text: TextSpan(
-                  style: textTheme.headlineSmall,
-                  children: _processedLine.spans,
-                ),
-              ),
-            );
-            break;
-
-          case _LineKind.unorderedList:
-            // TODO: Apply list level.
-            widget = Row(
-              children: [
-                SizedBox(
-                  width: 10.0,
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text('• '),
-                  ),
-                ),
-                Flexible(
-                  child: RichText(
-                    text: TextSpan(
-                      style: textTheme.bodyMedium,
-                      children: _processedLine.spans,
-                    ),
-                  ),
-                ),
-              ],
-            );
-            break;
-
-          default:
-            break;
-        }
-        widgets.add(widget);
-        _previousLineKind = _lineKind;
-      }
-      */
     }
 
-    // TODO: Calculate list levels from indents.
-
-    // TODO: Create widgets from processed lines.
+    final listLevels = _listLevelsFromProcessedLines(processedLines);
 
     final widgets = <Widget>[];
     for (final processedLine in processedLines) {
@@ -297,11 +211,11 @@ class MarkdownParser {
             break;
 
           case _LineKind.unorderedList:
-            // TODO: Apply list level.
+          	var listLevel = listLevels[processedLine.indent] ?? 0;
             widget = Row(
               children: [
                 SizedBox(
-                  width: 10.0,
+                  width: 10.0 + listLevel * 20.0,
                   child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
@@ -635,5 +549,25 @@ class MarkdownParser {
     }
 
     return (line, false);
+  }
+
+  static Map<int, int> _listLevelsFromProcessedLines(List<_ProcessedLine> processedLines) {
+    final indents = [];
+    for (final processedLine in processedLines) {
+      final indent = processedLine.indent;
+      if (!indents.contains(indent)) {
+        indents.add(indent);
+      }
+    }
+    indents.sort();
+
+    final result = <int, int>{};
+    var index = 0;
+    for (final indent in indents) {
+      result[indent] = index;
+      index++;
+    }
+
+    return result;
   }
 }
