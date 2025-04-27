@@ -136,6 +136,20 @@ void main() {
       expect(row.children[1] is Flexible, true);
     });
 
+    testWidgets('MarkdownParser should create widgets for ordered lists.',
+        (WidgetTester tester) async {
+      await init(tester);
+      final context = tester.element(find.text('This is a test.'));
+      final parser = MarkdownParser(context, '1. Hello, World!');
+      parser.execute();
+      final contents = parser.contents;
+      final column = contents as Column;
+      final widget = column.children[0];
+      final row = widget as Row;
+      expect(row.children[0] is SizedBox, true);
+      expect(row.children[1] is Flexible, true);
+    });
+
     testWidgets('MarkdownParser should create widgets for link texts.',
         (WidgetTester tester) async {
       await init(tester);

@@ -33,6 +33,7 @@ enum _LineKind {
   headlineMedium,
   headlineSmall,
   unorderedList,
+  orderedList,
 }
 
 enum _SpanState {
@@ -44,6 +45,7 @@ enum _SpanState {
 }
 
 class _ProcessedLine {
+  // TODO: Add paragraph started flag?
   var indent = 0;
   var lineKind = _LineKind.body;
   var spans = <InlineSpan>[];
@@ -111,7 +113,8 @@ class MarkdownParser {
       _parseHeadlineLarge,
       _parseHeadlineMedium,
       _parseHeadlineSmall,
-      _parseUnorderdList,
+      _parseUnorderedList,
+      _parseOrderedList,
       _parseStrikethrough,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
@@ -154,6 +157,7 @@ class MarkdownParser {
 
     final widgets = <Widget>[];
     var previousLineKind = _LineKind.none;
+    var orderedListNumber = 1;
     for (final processedLine in processedLines) {
       if (_paragraphStarted && previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
@@ -216,6 +220,33 @@ class MarkdownParser {
                   child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
+                  ),
+                ),
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: processedLine.spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
+
+          case _LineKind.orderedList:
+            if (previousLineKind != _LineKind.orderedList) {
+              orderedListNumber = 1;
+            } else {
+              orderedListNumber++;
+            }
+            widget = Row(
+              children: [
+                SizedBox(
+                  width: 15.0,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('$orderedListNumber. '),
                   ),
                 ),
                 Flexible(
@@ -298,7 +329,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseUnorderdList(String line) {
+  (String, bool) _parseUnorderedList(String line) {
     final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -307,6 +338,23 @@ class MarkdownParser {
         line = line.replaceFirst(regExp, '');
         _processedLine.indent = string.length - 2;
         _processedLine.lineKind = _LineKind.unorderedList;
+
+        return (line, true);
+      }
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseOrderedList(String line) {
+    final regExp = RegExp(r'^ *\d+[.)] ');
+    final match = regExp.firstMatch(line);
+    if (match != null) {
+      final string = match.group(0);
+      if (string != null) {
+        line = line.replaceFirst(regExp, '');
+        _processedLine.indent = 0;
+        _processedLine.lineKind = _LineKind.orderedList;
 
         return (line, true);
       }
