@@ -43,19 +43,21 @@ enum _SpanState {
   autolinkStarted,
 }
 
+class _ProcessedLine {
+  var indent = 0;
+  var lineKind = _LineKind.body;
+  var spans = <InlineSpan>[];
+}
+
 class MarkdownParser {
   late final BuildContext _context;
   late final String _text;
   late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
-  var _lineKind = _LineKind.body;
-  var _previousLineKind = _LineKind.none;
   var _spanState = _SpanState.normal;
-  var _spans = <InlineSpan>[];
+  var _processedLine = _ProcessedLine();
   var _linkText = '';
-  var _listLevel = 0;
-  var _previousIndent = 0;
   var _paragraphStarted = false;
 
   static TextTheme? _textTheme;
@@ -105,8 +107,6 @@ class MarkdownParser {
   void execute() {
     final textTheme = _textTheme!;
     final lines = _text.split('\n');
-    final widgets = <Widget>[];
-
     final parsers = [
       _parseHeadlineLarge,
       _parseHeadlineMedium,
@@ -123,12 +123,13 @@ class MarkdownParser {
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
+    final processedLines = <_ProcessedLine>[];
 
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
-      _lineKind = _LineKind.body;
+      _processedLine = _ProcessedLine();
       _spanState = _SpanState.normal;
-      _spans = <InlineSpan>[];
+      _processedLine = _ProcessedLine();
 
       var aDone = false;
       while (!aDone) {
@@ -143,21 +144,29 @@ class MarkdownParser {
         }
       }
       if (line.isNotEmpty) {
-        _spans.add(TextSpan(text: line));
+        _processedLine.spans.add(TextSpan(text: line));
       }
 
-      if (_paragraphStarted && _previousLineKind == _LineKind.body) {
+      processedLines.add(_processedLine);
+    }
+
+    final listLevels = _listLevelsFromProcessedLines(processedLines);
+
+    final widgets = <Widget>[];
+    var previousLineKind = _LineKind.none;
+    for (final processedLine in processedLines) {
+      if (_paragraphStarted && previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
         _paragraphStarted = false;
       }
-      if (_spans.isNotEmpty) {
+      if (processedLine.spans.isNotEmpty) {
         late final Widget widget;
-        switch (_lineKind) {
+        switch (processedLine.lineKind) {
           case _LineKind.body:
             widget = RichText(
               text: TextSpan(
                 style: textTheme.bodyMedium,
-                children: _spans,
+                children: processedLine.spans,
               ),
             );
             break;
@@ -168,7 +177,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: textTheme.headlineLarge,
-                  children: _spans,
+                  children: processedLine.spans,
                 ),
               ),
             );
@@ -180,7 +189,7 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: textTheme.headlineMedium,
-                  children: _spans,
+                  children: processedLine.spans,
                 ),
               ),
             );
@@ -192,17 +201,18 @@ class MarkdownParser {
               child: RichText(
                 text: TextSpan(
                   style: textTheme.headlineSmall,
-                  children: _spans,
+                  children: processedLine.spans,
                 ),
               ),
             );
             break;
 
           case _LineKind.unorderedList:
+            var listLevel = listLevels[processedLine.indent] ?? 0;
             widget = Row(
               children: [
                 SizedBox(
-                  width: 10.0 + _listLevel * 20.0,
+                  width: 10.0 + listLevel * 20.0,
                   child: const Align(
                     alignment: Alignment.centerRight,
                     child: Text('• '),
@@ -212,7 +222,7 @@ class MarkdownParser {
                   child: RichText(
                     text: TextSpan(
                       style: textTheme.bodyMedium,
-                      children: _spans,
+                      children: processedLine.spans,
                     ),
                   ),
                 ),
@@ -224,8 +234,9 @@ class MarkdownParser {
             break;
         }
         widgets.add(widget);
-        _previousLineKind = _lineKind;
       }
+
+      previousLineKind = processedLine.lineKind;
     }
 
     _contents = Column(
@@ -257,7 +268,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineLarge(String line) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
-      _lineKind = _LineKind.headlineLarge;
+      _processedLine.lineKind = _LineKind.headlineLarge;
 
       return (line, true);
     }
@@ -268,7 +279,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineMedium(String line) {
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
-      _lineKind = _LineKind.headlineMedium;
+      _processedLine.lineKind = _LineKind.headlineMedium;
 
       return (line, true);
     }
@@ -279,7 +290,7 @@ class MarkdownParser {
   (String, bool) _parseHeadlineSmall(String line) {
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
-      _lineKind = _LineKind.headlineSmall;
+      _processedLine.lineKind = _LineKind.headlineSmall;
 
       return (line, true);
     }
@@ -294,18 +305,8 @@ class MarkdownParser {
       final string = match.group(0);
       if (string != null) {
         line = line.replaceFirst(regExp, '');
-        final indent = string.length - 2;
-        if (_previousLineKind != _LineKind.unorderedList) {
-          _listLevel = 0;
-        } else {
-          if (indent < _previousIndent && _listLevel > 0) {
-            _listLevel--;
-          } else if (indent > _previousIndent) {
-            _listLevel++;
-          }
-        }
-        _previousIndent = indent;
-        _lineKind = _LineKind.unorderedList;
+        _processedLine.indent = string.length - 2;
+        _processedLine.lineKind = _LineKind.unorderedList;
 
         return (line, true);
       }
@@ -321,12 +322,12 @@ class MarkdownParser {
       line = line.substring(index + 2);
       if (_spanState == _SpanState.normal) {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(text: aLine));
+          _processedLine.spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.strikethroughStarted;
       } else {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(
+          _processedLine.spans.add(TextSpan(
             text: aLine,
             style: const TextStyle(
               decoration: TextDecoration.lineThrough,
@@ -345,7 +346,7 @@ class MarkdownParser {
   (String, bool) _parseChechboxChecked(String line) {
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
-      _spans.add(
+      _processedLine.spans.add(
         const WidgetSpan(
           child: Icon(
             Icons.check_box_rounded,
@@ -364,7 +365,7 @@ class MarkdownParser {
   (String, bool) _parseChechboxUnchecked(String line) {
     if (line.startsWith('[ ]')) {
       line = line.replaceFirst('[ ]', '');
-      _spans.add(
+      _processedLine.spans.add(
         const WidgetSpan(
           child: Icon(
             Icons.check_box_outline_blank_rounded,
@@ -387,7 +388,7 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.normal) {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(text: aLine));
+          _processedLine.spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.linkTextStarted;
       }
@@ -435,7 +436,7 @@ class MarkdownParser {
               };
           }
 
-          _spans.add(TextSpan(
+          _processedLine.spans.add(TextSpan(
             text: _linkText,
             style: TextStyle(
               color: _colorScheme.primary,
@@ -462,7 +463,7 @@ class MarkdownParser {
       line = line.substring(index + 1);
       if (_spanState == _SpanState.normal) {
         if (aLine.isNotEmpty) {
-          _spans.add(TextSpan(text: aLine));
+          _processedLine.spans.add(TextSpan(text: aLine));
         }
         _spanState = _SpanState.autolinkStarted;
       }
@@ -488,7 +489,7 @@ class MarkdownParser {
               };
           }
 
-          _spans.add(TextSpan(
+          _processedLine.spans.add(TextSpan(
             text: aLine,
             style: TextStyle(
               color: _colorScheme.primary,
@@ -509,7 +510,7 @@ class MarkdownParser {
   (String, bool) _parseThemeticBreak(String line) {
     if (line.startsWith('---')) {
       line = '';
-      _spans.add(
+      _processedLine.spans.add(
         WidgetSpan(
             child: Row(
           children: [
@@ -536,7 +537,7 @@ class MarkdownParser {
   }
 
   (String, bool) _parseParagraphStarted(String line) {
-    if (_paragraphStarted || _spans.isNotEmpty) {
+    if (_paragraphStarted || _processedLine.spans.isNotEmpty) {
       return (line, false);
     }
 
@@ -547,5 +548,26 @@ class MarkdownParser {
     }
 
     return (line, false);
+  }
+
+  static Map<int, int> _listLevelsFromProcessedLines(
+      List<_ProcessedLine> processedLines) {
+    final indents = [];
+    for (final processedLine in processedLines) {
+      final indent = processedLine.indent;
+      if (!indents.contains(indent)) {
+        indents.add(indent);
+      }
+    }
+    indents.sort();
+
+    final result = <int, int>{};
+    var index = 0;
+    for (final indent in indents) {
+      result[indent] = index;
+      index++;
+    }
+
+    return result;
   }
 }
