@@ -113,8 +113,8 @@ class MarkdownParser {
       _parseHeadlineLarge,
       _parseHeadlineMedium,
       _parseHeadlineSmall,
-      _parseUnorderdList,
-      _parseOrderdList,
+      _parseUnorderedList,
+      _parseOrderedList,
       _parseStrikethrough,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
@@ -246,7 +246,7 @@ class MarkdownParser {
                   width: 15.0,
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('${orderedListNumber}. '),
+                    child: Text('$orderedListNumber. '),
                   ),
                 ),
                 Flexible(
@@ -329,7 +329,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseUnorderdList(String line) {
+  (String, bool) _parseUnorderedList(String line) {
     final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -346,7 +346,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseOrderdList(String line) {
+  (String, bool) _parseOrderedList(String line) {
     final regExp = RegExp(r'^ *\d+[.)] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
