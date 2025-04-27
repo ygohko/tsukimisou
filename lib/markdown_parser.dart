@@ -33,6 +33,7 @@ enum _LineKind {
   headlineMedium,
   headlineSmall,
   unorderedList,
+  orderedList,
 }
 
 enum _SpanState {
@@ -112,6 +113,7 @@ class MarkdownParser {
       _parseHeadlineMedium,
       _parseHeadlineSmall,
       _parseUnorderdList,
+      _parseOrderdList,
       _parseStrikethrough,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
@@ -230,6 +232,29 @@ class MarkdownParser {
             );
             break;
 
+          case _LineKind.orderedList:
+            var listLevel = listLevels[processedLine.indent] ?? 0;
+            widget = Row(
+              children: [
+                SizedBox(
+                  width: 20.0,
+                  child: const Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('1.'),
+                  ),
+                ),
+                Flexible(
+                  child: RichText(
+                    text: TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: processedLine.spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
+
           default:
             break;
         }
@@ -307,6 +332,23 @@ class MarkdownParser {
         line = line.replaceFirst(regExp, '');
         _processedLine.indent = string.length - 2;
         _processedLine.lineKind = _LineKind.unorderedList;
+
+        return (line, true);
+      }
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseOrderdList(String line) {
+    final regExp = RegExp(r'^ *\d+[.)] ');
+    final match = regExp.firstMatch(line);
+    if (match != null) {
+      final string = match.group(0);
+      if (string != null) {
+        line = line.replaceFirst(regExp, '');
+        _processedLine.indent = 0;
+        _processedLine.lineKind = _LineKind.orderedList;
 
         return (line, true);
       }
