@@ -451,7 +451,7 @@ class _ViewingPageState extends State<ViewingPage>
           content: SizedBox(
             width: 200.0,
             height: 96.0,
-            child: ListView(
+            child: Column(
               children: tiles,
             ),
           ),
