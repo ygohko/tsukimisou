@@ -55,7 +55,6 @@ class MarkdownParser {
   late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
-  var _previousLineKind = _LineKind.none;
   var _spanState = _SpanState.normal;
   var _processedLine = _ProcessedLine();
   var _linkText = '';
@@ -149,14 +148,14 @@ class MarkdownParser {
       }
 
       processedLines.add(_processedLine);
-      _previousLineKind = _processedLine.lineKind;
     }
 
     final listLevels = _listLevelsFromProcessedLines(processedLines);
 
     final widgets = <Widget>[];
+    var previousLineKind = _LineKind.none;
     for (final processedLine in processedLines) {
-    if (_paragraphStarted && _previousLineKind == _LineKind.body) {
+      if (_paragraphStarted && previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
         _paragraphStarted = false;
       }
@@ -209,7 +208,7 @@ class MarkdownParser {
             break;
 
           case _LineKind.unorderedList:
-          	var listLevel = listLevels[processedLine.indent] ?? 0;
+            var listLevel = listLevels[processedLine.indent] ?? 0;
             widget = Row(
               children: [
                 SizedBox(
@@ -236,6 +235,8 @@ class MarkdownParser {
         }
         widgets.add(widget);
       }
+
+      previousLineKind = processedLine.lineKind;
     }
 
     _contents = Column(
@@ -549,7 +550,8 @@ class MarkdownParser {
     return (line, false);
   }
 
-  static Map<int, int> _listLevelsFromProcessedLines(List<_ProcessedLine> processedLines) {
+  static Map<int, int> _listLevelsFromProcessedLines(
+      List<_ProcessedLine> processedLines) {
     final indents = [];
     for (final processedLine in processedLines) {
       final indent = processedLine.indent;
