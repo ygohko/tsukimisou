@@ -45,6 +45,7 @@ enum _SpanState {
 }
 
 class _ProcessedLine {
+  // TODO: Add paragraph started flag?
   var indent = 0;
   var lineKind = _LineKind.body;
   var spans = <InlineSpan>[];
@@ -156,6 +157,7 @@ class MarkdownParser {
 
     final widgets = <Widget>[];
     var previousLineKind = _LineKind.none;
+    var orderedListNumber = 1;
     for (final processedLine in processedLines) {
       if (_paragraphStarted && previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
@@ -233,14 +235,18 @@ class MarkdownParser {
             break;
 
           case _LineKind.orderedList:
-            var listLevel = listLevels[processedLine.indent] ?? 0;
+            if (previousLineKind != _LineKind.orderedList) {
+              orderedListNumber = 1;
+            } else {
+              orderedListNumber++;
+            }
             widget = Row(
               children: [
                 SizedBox(
-                  width: 20.0,
-                  child: const Align(
+                  width: 15.0,
+                  child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('1.'),
+                    child: Text('${orderedListNumber}. '),
                   ),
                 ),
                 Flexible(
