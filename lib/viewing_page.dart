@@ -450,8 +450,8 @@ class _ViewingPageState extends State<ViewingPage>
         return AlertDialog(
           content: SizedBox(
             width: 200.0,
-            height: 96.0,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: tiles,
             ),
           ),
