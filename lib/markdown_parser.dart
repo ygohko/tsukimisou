@@ -27,7 +27,6 @@ import 'package:url_launcher/url_launcher.dart';
 typedef MemoLinkCallback = void Function(String memoName);
 
 enum _LineKind {
-  // TODO: Remove this?
   none,
   body,
   headlineLarge,
@@ -56,7 +55,6 @@ class MarkdownParser {
   late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
-  // var _lineKind = _LineKind.body;
   var _previousLineKind = _LineKind.none;
   var _spanState = _SpanState.normal;
   var _processedLine = _ProcessedLine();
@@ -239,7 +237,7 @@ class MarkdownParser {
         widgets.add(widget);
       }
     }
-    
+
     _contents = Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
