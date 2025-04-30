@@ -76,6 +76,7 @@ class _ViewingPageState extends State<ViewingPage>
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _animationController.dispose();
     _textEditingController.dispose();
     super.dispose();
@@ -192,6 +193,7 @@ class _ViewingPageState extends State<ViewingPage>
           actions: actions,
         ),
         body: ListView(
+          controller: _scrollController,
           children: [
             ClipRect(
               child: SlideTransition(
@@ -496,6 +498,7 @@ class _ViewingPageState extends State<ViewingPage>
     }
     _previousMemos.add(_memo);
     _animateCard(_Direction.forward);
+    _scrollController.jumpTo(0.0);
     setState(() {
       _memo = memo;
     });
@@ -503,6 +506,7 @@ class _ViewingPageState extends State<ViewingPage>
 
   void _showPreviousMemo() {
     _animateCard(_Direction.backward);
+    _scrollController.jumpTo(0.0);
     setState(() {
       _memo = _previousMemos.last;
       _previousMemos.removeLast();
