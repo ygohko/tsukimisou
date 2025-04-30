@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -49,6 +49,7 @@ class _ProcessedLine {
   var indent = 0;
   var lineKind = _LineKind.body;
   var spans = <InlineSpan>[];
+  var paragraphStarted = false;
 }
 
 class MarkdownParser {
@@ -60,7 +61,6 @@ class MarkdownParser {
   var _spanState = _SpanState.normal;
   var _processedLine = _ProcessedLine();
   var _linkText = '';
-  var _paragraphStarted = false;
 
   static TextTheme? _textTheme;
 
@@ -159,9 +159,8 @@ class MarkdownParser {
     var previousLineKind = _LineKind.none;
     var orderedListNumber = 1;
     for (final processedLine in processedLines) {
-      if (_paragraphStarted && previousLineKind == _LineKind.body) {
+      if (processedLine.paragraphStarted && previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
-        _paragraphStarted = false;
       }
       if (processedLine.spans.isNotEmpty) {
         late final Widget widget;
@@ -585,12 +584,12 @@ class MarkdownParser {
   }
 
   (String, bool) _parseParagraphStarted(String line) {
-    if (_paragraphStarted || _processedLine.spans.isNotEmpty) {
+    if (_processedLine.paragraphStarted || _processedLine.spans.isNotEmpty) {
       return (line, false);
     }
 
     if (line.isEmpty) {
-      _paragraphStarted = true;
+      _processedLine.paragraphStarted = true;
 
       return (line, true);
     }
