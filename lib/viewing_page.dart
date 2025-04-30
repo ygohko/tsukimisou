@@ -56,9 +56,11 @@ class ViewingPage extends StatefulWidget {
 
 class _ViewingPageState extends State<ViewingPage>
     with TickerProviderStateMixin {
-  late final TextEditingController _textEditingController;
+  final _textEditingController = TextEditingController();
   late final AnimationController _animationController;
-  late Animation<Offset> _animation;
+  final _scrollController = ScrollController();
+  Animation<Offset> _animation =
+      const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
   late Memo _memo;
   final _previousMemos = <Memo>[];
   var _fullScreen = false;
@@ -66,10 +68,8 @@ class _ViewingPageState extends State<ViewingPage>
   @override
   void initState() {
     super.initState();
-    _textEditingController = TextEditingController();
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
-    _animation = const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
     _memo = widget.memo;
     _fullScreen = widget.fullScreen;
   }
@@ -389,7 +389,7 @@ class _ViewingPageState extends State<ViewingPage>
                       if (memo != null) {
                         if (memo != _memo) {
                           setState(() {
-                              error = true;
+                            error = true;
                           });
                         } else {
                           Navigator.of(context).pop(null);
