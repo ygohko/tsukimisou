@@ -135,13 +135,6 @@
     "@linkedMemoIsNotFound": {
         "description": "Text for linked memo not found error dialog."
     },
-    "memoAtDateTime": "Memo at {dateTime}",
-    "@memoAtDateTime": {
-        "description": "Title for viewing page app bar",
-        "placeholders": {
-            "dateTime": {}
-        }
-    },
     "boundTags": "Tags: {tags}",
     "@boundTags": {
         "description": "Text for tags list tile",
