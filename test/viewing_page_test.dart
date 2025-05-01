@@ -9,6 +9,7 @@ import 'package:tsukimisou/viewing_page.dart';
 
 Future<void> init(WidgetTester tester, Memo memo) async {
   memo.text = 'This is a test.';
+  memo.name = 'Test';
   await tester.pumpWidget(
     ChangeNotifierProvider(
       create: (context) => MemoStore(),
@@ -35,7 +36,7 @@ void main() {
       expect(find.byIcon(Icons.share), findsOneWidget);
       expect(find.byIcon(Icons.delete), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsOneWidget);
-      expect(find.textContaining('Memo at'), findsOneWidget);
+      expect(find.textContaining('Test'), findsWidgets);
       expect(find.textContaining('This is a test.'), findsOneWidget);
       expect(find.textContaining('Updated:'), findsOneWidget);
       expect(find.textContaining('Tags:'), findsOneWidget);
