@@ -189,7 +189,7 @@ class _ViewingPageState extends State<ViewingPage>
           leading: common_uis.hasLargeScreen()
               ? const CloseButton()
               : const BackButton(),
-          title: Text(localizations.memoAtDateTime(dateTime.toSmartString())),
+          title: Text(_memo.name),
           actions: actions,
         ),
         body: ListView(
