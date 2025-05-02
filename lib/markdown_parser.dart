@@ -45,7 +45,6 @@ enum _SpanState {
 }
 
 class _ProcessedLine {
-  // TODO: Add paragraph started flag?
   var indent = 0;
   var lineKind = _LineKind.body;
   var spans = <InlineSpan>[];
@@ -159,7 +158,8 @@ class MarkdownParser {
     var previousLineKind = _LineKind.none;
     var orderedListNumber = 1;
     for (final processedLine in processedLines) {
-      if (processedLine.paragraphStarted && previousLineKind == _LineKind.body) {
+      if (processedLine.paragraphStarted &&
+          previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
       }
       if (processedLine.spans.isNotEmpty) {

@@ -132,11 +132,10 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
             title: Text(localizations.addANewTagTitle),
             content: TextField(
               controller: controller,
-              decoration:
-                  InputDecoration(
-                    hintText: localizations.enterATagName,
-                    border: const OutlineInputBorder(),
-                  ),
+              decoration: InputDecoration(
+                hintText: localizations.enterATagName,
+                border: const OutlineInputBorder(),
+              ),
               autofocus: true,
               onSubmitted: (text) {
                 accepted = true;
