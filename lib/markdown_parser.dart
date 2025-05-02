@@ -159,7 +159,8 @@ class MarkdownParser {
     var previousLineKind = _LineKind.none;
     var orderedListNumber = 1;
     for (final processedLine in processedLines) {
-      if (processedLine.paragraphStarted && previousLineKind == _LineKind.body) {
+      if (processedLine.paragraphStarted &&
+          previousLineKind == _LineKind.body) {
         widgets.add(const SizedBox(height: 10.0));
       }
       if (processedLine.spans.isNotEmpty) {
