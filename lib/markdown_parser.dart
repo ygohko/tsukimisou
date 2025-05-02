@@ -45,7 +45,6 @@ enum _SpanState {
 }
 
 class _ProcessedLine {
-  // TODO: Add paragraph started flag?
   var indent = 0;
   var lineKind = _LineKind.body;
   var spans = <InlineSpan>[];
