@@ -166,8 +166,8 @@ class MarkdownParser {
         late final Widget widget;
         switch (processedLine.lineKind) {
           case _LineKind.body:
-            widget = RichText(
-              text: TextSpan(
+            widget = Text.rich(
+              TextSpan(
                 style: textTheme.bodyMedium,
                 children: processedLine.spans,
               ),
