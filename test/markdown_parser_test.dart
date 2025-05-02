@@ -37,8 +37,8 @@ void main() {
       final contents = parser.contents;
       final column = contents as Column;
       final widget = column.children[0];
-      final richText = widget as RichText;
-      final span = richText.text as TextSpan;
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
       expect(span.style, textTheme.bodyMedium);
       expect(span.toPlainText(), 'Hello, World!');
     });
@@ -54,8 +54,8 @@ void main() {
       final column = contents as Column;
       final widget = column.children[0];
       final container = widget as Container;
-      final richText = container.child as RichText;
-      final span = richText.text as TextSpan;
+      final text = container.child as Text;
+      final span = text.textSpan as TextSpan;
       expect(span.style, textTheme.headlineLarge);
       expect(span.toPlainText(), 'Hello, World!');
     });
@@ -71,8 +71,8 @@ void main() {
       final column = contents as Column;
       final widget = column.children[0];
       final container = widget as Container;
-      final richText = container.child as RichText;
-      final span = richText.text as TextSpan;
+      final text = container.child as Text;
+      final span = text.textSpan as TextSpan;
       expect(span.style, textTheme.headlineMedium);
       expect(span.toPlainText(), 'Hello, World!');
     });
@@ -88,8 +88,8 @@ void main() {
       final column = contents as Column;
       final widget = column.children[0];
       final container = widget as Container;
-      final richText = container.child as RichText;
-      final span = richText.text as TextSpan;
+      final text = container.child as Text;
+      final span = text.textSpan as TextSpan;
       expect(span.style, textTheme.headlineSmall);
       expect(span.toPlainText(), 'Hello, World!');
     });
@@ -161,8 +161,8 @@ void main() {
       final contents = parser.contents;
       final column = contents as Column;
       final widget = column.children[0];
-      final richText = widget as RichText;
-      final span = richText.text as TextSpan;
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
       expect(span.style, textTheme.bodyMedium);
       expect(span.toPlainText(), 'Hello, World!');
     });
@@ -177,8 +177,8 @@ void main() {
       final contents = parser.contents;
       final column = contents as Column;
       final widget = column.children[0];
-      final richText = widget as RichText;
-      final span = richText.text as TextSpan;
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
       expect(span.style, textTheme.bodyMedium);
       expect(span.toPlainText(), 'https://www.google.com');
     });
@@ -192,8 +192,8 @@ void main() {
       final contents = parser.contents;
       final column = contents as Column;
       final widget = column.children[0];
-      final richText = widget as RichText;
-      final span = richText.text as TextSpan;
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
       final children = span.children!;
       final widgetSpan = children[0] as WidgetSpan;
       final row = widgetSpan.child as Row;
