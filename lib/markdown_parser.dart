@@ -177,8 +177,8 @@ class MarkdownParser {
           case _LineKind.headlineLarge:
             widget = Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   style: textTheme.headlineLarge,
                   children: processedLine.spans,
                 ),
@@ -189,8 +189,8 @@ class MarkdownParser {
           case _LineKind.headlineMedium:
             widget = Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   style: textTheme.headlineMedium,
                   children: processedLine.spans,
                 ),
@@ -201,8 +201,8 @@ class MarkdownParser {
           case _LineKind.headlineSmall:
             widget = Container(
               padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: RichText(
-                text: TextSpan(
+              child: Text.rich(
+                TextSpan(
                   style: textTheme.headlineSmall,
                   children: processedLine.spans,
                 ),
@@ -222,8 +222,8 @@ class MarkdownParser {
                   ),
                 ),
                 Flexible(
-                  child: RichText(
-                    text: TextSpan(
+                  child: Text.rich(
+                    TextSpan(
                       style: textTheme.bodyMedium,
                       children: processedLine.spans,
                     ),
@@ -249,8 +249,8 @@ class MarkdownParser {
                   ),
                 ),
                 Flexible(
-                  child: RichText(
-                    text: TextSpan(
+                  child: Text.rich(
+                    TextSpan(
                       style: textTheme.bodyMedium,
                       children: processedLine.spans,
                     ),
