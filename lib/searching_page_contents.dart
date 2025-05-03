@@ -103,7 +103,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             color: common_uis.TsukimisouColors.scheme.primary,
             size: 150.0,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20.0,
           ),
           Text(

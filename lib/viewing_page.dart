@@ -105,6 +105,7 @@ class _ViewingPageState extends State<ViewingPage>
     if (_previousMemos.isNotEmpty) {
       actions.add(
         IconButton(
+          key: const ValueKey('backToPreviousMemoButton'),
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: _showPreviousMemo,
           tooltip: localizations.backToPreviousMemo,
