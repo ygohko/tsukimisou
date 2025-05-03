@@ -268,6 +268,10 @@
     "@searchTitle": {
         "description": "App bar title for searching page"
     },
+    "noMemosFound": "No memos found",
+    "@noMemosFound": {
+        "description": "Indicator text when memos are not found for searching page"
+    },
     "openAsUrl": "Open as URL",
     "@openAsUrl": {
         "description": "Text for Open as URL context menu item"
