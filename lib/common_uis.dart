@@ -104,6 +104,15 @@ class TsukimisouTextStyles {
 
     return style;
   }
+
+  /// Text style for not found indicator on searching page.
+  static TextStyle searchingPageNotFoundIndicator(BuildContext context) {
+    var style = Theme.of(context).textTheme.titleLarge;
+    style ??= const TextStyle();
+    style = style.apply(color: Colors.black.withOpacity(0.6));
+
+    return style;
+  }
 }
 
 class DialogTransitionBuilders {

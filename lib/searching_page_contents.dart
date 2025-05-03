@@ -109,7 +109,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             ),
             Text(
               'No memos found',
-              style: Theme.of(context).textTheme.headlineSmall,
+              style: common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(context),
             ),
           ],
         ),
