@@ -95,24 +95,22 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
       );
     }
     else {
-      contents = Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.question_mark,
-              color: common_uis.TsukimisouColors.scheme.primary,
-              size: 150.0,
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Text(
-              localizations.noMemosFound,
-              style: common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(context),
-            ),
-          ],
-        ),
+      contents = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.question_mark,
+            color: common_uis.TsukimisouColors.scheme.primary,
+            size: 150.0,
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Text(
+            localizations.noMemosFound,
+            style: common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(context),
+          ),
+        ],
       );
     }
     const platform = LocalPlatform();
