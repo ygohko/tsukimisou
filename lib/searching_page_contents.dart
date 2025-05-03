@@ -65,32 +65,56 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final lastMerged =
         DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
     final appState = Provider.of<AppState>(context, listen: false);
-    Widget contents = ListView.builder(
-      itemCount: _memos.length,
-      itemBuilder: (context, i) {
-        final memo = _memos[i];
-        final lastModified =
-            DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-        late final bool unsynchronized;
-        if (lastModified.isAfter(lastMerged)) {
-          unsynchronized = true;
-        } else {
-          unsynchronized = false;
-        }
-        return Card(
-          color: common_uis.TsukimisouColors.memoCard,
-          elevation: 2.0,
-          child: InkWell(
-            onTap: appState.mergingWithGoogleDrive
-                ? null
-                : () async {
-                    await common_uis.viewMemo(context, memo);
-                  },
-            child: common_uis.memoCardContents(context, memo, unsynchronized),
-          ),
-        );
-      },
-    );
+    late Widget contents;
+    if (_memos.isNotEmpty) {
+      contents = ListView.builder(
+        itemCount: _memos.length,
+        itemBuilder: (context, i) {
+          final memo = _memos[i];
+          final lastModified =
+          DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+          late final bool unsynchronized;
+          if (lastModified.isAfter(lastMerged)) {
+            unsynchronized = true;
+          } else {
+            unsynchronized = false;
+          }
+          return Card(
+            color: common_uis.TsukimisouColors.memoCard,
+            elevation: 2.0,
+            child: InkWell(
+              onTap: appState.mergingWithGoogleDrive
+              ? null
+              : () async {
+                await common_uis.viewMemo(context, memo);
+              },
+              child: common_uis.memoCardContents(context, memo, unsynchronized),
+            ),
+          );
+        },
+      );
+    }
+    else {
+      contents = Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.question_mark,
+              color: common_uis.TsukimisouColors.scheme.primary,
+              size: 150.0,
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Text(
+              'No memos found',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ],
+        ),
+      );
+    }
     const platform = LocalPlatform();
     if (platform.isMobile) {
       contents = Scrollbar(
