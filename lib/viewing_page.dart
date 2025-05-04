@@ -86,6 +86,11 @@ class _ViewingPageState extends State<ViewingPage>
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
     final dateTime = DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
+    final lastModified =
+    DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
+    final lastMerged = DateTime.fromMillisecondsSinceEpoch(
+      Provider.of<MemoStore>(context, listen: false).lastMerged);
+    final unsynchronized = lastModified.isAfter(lastMerged);
     var tagsString = '';
     for (final tag in _memo.tags) {
       tagsString += '$tag, ';
@@ -235,6 +240,15 @@ class _ViewingPageState extends State<ViewingPage>
               onTap: _chooseViewingMode,
             ),
             const Divider(),
+            if (unsynchronized) ...[
+              ListTile(
+                title: Text(
+                  localizations.unsynchronized,
+                  style: attributeStyle,
+                ),
+              ),
+              const Divider(),
+            ]
           ],
         ),
       ),
