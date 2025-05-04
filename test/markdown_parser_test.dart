@@ -43,6 +43,41 @@ void main() {
       expect(span.toPlainText(), 'Hello, World!');
     });
 
+    testWidgets('MarkdownParser should create widgets for strikethrough texts.',
+        (WidgetTester tester) async {
+      await init(tester);
+      final context = tester.element(find.text('This is a test.'));
+      final parser = MarkdownParser(context, '~~Hello, World!~~');
+      parser.execute();
+      final textTheme = parser.textTheme;
+      final contents = parser.contents;
+      final column = contents as Column;
+      final widget = column.children[0];
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
+      final aSpan = span.children![0] as TextSpan;
+      expect(aSpan.style!.decoration, TextDecoration.lineThrough);
+      expect(aSpan.toPlainText(), 'Hello, World!');
+    });
+
+    testWidgets('MarkdownParser should create widgets for code span texts.',
+        (WidgetTester tester) async {
+      await init(tester);
+      final context = tester.element(find.text('This is a test.'));
+      final parser = MarkdownParser(context, '`Hello, World!`');
+      parser.execute();
+      final textTheme = parser.textTheme;
+      final contents = parser.contents;
+      final column = contents as Column;
+      final widget = column.children[0];
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
+      final aSpan = span.children![0] as TextSpan;
+      expect(aSpan.style!.backgroundColor, Colors.grey[300]);
+      expect(aSpan.style!.fontFeatures!.length, 1);
+      expect(aSpan.toPlainText(), 'Hello, World!');
+    });
+
     testWidgets('MarkdownParser should create widgets for large healines.',
         (WidgetTester tester) async {
       await init(tester);
