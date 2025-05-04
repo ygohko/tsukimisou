@@ -116,6 +116,7 @@ class MarkdownParser {
       _parseUnorderedList,
       _parseOrderedList,
       _parseStrikethrough,
+      _parseCode,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
       _parseLinkTextStarted,
@@ -123,7 +124,6 @@ class MarkdownParser {
       _parseLinkTargetEnded,
       _parseAutolinkStarted,
       _parseAutolinkEnded,
-      _parseCode,
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
@@ -392,6 +392,41 @@ class MarkdownParser {
     return (line, false);
   }
 
+  (String, bool) _parseCode(String line) {
+    final index = line.indexOf('`');
+    if (index != -1) {
+      if (_spanState == _SpanState.normal) {
+        final aLine = line.substring(0, index);
+        line = line.substring(index + 1);
+        if (aLine.isNotEmpty) {
+          _processedLine.spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.codeStarted;
+
+        return (line, true);
+      } else if (_spanState == _SpanState.codeStarted) {
+        final aLine = line.substring(0, index);
+        line = line.substring(index + 1);
+        if (aLine.isNotEmpty) {
+          _processedLine.spans.add(TextSpan(
+            text: aLine,
+            style: TextStyle(
+              backgroundColor: Colors.grey[300],
+              fontFeatures: const [
+                FontFeature.tabularFigures(),
+              ],
+            ),
+          ));
+        }
+        _spanState = _SpanState.normal;
+        
+        return (line, true);
+      }
+    }
+
+    return (line, false);
+  }
+  
   (String, bool) _parseChechboxChecked(String line) {
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
@@ -551,41 +586,6 @@ class MarkdownParser {
       }
 
       return (line, true);
-    }
-
-    return (line, false);
-  }
-
-  (String, bool) _parseCode(String line) {
-    final index = line.indexOf('`');
-    if (index != -1) {
-      if (_spanState == _SpanState.normal) {
-        final aLine = line.substring(0, index);
-        line = line.substring(index + 1);
-        if (aLine.isNotEmpty) {
-          _processedLine.spans.add(TextSpan(text: aLine));
-        }
-        _spanState = _SpanState.codeStarted;
-
-        return (line, true);
-      } else if (_spanState == _SpanState.codeStarted) {
-        final aLine = line.substring(0, index);
-        line = line.substring(index + 1);
-        if (aLine.isNotEmpty) {
-          _processedLine.spans.add(TextSpan(
-            text: aLine,
-            style: TextStyle(
-              backgroundColor: Colors.grey[300],
-              fontFeatures: [
-                FontFeature.tabularFigures(),
-              ],
-            ),
-          ));
-        }
-        _spanState = _SpanState.normal;
-        
-        return (line, true);
-      }
     }
 
     return (line, false);
