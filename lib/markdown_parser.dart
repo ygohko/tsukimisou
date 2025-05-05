@@ -273,6 +273,20 @@ class MarkdownParser {
             );
             break;
 
+          case _LineKind.code:
+            widget = Text.rich(
+              TextSpan(
+                style:  TextStyle(
+                  backgroundColor: Colors.grey[300],
+                  fontFeatures: const [
+                    FontFeature.tabularFigures(),
+                  ],
+                  children: processedLine.spans,
+                ),
+              ),
+            );
+            break;
+
           default:
             break;
         }
