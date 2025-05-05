@@ -43,6 +43,23 @@ void main() {
       expect(span.toPlainText(), 'Hello, World!');
     });
 
+    testWidgets('MarkdownParser should create widgets for code block texts.',
+        (WidgetTester tester) async {
+      await init(tester);
+      final context = tester.element(find.text('This is a test.'));
+      final parser = MarkdownParser(context, '```\nHello, World!\n```');
+      parser.execute();
+      final textTheme = parser.textTheme;
+      final contents = parser.contents;
+      final column = contents as Column;
+      final widget = column.children[0];
+      final text = widget as Text;
+      final span = text.textSpan as TextSpan;
+      expect(span.style!.backgroundColor, Colors.grey[300]);
+      expect(span.style!.fontFeatures!.length, 1);
+      expect(span.toPlainText(), 'Hello, World!');
+    });
+
     testWidgets('MarkdownParser should create widgets for strikethrough texts.',
         (WidgetTester tester) async {
       await init(tester);
