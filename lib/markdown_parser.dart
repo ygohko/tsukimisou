@@ -34,6 +34,12 @@ enum _LineKind {
   headlineSmall,
   unorderedList,
   orderedList,
+  code,
+}
+
+enum _BlockState {
+  normal,
+  code,
 }
 
 enum _SpanState {
@@ -58,6 +64,7 @@ class MarkdownParser {
   late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
+  var _blockState = _BlockState.normal;
   var _spanState = _SpanState.normal;
   var _processedLine = _ProcessedLine();
   var _linkText = '';
@@ -116,7 +123,7 @@ class MarkdownParser {
       _parseUnorderedList,
       _parseOrderedList,
       _parseStrikethrough,
-      _parseCode,
+      _parseCodeSpan,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
       _parseLinkTextStarted,
@@ -124,6 +131,7 @@ class MarkdownParser {
       _parseLinkTargetEnded,
       _parseAutolinkStarted,
       _parseAutolinkEnded,
+      _parseCodeBlock,
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
@@ -132,6 +140,9 @@ class MarkdownParser {
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
       _processedLine = _ProcessedLine();
+      if (_blockState == _BlockState.code) {
+        _processedLine.lineKind = _LineKind.code;
+      }
       _spanState = _SpanState.normal;
       _processedLine = _ProcessedLine();
 
@@ -392,7 +403,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseCode(String line) {
+  (String, bool) _parseCodeSpan(String line) {
     final index = line.indexOf('`');
     if (index != -1) {
       if (_spanState == _SpanState.normal) {
@@ -586,6 +597,23 @@ class MarkdownParser {
       }
 
       return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseCodeBlock(String line) {
+    if (line.startsWith('```')) {
+      line = '';
+      if (_blockState == _BlockState.normal) {
+        _blockState = _BlockState.code;
+
+        return (line, true);
+      } else if (_blockState == _BlockState.code) {
+        _blockState = _BlockState.normal;
+
+        return (line, true);
+      }
     }
 
     return (line, false);
