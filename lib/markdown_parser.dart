@@ -117,6 +117,7 @@ class MarkdownParser {
     final textTheme = _textTheme!;
     final lines = _text.split('\n');
     final parsers = [
+      _parseCodeBlock,
       _parseHeadlineLarge,
       _parseHeadlineMedium,
       _parseHeadlineSmall,
@@ -131,7 +132,6 @@ class MarkdownParser {
       _parseLinkTargetEnded,
       _parseAutolinkStarted,
       _parseAutolinkEnded,
-      _parseCodeBlock,
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
@@ -144,7 +144,6 @@ class MarkdownParser {
         _processedLine.lineKind = _LineKind.code;
       }
       _spanState = _SpanState.normal;
-      _processedLine = _ProcessedLine();
 
       var aDone = false;
       while (!aDone) {
@@ -159,6 +158,31 @@ class MarkdownParser {
         }
       }
       if (line.isNotEmpty) {
+        /*
+        print('lineKind: ${_processedLine.lineKind}');
+
+        
+        if (_processedLine.lineKind == _LineKind.code) {
+          // ADHOC
+
+          print('ogya----------');
+
+          _processedLine.spans.add(
+            TextSpan(
+              style: TextStyle(
+                backgroundColor: Colors.grey[300],
+                fontFeatures: const [
+                  FontFeature.tabularFigures(),
+                ],
+              ),
+              text: line,
+            ),
+          );
+        } else {
+          _processedLine.spans.add(TextSpan(text: line));
+        }
+        */
+
         _processedLine.spans.add(TextSpan(text: line));
       }
 
@@ -281,8 +305,8 @@ class MarkdownParser {
                   fontFeatures: const [
                     FontFeature.tabularFigures(),
                   ],
-                  children: processedLine.spans,
                 ),
+                children: processedLine.spans,
               ),
             );
             break;
@@ -622,9 +646,13 @@ class MarkdownParser {
       if (_blockState == _BlockState.normal) {
         _blockState = _BlockState.code;
 
+        print('_blockState: $_blockState');
+
         return (line, true);
       } else if (_blockState == _BlockState.code) {
         _blockState = _BlockState.normal;
+
+        print('_blockState: $_blockState');
 
         return (line, true);
       }
