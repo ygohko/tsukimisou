@@ -158,31 +158,6 @@ class MarkdownParser {
         }
       }
       if (line.isNotEmpty) {
-        /*
-        print('lineKind: ${_processedLine.lineKind}');
-
-        
-        if (_processedLine.lineKind == _LineKind.code) {
-          // ADHOC
-
-          print('ogya----------');
-
-          _processedLine.spans.add(
-            TextSpan(
-              style: TextStyle(
-                backgroundColor: Colors.grey[300],
-                fontFeatures: const [
-                  FontFeature.tabularFigures(),
-                ],
-              ),
-              text: line,
-            ),
-          );
-        } else {
-          _processedLine.spans.add(TextSpan(text: line));
-        }
-        */
-
         _processedLine.spans.add(TextSpan(text: line));
       }
 
@@ -301,6 +276,7 @@ class MarkdownParser {
             widget = Text.rich(
               TextSpan(
                 style:  TextStyle(
+                  // TODO: Add a constant.
                   backgroundColor: Colors.grey[300],
                   fontFeatures: const [
                     FontFeature.tabularFigures(),
@@ -460,6 +436,7 @@ class MarkdownParser {
           _processedLine.spans.add(TextSpan(
             text: aLine,
             style: TextStyle(
+              // TODO: Add a constant.
               backgroundColor: Colors.grey[300],
               fontFeatures: const [
                 FontFeature.tabularFigures(),
@@ -475,7 +452,7 @@ class MarkdownParser {
 
     return (line, false);
   }
-  
+
   (String, bool) _parseChechboxChecked(String line) {
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
@@ -646,13 +623,9 @@ class MarkdownParser {
       if (_blockState == _BlockState.normal) {
         _blockState = _BlockState.code;
 
-        print('_blockState: $_blockState');
-
         return (line, true);
       } else if (_blockState == _BlockState.code) {
         _blockState = _BlockState.normal;
-
-        print('_blockState: $_blockState');
 
         return (line, true);
       }
