@@ -24,6 +24,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'common_uis.dart';
+
 typedef MemoLinkCallback = void Function(String memoName);
 
 enum _LineKind {
@@ -278,8 +280,7 @@ class MarkdownParser {
             widget = Text.rich(
               TextSpan(
                 style:  TextStyle(
-                  // TODO: Add a constant.
-                  backgroundColor: Colors.grey[300],
+                  backgroundColor: TsukimisouColors.codeBackground,
                   fontFeatures: const [
                     FontFeature.tabularFigures(),
                   ],
@@ -294,12 +295,12 @@ class MarkdownParser {
               children: [
                 Container(
                   width: 2.0,
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minHeight: 20.0,
                   ),
-                  color: Colors.grey,
+                  color: TsukimisouColors.blockQuoteIndicator,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10.0,
                 ),
                 Flexible(
@@ -463,8 +464,7 @@ class MarkdownParser {
           _processedLine.spans.add(TextSpan(
             text: aLine,
             style: TextStyle(
-              // TODO: Add a constant.
-              backgroundColor: Colors.grey[300],
+              backgroundColor: TsukimisouColors.codeBackground,
               fontFeatures: const [
                 FontFeature.tabularFigures(),
               ],
@@ -488,7 +488,7 @@ class MarkdownParser {
           child: Icon(
             Icons.check_box_rounded,
             size: 20.0,
-            color: Colors.green,
+            color: TsukimisouColors.checkBoxChecked,
           ),
         ),
       );
@@ -507,7 +507,7 @@ class MarkdownParser {
           child: Icon(
             Icons.check_box_outline_blank_rounded,
             size: 20.0,
-            color: Colors.red,
+            color: TsukimisouColors.checkBoxUnchecked,
           ),
         ),
       );

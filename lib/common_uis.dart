@@ -55,6 +55,18 @@ class TsukimisouColors {
 
   /// Color for memo card.
   static const memoCard = Color(0xFFFFFFFF);
+
+  /// Color for unchecked check box.
+  static const checkBoxUnchecked = Colors.red;
+
+  /// Color for checked check box.
+  static const checkBoxChecked = Colors.green;
+
+  /// Color for code background.
+  static final codeBackground = Colors.grey[300];
+
+  /// Color for block quote indicator.
+  static const blockQuoteIndicator = Colors.grey;
 }
 
 class TsukimisouTextStyles {
