@@ -279,7 +279,7 @@ class MarkdownParser {
           case _LineKind.code:
             widget = Text.rich(
               TextSpan(
-                style: TsukimisouTextStyles.vieweingPageCode(_context),
+                style: TsukimisouTextStyles.viewingPageCode(_context),
                 children: processedLine.spans,
               ),
             );
@@ -458,7 +458,7 @@ class MarkdownParser {
         if (aLine.isNotEmpty) {
           _processedLine.spans.add(TextSpan(
             text: aLine,
-            style: TsukimisouTextStyles.vieweingPageCode(_context),
+            style: TsukimisouTextStyles.viewingPageCode(_context),
           ));
         }
         _spanState = _SpanState.normal;

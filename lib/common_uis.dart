@@ -108,7 +108,7 @@ class TsukimisouTextStyles {
   }
 
   /// Text style for code spans and code blocks on vieweing page.
-  static TextStyle vieweingPageCode(BuildContext context) {
+  static TextStyle viewingPageCode(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
     style = GoogleFonts.mPlus1Code(textStyle: style);
