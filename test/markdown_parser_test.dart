@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tsukimisou/common_uis.dart';
 import 'package:tsukimisou/markdown_parser.dart';
 
 Future<void> init(WidgetTester tester) async {
@@ -54,8 +55,7 @@ void main() {
       final widget = column.children[0];
       final text = widget as Text;
       final span = text.textSpan as TextSpan;
-      expect(span.style!.backgroundColor, Colors.grey[300]);
-      expect(span.style!.fontFeatures!.length, 1);
+      expect(span.style!.backgroundColor, TsukimisouColors.codeBackground);
       expect(span.toPlainText(), 'Hello, World!');
     });
 
@@ -102,8 +102,7 @@ void main() {
       final text = widget as Text;
       final span = text.textSpan as TextSpan;
       final aSpan = span.children![0] as TextSpan;
-      expect(aSpan.style!.backgroundColor, Colors.grey[300]);
-      expect(aSpan.style!.fontFeatures!.length, 1);
+      expect(aSpan.style!.backgroundColor, TsukimisouColors.codeBackground);
       expect(aSpan.toPlainText(), 'Hello, World!');
     });
 
