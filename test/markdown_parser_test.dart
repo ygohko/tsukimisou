@@ -49,7 +49,6 @@ void main() {
       final context = tester.element(find.text('This is a test.'));
       final parser = MarkdownParser(context, '```\nHello, World!\n```');
       parser.execute();
-      final textTheme = parser.textTheme;
       final contents = parser.contents;
       final column = contents as Column;
       final widget = column.children[0];
