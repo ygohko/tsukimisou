@@ -35,6 +35,7 @@ enum _LineKind {
   unorderedList,
   orderedList,
   code,
+  blockQuote,
 }
 
 enum _BlockState {
@@ -123,6 +124,7 @@ class MarkdownParser {
       _parseHeadlineSmall,
       _parseUnorderedList,
       _parseOrderedList,
+      _parseBlockQuote,
       _parseStrikethrough,
       _parseCodeSpan,
       _parseChechboxChecked,
@@ -287,6 +289,31 @@ class MarkdownParser {
             );
             break;
 
+          case _LineKind.blockQuote:
+            widget = Row(
+              children: [
+                Container(
+                  width: 2.0,
+                  constraints: BoxConstraints(
+                    minHeight: 20.0,
+                  ),
+                  color: Colors.grey,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Flexible(
+                  child: Text.rich(
+                    TextSpan(
+                      style: textTheme.bodyMedium,
+                      children: processedLine.spans,
+                    ),
+                  ),
+                ),
+              ],
+            );
+            break;
+            
           default:
             break;
         }
@@ -629,6 +656,17 @@ class MarkdownParser {
 
         return (line, true);
       }
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseBlockQuote(String line) {
+    if (line.startsWith('> ')) {
+      line = line.replaceFirst('> ', '');
+      _processedLine.lineKind = _LineKind.blockQuote;
+
+      return (line, true);
     }
 
     return (line, false);
