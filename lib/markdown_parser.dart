@@ -119,6 +119,7 @@ class MarkdownParser {
   void execute() {
     final textTheme = _textTheme!;
     final lines = _text.split('\n');
+    // TODO Is adding head flag needed?
     final parsers = [
       _parseCodeBlock,
       _parseHeadlineLarge,
@@ -137,7 +138,8 @@ class MarkdownParser {
       _parseAutolinkStarted,
       _parseAutolinkEnded,
       _parseThemeticBreak,
-      _parseParagraphStarted,
+      // _parseParagraphStarted,
+      _parseEmptyLine,
     ];
     final processedLines = <_ProcessedLine>[];
 
@@ -699,6 +701,7 @@ class MarkdownParser {
     return (line, false);
   }
 
+  /*
   (String, bool) _parseParagraphStarted(String line) {
     if (_processedLine.paragraphStarted || _processedLine.spans.isNotEmpty) {
       return (line, false);
@@ -708,6 +711,27 @@ class MarkdownParser {
       _processedLine.paragraphStarted = true;
 
       return (line, true);
+    }
+
+    return (line, false);
+  }
+  */
+
+  (String, bool) _parseEmptyLine(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
+    if (line.isEmpty) {
+      if (_blockState == _BlockState.normal) {
+        _processedLine.paragraphStarted = true;
+
+        return (line, true);
+      } else if (_blockState == _BlockState.code) {
+        _processedLine.spans(TextSpan(text: ''));
+
+        return (line, true);
+      }
     }
 
     return (line, false);
