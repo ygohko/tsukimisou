@@ -23,6 +23,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
 import 'extensions.dart';
@@ -63,7 +64,7 @@ class TsukimisouColors {
   static const checkBoxChecked = Colors.green;
 
   /// Color for code background.
-  static final codeBackground = Colors.grey[300];
+  static final codeBackground = Colors.grey[200];
 
   /// Color for block quote indicator.
   static const blockQuoteIndicator = Colors.grey;
@@ -102,6 +103,19 @@ class TsukimisouTextStyles {
     var style = Theme.of(context).textTheme.titleMedium;
     style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
+
+    return style;
+  }
+
+  /// Text style for code spans and code blocks on vieweing page.
+  static TextStyle vieweingPageCode(BuildContext context) {
+    var style = Theme.of(context).textTheme.bodyMedium;
+    style ??= const TextStyle();
+    style = GoogleFonts.mPlus1Code(textStyle: style);
+    style = style.apply(
+      backgroundColor: TsukimisouColors.codeBackground,
+      fontWeightDelta: 1,
+    );
 
     return style;
   }
