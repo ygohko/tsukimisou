@@ -151,17 +151,19 @@ class MarkdownParser {
       }
       _spanState = _SpanState.normal;
 
-      var aDone = false;
-      while (!aDone) {
-        aDone = true;
+      var done = false;
+      var head = true;
+      while (!done) {
+        done = true;
         for (final parser in parsers) {
-          final (aLine, parsed) = parser(line);
+          final (aLine, parsed) = parser(line, head);
           line = aLine;
           if (parsed) {
-            aDone = false;
+            done = false;
             break;
           }
         }
+        head = false;
       }
       if (line.isNotEmpty) {
         _processedLine.spans.add(TextSpan(text: line));
