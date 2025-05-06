@@ -34,6 +34,12 @@ enum _LineKind {
   headlineSmall,
   unorderedList,
   orderedList,
+  code,
+}
+
+enum _BlockState {
+  normal,
+  code,
 }
 
 enum _SpanState {
@@ -58,6 +64,7 @@ class MarkdownParser {
   late final MemoLinkCallback? _onMemoLinkRequested;
   late final Widget _contents;
   late final ColorScheme _colorScheme;
+  var _blockState = _BlockState.normal;
   var _spanState = _SpanState.normal;
   var _processedLine = _ProcessedLine();
   var _linkText = '';
@@ -110,12 +117,14 @@ class MarkdownParser {
     final textTheme = _textTheme!;
     final lines = _text.split('\n');
     final parsers = [
+      _parseCodeBlock,
       _parseHeadlineLarge,
       _parseHeadlineMedium,
       _parseHeadlineSmall,
       _parseUnorderedList,
       _parseOrderedList,
       _parseStrikethrough,
+      _parseCodeSpan,
       _parseChechboxChecked,
       _parseChechboxUnchecked,
       _parseLinkTextStarted,
@@ -123,7 +132,6 @@ class MarkdownParser {
       _parseLinkTargetEnded,
       _parseAutolinkStarted,
       _parseAutolinkEnded,
-      _parseCode,
       _parseThemeticBreak,
       _parseParagraphStarted,
     ];
@@ -132,8 +140,10 @@ class MarkdownParser {
     for (var line in lines) {
       line = line.replaceFirst('\n', '');
       _processedLine = _ProcessedLine();
+      if (_blockState == _BlockState.code) {
+        _processedLine.lineKind = _LineKind.code;
+      }
       _spanState = _SpanState.normal;
-      _processedLine = _ProcessedLine();
 
       var aDone = false;
       while (!aDone) {
@@ -262,6 +272,21 @@ class MarkdownParser {
             );
             break;
 
+          case _LineKind.code:
+            widget = Text.rich(
+              TextSpan(
+                style:  TextStyle(
+                  // TODO: Add a constant.
+                  backgroundColor: Colors.grey[300],
+                  fontFeatures: const [
+                    FontFeature.tabularFigures(),
+                  ],
+                ),
+                children: processedLine.spans,
+              ),
+            );
+            break;
+
           default:
             break;
         }
@@ -387,6 +412,42 @@ class MarkdownParser {
       }
 
       return (line, true);
+    }
+
+    return (line, false);
+  }
+
+  (String, bool) _parseCodeSpan(String line) {
+    final index = line.indexOf('`');
+    if (index != -1) {
+      if (_spanState == _SpanState.normal) {
+        final aLine = line.substring(0, index);
+        line = line.substring(index + 1);
+        if (aLine.isNotEmpty) {
+          _processedLine.spans.add(TextSpan(text: aLine));
+        }
+        _spanState = _SpanState.codeStarted;
+
+        return (line, true);
+      } else if (_spanState == _SpanState.codeStarted) {
+        final aLine = line.substring(0, index);
+        line = line.substring(index + 1);
+        if (aLine.isNotEmpty) {
+          _processedLine.spans.add(TextSpan(
+            text: aLine,
+            style: TextStyle(
+              // TODO: Add a constant.
+              backgroundColor: Colors.grey[300],
+              fontFeatures: const [
+                FontFeature.tabularFigures(),
+              ],
+            ),
+          ));
+        }
+        _spanState = _SpanState.normal;
+        
+        return (line, true);
+      }
     }
 
     return (line, false);
@@ -556,34 +617,16 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseCode(String line) {
-    final index = line.indexOf('`');
-    if (index != -1) {
-      if (_spanState == _SpanState.normal) {
-        final aLine = line.substring(0, index);
-        line = line.substring(index + 1);
-        if (aLine.isNotEmpty) {
-          _processedLine.spans.add(TextSpan(text: aLine));
-        }
-        _spanState = _SpanState.codeStarted;
+  (String, bool) _parseCodeBlock(String line) {
+    if (line.startsWith('```')) {
+      line = '';
+      if (_blockState == _BlockState.normal) {
+        _blockState = _BlockState.code;
 
         return (line, true);
-      } else if (_spanState == _SpanState.codeStarted) {
-        final aLine = line.substring(0, index);
-        line = line.substring(index + 1);
-        if (aLine.isNotEmpty) {
-          _processedLine.spans.add(TextSpan(
-            text: aLine,
-            style: TextStyle(
-              backgroundColor: Colors.grey[300],
-              fontFeatures: [
-                FontFeature.tabularFigures(),
-              ],
-            ),
-          ));
-        }
-        _spanState = _SpanState.normal;
-        
+      } else if (_blockState == _BlockState.code) {
+        _blockState = _BlockState.normal;
+
         return (line, true);
       }
     }
