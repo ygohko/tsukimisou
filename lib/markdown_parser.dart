@@ -582,6 +582,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseAutolinkStarted(String line) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
+
     final regExp = RegExp(r'<.*>');
     final matched = regExp.firstMatch(line);
     if (matched != null && _spanState != _SpanState.autolinkStarted) {
@@ -602,6 +606,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseAutolinkEnded(String line) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
+
     final index = line.indexOf('>');
     if (index != -1 && _spanState == _SpanState.autolinkStarted) {
       final aLine = line.substring(0, index);
