@@ -59,6 +59,21 @@ void main() {
       expect(span.toPlainText(), 'Hello, World!');
     });
 
+    testWidgets('MarkdownParser should create widgets for block quote texts.',
+        (WidgetTester tester) async {
+      await init(tester);
+      final context = tester.element(find.text('This is a test.'));
+      final parser = MarkdownParser(context, '> Hello, World!');
+      parser.execute();
+      final contents = parser.contents;
+      final column = contents as Column;
+      final widget = column.children[0];
+      final row = widget as Row;
+      expect(row.children[0] is Container, true);
+      expect(row.children[1] is SizedBox, true);
+      expect(row.children[2] is Flexible, true);
+    });
+
     testWidgets('MarkdownParser should create widgets for strikethrough texts.',
         (WidgetTester tester) async {
       await init(tester);
