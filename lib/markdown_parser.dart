@@ -348,6 +348,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseHeadlineLarge(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
       _processedLine.lineKind = _LineKind.headlineLarge;
@@ -359,6 +363,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseHeadlineMedium(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
       _processedLine.lineKind = _LineKind.headlineMedium;
@@ -370,6 +378,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseHeadlineSmall(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
       _processedLine.lineKind = _LineKind.headlineSmall;
@@ -381,6 +393,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseUnorderedList(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -398,6 +414,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseOrderedList(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     final regExp = RegExp(r'^ *\d+[.)] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -645,6 +665,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseCodeBlock(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('```')) {
       line = '';
       if (_blockState == _BlockState.normal) {
@@ -662,6 +686,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseBlockQuote(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('> ')) {
       line = line.replaceFirst('> ', '');
       _processedLine.lineKind = _LineKind.blockQuote;
@@ -673,6 +701,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseThemeticBreak(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('---')) {
       line = '';
       _processedLine.spans.add(
