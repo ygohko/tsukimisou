@@ -349,7 +349,7 @@ class MarkdownParser {
     }
   }
 
-  (String, bool) _parseHeadlineLarge(String line) {
+  (String, bool) _parseHeadlineLarge(String line, bool head) {
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
       _processedLine.lineKind = _LineKind.headlineLarge;
@@ -360,7 +360,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseHeadlineMedium(String line) {
+  (String, bool) _parseHeadlineMedium(String line, bool head) {
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
       _processedLine.lineKind = _LineKind.headlineMedium;
@@ -371,7 +371,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseHeadlineSmall(String line) {
+  (String, bool) _parseHeadlineSmall(String line, bool head) {
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
       _processedLine.lineKind = _LineKind.headlineSmall;
@@ -382,7 +382,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseUnorderedList(String line) {
+  (String, bool) _parseUnorderedList(String line, bool head) {
     final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -399,7 +399,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseOrderedList(String line) {
+  (String, bool) _parseOrderedList(String line, bool head) {
     final regExp = RegExp(r'^ *\d+[.)] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -416,7 +416,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseStrikethrough(String line) {
+  (String, bool) _parseStrikethrough(String line, bool head) {
     final index = line.indexOf('~~');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -444,7 +444,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseCodeSpan(String line) {
+  (String, bool) _parseCodeSpan(String line, bool head) {
     final index = line.indexOf('`');
     if (index != -1) {
       if (_spanState == _SpanState.normal) {
@@ -474,7 +474,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseChechboxChecked(String line) {
+  (String, bool) _parseChechboxChecked(String line, bool head) {
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
       _processedLine.spans.add(
@@ -493,7 +493,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseChechboxUnchecked(String line) {
+  (String, bool) _parseChechboxUnchecked(String line, bool head) {
     if (line.startsWith('[ ]')) {
       line = line.replaceFirst('[ ]', '');
       _processedLine.spans.add(
@@ -512,7 +512,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseLinkTextStarted(String line) {
+  (String, bool) _parseLinkTextStarted(String line, bool head) {
     final index = line.indexOf('[');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -530,7 +530,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseLinkTargetStarted(String line) {
+  (String, bool) _parseLinkTargetStarted(String line, bool head) {
     final index = line.indexOf('](');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -548,7 +548,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseLinkTargetEnded(String line) {
+  (String, bool) _parseLinkTargetEnded(String line, bool head) {
     if (_spanState != _SpanState.linkTargetStarted) {
       return (line, false);
     }
@@ -585,7 +585,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseAutolinkStarted(String line) {
+  (String, bool) _parseAutolinkStarted(String line, bool head) {
     if (_blockState != _BlockState.normal) {
       return (line, false);
     }
@@ -609,7 +609,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseAutolinkEnded(String line) {
+  (String, bool) _parseAutolinkEnded(String line, bool head) {
     if (_blockState != _BlockState.normal) {
       return (line, false);
     }
@@ -646,7 +646,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseCodeBlock(String line) {
+  (String, bool) _parseCodeBlock(String line, bool head) {
     if (line.startsWith('```')) {
       line = '';
       if (_blockState == _BlockState.normal) {
@@ -663,7 +663,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseBlockQuote(String line) {
+  (String, bool) _parseBlockQuote(String line, bool head) {
     if (line.startsWith('> ')) {
       line = line.replaceFirst('> ', '');
       _processedLine.lineKind = _LineKind.blockQuote;
@@ -674,7 +674,7 @@ class MarkdownParser {
     return (line, false);
   }
 
-  (String, bool) _parseThemeticBreak(String line) {
+  (String, bool) _parseThemeticBreak(String line, bool head) {
     if (line.startsWith('---')) {
       line = '';
       _processedLine.spans.add(
@@ -730,7 +730,7 @@ class MarkdownParser {
 
         return (line, true);
       } else if (_blockState == _BlockState.code) {
-        _processedLine.spans(TextSpan(text: ''));
+        _processedLine.spans.add(const TextSpan(text: ''));
 
         return (line, true);
       }
