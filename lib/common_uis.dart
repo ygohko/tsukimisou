@@ -114,7 +114,7 @@ class TsukimisouTextStyles {
     style = GoogleFonts.mPlus1Code(textStyle: style);
     style = style.apply(
       backgroundColor: TsukimisouColors.codeBackground,
-      fontWeightDelta: 1,
+      fontWeightDelta: 2,
     );
 
     return style;
