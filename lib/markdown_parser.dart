@@ -531,6 +531,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTextStarted(String line, bool head) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
+
     final index = line.indexOf('[');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -549,6 +553,13 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetStarted(String line, bool head) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
+    if (_spanState != _SpanState.linkTextStarted) {
+      return (line, false);
+    }
+
     final index = line.indexOf('](');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -567,6 +578,9 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetEnded(String line, bool head) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
     if (_spanState != _SpanState.linkTargetStarted) {
       return (line, false);
     }
