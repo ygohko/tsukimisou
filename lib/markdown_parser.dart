@@ -493,6 +493,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseChechboxChecked(String line, bool head) {
+    if (_processedLine.spans.isNotEmpty) {
+      return (line, false);
+    }
+
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
       _processedLine.spans.add(
@@ -512,6 +516,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseChechboxUnchecked(String line, bool head) {
+    if (_processedLine.spans.isNotEmpty) {
+      return (line, false);
+    }
+
     if (line.startsWith('[ ]')) {
       line = line.replaceFirst('[ ]', '');
       _processedLine.spans.add(
