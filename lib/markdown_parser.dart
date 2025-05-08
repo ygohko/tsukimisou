@@ -177,7 +177,12 @@ class MarkdownParser {
     var orderedListNumber = 1;
     for (final processedLine in processedLines) {
       if (processedLine.paragraphStarted &&
-          previousLineKind == _LineKind.body) {
+          (previousLineKind != _LineKind.headlineLarge &&
+            previousLineKind != _LineKind.headlineMedium &&
+            previousLineKind != _LineKind.headlineSmall) &&
+          (processedLine.lineKind != _LineKind.headlineLarge &&
+            processedLine.lineKind != _LineKind.headlineMedium &&
+            processedLine.lineKind != _LineKind.headlineSmall)) {
         widgets.add(const SizedBox(height: 10.0));
       }
       if (processedLine.spans.isNotEmpty) {
