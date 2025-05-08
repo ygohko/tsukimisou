@@ -348,6 +348,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseHeadlineLarge(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('# ')) {
       line = line.replaceFirst('# ', '');
       _processedLine.lineKind = _LineKind.headlineLarge;
@@ -359,6 +363,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseHeadlineMedium(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('## ')) {
       line = line.replaceFirst('## ', '');
       _processedLine.lineKind = _LineKind.headlineMedium;
@@ -370,6 +378,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseHeadlineSmall(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('### ')) {
       line = line.replaceFirst('### ', '');
       _processedLine.lineKind = _LineKind.headlineSmall;
@@ -381,6 +393,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseUnorderedList(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     final regExp = RegExp(r'^ *[\+\-\*] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -398,6 +414,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseOrderedList(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     final regExp = RegExp(r'^ *\d+[.)] ');
     final match = regExp.firstMatch(line);
     if (match != null) {
@@ -473,6 +493,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseChechboxChecked(String line, bool head) {
+    if (_processedLine.spans.isNotEmpty) {
+      return (line, false);
+    }
+
     if (line.startsWith('[x]')) {
       line = line.replaceFirst('[x]', '');
       _processedLine.spans.add(
@@ -492,6 +516,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseChechboxUnchecked(String line, bool head) {
+    if (_processedLine.spans.isNotEmpty) {
+      return (line, false);
+    }
+
     if (line.startsWith('[ ]')) {
       line = line.replaceFirst('[ ]', '');
       _processedLine.spans.add(
@@ -511,6 +539,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTextStarted(String line, bool head) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
+
     final index = line.indexOf('[');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -529,6 +561,13 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetStarted(String line, bool head) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
+    if (_spanState != _SpanState.linkTextStarted) {
+      return (line, false);
+    }
+
     final index = line.indexOf('](');
     if (index != -1) {
       final aLine = line.substring(0, index);
@@ -547,6 +586,9 @@ class MarkdownParser {
   }
 
   (String, bool) _parseLinkTargetEnded(String line, bool head) {
+    if (_blockState != _BlockState.normal) {
+      return (line, false);
+    }
     if (_spanState != _SpanState.linkTargetStarted) {
       return (line, false);
     }
@@ -645,6 +687,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseCodeBlock(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('```')) {
       line = '';
       if (_blockState == _BlockState.normal) {
@@ -662,6 +708,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseBlockQuote(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('> ')) {
       line = line.replaceFirst('> ', '');
       _processedLine.lineKind = _LineKind.blockQuote;
@@ -673,6 +723,10 @@ class MarkdownParser {
   }
 
   (String, bool) _parseThemeticBreak(String line, bool head) {
+    if (!head) {
+      return (line, false);
+    }
+
     if (line.startsWith('---')) {
       line = '';
       _processedLine.spans.add(
