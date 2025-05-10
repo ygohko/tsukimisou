@@ -5,7 +5,7 @@ import 'package:tsukimisou/markdown_parser.dart';
 
 // These tests are extracted from CommonMark spec 0.31.2 by John MacFarlane,
 // licended under CC-BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
-List<String> markdownTests = [
+List<String> _markdownTests = [
   '→foo→baz→→bim',
   '  →foo→baz→→bim',
   '    a→a\n    ὐ→a',
@@ -941,7 +941,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
-      for (final line in markdownTests) {
+      for (final line in _markdownTests) {
         final parser = MarkdownParser(context, line);
         parser.execute();
       }
