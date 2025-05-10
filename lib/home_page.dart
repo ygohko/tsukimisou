@@ -86,10 +86,11 @@ class _HomePageState extends State<HomePage> {
     await _load();
     const platform = LocalPlatform();
     if (platform.isAndroid) {
-      final initialText = await ReceiveSharingIntent.getInitialText();
-      if (initialText != null) {
-        ReceiveSharingIntent.reset();
-        _addMemo(initialText: initialText);
+      final intent = ReceiveSharingIntent.instance;
+      final medias = await intent.getInitialMedia();
+      if (medias.isNotEmpty) {
+        intent.reset();
+        _addMemo(initialText: medias[0].toString());
       }
     }
   }
