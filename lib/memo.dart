@@ -132,11 +132,11 @@ class Memo {
 
   /// Hash generated from this memo.
   String get hash {
-    // TODO: Consider name and viewing mode?
     var string = 'text: $_text\ntags: ';
     for (final tag in _tags) {
       string += '$tag, ';
     }
+    string += '\nname: $_name\nviewingMode: $_viewingMode';
     final values = utf8.encode(string);
 
     return sha256.convert(values).toString();
