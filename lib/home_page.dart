@@ -89,8 +89,14 @@ class _HomePageState extends State<HomePage> {
       final intent = ReceiveSharingIntent.instance;
       final medias = await intent.getInitialMedia();
       if (medias.isNotEmpty) {
-        intent.reset();
-        _addMemo(initialText: medias[0].toString());
+        final media = medias[0];
+        if (media.mimeType == 'text/plain') {
+          final text = media.path;
+          intent.reset();
+          _addMemo(initialText: text);
+        } else {
+          intent.reset();
+        }
       }
     }
   }
