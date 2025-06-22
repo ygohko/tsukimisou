@@ -178,11 +178,11 @@ class MarkdownParser {
     for (final processedLine in processedLines) {
       if (processedLine.paragraphStarted &&
           (previousLineKind != _LineKind.headlineLarge &&
-            previousLineKind != _LineKind.headlineMedium &&
-            previousLineKind != _LineKind.headlineSmall) &&
+              previousLineKind != _LineKind.headlineMedium &&
+              previousLineKind != _LineKind.headlineSmall) &&
           (processedLine.lineKind != _LineKind.headlineLarge &&
-            processedLine.lineKind != _LineKind.headlineMedium &&
-            processedLine.lineKind != _LineKind.headlineSmall)) {
+              processedLine.lineKind != _LineKind.headlineMedium &&
+              processedLine.lineKind != _LineKind.headlineSmall)) {
         widgets.add(const SizedBox(height: 10.0));
       }
       if (processedLine.spans.isNotEmpty) {
@@ -316,7 +316,7 @@ class MarkdownParser {
               ],
             );
             break;
-            
+
           default:
             break;
         }
@@ -489,7 +489,7 @@ class MarkdownParser {
           ));
         }
         _spanState = _SpanState.normal;
-        
+
         return (line, true);
       }
     }

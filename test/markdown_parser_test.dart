@@ -937,7 +937,8 @@ void main() {
       expect(column.children[1] is SizedBox, true);
     });
 
-    testWidgets('MarkdownParser should parse Markdown texts that extracted from spec.txt.',
+    testWidgets(
+        'MarkdownParser should parse Markdown texts that extracted from spec.txt.',
         (WidgetTester tester) async {
       await init(tester);
       final context = tester.element(find.text('This is a test.'));
