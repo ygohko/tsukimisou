@@ -72,7 +72,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         itemBuilder: (context, i) {
           final memo = _memos[i];
           final lastModified =
-          DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+              DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
           late final bool unsynchronized;
           if (lastModified.isAfter(lastMerged)) {
             unsynchronized = true;
@@ -84,17 +84,16 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             elevation: 2.0,
             child: InkWell(
               onTap: appState.mergingWithGoogleDrive
-              ? null
-              : () async {
-                await common_uis.viewMemo(context, memo);
-              },
+                  ? null
+                  : () async {
+                      await common_uis.viewMemo(context, memo);
+                    },
               child: common_uis.memoCardContents(context, memo, unsynchronized),
             ),
           );
         },
       );
-    }
-    else {
+    } else {
       contents = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -108,7 +107,9 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           ),
           Text(
             localizations.noMemosFound,
-            style: common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(context),
+            style:
+                common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(
+                    context),
           ),
         ],
       );
