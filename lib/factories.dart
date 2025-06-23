@@ -36,7 +36,7 @@ abstract class Factories {
   static Factories? _instance;
 
   /// Ceates memo store local loader.
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+  Future<MemoStoreLocalLoader> memoStoreLocalLoaderFromFileName(
       MemoStore memoStore, String fileName);
 
   /// Ceates memo store local saver.
@@ -73,7 +73,7 @@ abstract class Factories {
 class AppFactories extends Factories {
   /// Ceates memo store local loader.
   @override
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+  Future<MemoStoreLocalLoader> memoStoreLocalLoaderFromFileName(
       MemoStore memoStore, String fileName) async {
     return MemoStoreLocalLoader.fromFileName(memoStore, fileName);
   }
@@ -103,7 +103,7 @@ class AppFactories extends Factories {
 class TestFactories extends Factories {
   /// Ceates memo store local loader.
   @override
-  Future<MemoStoreAbstractLocalLoader> memoStoreLocalLoaderFromFileName(
+  Future<MemoStoreLocalLoader> memoStoreLocalLoaderFromFileName(
       MemoStore memoStore, String fileName) async {
     return MemoStoreMockLocalLoader.fromFileName(memoStore, fileName);
   }
