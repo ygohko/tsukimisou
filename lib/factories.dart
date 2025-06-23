@@ -35,10 +35,6 @@ abstract class Factories {
   static var _type = FactoriesType.app;
   static Factories? _instance;
 
-  /// Ceates memo store local loader.
-  Future<MemoStoreLocalLoader> memoStoreLocalLoaderFromFileName(
-      MemoStore memoStore, String fileName);
-
   /// Ceates memo store local saver.
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
       MemoStore memoStore, String fileName);
@@ -71,13 +67,6 @@ abstract class Factories {
 }
 
 class AppFactories extends Factories {
-  /// Ceates memo store local loader.
-  @override
-  Future<MemoStoreLocalLoader> memoStoreLocalLoaderFromFileName(
-      MemoStore memoStore, String fileName) async {
-    return MemoStoreLocalLoader.fromFileName(memoStore, fileName);
-  }
-
   /// Ceates memo store local saver.
   @override
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
@@ -101,13 +90,6 @@ class AppFactories extends Factories {
 }
 
 class TestFactories extends Factories {
-  /// Ceates memo store local loader.
-  @override
-  Future<MemoStoreLocalLoader> memoStoreLocalLoaderFromFileName(
-      MemoStore memoStore, String fileName) async {
-    return MemoStoreMockLocalLoader.fromFileName(memoStore, fileName);
-  }
-
   /// Ceates memo store local saver.
   @override
   Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(

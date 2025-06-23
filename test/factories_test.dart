@@ -28,14 +28,6 @@ void main() {
       expect(factories.runtimeType, TestFactories);
     });
 
-    test('Factories should create local loader for app.', () async {
-      final memoStore = MemoStore();
-      final factories = Factories.instance();
-      final loader = await factories.memoStoreLocalLoaderFromFileName(
-          memoStore, 'test.json');
-      expect(loader.runtimeType, MemoStoreMockLocalLoader);
-    });
-
     test('Factories should create local saver for app.', () async {
       final memoStore = MemoStore();
       final factories = Factories.instance();
