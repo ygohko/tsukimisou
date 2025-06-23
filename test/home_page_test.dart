@@ -6,6 +6,7 @@ import 'package:tsukimisou/app_state.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/home_page.dart';
 import 'package:tsukimisou/memo_store.dart';
+import 'package:tsukimisou/memo_store_local_loader.dart';
 
 Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(
@@ -26,6 +27,9 @@ Future<void> init(WidgetTester tester) async {
 
 void main() {
   Factories.init(FactoriesType.test);
+  MemoStoreLocalLoader.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalLoader(memoStore, path);
+  };
 
   group('HomePage', () {
     testWidgets('HomePage shoud have specified widgets.',

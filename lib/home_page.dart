@@ -41,6 +41,7 @@ import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
+import 'memo_store_local_loader.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
@@ -104,7 +105,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _load() async {
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(
+    final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
         memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();

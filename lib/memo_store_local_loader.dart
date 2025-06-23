@@ -63,6 +63,11 @@ class MemoStoreLocalLoader extends MemoStoreLoader {
     return MemoStoreLocalLoader(memoStore, path);
   }
 
+  /// Hook for constructor of memo store loader.
+  static set constructorHook(MemoStoreLocalLoaderConstructorHook hook) {
+    _constructorHook = hook;
+  }
+
   MemoStoreLocalLoader._private(MemoStore memoStore, this._path) : super(memoStore);
 }
 
