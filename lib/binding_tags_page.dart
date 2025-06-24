@@ -30,6 +30,7 @@ import 'common_uis.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_local_saver.dart';
 
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
@@ -212,7 +213,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     widget.memo.beginModification();
     widget.memo.tags = [..._boundTags];
     memoStore.markAsChanged();
-    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();

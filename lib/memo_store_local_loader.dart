@@ -64,7 +64,7 @@ class MemoStoreLocalLoader extends MemoStoreLoader {
   }
 
   /// Hook for constructor of memo store loader.
-  static set constructorHook(MemoStoreLocalLoaderConstructorHook hook) {
+  static set constructorHook(MemoStoreLocalLoaderConstructorHook? hook) {
     _constructorHook = hook;
   }
 

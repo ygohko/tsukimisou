@@ -35,10 +35,6 @@ abstract class Factories {
   static var _type = FactoriesType.app;
   static Factories? _instance;
 
-  /// Ceates memo store local saver.
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
-      MemoStore memoStore, String fileName);
-
   /// Ceates memo store Google Drive loader.
   MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
       MemoStore memoStore, String fileName);
@@ -67,13 +63,6 @@ abstract class Factories {
 }
 
 class AppFactories extends Factories {
-  /// Ceates memo store local saver.
-  @override
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
-      MemoStore memoStore, String fileName) async {
-    return MemoStoreLocalSaver.fromFileName(memoStore, fileName);
-  }
-
   /// Ceates memo store Google Drive loader.
   @override
   MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
@@ -90,13 +79,6 @@ class AppFactories extends Factories {
 }
 
 class TestFactories extends Factories {
-  /// Ceates memo store local saver.
-  @override
-  Future<MemoStoreAbstractLocalSaver> memoStoreLocalSaverFromFileName(
-      MemoStore memoStore, String fileName) async {
-    return MemoStoreMockLocalSaver.fromFileName(memoStore, fileName);
-  }
-
   /// Ceates memo store Google Drive loader.
   @override
   MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
