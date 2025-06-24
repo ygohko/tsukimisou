@@ -36,6 +36,7 @@ import 'extensions.dart';
 import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_local_saver.dart';
 
 enum _Direction {
   forward,
@@ -310,7 +311,7 @@ class _ViewingPageState extends State<ViewingPage>
 
     final factories = Factories.instance();
     memoStore.removeMemo(_memo);
-    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
@@ -483,7 +484,7 @@ class _ViewingPageState extends State<ViewingPage>
     final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     memoStore.markAsChanged();
-    final memoStoreSaver = await factories.memoStoreLocalSaverFromFileName(
+    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();

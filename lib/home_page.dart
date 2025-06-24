@@ -42,6 +42,7 @@ import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 import 'memo_store_local_loader.dart';
+import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
@@ -240,7 +241,7 @@ class _HomePageState extends State<HomePage> {
     merger.cloudMarkerText = localizations.cloud;
     merger.execute();
 
-    final localSaver = await factories.memoStoreLocalSaverFromFileName(
+    final localSaver = await MemoStoreLocalSaver.fromFileName(
         toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();

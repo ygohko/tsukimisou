@@ -35,10 +35,16 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
   static MemoStoreLocalSaverConatructorHook? _constructorHook;
   
   /// Creates a memo store saver.
-  MemoStoreLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
+  factory MemoStoreLocalSaver(MemoStore memoStore, String path) {
+    final hook = _constructorHook;
+    if (hook != null) {
+      return hook(memoStore, path);
+    }
+
+    return MemoStoreLocalSaver._private(memoStore, path);
+  }
 
   /// Executes this memo store saver.
-  @override
   Future<void> execute() async {
     final string = serialize();
     final file = File(_path);
@@ -65,9 +71,11 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
   MemoStoreLocalSaver._private(MemoStore memoStore, this._path) : super(memoStore);
 }
 
-class MemoStoreMockLocalSaver extends MemoStoreAbstractLocalSaver {
+class MemoStoreMockLocalSaver extends MemoStoreSaver implements MemoStoreLocalSaver {
+  final String _path;
+
   /// Creates a memo store saver.
-  MemoStoreMockLocalSaver(MemoStore memoStore, String path) : super(memoStore);
+  MemoStoreMockLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store saver.
   @override
