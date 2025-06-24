@@ -7,6 +7,7 @@ import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/home_page.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_local_loader.dart';
+import 'package:tsukimisou/memo_store_local_saver.dart';
 
 Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(
@@ -30,6 +31,9 @@ void main() {
   MemoStoreLocalLoader.constructorHook = (memoStore, path) {
     return MemoStoreMockLocalLoader(memoStore, path);
   };
+  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalSaver(memoStore, path);
+  };
 
   group('HomePage', () {
     testWidgets('HomePage shoud have specified widgets.',
@@ -50,5 +54,6 @@ void main() {
     });
   });
 
+  MemoStoreLocalSaver.constructorHook = null;
   MemoStoreLocalLoader.constructorHook = null;
 }

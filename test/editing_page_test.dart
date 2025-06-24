@@ -6,6 +6,7 @@ import 'package:tsukimisou/editing_page.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
+import 'package:tsukimisou/memo_store_local_saver.dart';
 
 Future<void> init(WidgetTester tester, Memo? memo) async {
   await tester.pumpWidget(
@@ -23,6 +24,9 @@ Future<void> init(WidgetTester tester, Memo? memo) async {
 
 void main() {
   Factories.init(FactoriesType.test);
+  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalSaver(memoStore, path);
+  };
 
   group('EditingPage', () {
     testWidgets(
@@ -54,5 +58,7 @@ void main() {
       await tester.pump();
       expect(memo.text, 'This is a text');
     });
+
+    MemoStoreLocalSaver.constructorHook = null;
   });
 }

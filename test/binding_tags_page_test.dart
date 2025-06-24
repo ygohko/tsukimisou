@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/binding_tags_page.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo.dart';
+import 'package:tsukimisou/memo_store_local_saver.dart';
 
 Future<void> init(WidgetTester tester, Memo memo) async {
   await tester.pumpWidget(MaterialApp(
@@ -16,6 +17,9 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 
 void main() {
   Factories.init(FactoriesType.test);
+  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalSaver(memoStore, path);
+  };
 
   group('BindingTagsPage', () {
     testWidgets('BindingTagsPage should have specified widgets.',
@@ -57,5 +61,7 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
       expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(4));
     });
+
+    MemoStoreLocalSaver.constructorHook = null;
   });
 }
