@@ -7,8 +7,6 @@ import 'package:path_provider_linux/path_provider_linux.dart';
 import 'package:path_provider_windows/path_provider_windows.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_local_loader.dart';
-import 'package:tsukimisou/memo_store_local_saver.dart';
 import 'package:tsukimisou/memo_store_google_drive_loader.dart';
 import 'package:tsukimisou/memo_store_google_drive_saver.dart';
 
@@ -26,14 +24,6 @@ void main() {
     test('Factories should create test factoreis.', () async {
       final factories = Factories.instance();
       expect(factories.runtimeType, TestFactories);
-    });
-
-    test('Factories should create local saver for app.', () async {
-      final memoStore = MemoStore();
-      final factories = Factories.instance();
-      final saver = await factories.memoStoreLocalSaverFromFileName(
-          memoStore, 'test.json');
-      expect(saver.runtimeType, MemoStoreMockLocalSaver);
     });
 
     test('Factories should create Google Drive loader for app.', () {

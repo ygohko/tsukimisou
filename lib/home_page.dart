@@ -104,7 +104,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
         memoStore, 'MemoStore.json');

@@ -33,7 +33,6 @@ import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
-import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -309,7 +308,6 @@ class _ViewingPageState extends State<ViewingPage>
       return;
     }
 
-    final factories = Factories.instance();
     memoStore.removeMemo(_memo);
     final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
         memoStore, 'MemoStore.json');
@@ -481,7 +479,6 @@ class _ViewingPageState extends State<ViewingPage>
 
   Future<void> _save() async {
     final localizations = AppLocalizations.of(context)!;
-    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     memoStore.markAsChanged();
     final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(

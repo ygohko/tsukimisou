@@ -23,8 +23,6 @@
 import 'memo_store.dart';
 import 'memo_store_google_drive_loader.dart';
 import 'memo_store_google_drive_saver.dart';
-import 'memo_store_local_loader.dart';
-import 'memo_store_local_saver.dart';
 
 enum FactoriesType {
   app,

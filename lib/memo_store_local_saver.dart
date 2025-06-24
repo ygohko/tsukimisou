@@ -72,6 +72,7 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
 }
 
 class MemoStoreMockLocalSaver extends MemoStoreSaver implements MemoStoreLocalSaver {
+  @override
   final String _path;
 
   /// Creates a memo store saver.

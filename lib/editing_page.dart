@@ -28,7 +28,6 @@ import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
 import 'extensions.dart';
-import 'factories.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -128,7 +127,6 @@ class _EditingPageState extends State<EditingPage> {
 
   void _save() async {
     final localizations = AppLocalizations.of(context)!;
-    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = widget.memo;
     if (memo == null) {
