@@ -42,7 +42,6 @@ class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
   }
 
   /// Executes this memo store saver.
-  @override
   Future<void> execute() async {
     final string = serialize();
     final file = GoogleDriveFile(_fileName);
@@ -60,7 +59,7 @@ class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
 
 class MemoStoreMockGoogleDriveSaver extends MemoStoreSaver implements MemoStoreGoogleDriveSaver {
   @override
-  String _fileName;
+  final String _fileName;
 
   /// Creates a memo store saver.
   MemoStoreMockGoogleDriveSaver(MemoStore memoStore, this._fileName)
