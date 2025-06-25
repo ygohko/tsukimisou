@@ -58,6 +58,7 @@ void main() {
     });
   });
 
+  MemoStoreGoogleDriveLoader.constructorHook = null;
   MemoStoreLocalSaver.constructorHook = null;
   MemoStoreLocalLoader.constructorHook = null;
 }

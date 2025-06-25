@@ -24,20 +24,22 @@ import 'google_drive_file.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
-abstract class MemoStoreAbstractGoogleDriveSaver extends MemoStoreSaver {
-  /// Creates a memo store saver.
-  MemoStoreAbstractGoogleDriveSaver(MemoStore memoStore) : super(memoStore);
+typedef MemoStoreGoogleDriveSaverConstructorHook = MemoStoreGoogleDriveSaver Function(MemoStore memoStore, String fileName);
 
-  /// Executes this memo store saver.
-  Future<void> execute();
-}
-
-class MemoStoreGoogleDriveSaver extends MemoStoreAbstractGoogleDriveSaver {
+class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
   final String _fileName;
 
+  static MemoStoreGoogleDriveSaverConstructorHook? _constructorHook;
+  
   /// Creates a memo store saver.
-  MemoStoreGoogleDriveSaver(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  factory MemoStoreGoogleDriveSaver(MemoStore memoStore, String fileName) {
+    final hook = _constructorHook;
+    if (hook != null) {
+      return hook(memoStore, fileName);
+    }
+
+    return MemoStoreGoogleDriveSaver._private(memoStore, fileName);
+  }
 
   /// Executes this memo store saver.
   @override
@@ -46,11 +48,22 @@ class MemoStoreGoogleDriveSaver extends MemoStoreAbstractGoogleDriveSaver {
     final file = GoogleDriveFile(_fileName);
     await file.writeAsString(string);
   }
+
+  /// Hook for constructor of memo store saver.
+  static set constructorHook(MemoStoreGoogleDriveSaverConstructorHook? hook) {
+    _constructorHook = hook;
+  }
+  
+  MemoStoreGoogleDriveSaver._private(MemoStore memoStore, this._fileName)
+      : super(memoStore);
 }
 
-class MemoStoreMockGoogleDriveSaver extends MemoStoreAbstractGoogleDriveSaver {
+class MemoStoreMockGoogleDriveSaver extends MemoStoreSaver implements MemoStoreGoogleDriveSaver {
+  @override
+  String _fileName;
+
   /// Creates a memo store saver.
-  MemoStoreMockGoogleDriveSaver(MemoStore memoStore, String fileName)
+  MemoStoreMockGoogleDriveSaver(MemoStore memoStore, this._fileName)
       : super(memoStore);
 
   /// Executes this memo store saver.

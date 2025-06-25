@@ -41,6 +41,7 @@ import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_google_drive_loader.dart';
+import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
@@ -265,7 +266,7 @@ class _HomePageState extends State<HomePage> {
       _savingToGoogleDrive = true;
     });
     final saver =
-        factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+        MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception {

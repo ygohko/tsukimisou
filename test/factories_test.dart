@@ -25,12 +25,5 @@ void main() {
       final factories = Factories.instance();
       expect(factories.runtimeType, TestFactories);
     });
-
-    test('Factories should create Google Drive saver for app.', () {
-      final memoStore = MemoStore();
-      final factories = Factories.instance();
-      final saver = factories.memoStoreGoogleDriveSaver(memoStore, 'test.json');
-      expect(saver.runtimeType, MemoStoreMockGoogleDriveSaver);
-    });
   });
 }
