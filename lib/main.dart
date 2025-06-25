@@ -25,11 +25,9 @@ import 'package:provider/provider.dart';
 
 import 'app.dart';
 import 'app_state.dart';
-import 'factories.dart';
 import 'memo_store.dart';
 
 void main() async {
-  Factories.init(FactoriesType.app);
   runApp(
     MultiProvider(
       providers: [

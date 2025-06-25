@@ -36,7 +36,6 @@ import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
-import 'factories.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -170,7 +169,6 @@ class _HomePageState extends State<HomePage> {
     _showSynchronizingBanner();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final fromMemoStore = MemoStore();
-    final factories = Factories.instance();
     final loader =
         MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {

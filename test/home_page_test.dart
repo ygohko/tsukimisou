@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tsukimisou/app_state.dart';
-import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/home_page.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_google_drive_loader.dart';
@@ -29,7 +28,6 @@ Future<void> init(WidgetTester tester) async {
 }
 
 void main() {
-  Factories.init(FactoriesType.test);
   MemoStoreLocalLoader.constructorHook = (memoStore, path) {
     return MemoStoreMockLocalLoader(memoStore, path);
   };
