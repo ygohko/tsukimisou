@@ -24,20 +24,22 @@ import 'google_drive_file.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-abstract class MemoStoreAbstractGoogleDriveLoader extends MemoStoreLoader {
-  /// Creates a memo store loader.
-  MemoStoreAbstractGoogleDriveLoader(MemoStore memoStore) : super(memoStore);
+typedef MemoStoreGoogleDriveLoaderConstructorHook = MemoStoreGoogleDriveLoader Function(MemoStore memoStore, String fileName);
 
-  /// Executes this memo store loader.
-  Future<void> execute();
-}
-
-class MemoStoreGoogleDriveLoader extends MemoStoreAbstractGoogleDriveLoader {
+class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
   final String _fileName;
 
+  static MemoStoreGoogleDriveLoaderConstructorHook? _constructorHook;
+  
   /// Creates a memo store loader.
-  MemoStoreGoogleDriveLoader(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  factory MemoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
+    final hook = _constructorHook;
+    if (hook != null) {
+      return hook(memoStore, fileName);
+    }
+
+    return MemoStoreGoogleDriveLoader._private(memoStore, fileName);
+  }
 
   /// Executes this memo store loader.
   @override
@@ -46,12 +48,18 @@ class MemoStoreGoogleDriveLoader extends MemoStoreAbstractGoogleDriveLoader {
     final string = await file.readAsStringLocked();
     deserialize(string);
   }
+
+  MemoStoreGoogleDriveLoader._private(MemoStore memoStore, this._fileName)
+      : super(memoStore);
 }
 
 class MemoStoreMockGoogleDriveLoader
-    extends MemoStoreAbstractGoogleDriveLoader {
+    extends MemoStoreLoader implements MemoStoreGoogleDriveLoader {
+  @override
+  final String _fileName;
+
   /// Creates a memo store loader.
-  MemoStoreMockGoogleDriveLoader(MemoStore memoStore, String fileName)
+  MemoStoreMockGoogleDriveLoader(MemoStore memoStore, this._fileName)
       : super(memoStore);
 
   /// Executes this memo store loader.

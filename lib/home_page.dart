@@ -40,6 +40,7 @@ import 'factories.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_google_drive_loader.dart';
 import 'memo_store_loader.dart';
 import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
@@ -170,7 +171,7 @@ class _HomePageState extends State<HomePage> {
     final fromMemoStore = MemoStore();
     final factories = Factories.instance();
     final loader =
-        factories.memoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+        MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
     } on FileNotFoundException {

@@ -27,12 +27,12 @@ import 'package:path_provider/path_provider.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
-typedef MemoStoreLocalSaverConatructorHook = MemoStoreLocalSaver Function(MemoStore memoStore, String path);
+typedef MemoStoreLocalSaverConstructorHook = MemoStoreLocalSaver Function(MemoStore memoStore, String path);
 
 class MemoStoreLocalSaver extends MemoStoreSaver {
   final String _path;
 
-  static MemoStoreLocalSaverConatructorHook? _constructorHook;
+  static MemoStoreLocalSaverConstructorHook? _constructorHook;
   
   /// Creates a memo store saver.
   factory MemoStoreLocalSaver(MemoStore memoStore, String path) {
@@ -64,7 +64,7 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
     return MemoStoreLocalSaver(memoStore, path);
   }
 
-  static set constructorHook(MemoStoreLocalSaverConatructorHook? hook) {
+  static set constructorHook(MemoStoreLocalSaverConstructorHook? hook) {
     _constructorHook = hook;
   }
   

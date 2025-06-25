@@ -21,17 +21,9 @@ void main() {
   Factories.init(FactoriesType.test);
 
   group('Factories', () {
-    test('Factories should create test factoreis.', () async {
+    test('Factories should create test factories.', () async {
       final factories = Factories.instance();
       expect(factories.runtimeType, TestFactories);
-    });
-
-    test('Factories should create Google Drive loader for app.', () {
-      final memoStore = MemoStore();
-      final factories = Factories.instance();
-      final loader =
-          factories.memoStoreGoogleDriveLoader(memoStore, 'test.json');
-      expect(loader.runtimeType, MemoStoreMockGoogleDriveLoader);
     });
 
     test('Factories should create Google Drive saver for app.', () {

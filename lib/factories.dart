@@ -33,10 +33,6 @@ abstract class Factories {
   static var _type = FactoriesType.app;
   static Factories? _instance;
 
-  /// Ceates memo store Google Drive loader.
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
-      MemoStore memoStore, String fileName);
-
   /// Ceates memo store Google Drive saver.
   MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
       MemoStore memoStore, String fileName);
@@ -61,13 +57,6 @@ abstract class Factories {
 }
 
 class AppFactories extends Factories {
-  /// Ceates memo store Google Drive loader.
-  @override
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
-      MemoStore memoStore, String fileName) {
-    return MemoStoreGoogleDriveLoader(memoStore, fileName);
-  }
-
   /// Ceates memo store Google Drive saver.
   @override
   MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
@@ -77,13 +66,6 @@ class AppFactories extends Factories {
 }
 
 class TestFactories extends Factories {
-  /// Ceates memo store Google Drive loader.
-  @override
-  MemoStoreAbstractGoogleDriveLoader memoStoreGoogleDriveLoader(
-      MemoStore memoStore, String fileName) {
-    return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
-  }
-
   /// Ceates memo store Google Drive saver.
   @override
   MemoStoreAbstractGoogleDriveSaver memoStoreGoogleDriveSaver(
