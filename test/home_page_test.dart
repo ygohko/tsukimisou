@@ -6,6 +6,7 @@ import 'package:tsukimisou/app_state.dart';
 import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/home_page.dart';
 import 'package:tsukimisou/memo_store.dart';
+import 'package:tsukimisou/memo_store_google_drive_loader.dart';
 import 'package:tsukimisou/memo_store_local_loader.dart';
 import 'package:tsukimisou/memo_store_local_saver.dart';
 
@@ -33,6 +34,9 @@ void main() {
   };
   MemoStoreLocalSaver.constructorHook = (memoStore, path) {
     return MemoStoreMockLocalSaver(memoStore, path);
+  };
+  MemoStoreGoogleDriveLoader.constructorHook = (memoStore, fileName) {
+    return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
   };
 
   group('HomePage', () {

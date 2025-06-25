@@ -49,6 +49,11 @@ class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
     deserialize(string);
   }
 
+  /// Hook for cobstructor of memo store loader.
+  static set constructorHook(MemoStoreGoogleDriveLoaderConstructorHook? hook) {
+    _constructorHook = hook;
+  }
+  
   MemoStoreGoogleDriveLoader._private(MemoStore memoStore, this._fileName)
       : super(memoStore);
 }
