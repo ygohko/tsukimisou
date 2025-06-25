@@ -3,9 +3,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tsukimisou/app_state.dart';
-import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/home_page.dart';
 import 'package:tsukimisou/memo_store.dart';
+import 'package:tsukimisou/memo_store_google_drive_loader.dart';
+import 'package:tsukimisou/memo_store_google_drive_saver.dart';
+import 'package:tsukimisou/memo_store_local_loader.dart';
+import 'package:tsukimisou/memo_store_local_saver.dart';
 
 Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(
@@ -25,7 +28,18 @@ Future<void> init(WidgetTester tester) async {
 }
 
 void main() {
-  Factories.init(FactoriesType.test);
+  MemoStoreLocalLoader.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalLoader(memoStore, path);
+  };
+  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalSaver(memoStore, path);
+  };
+  MemoStoreGoogleDriveLoader.constructorHook = (memoStore, fileName) {
+    return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
+  };
+  MemoStoreGoogleDriveSaver.constructorHook = (memoStore, fileName) {
+    return MemoStoreMockGoogleDriveSaver(memoStore, fileName);
+  };
 
   group('HomePage', () {
     testWidgets('HomePage shoud have specified widgets.',
@@ -45,4 +59,9 @@ void main() {
       expect(find.byIcon(Icons.close), findsOneWidget);
     });
   });
+
+  MemoStoreGoogleDriveSaver.constructorHook = null;
+  MemoStoreGoogleDriveLoader.constructorHook = null;
+  MemoStoreLocalSaver.constructorHook = null;
+  MemoStoreLocalLoader.constructorHook = null;
 }

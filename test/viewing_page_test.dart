@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:tsukimisou/factories.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
+import 'package:tsukimisou/memo_store_local_saver.dart';
 import 'package:tsukimisou/viewing_page.dart';
 
 Future<void> init(WidgetTester tester, Memo memo) async {
@@ -24,7 +24,9 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 }
 
 void main() {
-  Factories.init(FactoriesType.test);
+  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+    return MemoStoreMockLocalSaver(memoStore, path);
+  };
 
   group('ViewingPage', () {
     // TODO: Add tests fo TinyMarkdown viewing mode.
@@ -71,5 +73,7 @@ void main() {
       await tester.pump();
       expect(find.text('Bind tags'), findsOneWidget);
     });
+
+    MemoStoreLocalSaver.constructorHook = null;
   });
 }

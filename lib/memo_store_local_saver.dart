@@ -27,22 +27,24 @@ import 'package:path_provider/path_provider.dart';
 import 'memo_store.dart';
 import 'memo_store_saver.dart';
 
-abstract class MemoStoreAbstractLocalSaver extends MemoStoreSaver {
-  /// Creates a memo store saver.
-  MemoStoreAbstractLocalSaver(MemoStore memoStore) : super(memoStore);
+typedef MemoStoreLocalSaverConstructorHook = MemoStoreLocalSaver Function(MemoStore memoStore, String path);
 
-  /// Executes this memo store saver.
-  Future<void> execute();
-}
-
-class MemoStoreLocalSaver extends MemoStoreAbstractLocalSaver {
+class MemoStoreLocalSaver extends MemoStoreSaver {
   final String _path;
 
+  static MemoStoreLocalSaverConstructorHook? _constructorHook;
+  
   /// Creates a memo store saver.
-  MemoStoreLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
+  factory MemoStoreLocalSaver(MemoStore memoStore, String path) {
+    final hook = _constructorHook;
+    if (hook != null) {
+      return hook(memoStore, path);
+    }
+
+    return MemoStoreLocalSaver._private(memoStore, path);
+  }
 
   /// Executes this memo store saver.
-  @override
   Future<void> execute() async {
     final string = serialize();
     final file = File(_path);
@@ -61,11 +63,20 @@ class MemoStoreLocalSaver extends MemoStoreAbstractLocalSaver {
 
     return MemoStoreLocalSaver(memoStore, path);
   }
+
+  static set constructorHook(MemoStoreLocalSaverConstructorHook? hook) {
+    _constructorHook = hook;
+  }
+  
+  MemoStoreLocalSaver._private(MemoStore memoStore, this._path) : super(memoStore);
 }
 
-class MemoStoreMockLocalSaver extends MemoStoreAbstractLocalSaver {
+class MemoStoreMockLocalSaver extends MemoStoreSaver implements MemoStoreLocalSaver {
+  @override
+  final String _path;
+
   /// Creates a memo store saver.
-  MemoStoreMockLocalSaver(MemoStore memoStore, String path) : super(memoStore);
+  MemoStoreMockLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store saver.
   @override

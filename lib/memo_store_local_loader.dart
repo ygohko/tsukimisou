@@ -27,22 +27,24 @@ import 'package:path_provider/path_provider.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-abstract class MemoStoreAbstractLocalLoader extends MemoStoreLoader {
-  /// Creates a memo store loader.
-  MemoStoreAbstractLocalLoader(MemoStore memoStore) : super(memoStore);
+typedef MemoStoreLocalLoaderConstructorHook = MemoStoreLocalLoader Function(MemoStore memoStore, String path);
 
-  /// Executes this memo store loader.
-  Future<void> execute();
-}
-
-class MemoStoreLocalLoader extends MemoStoreAbstractLocalLoader {
+class MemoStoreLocalLoader extends MemoStoreLoader {
   final String _path;
 
+  static MemoStoreLocalLoaderConstructorHook? _constructorHook;
+
   /// Creates a memo store loader.
-  MemoStoreLocalLoader(MemoStore memoStore, this._path) : super(memoStore);
+  factory MemoStoreLocalLoader(MemoStore memoStore, String path) {
+    final hook = _constructorHook;
+    if (hook != null) {
+      return hook(memoStore, path);
+    }
+
+    return MemoStoreLocalLoader._private(memoStore, path);
+  }
 
   /// Executes this memo store loader.
-  @override
   Future<void> execute() async {
     final file = File(_path);
     final string = await file.readAsString();
@@ -60,11 +62,21 @@ class MemoStoreLocalLoader extends MemoStoreAbstractLocalLoader {
 
     return MemoStoreLocalLoader(memoStore, path);
   }
+
+  /// Hook for constructor of memo store loader.
+  static set constructorHook(MemoStoreLocalLoaderConstructorHook? hook) {
+    _constructorHook = hook;
+  }
+
+  MemoStoreLocalLoader._private(MemoStore memoStore, this._path) : super(memoStore);
 }
 
-class MemoStoreMockLocalLoader extends MemoStoreAbstractLocalLoader {
+class MemoStoreMockLocalLoader extends MemoStoreLoader implements MemoStoreLocalLoader {
+  @override
+  final String _path;
+
   /// Creates a memo store loader.
-  MemoStoreMockLocalLoader(MemoStore memoStore, String path) : super(memoStore);
+  MemoStoreMockLocalLoader(MemoStore memoStore, this._path) : super(memoStore);
 
   /// Executes this memo store loader.
   @override

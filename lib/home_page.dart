@@ -36,11 +36,14 @@ import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
-import 'factories.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_google_drive_loader.dart';
+import 'memo_store_google_drive_saver.dart';
 import 'memo_store_loader.dart';
+import 'memo_store_local_loader.dart';
+import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
@@ -102,9 +105,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _load() async {
-    final factories = Factories.instance();
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memoStoreLoader = await factories.memoStoreLocalLoaderFromFileName(
+    final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
         memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
@@ -167,9 +169,8 @@ class _HomePageState extends State<HomePage> {
     _showSynchronizingBanner();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final fromMemoStore = MemoStore();
-    final factories = Factories.instance();
     final loader =
-        factories.memoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+        MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
     } on FileNotFoundException {
@@ -239,7 +240,7 @@ class _HomePageState extends State<HomePage> {
     merger.cloudMarkerText = localizations.cloud;
     merger.execute();
 
-    final localSaver = await factories.memoStoreLocalSaverFromFileName(
+    final localSaver = await MemoStoreLocalSaver.fromFileName(
         toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
@@ -263,7 +264,7 @@ class _HomePageState extends State<HomePage> {
       _savingToGoogleDrive = true;
     });
     final saver =
-        factories.memoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+        MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception {
