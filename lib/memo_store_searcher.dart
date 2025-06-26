@@ -50,6 +50,7 @@ class MemoStoreSearcher {
       for (final tag in memo.tags) {
         text += " ${tag.toLowerCase()}";
       }
+      text += " ${memo.name.toLowerCase()}";
       var found = true;
       for (final keyword in keywords) {
         if (!text.contains(keyword)) {
