@@ -391,8 +391,32 @@ class _HomePageState extends State<HomePage> {
       body: Scrollbar(
         child: Consumer2<MemoStore, AppState>(
           builder: (context, memoStore, appState, child) {
-            _updateShownMemos();
-            return _memoListView();
+            if (memoStore.memos.isNotEmpty) {
+              _updateShownMemos();
+              return _memoListView();
+            } else {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add,
+                    color: common_uis.TsukimisouColors.scheme.primary,
+                    size: 150.0,
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    // TODO: Localize this.
+                    'To create a new memo, press Add a memo button',
+                    style:
+                    // TODO: Rename this.
+                    common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(
+                      context),
+                  ),
+                ],
+              );
+            }
           },
         ),
       ),
