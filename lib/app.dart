@@ -24,10 +24,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common_uis.dart';
 import 'home_page.dart';
+import 'gen_l10n/app_localizations.dart';
 
 class App extends StatelessWidget {
   /// Creates a app.

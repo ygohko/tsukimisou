@@ -21,7 +21,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +30,7 @@ import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_searcher.dart';
+import 'gen_l10n/app_localizations.dart';
 
 class SearchingPageContents extends StatefulWidget {
   /// Creates a searching page contents.
