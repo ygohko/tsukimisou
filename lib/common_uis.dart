@@ -513,3 +513,27 @@ Widget richTextContents(BuildContext context, String text,
 
   return parser.contents;
 }
+
+Widget noMemosIndicator(BuildContext context, IconData icon, String text) {
+  return Padding(
+    padding: const EdgeInsets.all(20.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          color: TsukimisouColors.scheme.primary,
+          size: 150.0,
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          text,
+          style: TsukimisouTextStyles.noMemosIndicator(context),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
+}

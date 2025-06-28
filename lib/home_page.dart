@@ -395,28 +395,7 @@ class _HomePageState extends State<HomePage> {
               _updateShownMemos();
               return _memoListView();
             } else {
-              // TODO: Commonize hint indicators.
-              return Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add,
-                      color: common_uis.TsukimisouColors.scheme.primary,
-                      size: 150.0,
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      localizations.toCreateANewMemo,
-                      style: common_uis.TsukimisouTextStyles.noMemosIndicator(context),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
+              return common_uis.noMemosIndicator(context, Icons.add, localizations.toCreateANewMemo);
             }
           },
         ),

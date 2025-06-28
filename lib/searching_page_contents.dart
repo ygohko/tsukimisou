@@ -94,26 +94,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         },
       );
     } else {
-      contents = Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.question_mark,
-            color: common_uis.TsukimisouColors.scheme.primary,
-            size: 150.0,
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-          Text(
-            localizations.noMemosFound,
-            style:
-                common_uis.TsukimisouTextStyles.noMemosIndicator(
-                    context),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      );
+      contents = common_uis.noMemosIndicator(context, Icons.question_mark, localizations.noMemosFound);
     }
     const platform = LocalPlatform();
     if (platform.isMobile) {
