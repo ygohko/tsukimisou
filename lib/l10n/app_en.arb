@@ -36,7 +36,7 @@
         "description": "Tooltip for add a memo button"
     },
     "toCreateANewMemo": "To create a new memo, press Add a memo button",
-    "@addAMemo": {
+    "@toCreateANewMemo": {
         "description": "Indicator text when there no memos in home page"
     },
     "tags": "Tags",
