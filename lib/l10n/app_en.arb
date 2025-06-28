@@ -35,6 +35,10 @@
     "@addAMemo": {
         "description": "Tooltip for add a memo button"
     },
+    "toCreateANewMemo": "To create a new memo, press Add a memo button",
+    "@addAMemo": {
+        "description": "Indicator text when there no memos in home page"
+    },
     "tags": "Tags",
     "@tags": {
         "description": "Subtitle for tags group of drawer"

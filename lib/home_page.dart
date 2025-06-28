@@ -409,12 +409,8 @@ class _HomePageState extends State<HomePage> {
                       height: 20.0,
                     ),
                     Text(
-                      // TODO: Localize this.
-                      'To create a new memo, press Add a memo button',
-                      style:
-                      // TODO: Rename this.
-                      common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(
-                        context),
+                      localizations.toCreateANewMemo,
+                      style: common_uis.TsukimisouTextStyles.noMemosIndicator(context),
                     ),
                   ],
                 ),

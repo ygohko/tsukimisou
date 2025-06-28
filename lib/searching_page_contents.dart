@@ -108,7 +108,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           Text(
             localizations.noMemosFound,
             style:
-                common_uis.TsukimisouTextStyles.searchingPageNotFoundIndicator(
+                common_uis.TsukimisouTextStyles.noMemosIndicator(
                     context),
           ),
         ],

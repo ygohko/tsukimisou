@@ -131,8 +131,8 @@ class TsukimisouTextStyles {
     return style;
   }
 
-  /// Text style for not found indicator on searching page.
-  static TextStyle searchingPageNotFoundIndicator(BuildContext context) {
+  /// Text style for indicator shown when there are no mems.
+  static TextStyle noMemosIndicator(BuildContext context) {
     var style = Theme.of(context).textTheme.titleLarge;
     style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
