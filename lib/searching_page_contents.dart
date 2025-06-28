@@ -110,6 +110,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             style:
                 common_uis.TsukimisouTextStyles.noMemosIndicator(
                     context),
+            textAlign: TextAlign.center,
           ),
         ],
       );

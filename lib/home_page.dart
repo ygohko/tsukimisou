@@ -395,6 +395,7 @@ class _HomePageState extends State<HomePage> {
               _updateShownMemos();
               return _memoListView();
             } else {
+              // TODO: Commonize hint indicators.
               return Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -411,6 +412,7 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       localizations.toCreateANewMemo,
                       style: common_uis.TsukimisouTextStyles.noMemosIndicator(context),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
