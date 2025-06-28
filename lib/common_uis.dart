@@ -131,8 +131,8 @@ class TsukimisouTextStyles {
     return style;
   }
 
-  /// Text style for not found indicator on searching page.
-  static TextStyle searchingPageNotFoundIndicator(BuildContext context) {
+  /// Text style for indicator shown when there are no mems.
+  static TextStyle noMemosIndicator(BuildContext context) {
     var style = Theme.of(context).textTheme.titleLarge;
     style ??= const TextStyle();
     style = style.apply(color: Colors.black.withOpacity(0.6));
@@ -512,4 +512,28 @@ Widget richTextContents(BuildContext context, String text,
   parser.execute();
 
   return parser.contents;
+}
+
+Widget noMemosIndicator(BuildContext context, IconData icon, String text) {
+  return Padding(
+    padding: const EdgeInsets.all(20.0),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          color: TsukimisouColors.scheme.primary,
+          size: 150.0,
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+        Text(
+          text,
+          style: TsukimisouTextStyles.noMemosIndicator(context),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
 }

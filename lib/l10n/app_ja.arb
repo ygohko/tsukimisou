@@ -6,6 +6,7 @@
     "updated": "更新: {dateTime}",
     "unsynchronized": "未同期",
     "addAMemo": "メモを追加",
+    "toCreateANewMemo": "メモを追加ボタンを押して、新しいメモを作成してください",
     "tags": "タグ",
     "googleDriveIntegration": "Google Drive連携",
     "synchronize": "同期",

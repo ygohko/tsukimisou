@@ -391,8 +391,12 @@ class _HomePageState extends State<HomePage> {
       body: Scrollbar(
         child: Consumer2<MemoStore, AppState>(
           builder: (context, memoStore, appState, child) {
-            _updateShownMemos();
-            return _memoListView();
+            if (memoStore.memos.isNotEmpty) {
+              _updateShownMemos();
+              return _memoListView();
+            } else {
+              return common_uis.noMemosIndicator(context, Icons.add, localizations.toCreateANewMemo);
+            }
           },
         ),
       ),
