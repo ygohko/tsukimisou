@@ -39,7 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   diff_match_patch: ^0.4.1
   file: ^6.1.4
-  flutter_secure_storage: ^5.0.0
+  flutter_secure_storage: ^9.2.4
   googleapis: ^13.2.0
   googleapis_auth: ^1.3.0
   google_fonts: ^6.2.1
