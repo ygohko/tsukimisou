@@ -22,7 +22,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
@@ -30,6 +29,7 @@ import 'extensions.dart';
 import 'markdown_parser.dart';
 import 'memo.dart';
 import 'viewing_page.dart';
+import 'gen_l10n/app_localizations.dart';
 
 typedef DialogTransitionBuilder = AnimatedWidget Function(
     Animation<double> animation,
@@ -75,7 +75,7 @@ class TsukimisouTextStyles {
   static TextStyle homePageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
-    style = style.apply(color: Colors.black.withOpacity(0.6));
+    style = style.apply(color: Colors.black.withValues(alpha: 0.6));
 
     return style;
   }
@@ -84,7 +84,7 @@ class TsukimisouTextStyles {
   static TextStyle homePageDrawerFooter(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
-    style = style.apply(color: Colors.black.withOpacity(0.6));
+    style = style.apply(color: Colors.black.withValues(alpha: 0.6));
 
     return style;
   }
@@ -102,7 +102,7 @@ class TsukimisouTextStyles {
   static TextStyle viewingPageMemoAttribute(BuildContext context) {
     var style = Theme.of(context).textTheme.titleMedium;
     style ??= const TextStyle();
-    style = style.apply(color: Colors.black.withOpacity(0.6));
+    style = style.apply(color: Colors.black.withValues(alpha: 0.6));
 
     return style;
   }
@@ -135,7 +135,7 @@ class TsukimisouTextStyles {
   static TextStyle noMemosIndicator(BuildContext context) {
     var style = Theme.of(context).textTheme.titleLarge;
     style ??= const TextStyle();
-    style = style.apply(color: Colors.black.withOpacity(0.6));
+    style = style.apply(color: Colors.black.withValues(alpha: 0.6));
 
     return style;
   }

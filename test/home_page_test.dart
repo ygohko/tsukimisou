@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:tsukimisou/app_state.dart';
@@ -9,6 +8,7 @@ import 'package:tsukimisou/memo_store_google_drive_loader.dart';
 import 'package:tsukimisou/memo_store_google_drive_saver.dart';
 import 'package:tsukimisou/memo_store_local_loader.dart';
 import 'package:tsukimisou/memo_store_local_saver.dart';
+import 'package:tsukimisou/gen_l10n/app_localizations.dart';
 
 Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(

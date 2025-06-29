@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsukimisou/binding_tags_page.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store_local_saver.dart';
+import 'package:tsukimisou/gen_l10n/app_localizations.dart';
 
 Future<void> init(WidgetTester tester, Memo memo) async {
   await tester.pumpWidget(MaterialApp(
