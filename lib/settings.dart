@@ -28,18 +28,15 @@ class Settings extends ChangeNotifier {
   late final SharedPreferencesWithCache? _preferences;
 
   Future<bool> getSynchronizingHidden() async {
-    // TODO: Instanciate preferrences.
-    if (_preferences == null) {
-      _preferences = await SharedPreferencesWithCache.create(
-        cacheOptions: SharedPreferencesWithCacheOptions.new(),
-      );
-    }
+    _preferences ??= await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    );
     final preferences = _preferences;
     if (preferences == null) {
       return false;
     }
 
-    final hidden = await preferences.getBool('synchronizingHidden');
+    final hidden = preferences.getBool('synchronizingHidden');
     if (hidden == null) {
       return false;
     }
@@ -48,12 +45,9 @@ class Settings extends ChangeNotifier {
   }
 
   Future<void> setSynchronizingHidden(bool hidden) async {
-    // TODO: Instanciate preferrences.
-    if (_preferences == null) {
-      _preferences = await SharedPreferencesWithCache.create(
-        cacheOptions: SharedPreferencesWithCacheOptions.new(),
-      );
-    }
+    _preferences ??= await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    );
     final preferences = _preferences;
     if (preferences == null) {
       return;
