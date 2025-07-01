@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2025 Yasuaki Gohko
  *
@@ -86,6 +87,6 @@ class Settings extends ChangeNotifier {
     }
 
     final serialized = jsonEncode(scores);
-    await preferences.setString('tagScires', serialized);
+    await preferences.setString('tagScores', serialized);
   }
 }
