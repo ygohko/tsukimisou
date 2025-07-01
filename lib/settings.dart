@@ -75,4 +75,17 @@ class Settings extends ChangeNotifier {
 
     return scores;
   }
+
+  Future<void> setTagScores(Map<String, double> scores) async {
+    _preferences ??= await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    );
+    final preferences = _preferences;
+    if (preferences == null) {
+      return;
+    }
+
+    final serialized = jsonEncode(scores);
+    await preferences.setString('tagScires', serialized);
+  }
 }
