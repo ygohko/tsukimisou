@@ -28,7 +28,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // TODO: Add mechanism to mock shared preferences.
 class Settings extends ChangeNotifier {
-  late final SharedPreferencesWithCache? _preferences;
+  SharedPreferencesWithCache? _preferences;
 
   Future<bool> getSynchronizingHidden() async {
     _preferences ??= await SharedPreferencesWithCache.create(
@@ -73,7 +73,7 @@ class Settings extends ChangeNotifier {
     if (serialized == null) {
       return <String, double>{};
     }
-    final scores = jsonDecode(serialized);
+    final scores = jsonDecode(serialized) as Map<String, double>;
 
     return scores;
   }
@@ -89,5 +89,6 @@ class Settings extends ChangeNotifier {
 
     final serialized = jsonEncode(scores);
     await preferences.setString('tagScores', serialized);
+    notifyListeners();
   }
 }
