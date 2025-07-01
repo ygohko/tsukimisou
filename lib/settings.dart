@@ -27,10 +27,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Settings extends ChangeNotifier {
   late final SharedPreferencesWithCache? _preferences;
 
-  bool get synchronizingHidden async {
+  Future<bool> getSynchronizingHidden() async {
     // TODO: Instanciate preferrences.
+    if (_preferences == null) {
+      _preferences = await SharedPreferencesWithCache.create(
+        cacheOptions: SharedPreferencesWithCacheOptions.new(),
+      );
+    }
+    final preferences = _preferences;
+    if (preferences == null) {
+      return false;
+    }
 
-    final hidden = await _preferences.getBool('synchronizingHidden');
+    final hidden = await preferences.getBool('synchronizingHidden');
     if (hidden == null) {
       return false;
     }
@@ -38,10 +47,19 @@ class Settings extends ChangeNotifier {
     return hidden;
   }
 
-  set synchronizingHidden(bool hidden) async {
+  Future<void> setSynchronizingHidden(bool hidden) async {
     // TODO: Instanciate preferrences.
+    if (_preferences == null) {
+      _preferences = await SharedPreferencesWithCache.create(
+        cacheOptions: SharedPreferencesWithCacheOptions.new(),
+      );
+    }
+    final preferences = _preferences;
+    if (preferences == null) {
+      return;
+    }
 
-    _preferences.setBool('synchronizingHidden', hidden);
+    await preferences.setBool('synchronizingHidden', hidden);
     notifyListeners();
   }
 }
