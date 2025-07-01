@@ -10,5 +10,7 @@ void main() {
     test('Settings should be created', () {
       expect(Settings(), isNotNull);
     });
+
+    // TODO: Add tests for getters and setters.
   });
 }

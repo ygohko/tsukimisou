@@ -26,6 +26,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// TODO: Add mechanism to mock shared preferences.
 class Settings extends ChangeNotifier {
   late final SharedPreferencesWithCache? _preferences;
 
