@@ -20,8 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
- 
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
@@ -55,5 +56,23 @@ class Settings extends ChangeNotifier {
 
     await preferences.setBool('synchronizingHidden', hidden);
     notifyListeners();
+  }
+
+  Future<Map<String, double>> getTagScores() async {
+    _preferences ??= await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    );
+    final preferences = _preferences;
+    if (preferences == null) {
+      return <String, double>{};
+    }
+
+    final serialized = preferences.getString('tagScores');
+    if (serialized == null) {
+      return <String, double>{};
+    }
+    final scores = jsonDecode(serialized);
+
+    return scores;
   }
 }
