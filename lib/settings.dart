@@ -36,9 +36,7 @@ class Settings extends ChangeNotifier {
 
   /// Gets whether synchronizing is hidden.
   Future<bool> getSynchronizingHidden() async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return false;
@@ -54,9 +52,7 @@ class Settings extends ChangeNotifier {
 
   /// Sets whether synchronizing is hidden.
   Future<void> setSynchronizingHidden(bool hidden) async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return;
@@ -68,9 +64,7 @@ class Settings extends ChangeNotifier {
 
   /// Gets tag scores.
   Future<Map<String, double>> getTagScores() async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return <String, double>{};
@@ -87,9 +81,7 @@ class Settings extends ChangeNotifier {
 
   /// Sets tag scores.
   Future<void> setTagScores(Map<String, double> scores) async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return;
