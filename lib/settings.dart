@@ -30,6 +30,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Settings extends ChangeNotifier {
   SharedPreferencesWithCache? _preferences;
 
+  /// Gets whether synchronizing is hidden.
   Future<bool> getSynchronizingHidden() async {
     _preferences ??= await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
@@ -47,6 +48,7 @@ class Settings extends ChangeNotifier {
     return hidden;
   }
 
+  /// Sets whether synchronizing is hidden.
   Future<void> setSynchronizingHidden(bool hidden) async {
     _preferences ??= await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
@@ -60,6 +62,7 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Gets tag scores.
   Future<Map<String, double>> getTagScores() async {
     _preferences ??= await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
@@ -78,6 +81,7 @@ class Settings extends ChangeNotifier {
     return scores;
   }
 
+  /// Sets tag scores.
   Future<void> setTagScores(Map<String, double> scores) async {
     _preferences ??= await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
