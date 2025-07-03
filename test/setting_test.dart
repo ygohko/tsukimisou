@@ -4,13 +4,22 @@ import 'package:tsukimisou/settings.dart';
 
 class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
   var _hidden = false;
+  var _tagScores = '{"a": 1.0, "b": 0.5}';
 
   bool? getBool(String key) {
     return _hidden;
   }
 
+  String? getString(String key) {
+    return _tagScores;
+  }
+
   Future<void> setBool(String key, bool value) async {
     _hidden = value;
+  }
+
+  Future<void> setString(String key, String value) async {
+    _tagScores = value;
   }
 
   noSuchMethod(Invocation invocation) {
@@ -26,7 +35,7 @@ void main() {
       expect(Settings(), isNotNull);
     });
 
-    test('Settings.getSynchronizing() should get whether synchronizing is hidden', () async {
+    test('Settings.getSynchronizingHidden() should get whether synchronizing is hidden', () async {
         Settings.sharedPreferencesCreatorHook = () async {
           return MockSharedPreferencesWithCache();
         };
@@ -36,7 +45,7 @@ void main() {
         expect(hidden, false);
     });
 
-    test('Settings.setSynchronizing() should set whether synchronizing is hidden', () async {
+    test('Settings.setSynchronizingHidden() should set whether synchronizing is hidden', () async {
         Settings.sharedPreferencesCreatorHook = () async {
           return MockSharedPreferencesWithCache();
         };
@@ -47,6 +56,16 @@ void main() {
         expect(hidden, true);
     });
 
+    test('Settings.getTagScores() should get tag scores', () async {
+        Settings.sharedPreferencesCreatorHook = () async {
+          return MockSharedPreferencesWithCache();
+        };
+
+        final settings = Settings();
+        final scores = await settings.getTagScores();
+        expect(scores['a'], 1.0);
+        expect(scores['b'], 0.5);
+    });
 
     
 

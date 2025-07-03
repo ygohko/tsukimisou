@@ -74,7 +74,11 @@ class Settings extends ChangeNotifier {
     if (serialized == null) {
       return <String, double>{};
     }
-    final scores = jsonDecode(serialized) as Map<String, double>;
+    final decoded = jsonDecode(serialized);
+    final scores = <String, double>{};
+    for (final key in decoded.keys) {
+      scores[key] = decoded[key]!;
+    }
 
     return scores;
   }
