@@ -3,11 +3,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tsukimisou/settings.dart';
 
 class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
+  var _hidden = false;
+
   bool? getBool(String key) {
-    return true;
+    return _hidden;
   }
 
   Future<void> setBool(String key, bool value) async {
+    _hidden = value;
   }
 
   noSuchMethod(Invocation invocation) {
@@ -23,23 +26,25 @@ void main() {
       expect(Settings(), isNotNull);
     });
 
-    test('Settings.getSynchronizing() should whether synchronizing is hidden', () async {
+    test('Settings.getSynchronizing() should get whether synchronizing is hidden', () async {
         Settings.sharedPreferencesCreatorHook = () async {
           return MockSharedPreferencesWithCache();
         };
 
         final settings = Settings();
         final hidden = await settings.getSynchronizingHidden();
-        expect(hidden, true);
+        expect(hidden, false);
     });
 
-    test('Settings.getSynchronizing() should whether synchronizing is hidden', () async {
+    test('Settings.setSynchronizing() should set whether synchronizing is hidden', () async {
         Settings.sharedPreferencesCreatorHook = () async {
           return MockSharedPreferencesWithCache();
         };
 
         final settings = Settings();
-        await settings.setSynchronizingHidden(false);
+        await settings.setSynchronizingHidden(true);
+        final hidden = await settings.getSynchronizingHidden();
+        expect(hidden, true);
     });
 
 
