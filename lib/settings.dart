@@ -26,14 +26,17 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+typedef SettingsSharedPreferencesCreatorHook = Future<SharedPreferencesWithCache> Function();
+
 // TODO: Add mechanism to mock shared preferences.
 class Settings extends ChangeNotifier {
   SharedPreferencesWithCache? _preferences;
 
+  static SettingsSharedPreferencesCreatorHook? _sharedPreferencesCreatorHook;
+
+  /// Gets whether synchronizing is hidden.
   Future<bool> getSynchronizingHidden() async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return false;
@@ -47,10 +50,9 @@ class Settings extends ChangeNotifier {
     return hidden;
   }
 
+  /// Sets whether synchronizing is hidden.
   Future<void> setSynchronizingHidden(bool hidden) async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return;
@@ -60,10 +62,9 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Gets tag scores.
   Future<Map<String, double>> getTagScores() async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return <String, double>{};
@@ -73,15 +74,18 @@ class Settings extends ChangeNotifier {
     if (serialized == null) {
       return <String, double>{};
     }
-    final scores = jsonDecode(serialized) as Map<String, double>;
+    final decoded = jsonDecode(serialized);
+    final scores = <String, double>{};
+    for (final key in decoded.keys) {
+      scores[key] = decoded[key]!;
+    }
 
     return scores;
   }
 
+  /// Sets tag scores.
   Future<void> setTagScores(Map<String, double> scores) async {
-    _preferences ??= await SharedPreferencesWithCache.create(
-      cacheOptions: const SharedPreferencesWithCacheOptions(),
-    );
+    _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return;
@@ -90,5 +94,21 @@ class Settings extends ChangeNotifier {
     final serialized = jsonEncode(scores);
     await preferences.setString('tagScores', serialized);
     notifyListeners();
+  }
+
+  /// Hook when creating shared preferences.
+  static set sharedPreferencesCreatorHook(SettingsSharedPreferencesCreatorHook? hook) {
+    _sharedPreferencesCreatorHook = hook;
+  }
+
+  Future<SharedPreferencesWithCache> _createPreferences() async {
+    final hook = _sharedPreferencesCreatorHook;
+    if (hook != null) {
+      return await hook();
+    }
+
+    return await SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    );
   }
 }
