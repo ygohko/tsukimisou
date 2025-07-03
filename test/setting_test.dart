@@ -67,8 +67,19 @@ void main() {
         expect(scores['b'], 0.5);
     });
 
-    
+    test('Settings.setTagScores() should set tag scores', () async {
+        Settings.sharedPreferencesCreatorHook = () async {
+          return MockSharedPreferencesWithCache();
+        };
 
-    // TODO: Add tests for getters and setters.
+        final settings = Settings();
+        await settings.setTagScores({
+            'c': 1.0,
+            'd': 0.5,            
+        });
+        final scores = await settings.getTagScores();
+        expect(scores['c'], 1.0);
+        expect(scores['d'], 0.5);
+    });
   });
 }
