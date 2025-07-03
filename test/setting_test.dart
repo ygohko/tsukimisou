@@ -7,6 +7,9 @@ class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
     return true;
   }
 
+  Future<void> setBool(String key, bool value) async {
+  }
+
   noSuchMethod(Invocation invocation) {
     assert(false);
   }
@@ -30,6 +33,17 @@ void main() {
         expect(hidden, true);
     });
 
+    test('Settings.getSynchronizing() should whether synchronizing is hidden', () async {
+        Settings.sharedPreferencesCreatorHook = () async {
+          return MockSharedPreferencesWithCache();
+        };
+
+        final settings = Settings();
+        await settings.setSynchronizingHidden(false);
+    });
+
+
+    
 
     // TODO: Add tests for getters and setters.
   });
