@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2025 Yasuaki Gohko
  *
