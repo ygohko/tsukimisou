@@ -21,6 +21,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'settings.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({super.key});
@@ -30,8 +33,59 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  var _synchronizingHidden = false;
+
+  @override
+  void didChangeDependencied() async {
+    final settings = Provider.of<Settings>(context, listen: false);
+    final hidden = await settings.getSynchronizingHidden();
+    setState(() {
+        _synchronizingHidden = hidden;
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("設定"),
+      ),
+      body: ListView(
+        children: [
+          Consumer<Settings>(
+            builder: (context, settings, child) {
+              return ListTile(
+                title: const Text("Google Drive同期を隠す"),
+                trailing: Switch(
+                  value: _synchronizingHidden,
+                  onChanged: (bool value) async {
+                    _synchronizingHidden = !_synchronizingHidden;
+                    final settings = Provider.of<Settings>(context, listen: false);
+                    await settings.setSynchronizingHidden(_synchronizingHidden);
+                  },
+                ),
+                onTap: () async {
+                  _synchronizingHidden = !_synchronizingHidden;
+                  final settings = Provider.of<Settings>(context, listen: false);
+                  await settings.setSynchronizingHidden(_synchronizingHidden);
+                },
+              );
+            },
+          ),
+          ListTile(
+            title: const Text("このアプリについて"),
+            onTap: () {
+              // TODO: Implement functionality
+            },
+          ),
+          ListTile(
+            title: const Text("プライバシーポリシー"),
+            onTap: () {
+              // TODO: Implement functionality
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

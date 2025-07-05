@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 import 'app.dart';
 import 'app_state.dart';
 import 'memo_store.dart';
+import 'settings.dart';
 
 void main() async {
   runApp(
@@ -33,6 +34,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
         ChangeNotifierProvider<AppState>(create: (context) => AppState()),
+        ChangeNotifierProvider<Settings>(create: (context) => Settings()),
       ],
       child: const App(),
     ),
