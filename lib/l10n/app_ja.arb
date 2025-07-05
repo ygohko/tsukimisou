@@ -11,6 +11,8 @@
     "googleDriveIntegration": "Google Drive連携",
     "synchronize": "同期",
     "others": "その他",
+    "settings": "設定",
+    "hideGoogleDriveSynchronization": "Google Drive同期を隠す",
     "about": "このアプリについて",
     "privacyPolicy": "プライバシーポリシー",
     "synchronizing": "同期中...",

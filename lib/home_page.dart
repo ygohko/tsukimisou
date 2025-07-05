@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022 - 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -305,7 +305,13 @@ class _HomePageState extends State<HomePage> {
     showDialog(
       context: context,
       builder: (context) {
-        return SettingsPage();
+        return Center(
+          child: SizedBox(
+            width: 500.0,
+            height: 500.0,
+            child: SettingsPage(),
+          ),
+        );
       },
     );
   }
@@ -606,7 +612,7 @@ class _HomePageState extends State<HomePage> {
           return common_uis.subtitle(context, localizations.others);
         } else if (i == settingsIndex) {
           return ListTile(
-            title: Text('Settings'),
+            title: Text(localizations.settings),
             onTap: _showSettings,
             shape: border,
           );

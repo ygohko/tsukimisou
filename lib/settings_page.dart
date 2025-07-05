@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'settings.dart';
+import 'gen_l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   SettingsPage({super.key});
@@ -46,16 +47,18 @@ class _SettingsPageState extends State<SettingsPage> {
   
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("設定"),
+        title: Text(localizations.settings),
       ),
       body: ListView(
         children: [
           Consumer<Settings>(
             builder: (context, settings, child) {
               return ListTile(
-                title: const Text("Google Drive同期を隠す"),
+                title: Text(localizations.hideGoogleDriveSynchronization),
                 trailing: Switch(
                   value: _synchronizingHidden,
                   onChanged: (bool value) async {
@@ -73,13 +76,13 @@ class _SettingsPageState extends State<SettingsPage> {
             },
           ),
           ListTile(
-            title: const Text("このアプリについて"),
+            title: Text(localizations.about),
             onTap: () {
               // TODO: Implement functionality
             },
           ),
           ListTile(
-            title: const Text("プライバシーポリシー"),
+            title: Text(localizations.privacyPolicy),
             onTap: () {
               // TODO: Implement functionality
             },
