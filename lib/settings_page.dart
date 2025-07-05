@@ -22,12 +22,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import 'common_uis.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
-  SettingsPage({super.key});
+  final bool fullScreen;
+  
+  SettingsPage({super.key, this.fullScreen = true});
 
   @override
   State<StatefulWidget> createState() => _SettingsPageState();
@@ -49,8 +53,15 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
 
+    late final IconButton leading;
+    if (widget.fullScreen) {
+      leading = BackButton();
+    } else {
+      leading = CloseButton();
+    }
     return Scaffold(
       appBar: AppBar(
+        leading: leading,
         title: Text(localizations.settings),
       ),
       body: ListView(
@@ -83,12 +94,20 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           ListTile(
             title: Text(localizations.privacyPolicy),
-            onTap: () {
-              // TODO: Implement functionality
-            },
+            onTap: _showPrivacyPolicy,
           ),
         ],
       ),
     );
+  }
+
+  void _showPrivacyPolicy() async {
+    await launchUrl(
+        Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
+    if (mounted) {
+      if (!hasLargeScreen()) {
+        Navigator.of(context).pop();
+      }
+    }
   }
 }

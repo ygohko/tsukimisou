@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage> {
           child: SizedBox(
             width: 500.0,
             height: 500.0,
-            child: SettingsPage(),
+            child: SettingsPage(fullScreen: false),
           ),
         );
       },
