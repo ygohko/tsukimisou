@@ -46,6 +46,7 @@ import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
+import 'settings_page.dart';
 import 'gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
@@ -300,6 +301,15 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _showSettings() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SettingsPage();
+      },
+    );
+  }
+
   void _showAbout() async {
     if (!_licenseAdded) {
       _addLicenses();
@@ -535,7 +545,8 @@ class _HomePageState extends State<HomePage> {
     final synchronizeIndex = integrationSubtitleIndex + 1;
     final othersDividerIndex = synchronizeIndex + 1;
     final othersSubtitleIndex = othersDividerIndex + 1;
-    final aboutIndex = othersSubtitleIndex + 1;
+    final settingsIndex = othersSubtitleIndex + 1;
+    final aboutIndex = settingsIndex + 1;
     final privacyPolicyIndex = aboutIndex + 1;
     final footerIndex = privacyPolicyIndex + 1;
     final drawerItemCount = footerIndex + 1;
@@ -593,6 +604,12 @@ class _HomePageState extends State<HomePage> {
           return const Divider();
         } else if (i == othersSubtitleIndex) {
           return common_uis.subtitle(context, localizations.others);
+        } else if (i == settingsIndex) {
+          return ListTile(
+            title: Text('Settings'),
+            onTap: _showSettings,
+            shape: border,
+          );
         } else if (i == aboutIndex) {
           return ListTile(
             title: Text(localizations.about),
