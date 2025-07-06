@@ -35,7 +35,7 @@ import 'gen_l10n/app_localizations.dart';
 class SettingsPage extends StatefulWidget {
   final bool fullScreen;
   
-  SettingsPage({super.key, this.fullScreen = true});
+  const SettingsPage({super.key, this.fullScreen = true});
 
   @override
   State<StatefulWidget> createState() => _SettingsPageState();
@@ -45,7 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
   var _synchronizingHidden = false;
 
   @override
-  void didChangeDependencied() async {
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
     final settings = Provider.of<Settings>(context, listen: false);
     final hidden = await settings.getSynchronizingHidden();
     setState(() {
@@ -59,9 +60,9 @@ class _SettingsPageState extends State<SettingsPage> {
 
     late final IconButton leading;
     if (widget.fullScreen) {
-      leading = BackButton();
+      leading = const BackButton();
     } else {
-      leading = CloseButton();
+      leading = const CloseButton();
     }
     return Scaffold(
       appBar: AppBar(

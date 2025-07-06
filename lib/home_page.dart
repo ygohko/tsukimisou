@@ -22,14 +22,10 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
@@ -62,7 +58,6 @@ class _HomePageState extends State<HomePage> {
   var _filteringTag = '';
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
-  var _licenseAdded = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
   var _fileLockedCount = 0;
@@ -302,10 +297,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showSettings() async {
+    // TODO: Add small screen support.
     showDialog(
       context: context,
       builder: (context) {
-        return Center(
+        return const Center(
           child: SizedBox(
             width: 500.0,
             height: 500.0,
@@ -315,40 +311,6 @@ class _HomePageState extends State<HomePage> {
       },
       barrierDismissible: false,
     );
-  }
-
-  void _showAbout() async {
-    if (!_licenseAdded) {
-      _addLicenses();
-      _licenseAdded = true;
-    }
-    final localizations = AppLocalizations.of(context)!;
-    final packageInfo = await PackageInfo.fromPlatform();
-    if (!mounted) {
-      return;
-    }
-    if (!common_uis.hasLargeScreen()) {
-      Navigator.of(context).pop();
-    }
-    showAboutDialog(
-      context: context,
-      applicationName: localizations.tsukimisou,
-      applicationVersion: packageInfo.version,
-      applicationIcon: const Image(
-        image: AssetImage('assets/images/about_icon.png'),
-      ),
-      applicationLegalese: '(c) 2022 Yasuaki Gohko',
-    );
-  }
-
-  void _showPrivacyPolicy() async {
-    await launchUrl(
-        Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
-    if (mounted) {
-      if (!common_uis.hasLargeScreen()) {
-        Navigator.of(context).pop();
-      }
-    }
   }
 
   void _showSynchronizingBanner() {
@@ -674,20 +636,5 @@ class _HomePageState extends State<HomePage> {
       _shownMemos = [...memos];
     }
     _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
-  }
-
-  void _addLicenses() async {
-    LicenseRegistry.addLicense(() async* {
-      var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
-      yield LicenseEntryWithLineBreaks(
-        ['Noto Fonts'],
-        text,
-      );
-      text = await rootBundle.loadString('assets/licenses/tsukimisou.txt');
-      yield LicenseEntryWithLineBreaks(
-        ['Tsukimisou'],
-        text,
-      );
-    });
   }
 }
