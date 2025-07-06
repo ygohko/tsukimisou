@@ -51,6 +51,9 @@ class _SettingsPageState extends State<SettingsPage> {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context, listen: false);
     final hidden = await settings.getSynchronizingHidden();
+    if (!mounted) {
+      return;
+    }
     setState(() {
         _synchronizingHidden = hidden;
     });
