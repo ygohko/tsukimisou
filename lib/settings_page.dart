@@ -124,9 +124,6 @@ class _SettingsPageState extends State<SettingsPage> {
     if (!mounted) {
       return;
     }
-    if (!hasLargeScreen()) {
-      Navigator.of(context).pop();
-    }
     showAboutDialog(
       context: context,
       applicationName: localizations.tsukimisou,
@@ -141,11 +138,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void _showPrivacyPolicy() async {
     await launchUrl(
         Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
-    if (mounted) {
-      if (!hasLargeScreen()) {
-        Navigator.of(context).pop();
-      }
-    }
   }
 
   void _addLicenses() async {

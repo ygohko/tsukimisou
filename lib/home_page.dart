@@ -297,20 +297,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showSettings() async {
-    // TODO: Add small screen support.
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const Center(
-          child: SizedBox(
-            width: 500.0,
-            height: 500.0,
-            child: SettingsPage(fullScreen: false),
-          ),
-        );
-      },
-      barrierDismissible: false,
-    );
+    if (!common_uis.hasLargeScreen()) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return const SettingsPage(fullScreen: true);
+          },
+        ),
+      );
+    } else {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: SizedBox(
+              width: 500.0,
+              height: 500.0,
+              child: SettingsPage(fullScreen: false),
+            ),
+          );
+        },
+        barrierDismissible: false,
+      );
+    }
   }
 
   void _showSynchronizingBanner() {
