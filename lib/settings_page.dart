@@ -32,9 +32,11 @@ import 'common_uis.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
+/// Page to modify settings.
 class SettingsPage extends StatefulWidget {
   final bool fullScreen;
   
+  /// Create a settings page.
   const SettingsPage({super.key, this.fullScreen = true});
 
   @override
