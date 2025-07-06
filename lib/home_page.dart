@@ -298,6 +298,7 @@ class _HomePageState extends State<HomePage> {
 
   void _showSettings() async {
     if (!common_uis.hasLargeScreen()) {
+      Navigator.of(context).pop();
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
