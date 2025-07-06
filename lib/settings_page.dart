@@ -21,6 +21,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -88,9 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           ListTile(
             title: Text(localizations.about),
-            onTap: () {
-              // TODO: Implement functionality
-            },
+            onTap: _showAbout,
           ),
           ListTile(
             title: Text(localizations.privacyPolicy),
@@ -98,6 +97,33 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showAbout() async {
+    // TODO: Enable this.
+    /*
+    if (!_licenseAdded) {
+      _addLicenses();
+      _licenseAdded = true;
+    }
+    */
+    final localizations = AppLocalizations.of(context)!;
+    final packageInfo = await PackageInfo.fromPlatform();
+    if (!mounted) {
+      return;
+    }
+    if (!hasLargeScreen()) {
+      Navigator.of(context).pop();
+    }
+    showAboutDialog(
+      context: context,
+      applicationName: localizations.tsukimisou,
+      applicationVersion: packageInfo.version,
+      applicationIcon: const Image(
+        image: AssetImage('assets/images/about_icon.png'),
+      ),
+      applicationLegalese: '(c) 2022 - 2025 Yasuaki Gohko',
     );
   }
 
