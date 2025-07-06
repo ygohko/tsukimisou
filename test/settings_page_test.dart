@@ -44,8 +44,8 @@ Future<void> init(WidgetTester tester) async {
   await tester.pumpWidget(
     ChangeNotifierProvider(
       create: (context) => Settings(),
-      child: MaterialApp(
-        localizationsDelegates: const [
+      child: const MaterialApp(
+        localizationsDelegates: [
           AppLocalizations.delegate,
         ],
         home: SettingsPage(fullScreen: false),

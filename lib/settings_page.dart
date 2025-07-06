@@ -79,16 +79,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(localizations.hideGoogleDriveSynchronization),
                 trailing: Switch(
                   value: _synchronizingHidden,
-                  onChanged: (bool value) async {
-                    _synchronizingHidden = !_synchronizingHidden;
-                    final settings = Provider.of<Settings>(context, listen: false);
-                    await settings.setSynchronizingHidden(_synchronizingHidden);
+                  onChanged: (bool value) {
+                    _setSynchronizingHidden(value);
                   },
                 ),
-                onTap: () async {
-                  _synchronizingHidden = !_synchronizingHidden;
-                  final settings = Provider.of<Settings>(context, listen: false);
-                  await settings.setSynchronizingHidden(_synchronizingHidden);
+                onTap: () {
+                  _setSynchronizingHidden(!_synchronizingHidden);
                 },
               );
             },
@@ -104,6 +100,14 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     );
+  }
+
+  void _setSynchronizingHidden(bool hidden) async {
+    setState(() {
+        _synchronizingHidden = hidden;
+    });
+    final settings = Provider.of<Settings>(context, listen: false);
+    await settings.setSynchronizingHidden(_synchronizingHidden);
   }
 
   void _showAbout() async {
