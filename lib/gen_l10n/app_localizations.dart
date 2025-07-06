@@ -171,6 +171,18 @@ abstract class AppLocalizations {
   /// **'Others'**
   String get others;
 
+  /// Text for settings list tile and app bar
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// Text for hide Google Drive synchronization list tile
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Google Drive synchronization'**
+  String get hideGoogleDriveSynchronization;
+
   /// Text for about list tile
   ///
   /// In en, this message translates to:

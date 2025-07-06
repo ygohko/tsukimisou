@@ -22,8 +22,10 @@
 
 import 'package:flutter/foundation.dart';
 
+/// Application state.
 class AppState extends ChangeNotifier {
   var _mergingWithGoogleDrive = false;
+  var _licensesAdded = false;
 
   /// Whether merging with Google Drive.
   bool get mergingWithGoogleDrive => _mergingWithGoogleDrive;
@@ -31,6 +33,15 @@ class AppState extends ChangeNotifier {
   /// Whether merging with Google Drive.
   set mergingWithGoogleDrive(bool mergingWithGoogleDrive) {
     _mergingWithGoogleDrive = mergingWithGoogleDrive;
+    notifyListeners();
+  }
+
+  /// Whether licenses are added.
+  bool get licensesAdded => _licensesAdded;
+
+  /// Whether licenses are added.
+  set licensesAdded(bool licensesAdded) {
+    _licensesAdded = licensesAdded;
     notifyListeners();
   }
 }

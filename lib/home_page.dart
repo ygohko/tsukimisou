@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022 - 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -22,14 +22,10 @@
 
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
@@ -46,6 +42,7 @@ import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
+import 'settings_page.dart';
 import 'gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
@@ -61,7 +58,6 @@ class _HomePageState extends State<HomePage> {
   var _filteringTag = '';
   var _filteringEnabled = false;
   var _commonUiInitialized = false;
-  var _licenseAdded = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
   var _fileLockedCount = 0;
@@ -300,38 +296,21 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _showAbout() async {
-    if (!_licenseAdded) {
-      _addLicenses();
-      _licenseAdded = true;
-    }
-    final localizations = AppLocalizations.of(context)!;
-    final packageInfo = await PackageInfo.fromPlatform();
-    if (!mounted) {
-      return;
-    }
-    if (!common_uis.hasLargeScreen()) {
-      Navigator.of(context).pop();
-    }
-    showAboutDialog(
+  void _showSettings() async {
+    // TODO: Add small screen support.
+    showDialog(
       context: context,
-      applicationName: localizations.tsukimisou,
-      applicationVersion: packageInfo.version,
-      applicationIcon: const Image(
-        image: AssetImage('assets/images/about_icon.png'),
-      ),
-      applicationLegalese: '(c) 2022 Yasuaki Gohko',
+      builder: (context) {
+        return const Center(
+          child: SizedBox(
+            width: 500.0,
+            height: 500.0,
+            child: SettingsPage(fullScreen: false),
+          ),
+        );
+      },
+      barrierDismissible: false,
     );
-  }
-
-  void _showPrivacyPolicy() async {
-    await launchUrl(
-        Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
-    if (mounted) {
-      if (!common_uis.hasLargeScreen()) {
-        Navigator.of(context).pop();
-      }
-    }
   }
 
   void _showSynchronizingBanner() {
@@ -535,9 +514,8 @@ class _HomePageState extends State<HomePage> {
     final synchronizeIndex = integrationSubtitleIndex + 1;
     final othersDividerIndex = synchronizeIndex + 1;
     final othersSubtitleIndex = othersDividerIndex + 1;
-    final aboutIndex = othersSubtitleIndex + 1;
-    final privacyPolicyIndex = aboutIndex + 1;
-    final footerIndex = privacyPolicyIndex + 1;
+    final settingsIndex = othersSubtitleIndex + 1;
+    final footerIndex = settingsIndex + 1;
     final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     const border = RoundedRectangleBorder(
@@ -593,16 +571,10 @@ class _HomePageState extends State<HomePage> {
           return const Divider();
         } else if (i == othersSubtitleIndex) {
           return common_uis.subtitle(context, localizations.others);
-        } else if (i == aboutIndex) {
+        } else if (i == settingsIndex) {
           return ListTile(
-            title: Text(localizations.about),
-            onTap: _showAbout,
-            shape: border,
-          );
-        } else if (i == privacyPolicyIndex) {
-          return ListTile(
-            title: Text(localizations.privacyPolicy),
-            onTap: _showPrivacyPolicy,
+            title: Text(localizations.settings),
+            onTap: _showSettings,
             shape: border,
           );
         } else {
@@ -664,20 +636,5 @@ class _HomePageState extends State<HomePage> {
       _shownMemos = [...memos];
     }
     _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
-  }
-
-  void _addLicenses() async {
-    LicenseRegistry.addLicense(() async* {
-      var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
-      yield LicenseEntryWithLineBreaks(
-        ['Noto Fonts'],
-        text,
-      );
-      text = await rootBundle.loadString('assets/licenses/tsukimisou.txt');
-      yield LicenseEntryWithLineBreaks(
-        ['Tsukimisou'],
-        text,
-      );
-    });
   }
 }

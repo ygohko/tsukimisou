@@ -55,6 +55,14 @@
     "@others": {
         "description": "Subtitle for others group of drawer"
     },
+    "settings": "Settings",
+    "@settings": {
+        "description": "Text for settings list tile and app bar"
+    },
+    "hideGoogleDriveSynchronization": "Hide Google Drive synchronization",
+    "@hideGoogleDriveSynchronization": {
+        "description": "Text for hide Google Drive synchronization list tile"
+    },
     "about": "About",
     "@about": {
         "description": "Text for about list tile"

@@ -50,6 +50,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get others => 'その他';
 
   @override
+  String get settings => '設定';
+
+  @override
+  String get hideGoogleDriveSynchronization => 'Google Drive同期を隠す';
+
+  @override
   String get about => 'このアプリについて';
 
   @override

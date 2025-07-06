@@ -51,6 +51,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get others => 'Others';
 
   @override
+  String get settings => 'Settings';
+
+  @override
+  String get hideGoogleDriveSynchronization =>
+      'Hide Google Drive synchronization';
+
+  @override
   String get about => 'About';
 
   @override
