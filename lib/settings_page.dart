@@ -20,11 +20,14 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'app_state.dart';
 import 'common_uis.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
@@ -101,13 +104,11 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   void _showAbout() async {
-    // TODO: Enable this.
-    /*
-    if (!_licenseAdded) {
+    final appState = Provider.of<AppState>(context, listen: false);
+    if (!appState.licensesAdded) {
       _addLicenses();
-      _licenseAdded = true;
+      appState.licensesAdded = true;
     }
-    */
     final localizations = AppLocalizations.of(context)!;
     final packageInfo = await PackageInfo.fromPlatform();
     if (!mounted) {
@@ -135,5 +136,20 @@ class _SettingsPageState extends State<SettingsPage> {
         Navigator.of(context).pop();
       }
     }
+  }
+
+  void _addLicenses() async {
+    LicenseRegistry.addLicense(() async* {
+      var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
+      yield LicenseEntryWithLineBreaks(
+        ['Noto Fonts'],
+        text,
+      );
+      text = await rootBundle.loadString('assets/licenses/tsukimisou.txt');
+      yield LicenseEntryWithLineBreaks(
+        ['Tsukimisou'],
+        text,
+      );
+    });
   }
 }

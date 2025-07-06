@@ -313,6 +313,7 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
+      barrierDismissible: false,
     );
   }
 
@@ -552,9 +553,7 @@ class _HomePageState extends State<HomePage> {
     final othersDividerIndex = synchronizeIndex + 1;
     final othersSubtitleIndex = othersDividerIndex + 1;
     final settingsIndex = othersSubtitleIndex + 1;
-    final aboutIndex = settingsIndex + 1;
-    final privacyPolicyIndex = aboutIndex + 1;
-    final footerIndex = privacyPolicyIndex + 1;
+    final footerIndex = settingsIndex + 1;
     final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     const border = RoundedRectangleBorder(
@@ -614,18 +613,6 @@ class _HomePageState extends State<HomePage> {
           return ListTile(
             title: Text(localizations.settings),
             onTap: _showSettings,
-            shape: border,
-          );
-        } else if (i == aboutIndex) {
-          return ListTile(
-            title: Text(localizations.about),
-            onTap: _showAbout,
-            shape: border,
-          );
-        } else if (i == privacyPolicyIndex) {
-          return ListTile(
-            title: Text(localizations.privacyPolicy),
-            onTap: _showPrivacyPolicy,
             shape: border,
           );
         } else {
