@@ -36,9 +36,11 @@ class Settings extends ChangeNotifier {
   /// Initialize this settings.
   Future<void> init() async {
     _preferences ??= await _createPreferences();
+    notifyListeners();
   }
 
   /// Gets whether synchronizing is hidden.
+  // TODO: Rename to getSynchronizationHidden().
   bool getSynchronizingHidden() {
     final preferences = _preferences;
     if (preferences == null) {

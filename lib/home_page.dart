@@ -497,12 +497,18 @@ class _HomePageState extends State<HomePage> {
       itemCount: _shownMemos.length,
       itemBuilder: (context, i) {
         final appState = Provider.of<AppState>(context, listen: false);
+        final settings = Provider.of<Settings>(context, listen: false);
         final memo = _shownMemos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
-        final unsynchronized = lastModified.isAfter(lastMerged);
+        late final bool unsynchronized;
+        if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
+          unsynchronized = true;
+        } else {
+          unsynchronized = false;
+        }
         return Card(
           color: common_uis.TsukimisouColors.memoCard,
           elevation: 2.0,

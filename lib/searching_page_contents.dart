@@ -30,6 +30,7 @@ import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_searcher.dart';
+import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
 class SearchingPageContents extends StatefulWidget {
@@ -65,6 +66,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final lastMerged =
         DateTime.fromMillisecondsSinceEpoch(memoStore.lastMerged);
     final appState = Provider.of<AppState>(context, listen: false);
+    final settings = Provider.of<Settings>(context, listen: false);
     late Widget contents;
     if (_memos.isNotEmpty) {
       contents = ListView.builder(
@@ -74,7 +76,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           final lastModified =
               DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
           late final bool unsynchronized;
-          if (lastModified.isAfter(lastMerged)) {
+          if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
             unsynchronized = true;
           } else {
             unsynchronized = false;
