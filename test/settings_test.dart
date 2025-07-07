@@ -47,7 +47,7 @@ void main() {
         };
 
         final settings = Settings();
-        final hidden = await settings.getSynchronizingHidden();
+        final hidden = settings.getSynchronizingHidden();
         expect(hidden, false);
     });
 
@@ -58,7 +58,7 @@ void main() {
 
         final settings = Settings();
         await settings.setSynchronizingHidden(true);
-        final hidden = await settings.getSynchronizingHidden();
+        final hidden = settings.getSynchronizingHidden();
         expect(hidden, true);
     });
 
@@ -68,7 +68,7 @@ void main() {
         };
 
         final settings = Settings();
-        final scores = await settings.getTagScores();
+        final scores = settings.getTagScores();
         expect(scores['a'], 1.0);
         expect(scores['b'], 0.5);
     });
@@ -83,7 +83,7 @@ void main() {
             'c': 1.0,
             'd': 0.5,            
         });
-        final scores = await settings.getTagScores();
+        final scores = settings.getTagScores();
         expect(scores['c'], 1.0);
         expect(scores['d'], 0.5);
     });
