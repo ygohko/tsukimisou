@@ -70,6 +70,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    final settings = Provider.of<Settings>(context);
+    await settings.init();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (!_commonUiInitialized) {
       common_uis.init(context);
@@ -526,7 +533,7 @@ class _HomePageState extends State<HomePage> {
     late final int synchronizeIndex;
     late final int othersDividerIndex;
     // TODO: Use a value in settings.
-    final hidden = true;
+    final hidden = settings.getSynchronizingHidden();
     if (!hidden) {
       integrationDividerIndex = tagsEndIndex + 1;
       integrationSubtitleIndex = integrationDividerIndex + 1;

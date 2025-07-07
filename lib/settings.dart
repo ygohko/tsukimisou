@@ -33,9 +33,13 @@ class Settings extends ChangeNotifier {
 
   static SettingsSharedPreferencesCreatorHook? _sharedPreferencesCreatorHook;
 
-  /// Gets whether synchronizing is hidden.
-  Future<bool> getSynchronizingHidden() async {
+  /// Initialize this settings.
+  Future<void> init() async {
     _preferences ??= await _createPreferences();
+  }
+
+  /// Gets whether synchronizing is hidden.
+  bool getSynchronizingHidden() {
     final preferences = _preferences;
     if (preferences == null) {
       return false;
@@ -62,8 +66,7 @@ class Settings extends ChangeNotifier {
   }
 
   /// Gets tag scores.
-  Future<Map<String, double>> getTagScores() async {
-    _preferences ??= await _createPreferences();
+  Map<String, double> getTagScores() {
     final preferences = _preferences;
     if (preferences == null) {
       return <String, double>{};
