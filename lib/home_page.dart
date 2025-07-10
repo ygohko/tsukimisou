@@ -538,7 +538,6 @@ class _HomePageState extends State<HomePage> {
     late final int integrationSubtitleIndex;
     late final int synchronizeIndex;
     late final int othersDividerIndex;
-    // TODO: Use a value in settings.
     final hidden = settings.getSynchronizingHidden();
     if (!hidden) {
       integrationDividerIndex = tagsEndIndex + 1;
