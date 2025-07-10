@@ -1,18 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tsukimisou/memo.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_local_saver.dart';
 import 'package:tsukimisou/viewing_page.dart';
+import 'package:tsukimisou/settings.dart';
 import 'package:tsukimisou/gen_l10n/app_localizations.dart';
+
+// ignore: must_be_immutable
+class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
+  var _hidden = false;
+  var _tagScores = '{"a": 1.0, "b": 0.5}';
+
+  @override
+  bool? getBool(String key) {
+    return _hidden;
+  }
+
+  @override
+  String? getString(String key) {
+    return _tagScores;
+  }
+
+  @override
+  Future<void> setBool(String key, bool value) async {
+    _hidden = value;
+  }
+
+  @override
+  Future<void> setString(String key, String value) async {
+    _tagScores = value;
+  }
+
+  @override
+  noSuchMethod(Invocation invocation) {
+    throw UnimplementedError();
+  }
+}
 
 Future<void> init(WidgetTester tester, Memo memo) async {
   memo.text = 'This is a test.';
   memo.name = 'Test';
   await tester.pumpWidget(
-    ChangeNotifierProvider(
-      create: (context) => MemoStore(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<MemoStore>(create: (context) => MemoStore()),
+        ChangeNotifierProvider<Settings>(create: (context) => Settings()),
+      ],
       child: MaterialApp(
         localizationsDelegates: const [
           AppLocalizations.delegate,
@@ -26,6 +62,9 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 void main() {
   MemoStoreLocalSaver.constructorHook = (memoStore, path) {
     return MemoStoreMockLocalSaver(memoStore, path);
+  };
+  Settings.sharedPreferencesCreatorHook = () async {
+    return MockSharedPreferencesWithCache();
   };
 
   group('ViewingPage', () {
@@ -74,6 +113,7 @@ void main() {
       expect(find.text('Bind tags'), findsOneWidget);
     });
 
+    Settings.sharedPreferencesCreatorHook = null;
     MemoStoreLocalSaver.constructorHook = null;
   });
 }
