@@ -102,15 +102,32 @@ class Settings extends ChangeNotifier {
 
   /// Hook when creating shared preferences.
   static set sharedPreferencesCreatorHook(SettingsSharedPreferencesCreatorHook? hook) {
+
+    print("4");
+    
+
     _sharedPreferencesCreatorHook = hook;
   }
 
   Future<SharedPreferencesWithCache> _createPreferences() async {
+
+    print("1");
+    
     final hook = _sharedPreferencesCreatorHook;
     if (hook != null) {
+
+
+    print("2");
+    
+
       return await hook();
     }
 
+
+    print("3");
+    
+
+    
     return await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     );

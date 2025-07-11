@@ -38,9 +38,6 @@ class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
 }
 
 Future<void> init(WidgetTester tester) async {
-  Settings.sharedPreferencesCreatorHook = () async {
-    return MockSharedPreferencesWithCache();
-  };
   await tester.pumpWidget(
     ChangeNotifierProvider(
       create: (context) => Settings(),
@@ -56,12 +53,18 @@ Future<void> init(WidgetTester tester) async {
 
 void main() {
   group('SettingsPage', () {
-    testWidgets(
+      Settings.sharedPreferencesCreatorHook = () async {
+        return MockSharedPreferencesWithCache();
+      };
+
+      testWidgets(
         'SettinsPage should have specified widgets.',
         (WidgetTester tester) async {
-      await init(tester);
-      expect(find.text('Settings'), findsOneWidget);
-      expect(find.text('Hide Google Drive synchronization'), findsOneWidget);
-    });
+          await init(tester);
+          expect(find.text('Settings'), findsOneWidget);
+          expect(find.text('Hide Google Drive synchronization'), findsOneWidget);
+      });
+
+      Settings.sharedPreferencesCreatorHook = null;
   });
 }
