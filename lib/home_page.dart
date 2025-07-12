@@ -535,28 +535,7 @@ class _HomePageState extends State<HomePage> {
     final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
     final tagScores = settings.getTagScores();
-    tags.sort((aTag, bTag) {
-        late final double aScore;
-        if (tagScores.containsKey(aTag)) {
-          aScore = tagScores[aTag]!;
-        } else {
-          aScore = 0.0;
-        }
-        late final double bScore;
-        if (tagScores.containsKey(bTag)) {
-          bScore = tagScores[bTag]!;
-        } else {
-          bScore = 0.0;
-        }
-        if (aScore > bScore) {
-          return -1;
-        }
-        if (bScore > aScore) {
-          return 1;
-        }
-
-        return 0;
-    });
+    tags.sortByScores(tagScores);
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     late final int integrationDividerIndex;
     late final int integrationSubtitleIndex;

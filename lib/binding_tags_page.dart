@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
+import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -60,28 +61,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     super.initState();
     _candidateTags = [...widget.memo.tags];
     final tags = [...widget.additinalTags];
-    tags.sort((aTag, bTag) {
-        late final double aScore;
-        if (widget.tagScores.containsKey(aTag)) {
-          aScore = widget.tagScores[aTag]!;
-        } else {
-          aScore = 0.0;
-        }
-        late final double bScore;
-        if (widget.tagScores.containsKey(bTag)) {
-          bScore = widget.tagScores[bTag]!;
-        } else {
-          bScore = 0.0;
-        }
-        if (aScore > bScore) {
-          return -1;
-        }
-        if (bScore > aScore) {
-          return 1;
-        }
-
-        return 0;
-    });
+    tags.sortByScores(widget.tagScores);
     for (final tag in tags) {
       if (!_candidateTags.contains(tag)) {
         _candidateTags.add(tag);
