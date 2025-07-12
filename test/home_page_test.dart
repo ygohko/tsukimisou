@@ -74,49 +74,44 @@ void main() {
   MemoStoreGoogleDriveSaver.constructorHook = (memoStore, fileName) {
     return MemoStoreMockGoogleDriveSaver(memoStore, fileName);
   };
-/*
-  Settings.sharedPreferencesCreatorHook = () async {
-    return MockSharedPreferencesWithCache();
-  };
-*/
-    
+  
   group('HomePage', () {
 
 
       testWidgets('HomePage shoud have specified widgets.',
         (WidgetTester tester) async {
-  Settings.sharedPreferencesCreatorHook = () async {
-    return MockSharedPreferencesWithCache();
-  };
+          Settings.sharedPreferencesCreatorHook = () async {
+            return MockSharedPreferencesWithCache();
+          };
 
 
           await init(tester);
-      expect(find.text('Tsukimisou'), findsOneWidget);
-      expect(find.byIcon(Icons.add), findsOneWidget);
+          expect(find.text('Tsukimisou'), findsOneWidget);
+          expect(find.byIcon(Icons.add), findsOneWidget);
 
-    Settings.sharedPreferencesCreatorHook = null;
+          Settings.sharedPreferencesCreatorHook = null;
 
 
-  });
+      });
 
-    testWidgets('HomePage shoud show EditingPage when user taps add button.',
+      testWidgets('HomePage shoud show EditingPage when user taps add button.',
         (WidgetTester tester) async {
-  Settings.sharedPreferencesCreatorHook = () async {
-    return MockSharedPreferencesWithCache();
-  };
-      await init(tester);
-      await tester.tap(find.byIcon(Icons.add));
-      await tester.pump();
-      expect(find.textContaining('Add a new memo'), findsOneWidget);
-      expect(find.byIcon(Icons.done), findsOneWidget);
-      expect(find.byIcon(Icons.close), findsOneWidget);
+          Settings.sharedPreferencesCreatorHook = () async {
+            return MockSharedPreferencesWithCache();
+          };
+          await init(tester);
+          await tester.tap(find.byIcon(Icons.add));
+          await tester.pump();
+          expect(find.textContaining('Add a new memo'), findsOneWidget);
+          expect(find.byIcon(Icons.done), findsOneWidget);
+          expect(find.byIcon(Icons.close), findsOneWidget);
 
-    Settings.sharedPreferencesCreatorHook = null;
+          Settings.sharedPreferencesCreatorHook = null;
 
+
+      });
 
   });
-
-});
 
   MemoStoreGoogleDriveSaver.constructorHook = null;
   MemoStoreGoogleDriveLoader.constructorHook = null;

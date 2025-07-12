@@ -74,6 +74,7 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context);
     await settings.init();
+    setState(() {});
   }
 
   @override
