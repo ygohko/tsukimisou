@@ -342,7 +342,7 @@ class _ViewingPageState extends State<ViewingPage>
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
-          return BindingTagsPage(memo: _memo, additinalTags: memoStore.tags, tagScores: tagScores);
+          return BindingTagsPage(memo: _memo, additionalTags: memoStore.tags, tagScores: tagScores);
         },
       ));
     } else {
@@ -355,7 +355,7 @@ class _ViewingPageState extends State<ViewingPage>
               elevation: 0,
               child: BindingTagsPage(
                   memo: _memo,
-                  additinalTags: memoStore.tags,
+                  additionalTags: memoStore.tags,
                   tagScores: tagScores,
                   fullScreen: _fullScreen),
             ),
