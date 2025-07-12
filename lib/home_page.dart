@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 400),
       );
     }
   }
@@ -330,6 +330,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 400),
       );
     }
   }

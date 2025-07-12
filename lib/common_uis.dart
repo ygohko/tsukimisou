@@ -427,7 +427,7 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       barrierDismissible: false,
       transitionBuilder: DialogTransitionBuilders.primary,
       curve: Curves.fastOutSlowIn,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 500),
     );
   }
 }

@@ -193,7 +193,7 @@ class _ViewingPageState extends State<ViewingPage>
       );
     }
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
       width: width,
       height: height,
@@ -290,7 +290,7 @@ class _ViewingPageState extends State<ViewingPage>
         barrierColor: const Color(0x00000000),
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 400),
       );
     }
     setState(() {});
