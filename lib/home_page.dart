@@ -534,6 +534,7 @@ class _HomePageState extends State<HomePage> {
     final appState = Provider.of<AppState>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
+    final tagScores = settings.getTagScores();
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     late final int integrationDividerIndex;
     late final int integrationSubtitleIndex;
