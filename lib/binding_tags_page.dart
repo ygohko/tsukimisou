@@ -34,6 +34,7 @@ import 'gen_l10n/app_localizations.dart';
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
   final List<String> additinalTags;
+  final Map<String, double> tagScores;
   final bool fullScreen;
 
   /// Creates a binding tags page.
@@ -41,6 +42,7 @@ class BindingTagsPage extends StatefulWidget {
       {Key? key,
       required this.memo,
       required this.additinalTags,
+      required this.tagScores,
       this.fullScreen = true})
       : super(key: key);
 
@@ -57,7 +59,30 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
   void initState() {
     super.initState();
     _candidateTags = [...widget.memo.tags];
-    for (final tag in widget.additinalTags) {
+    final tags = [...widget.additinalTags];
+    tags.sort((aTag, bTag) {
+        late final double aScore;
+        if (widget.tagScores.containsKey(aTag)) {
+          aScore = widget.tagScores[aTag]!;
+        } else {
+          aScore = 0.0;
+        }
+        late final double bScore;
+        if (widget.tagScores.containsKey(bTag)) {
+          bScore = widget.tagScores[bTag]!;
+        } else {
+          bScore = 0.0;
+        }
+        if (aScore > bScore) {
+          return -1;
+        }
+        if (bScore > aScore) {
+          return 1;
+        }
+
+        return 0;
+    });
+    for (final tag in tags) {
       if (!_candidateTags.contains(tag)) {
         _candidateTags.add(tag);
       }

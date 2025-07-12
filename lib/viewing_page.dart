@@ -337,10 +337,12 @@ class _ViewingPageState extends State<ViewingPage>
 
   void _bindTags() async {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final settings = Provider.of<Settings>(context, listen: false);
+    final tagScores = settings.getTagScores();
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
-          return BindingTagsPage(memo: _memo, additinalTags: memoStore.tags);
+          return BindingTagsPage(memo: _memo, additinalTags: memoStore.tags, tagScores: tagScores);
         },
       ));
     } else {
@@ -354,6 +356,7 @@ class _ViewingPageState extends State<ViewingPage>
               child: BindingTagsPage(
                   memo: _memo,
                   additinalTags: memoStore.tags,
+                  tagScores: tagScores,
                   fullScreen: _fullScreen),
             ),
           );
