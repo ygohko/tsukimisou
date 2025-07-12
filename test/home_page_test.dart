@@ -62,59 +62,48 @@ Future<void> init(WidgetTester tester) async {
 }
 
 void main() {
-  MemoStoreLocalLoader.constructorHook = (memoStore, path) {
-    return MemoStoreMockLocalLoader(memoStore, path);
-  };
-  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
-    return MemoStoreMockLocalSaver(memoStore, path);
-  };
-  MemoStoreGoogleDriveLoader.constructorHook = (memoStore, fileName) {
-    return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
-  };
-  MemoStoreGoogleDriveSaver.constructorHook = (memoStore, fileName) {
-    return MemoStoreMockGoogleDriveSaver(memoStore, fileName);
-  };
-  
   group('HomePage', () {
+    setUpAll(() {
+      MemoStoreLocalLoader.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalLoader(memoStore, path);
+      };
+      MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalSaver(memoStore, path);
+      };
+      MemoStoreGoogleDriveLoader.constructorHook = (memoStore, fileName) {
+        return MemoStoreMockGoogleDriveLoader(memoStore, fileName);
+      };
+      MemoStoreGoogleDriveSaver.constructorHook = (memoStore, fileName) {
+        return MemoStoreMockGoogleDriveSaver(memoStore, fileName);
+      };
+      Settings.sharedPreferencesCreatorHook = () async {
+        return MockSharedPreferencesWithCache();
+      };
+    });
 
+    tearDownAll(() {
+      Settings.sharedPreferencesCreatorHook = null;
+      MemoStoreGoogleDriveSaver.constructorHook = null;
+      MemoStoreGoogleDriveLoader.constructorHook = null;
+      MemoStoreLocalSaver.constructorHook = null;
+      MemoStoreLocalLoader.constructorHook = null;
+    });
 
-      testWidgets('HomePage shoud have specified widgets.',
+    testWidgets('HomePage shoud have specified widgets.',
         (WidgetTester tester) async {
-          Settings.sharedPreferencesCreatorHook = () async {
-            return MockSharedPreferencesWithCache();
-          };
+      await init(tester);
+      expect(find.text('Tsukimisou'), findsOneWidget);
+      expect(find.byIcon(Icons.add), findsOneWidget);
+    });
 
-
-          await init(tester);
-          expect(find.text('Tsukimisou'), findsOneWidget);
-          expect(find.byIcon(Icons.add), findsOneWidget);
-
-          Settings.sharedPreferencesCreatorHook = null;
-
-
-      });
-
-      testWidgets('HomePage shoud show EditingPage when user taps add button.',
+    testWidgets('HomePage shoud show EditingPage when user taps add button.',
         (WidgetTester tester) async {
-          Settings.sharedPreferencesCreatorHook = () async {
-            return MockSharedPreferencesWithCache();
-          };
-          await init(tester);
-          await tester.tap(find.byIcon(Icons.add));
-          await tester.pump();
-          expect(find.textContaining('Add a new memo'), findsOneWidget);
-          expect(find.byIcon(Icons.done), findsOneWidget);
-          expect(find.byIcon(Icons.close), findsOneWidget);
-
-          Settings.sharedPreferencesCreatorHook = null;
-
-
-      });
-
+      await init(tester);
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pump();
+      expect(find.textContaining('Add a new memo'), findsOneWidget);
+      expect(find.byIcon(Icons.done), findsOneWidget);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+    });
   });
-
-  MemoStoreGoogleDriveSaver.constructorHook = null;
-  MemoStoreGoogleDriveLoader.constructorHook = null;
-  MemoStoreLocalSaver.constructorHook = null;
-  MemoStoreLocalLoader.constructorHook = null;
 }

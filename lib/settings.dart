@@ -27,7 +27,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 typedef SettingsSharedPreferencesCreatorHook = Future<SharedPreferencesWithCache> Function();
 
-// TODO: Add mechanism to mock shared preferences.
 class Settings extends ChangeNotifier {
   SharedPreferencesWithCache? _preferences;
 
@@ -101,31 +100,14 @@ class Settings extends ChangeNotifier {
 
   /// Hook when creating shared preferences.
   static set sharedPreferencesCreatorHook(SettingsSharedPreferencesCreatorHook? hook) {
-
-    print("4");
-    
-
     _sharedPreferencesCreatorHook = hook;
   }
 
   Future<SharedPreferencesWithCache> _createPreferences() async {
-
-    print("1");
-    
     final hook = _sharedPreferencesCreatorHook;
     if (hook != null) {
-
-
-    print("2");
-    
-
       return await hook();
     }
-
-
-    print("3");
-    
-
     
     return await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
