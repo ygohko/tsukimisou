@@ -535,6 +535,28 @@ class _HomePageState extends State<HomePage> {
     final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
     final tagScores = settings.getTagScores();
+    tags.sort((aTag, bTag) {
+        late final double aScore;
+        if (tagScores.containsKey(aTag)) {
+          aScore = tagScores[aTag]!;
+        } else {
+          aScore = 0.0;
+        }
+        late final double bScore;
+        if (tagScores.containsKey(bTag)) {
+          bScore = tagScores[bTag]!;
+        } else {
+          bScore = 0.0;
+        }
+        if (aScore > bScore) {
+          return -1;
+        }
+        if (bScore > aScore) {
+          return 1;
+        }
+
+        return 0;
+    });
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     late final int integrationDividerIndex;
     late final int integrationSubtitleIndex;
@@ -584,8 +606,8 @@ class _HomePageState extends State<HomePage> {
           final tag = tags[i - tagsBeginIndex];
           return ListTile(
             title: Text(tag),
-            onTap: () {
-              _filter(tag);
+            onTap: () async {
+              await _filter(tag);
             },
             selected: _filteringEnabled && _filteringTag == tag && !_searching,
             selectedColor:
@@ -634,7 +656,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _filter(String tag) {
+  Future<void> _filter(String tag) async {
+    final settings = Provider.of<Settings>(context, listen: false);
+    final tagScores = settings.getTagScores();
+    for (final key in tagScores.keys) {
+      var score = tagScores[key];
+      if (score != null) {
+        score *= 0.9;
+        if (key == tag) {
+          score += 1.0;
+        }
+        tagScores[key] = score;
+      }
+    }
+    if (!tagScores.containsKey(tag)) {
+      tagScores[tag] = 1.0;
+    }
+    await settings.setTagScores(tagScores);
+    if (!mounted) {
+      return;
+    }
     _filteringTag = tag;
     _filteringEnabled = true;
     _searching = false;
