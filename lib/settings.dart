@@ -108,7 +108,7 @@ class Settings extends ChangeNotifier {
     if (hook != null) {
       return await hook();
     }
-    
+
     return await SharedPreferencesWithCache.create(
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     );
