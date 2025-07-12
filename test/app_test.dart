@@ -39,9 +39,11 @@ class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
 }
 
 void main() {
-  Settings.sharedPreferencesCreatorHook = () async {
-    return MockSharedPreferencesWithCache();
-  };
+  setUpAll(() {
+    Settings.sharedPreferencesCreatorHook = () async {
+      return MockSharedPreferencesWithCache();
+    };
+  });
 
   testWidgets('App widget smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
@@ -60,5 +62,7 @@ void main() {
     await tester.pump();
   });
 
-  Settings.sharedPreferencesCreatorHook = null;
+  tearDownAll(() {
+    Settings.sharedPreferencesCreatorHook = null;
+  });
 }
