@@ -42,6 +42,7 @@ import 'memo_store_local_saver.dart';
 import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
+import 'settings.dart';
 import 'settings_page.dart';
 import 'gen_l10n/app_localizations.dart';
 
@@ -66,6 +67,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _initAsync();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    final settings = Provider.of<Settings>(context);
+    await settings.init();
+    setState(() {});
   }
 
   @override
@@ -401,8 +410,8 @@ class _HomePageState extends State<HomePage> {
       drawer: SafeArea(
         bottom: false,
         child: Drawer(
-          child: Consumer2<MemoStore, AppState>(
-            builder: (context, memoStore, appState, child) {
+          child: Consumer3<MemoStore, AppState, Settings>(
+            builder: (context, memoStore, appState, settings, child) {
               _updateShownMemos();
               return _drawerListView(true);
             },
@@ -489,12 +498,18 @@ class _HomePageState extends State<HomePage> {
       itemCount: _shownMemos.length,
       itemBuilder: (context, i) {
         final appState = Provider.of<AppState>(context, listen: false);
+        final settings = Provider.of<Settings>(context, listen: false);
         final memo = _shownMemos[i];
         final lastModified =
             DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
-        final unsynchronized = lastModified.isAfter(lastMerged);
+        late final bool unsynchronized;
+        if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
+          unsynchronized = true;
+        } else {
+          unsynchronized = false;
+        }
         return Card(
           color: common_uis.TsukimisouColors.memoCard,
           elevation: 2.0,
@@ -517,12 +532,25 @@ class _HomePageState extends State<HomePage> {
     const tagsBeginIndex = 2;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final appState = Provider.of<AppState>(context, listen: false);
+    final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    final integrationDividerIndex = tagsEndIndex + 1;
-    final integrationSubtitleIndex = integrationDividerIndex + 1;
-    final synchronizeIndex = integrationSubtitleIndex + 1;
-    final othersDividerIndex = synchronizeIndex + 1;
+    late final int integrationDividerIndex;
+    late final int integrationSubtitleIndex;
+    late final int synchronizeIndex;
+    late final int othersDividerIndex;
+    final hidden = settings.getSynchronizingHidden();
+    if (!hidden) {
+      integrationDividerIndex = tagsEndIndex + 1;
+      integrationSubtitleIndex = integrationDividerIndex + 1;
+      synchronizeIndex = integrationSubtitleIndex + 1;
+      othersDividerIndex = synchronizeIndex + 1;
+    } else {
+      integrationDividerIndex = -1;
+      integrationSubtitleIndex = -1;
+      synchronizeIndex = -1;
+      othersDividerIndex = tagsEndIndex + 1;
+    }
     final othersSubtitleIndex = othersDividerIndex + 1;
     final settingsIndex = othersSubtitleIndex + 1;
     final footerIndex = settingsIndex + 1;

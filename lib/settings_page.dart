@@ -28,7 +28,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app_state.dart';
-import 'common_uis.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
@@ -50,10 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void didChangeDependencies() async {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context, listen: false);
-    final hidden = await settings.getSynchronizingHidden();
-    if (!mounted) {
-      return;
-    }
+    final hidden = settings.getSynchronizingHidden();
     setState(() {
         _synchronizingHidden = hidden;
     });

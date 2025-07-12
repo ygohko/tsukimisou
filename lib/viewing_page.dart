@@ -35,6 +35,7 @@ import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
+import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
 enum _Direction {
@@ -90,7 +91,13 @@ class _ViewingPageState extends State<ViewingPage>
         DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
     final lastMerged = DateTime.fromMillisecondsSinceEpoch(
         Provider.of<MemoStore>(context, listen: false).lastMerged);
-    final unsynchronized = lastModified.isAfter(lastMerged);
+    final settings = Provider.of<Settings>(context, listen: false);
+    late final bool unsynchronized;
+    if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
+      unsynchronized = true;
+    } else {
+      unsynchronized = false;
+    }
     var tagsString = '';
     for (final tag in _memo.tags) {
       tagsString += '$tag, ';
@@ -240,7 +247,7 @@ class _ViewingPageState extends State<ViewingPage>
               onTap: _chooseViewingMode,
             ),
             const Divider(),
-            if (unsynchronized) ...[
+            if (!settings.getSynchronizingHidden() && unsynchronized) ...[
               ListTile(
                 title: Text(
                   localizations.unsynchronized,

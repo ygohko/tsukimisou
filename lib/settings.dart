@@ -27,15 +27,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 typedef SettingsSharedPreferencesCreatorHook = Future<SharedPreferencesWithCache> Function();
 
-// TODO: Add mechanism to mock shared preferences.
 class Settings extends ChangeNotifier {
   SharedPreferencesWithCache? _preferences;
 
   static SettingsSharedPreferencesCreatorHook? _sharedPreferencesCreatorHook;
 
-  /// Gets whether synchronizing is hidden.
-  Future<bool> getSynchronizingHidden() async {
+  /// Initialize this settings.
+  Future<void> init() async {
     _preferences ??= await _createPreferences();
+  }
+
+  /// Gets whether synchronizing is hidden.
+  // TODO: Rename to getSynchronizationHidden().
+  bool getSynchronizingHidden() {
     final preferences = _preferences;
     if (preferences == null) {
       return false;
@@ -62,8 +66,7 @@ class Settings extends ChangeNotifier {
   }
 
   /// Gets tag scores.
-  Future<Map<String, double>> getTagScores() async {
-    _preferences ??= await _createPreferences();
+  Map<String, double> getTagScores() {
     final preferences = _preferences;
     if (preferences == null) {
       return <String, double>{};
