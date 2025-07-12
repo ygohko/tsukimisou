@@ -534,6 +534,8 @@ class _HomePageState extends State<HomePage> {
     final appState = Provider.of<AppState>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
+    final tagScores = settings.getTagScores();
+    tags.sortByScores(tagScores);
     final tagsEndIndex = tagsBeginIndex + tags.length - 1;
     late final int integrationDividerIndex;
     late final int integrationSubtitleIndex;
@@ -583,8 +585,8 @@ class _HomePageState extends State<HomePage> {
           final tag = tags[i - tagsBeginIndex];
           return ListTile(
             title: Text(tag),
-            onTap: () {
-              _filter(tag);
+            onTap: () async {
+              await _filter(tag);
             },
             selected: _filteringEnabled && _filteringTag == tag && !_searching,
             selectedColor:
@@ -633,7 +635,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _filter(String tag) {
+  Future<void> _filter(String tag) async {
+    final settings = Provider.of<Settings>(context, listen: false);
+    final tagScores = settings.getTagScores();
+    for (final key in tagScores.keys) {
+      var score = tagScores[key];
+      if (score != null) {
+        score *= 0.9;
+        if (key == tag) {
+          score += 1.0;
+        }
+        tagScores[key] = score;
+      }
+    }
+    if (!tagScores.containsKey(tag)) {
+      tagScores[tag] = 1.0;
+    }
+    await settings.setTagScores(tagScores);
+    if (!mounted) {
+      return;
+    }
     _filteringTag = tag;
     _filteringEnabled = true;
     _searching = false;

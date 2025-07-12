@@ -58,3 +58,30 @@ extension AbstractProviding on Platform {
   /// Returns whether platform is developed by Apple or not.
   bool get isApple => isMacOS || isIOS;
 }
+
+extension ListSorting on List<String> {
+  void sortByScores(Map<String, double> scores) {
+    sort((aTag, bTag) {
+        late final double aScore;
+        if (scores.containsKey(aTag)) {
+          aScore = scores[aTag]!;
+        } else {
+          aScore = 0.0;
+        }
+        late final double bScore;
+        if (scores.containsKey(bTag)) {
+          bScore = scores[bTag]!;
+        } else {
+          bScore = 0.0;
+        }
+        if (aScore > bScore) {
+          return -1;
+        }
+        if (bScore > aScore) {
+          return 1;
+        }
+
+        return 0;
+    });
+  }
+}

@@ -26,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'common_uis.dart';
+import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -33,14 +34,16 @@ import 'gen_l10n/app_localizations.dart';
 
 class BindingTagsPage extends StatefulWidget {
   final Memo memo;
-  final List<String> additinalTags;
+  final List<String> additionalTags;
+  final Map<String, double> tagScores;
   final bool fullScreen;
 
   /// Creates a binding tags page.
   const BindingTagsPage(
       {Key? key,
       required this.memo,
-      required this.additinalTags,
+      required this.additionalTags,
+      required this.tagScores,
       this.fullScreen = true})
       : super(key: key);
 
@@ -57,7 +60,9 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
   void initState() {
     super.initState();
     _candidateTags = [...widget.memo.tags];
-    for (final tag in widget.additinalTags) {
+    final tags = [...widget.additionalTags];
+    tags.sortByScores(widget.tagScores);
+    for (final tag in tags) {
       if (!_candidateTags.contains(tag)) {
         _candidateTags.add(tag);
       }
