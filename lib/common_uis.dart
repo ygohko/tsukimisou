@@ -141,6 +141,11 @@ class TsukimisouTextStyles {
   }
 }
 
+class Durations {
+  /// Duration for editing transition.
+  static const editing = Duration(milliseconds: 400);
+}
+
 class DialogTransitionBuilders {
   /// Primary dialog transition.
   static AnimatedWidget primary(Animation<double> animation, Curve curve,
@@ -367,7 +372,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
 }
 
 /// Shows dialogs with transition.
-Future<T?> showTransitiningDialog<T>({
+Future<T?> showTransitioningDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   required DialogTransitionBuilder transitionBuilder,
@@ -414,7 +419,7 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       ),
     );
   } else {
-    await showTransitiningDialog(
+    await showTransitioningDialog(
       context: context,
       builder: (context) {
         return Center(
@@ -427,7 +432,7 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       barrierDismissible: false,
       transitionBuilder: DialogTransitionBuilders.primary,
       curve: Curves.fastOutSlowIn,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 500),
     );
   }
 }

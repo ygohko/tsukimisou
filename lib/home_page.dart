@@ -142,9 +142,11 @@ class _HomePageState extends State<HomePage> {
           return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
+        transitionDuration: common_uis.Durations.editing,
+        reverseTransitionDuration: common_uis.Durations.editing,
       ));
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           return Center(
@@ -158,7 +160,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 300),
+        duration: common_uis.Durations.editing,
       );
     }
   }
@@ -316,18 +318,21 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      await showDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           return const Center(
             child: SizedBox(
-              width: 500.0,
-              height: 500.0,
+              width: 450.0,
+              height: 215.0,
               child: SettingsPage(fullScreen: false),
             ),
           );
         },
         barrierDismissible: false,
+        transitionBuilder: common_uis.DialogTransitionBuilders.editing,
+        curve: Curves.fastOutSlowIn,
+        duration: common_uis.Durations.editing,
       );
     }
   }

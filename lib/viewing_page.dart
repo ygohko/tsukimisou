@@ -193,7 +193,7 @@ class _ViewingPageState extends State<ViewingPage>
       );
     }
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 200),
       curve: Curves.easeOutCubic,
       width: width,
       height: height,
@@ -272,9 +272,11 @@ class _ViewingPageState extends State<ViewingPage>
           return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
+        transitionDuration: common_uis.Durations.editing,
+        reverseTransitionDuration: common_uis.Durations.editing,
       ));
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           const platform = LocalPlatform();
@@ -290,7 +292,7 @@ class _ViewingPageState extends State<ViewingPage>
         barrierColor: const Color(0x00000000),
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 300),
+        duration: common_uis.Durations.editing,
       );
     }
     setState(() {});
@@ -346,7 +348,7 @@ class _ViewingPageState extends State<ViewingPage>
         },
       ));
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           return Center(
