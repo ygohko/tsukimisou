@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class MockSharedPreferencesWithCache implements SharedPreferencesWithCache {
   var _hidden = false;
   var _tagScores = '{"a": 1.0, "b": 0.5}';
