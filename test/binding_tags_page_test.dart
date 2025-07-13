@@ -19,54 +19,54 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 
 void main() {
   group('BindingTagsPage', () {
-      setUpAll(() {
-          MemoStoreLocalSaver.constructorHook = (memoStore, path) {
-            return MemoStoreMockLocalSaver(memoStore, path);
-          };
-      });
+    setUpAll(() {
+      MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalSaver(memoStore, path);
+      };
+    });
 
-      tearDownAll(() {
-          MemoStoreLocalSaver.constructorHook = null;
-      });
+    tearDownAll(() {
+      MemoStoreLocalSaver.constructorHook = null;
+    });
 
-      testWidgets('BindingTagsPage should have specified widgets.',
+    testWidgets('BindingTagsPage should have specified widgets.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          memo.text = 'This is a test.';
-          memo.tags = ['a', 'b', 'c'];
-          await init(tester, memo);
-          expect(find.text('a'), findsOneWidget);
-          expect(find.text('b'), findsOneWidget);
-          expect(find.text('c'), findsOneWidget);
-          expect(find.text('d'), findsOneWidget);
-          expect(find.text('e'), findsOneWidget);
-          expect(find.text('f'), findsOneWidget);
-          expect(find.byIcon(Icons.check_circle), findsNWidgets(3));
-          expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(3));
-      });
+      final memo = Memo();
+      memo.text = 'This is a test.';
+      memo.tags = ['a', 'b', 'c'];
+      await init(tester, memo);
+      expect(find.text('a'), findsOneWidget);
+      expect(find.text('b'), findsOneWidget);
+      expect(find.text('c'), findsOneWidget);
+      expect(find.text('d'), findsOneWidget);
+      expect(find.text('e'), findsOneWidget);
+      expect(find.text('f'), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle), findsNWidgets(3));
+      expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(3));
+    });
 
-      testWidgets('BindingTagsPage should add tags to memo.',
+    testWidgets('BindingTagsPage should add tags to memo.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          memo.text = 'This is a test.';
-          memo.tags = ['a', 'b', 'c'];
-          await init(tester, memo);
-          await tester.tap(find.text('d'));
-          await tester.pump();
-          expect(find.byIcon(Icons.check_circle), findsNWidgets(4));
-          expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(2));
-      });
+      final memo = Memo();
+      memo.text = 'This is a test.';
+      memo.tags = ['a', 'b', 'c'];
+      await init(tester, memo);
+      await tester.tap(find.text('d'));
+      await tester.pump();
+      expect(find.byIcon(Icons.check_circle), findsNWidgets(4));
+      expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(2));
+    });
 
-      testWidgets('BindingTagsPage should remove tags from memo.',
+    testWidgets('BindingTagsPage should remove tags from memo.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          memo.text = 'This is a test.';
-          memo.tags = ['a', 'b', 'c'];
-          await init(tester, memo);
-          await tester.tap(find.text('a'));
-          await tester.pump();
-          expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
-          expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(4));
-      });
+      final memo = Memo();
+      memo.text = 'This is a test.';
+      memo.tags = ['a', 'b', 'c'];
+      await init(tester, memo);
+      await tester.tap(find.text('a'));
+      await tester.pump();
+      expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
+      expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(4));
+    });
   });
 }

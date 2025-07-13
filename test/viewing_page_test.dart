@@ -31,63 +31,63 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 
 void main() {
   group('ViewingPage', () {
-      setUpAll(() {
-          MemoStoreLocalSaver.constructorHook = (memoStore, path) {
-            return MemoStoreMockLocalSaver(memoStore, path);
-          };
-          Settings.sharedPreferencesCreatorHook = () async {
-            return MockSharedPreferencesWithCache();
-          };
-      });
+    setUpAll(() {
+      MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalSaver(memoStore, path);
+      };
+      Settings.sharedPreferencesCreatorHook = () async {
+        return MockSharedPreferencesWithCache();
+      };
+    });
 
-      tearDownAll(() {
-          Settings.sharedPreferencesCreatorHook = null;
-          MemoStoreLocalSaver.constructorHook = null;
-      });
-      
-      // TODO: Add tests fo TinyMarkdown viewing mode.
-      testWidgets('ViewingPage should have specified widgets.',
+    tearDownAll(() {
+      Settings.sharedPreferencesCreatorHook = null;
+      MemoStoreLocalSaver.constructorHook = null;
+    });
+
+    // TODO: Add tests fo TinyMarkdown viewing mode.
+    testWidgets('ViewingPage should have specified widgets.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          await init(tester, memo);
-          expect(find.byIcon(Icons.close), findsOneWidget);
-          expect(find.byIcon(Icons.share), findsOneWidget);
-          expect(find.byIcon(Icons.delete), findsOneWidget);
-          expect(find.byIcon(Icons.edit), findsOneWidget);
-          expect(find.textContaining('Test'), findsWidgets);
-          expect(find.textContaining('This is a test.'), findsOneWidget);
-          expect(find.textContaining('Updated:'), findsOneWidget);
-          expect(find.textContaining('Tags:'), findsOneWidget);
-      });
+      final memo = Memo();
+      await init(tester, memo);
+      expect(find.byIcon(Icons.close), findsOneWidget);
+      expect(find.byIcon(Icons.share), findsOneWidget);
+      expect(find.byIcon(Icons.delete), findsOneWidget);
+      expect(find.byIcon(Icons.edit), findsOneWidget);
+      expect(find.textContaining('Test'), findsWidgets);
+      expect(find.textContaining('This is a test.'), findsOneWidget);
+      expect(find.textContaining('Updated:'), findsOneWidget);
+      expect(find.textContaining('Tags:'), findsOneWidget);
+    });
 
-      testWidgets(
+    testWidgets(
         'ViewingPage should show confirmation dialog when user taps delete button.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          await init(tester, memo);
-          await tester.tap(find.byIcon(Icons.delete));
-          await tester.pump();
-          expect(find.text('Delete this memo?'), findsOneWidget);
-      });
+      final memo = Memo();
+      await init(tester, memo);
+      await tester.tap(find.byIcon(Icons.delete));
+      await tester.pump();
+      expect(find.text('Delete this memo?'), findsOneWidget);
+    });
 
-      testWidgets(
+    testWidgets(
         'ViewingPage should show EditingPage when user taps edit button.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          await init(tester, memo);
-          await tester.tap(find.byIcon(Icons.edit));
-          await tester.pump();
-          expect(find.text('Edit a memo'), findsOneWidget);
-      });
+      final memo = Memo();
+      await init(tester, memo);
+      await tester.tap(find.byIcon(Icons.edit));
+      await tester.pump();
+      expect(find.text('Edit a memo'), findsOneWidget);
+    });
 
-      testWidgets(
+    testWidgets(
         'ViewingPage should show EditingPage when user taps edit button.',
         (WidgetTester tester) async {
-          final memo = Memo();
-          await init(tester, memo);
-          await tester.tap(find.textContaining('Tags:'));
-          await tester.pump();
-          expect(find.text('Bind tags'), findsOneWidget);
-      });
+      final memo = Memo();
+      await init(tester, memo);
+      await tester.tap(find.textContaining('Tags:'));
+      await tester.pump();
+      expect(find.text('Bind tags'), findsOneWidget);
+    });
   });
 }

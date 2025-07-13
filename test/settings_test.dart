@@ -7,57 +7,57 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Settings', () {
-      setUpAll(() {
-          Settings.sharedPreferencesCreatorHook = () async {
-            return MockSharedPreferencesWithCache();
-          };
-      });
+    setUpAll(() {
+      Settings.sharedPreferencesCreatorHook = () async {
+        return MockSharedPreferencesWithCache();
+      };
+    });
 
-      tearDownAll(() {
-          Settings.sharedPreferencesCreatorHook = null;
-      });
+    tearDownAll(() {
+      Settings.sharedPreferencesCreatorHook = null;
+    });
 
-      test('Settings should be created', () {
-          expect(Settings(), isNotNull);
-      });
+    test('Settings should be created', () {
+      expect(Settings(), isNotNull);
+    });
 
-      test(
+    test(
         'Settings.getSynchronizingHidden() should get whether synchronizing is hidden',
         () async {
-          final settings = Settings();
-          await settings.init();
-          final hidden = settings.getSynchronizingHidden();
-          expect(hidden, false);
-      });
+      final settings = Settings();
+      await settings.init();
+      final hidden = settings.getSynchronizingHidden();
+      expect(hidden, false);
+    });
 
-      test(
+    test(
         'Settings.setSynchronizingHidden() should set whether synchronizing is hidden',
         () async {
-          final settings = Settings();
-          await settings.init();
-          await settings.setSynchronizingHidden(true);
-          final hidden = settings.getSynchronizingHidden();
-          expect(hidden, true);
-      });
+      final settings = Settings();
+      await settings.init();
+      await settings.setSynchronizingHidden(true);
+      final hidden = settings.getSynchronizingHidden();
+      expect(hidden, true);
+    });
 
-      test('Settings.getTagScores() should get tag scores', () async {
-          final settings = Settings();
-          await settings.init();
-          final scores = settings.getTagScores();
-          expect(scores['a'], 1.0);
-          expect(scores['b'], 0.5);
-      });
+    test('Settings.getTagScores() should get tag scores', () async {
+      final settings = Settings();
+      await settings.init();
+      final scores = settings.getTagScores();
+      expect(scores['a'], 1.0);
+      expect(scores['b'], 0.5);
+    });
 
-      test('Settings.setTagScores() should set tag scores', () async {
-          final settings = Settings();
-          await settings.init();
-          await settings.setTagScores({
-              'c': 1.0,
-              'd': 0.5,
-          });
-          final scores = settings.getTagScores();
-          expect(scores['c'], 1.0);
-          expect(scores['d'], 0.5);
+    test('Settings.setTagScores() should set tag scores', () async {
+      final settings = Settings();
+      await settings.init();
+      await settings.setTagScores({
+        'c': 1.0,
+        'd': 0.5,
       });
+      final scores = settings.getTagScores();
+      expect(scores['c'], 1.0);
+      expect(scores['d'], 0.5);
+    });
   });
 }
