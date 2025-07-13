@@ -142,6 +142,8 @@ class _HomePageState extends State<HomePage> {
           return const OpenUpwardsPageTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child);
         },
+        transitionDuration: common_uis.Durations.editing,
+        reverseTransitionDuration: common_uis.Durations.editing,
       ));
     } else {
       await common_uis.showTransitiningDialog(
@@ -158,7 +160,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 400),
+        duration: common_uis.Durations.editing,
       );
     }
   }
@@ -330,7 +332,7 @@ class _HomePageState extends State<HomePage> {
         barrierDismissible: false,
         transitionBuilder: common_uis.DialogTransitionBuilders.editing,
         curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 400),
+        duration: common_uis.Durations.editing,
       );
     }
   }

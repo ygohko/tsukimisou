@@ -141,6 +141,11 @@ class TsukimisouTextStyles {
   }
 }
 
+class Durations {
+  /// Duration for editing transition.
+  static const editing = Duration(milliseconds: 400);
+}
+
 class DialogTransitionBuilders {
   /// Primary dialog transition.
   static AnimatedWidget primary(Animation<double> animation, Curve curve,
