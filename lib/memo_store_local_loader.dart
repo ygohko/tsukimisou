@@ -27,7 +27,8 @@ import 'package:path_provider/path_provider.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-typedef MemoStoreLocalLoaderConstructorHook = MemoStoreLocalLoader Function(MemoStore memoStore, String path);
+typedef MemoStoreLocalLoaderConstructorHook = MemoStoreLocalLoader Function(
+    MemoStore memoStore, String path);
 
 class MemoStoreLocalLoader extends MemoStoreLoader {
   final String _path;
@@ -68,10 +69,12 @@ class MemoStoreLocalLoader extends MemoStoreLoader {
     _constructorHook = hook;
   }
 
-  MemoStoreLocalLoader._private(MemoStore memoStore, this._path) : super(memoStore);
+  MemoStoreLocalLoader._private(MemoStore memoStore, this._path)
+      : super(memoStore);
 }
 
-class MemoStoreMockLocalLoader extends MemoStoreLoader implements MemoStoreLocalLoader {
+class MemoStoreMockLocalLoader extends MemoStoreLoader
+    implements MemoStoreLocalLoader {
   @override
   final String _path;
 

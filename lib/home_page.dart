@@ -111,8 +111,8 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _load() async {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memoStoreLoader = await MemoStoreLocalLoader.fromFileName(
-        memoStore, 'MemoStore.json');
+    final memoStoreLoader =
+        await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
     try {
       await memoStoreLoader.execute();
     } on FileNotCompatibleException {
@@ -176,8 +176,7 @@ class _HomePageState extends State<HomePage> {
     _showSynchronizingBanner();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     final fromMemoStore = MemoStore();
-    final loader =
-        MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+    final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
       await loader.execute();
     } on FileNotFoundException {
@@ -247,8 +246,8 @@ class _HomePageState extends State<HomePage> {
     merger.cloudMarkerText = localizations.cloud;
     merger.execute();
 
-    final localSaver = await MemoStoreLocalSaver.fromFileName(
-        toMemoStore, 'MemoStore.json');
+    final localSaver =
+        await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
     } on FileSystemException {
@@ -270,8 +269,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _savingToGoogleDrive = true;
     });
-    final saver =
-        MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+    final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
     } on Exception {
@@ -398,7 +396,8 @@ class _HomePageState extends State<HomePage> {
               _updateShownMemos();
               return _memoListView();
             } else {
-              return common_uis.noMemosIndicator(context, Icons.add, localizations.toCreateANewMemo);
+              return common_uis.noMemosIndicator(
+                  context, Icons.add, localizations.toCreateANewMemo);
             }
           },
         ),
@@ -510,7 +509,8 @@ class _HomePageState extends State<HomePage> {
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
         late final bool unsynchronized;
-        if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
+        if (!settings.getSynchronizingHidden() &&
+            lastModified.isAfter(lastMerged)) {
           unsynchronized = true;
         } else {
           unsynchronized = false;

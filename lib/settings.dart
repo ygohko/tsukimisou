@@ -25,7 +25,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-typedef SettingsSharedPreferencesCreatorHook = Future<SharedPreferencesWithCache> Function();
+typedef SettingsSharedPreferencesCreatorHook
+    = Future<SharedPreferencesWithCache> Function();
 
 class Settings extends ChangeNotifier {
   SharedPreferencesWithCache? _preferences;
@@ -99,7 +100,8 @@ class Settings extends ChangeNotifier {
   }
 
   /// Hook when creating shared preferences.
-  static set sharedPreferencesCreatorHook(SettingsSharedPreferencesCreatorHook? hook) {
+  static set sharedPreferencesCreatorHook(
+      SettingsSharedPreferencesCreatorHook? hook) {
     _sharedPreferencesCreatorHook = hook;
   }
 
