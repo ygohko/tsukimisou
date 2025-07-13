@@ -146,7 +146,7 @@ class _HomePageState extends State<HomePage> {
         reverseTransitionDuration: common_uis.Durations.editing,
       ));
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           return Center(
@@ -318,7 +318,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           return const Center(

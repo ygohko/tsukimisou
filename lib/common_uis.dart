@@ -372,7 +372,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
 }
 
 /// Shows dialogs with transition.
-Future<T?> showTransitiningDialog<T>({
+Future<T?> showTransitioningDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   required DialogTransitionBuilder transitionBuilder,
@@ -419,7 +419,7 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       ),
     );
   } else {
-    await showTransitiningDialog(
+    await showTransitioningDialog(
       context: context,
       builder: (context) {
         return Center(

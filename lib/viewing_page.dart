@@ -276,7 +276,7 @@ class _ViewingPageState extends State<ViewingPage>
         reverseTransitionDuration: common_uis.Durations.editing,
       ));
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           const platform = LocalPlatform();
@@ -348,7 +348,7 @@ class _ViewingPageState extends State<ViewingPage>
         },
       ));
     } else {
-      await common_uis.showTransitiningDialog(
+      await common_uis.showTransitioningDialog(
         context: context,
         builder: (context) {
           return Center(
