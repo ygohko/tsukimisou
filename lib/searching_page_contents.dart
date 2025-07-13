@@ -76,7 +76,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           final lastModified =
               DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
           late final bool unsynchronized;
-          if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
+          if (!settings.getSynchronizingHidden() &&
+              lastModified.isAfter(lastMerged)) {
             unsynchronized = true;
           } else {
             unsynchronized = false;
@@ -96,7 +97,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         },
       );
     } else {
-      contents = common_uis.noMemosIndicator(context, Icons.question_mark, localizations.noMemosFound);
+      contents = common_uis.noMemosIndicator(
+          context, Icons.question_mark, localizations.noMemosFound);
     }
     const platform = LocalPlatform();
     if (platform.isMobile) {

@@ -24,13 +24,14 @@ import 'google_drive_file.dart';
 import 'memo_store.dart';
 import 'memo_store_loader.dart';
 
-typedef MemoStoreGoogleDriveLoaderConstructorHook = MemoStoreGoogleDriveLoader Function(MemoStore memoStore, String fileName);
+typedef MemoStoreGoogleDriveLoaderConstructorHook = MemoStoreGoogleDriveLoader
+    Function(MemoStore memoStore, String fileName);
 
 class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
   final String _fileName;
 
   static MemoStoreGoogleDriveLoaderConstructorHook? _constructorHook;
-  
+
   /// Creates a memo store loader.
   factory MemoStoreGoogleDriveLoader(MemoStore memoStore, String fileName) {
     final hook = _constructorHook;
@@ -52,13 +53,13 @@ class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
   static set constructorHook(MemoStoreGoogleDriveLoaderConstructorHook? hook) {
     _constructorHook = hook;
   }
-  
+
   MemoStoreGoogleDriveLoader._private(MemoStore memoStore, this._fileName)
       : super(memoStore);
 }
 
-class MemoStoreMockGoogleDriveLoader
-    extends MemoStoreLoader implements MemoStoreGoogleDriveLoader {
+class MemoStoreMockGoogleDriveLoader extends MemoStoreLoader
+    implements MemoStoreGoogleDriveLoader {
   @override
   final String _fileName;
 

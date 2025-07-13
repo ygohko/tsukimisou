@@ -34,7 +34,7 @@ import 'gen_l10n/app_localizations.dart';
 /// Page to modify settings.
 class SettingsPage extends StatefulWidget {
   final bool fullScreen;
-  
+
   /// Create a settings page.
   const SettingsPage({super.key, this.fullScreen = true});
 
@@ -51,10 +51,10 @@ class _SettingsPageState extends State<SettingsPage> {
     final settings = Provider.of<Settings>(context, listen: false);
     final hidden = settings.getSynchronizingHidden();
     setState(() {
-        _synchronizingHidden = hidden;
+      _synchronizingHidden = hidden;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
@@ -103,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _setSynchronizingHidden(bool hidden) async {
     setState(() {
-        _synchronizingHidden = hidden;
+      _synchronizingHidden = hidden;
     });
     final settings = Provider.of<Settings>(context, listen: false);
     await settings.setSynchronizingHidden(_synchronizingHidden);

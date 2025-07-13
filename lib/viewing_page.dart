@@ -93,7 +93,8 @@ class _ViewingPageState extends State<ViewingPage>
         Provider.of<MemoStore>(context, listen: false).lastMerged);
     final settings = Provider.of<Settings>(context, listen: false);
     late final bool unsynchronized;
-    if (!settings.getSynchronizingHidden() && lastModified.isAfter(lastMerged)) {
+    if (!settings.getSynchronizingHidden() &&
+        lastModified.isAfter(lastMerged)) {
       unsynchronized = true;
     } else {
       unsynchronized = false;
@@ -318,8 +319,8 @@ class _ViewingPageState extends State<ViewingPage>
     }
 
     memoStore.removeMemo(_memo);
-    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'MemoStore.json');
+    final memoStoreSaver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException {
@@ -344,7 +345,10 @@ class _ViewingPageState extends State<ViewingPage>
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) {
-          return BindingTagsPage(memo: _memo, additionalTags: memoStore.tags, tagScores: tagScores);
+          return BindingTagsPage(
+              memo: _memo,
+              additionalTags: memoStore.tags,
+              tagScores: tagScores);
         },
       ));
     } else {
@@ -493,8 +497,8 @@ class _ViewingPageState extends State<ViewingPage>
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     memoStore.markAsChanged();
-    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'MemoStore.json');
+    final memoStoreSaver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException {

@@ -216,8 +216,8 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     widget.memo.beginModification();
     widget.memo.tags = [..._boundTags];
     memoStore.markAsChanged();
-    final memoStoreSaver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'MemoStore.json');
+    final memoStoreSaver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
     } on IOException {

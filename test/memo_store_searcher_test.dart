@@ -25,8 +25,7 @@ void main() {
       expect(searcher.results.length, 1);
     });
 
-    test(
-        'MemoStoreSearcher should find a memo that its tags contain keywords.',
+    test('MemoStoreSearcher should find a memo that its tags contain keywords.',
         () {
       final memoStore = MemoStore();
       final memo = Memo();
@@ -66,7 +65,7 @@ void main() {
       searcher.execute();
       expect(searcher.results.length, 1);
     });
-    
+
     test('MemoStoreSearcher should parse a query as keywords.', () {
       final memoStore = MemoStore();
       final memo = Memo();

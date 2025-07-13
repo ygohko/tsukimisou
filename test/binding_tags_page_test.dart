@@ -10,7 +10,10 @@ Future<void> init(WidgetTester tester, Memo memo) async {
     localizationsDelegates: const [
       AppLocalizations.delegate,
     ],
-    home: BindingTagsPage(memo: memo, additionalTags: const ['d', 'e', 'f'], tagScores: const <String, double>{}),
+    home: BindingTagsPage(
+        memo: memo,
+        additionalTags: const ['d', 'e', 'f'],
+        tagScores: const <String, double>{}),
   ));
 }
 
