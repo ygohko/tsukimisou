@@ -23,17 +23,21 @@ Future<void> init(WidgetTester tester) async {
 
 void main() {
   group('SettingsPage', () {
-    Settings.sharedPreferencesCreatorHook = () async {
-      return MockSharedPreferencesWithCache();
-    };
+      setUpAll(() {
+          Settings.sharedPreferencesCreatorHook = () async {
+            return MockSharedPreferencesWithCache();
+          };
+      });
 
-    testWidgets('SettinsPage should have specified widgets.',
+      tearDownAll(() {
+          Settings.sharedPreferencesCreatorHook = null;
+      });
+
+      testWidgets('SettinsPage should have specified widgets.',
         (WidgetTester tester) async {
-      await init(tester);
-      expect(find.text('Settings'), findsOneWidget);
-      expect(find.text('Hide Google Drive synchronization'), findsOneWidget);
-    });
-
-    Settings.sharedPreferencesCreatorHook = null;
+          await init(tester);
+          expect(find.text('Settings'), findsOneWidget);
+          expect(find.text('Hide Google Drive synchronization'), findsOneWidget);
+      });
   });
 }

@@ -15,6 +15,10 @@ void main() {
     };
   });
 
+  tearDownAll(() {
+    Settings.sharedPreferencesCreatorHook = null;
+  });
+
   testWidgets('App widget smoke test', (WidgetTester tester) async {
     await tester.pumpWidget(
       MultiProvider(
@@ -30,9 +34,5 @@ void main() {
     expect(find.byIcon(Icons.add), findsOneWidget);
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
-  });
-
-  tearDownAll(() {
-    Settings.sharedPreferencesCreatorHook = null;
   });
 }
