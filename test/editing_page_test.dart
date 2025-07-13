@@ -22,11 +22,17 @@ Future<void> init(WidgetTester tester, Memo? memo) async {
 }
 
 void main() {
-  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
-    return MemoStoreMockLocalSaver(memoStore, path);
-  };
-
   group('EditingPage', () {
+    setUpAll(() {
+      MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalSaver(memoStore, path);
+      };
+    });
+
+    tearDownAll(() {
+      MemoStoreLocalSaver.constructorHook = null;
+    });
+
     testWidgets(
         'EditingPage should have specified widgets when adding a new memo.',
         (WidgetTester tester) async {
@@ -56,7 +62,5 @@ void main() {
       await tester.pump();
       expect(memo.text, 'This is a text');
     });
-
-    MemoStoreLocalSaver.constructorHook = null;
   });
 }

@@ -18,11 +18,17 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 }
 
 void main() {
-  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
-    return MemoStoreMockLocalSaver(memoStore, path);
-  };
-
   group('BindingTagsPage', () {
+    setUpAll(() {
+      MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalSaver(memoStore, path);
+      };
+    });
+
+    tearDownAll(() {
+      MemoStoreLocalSaver.constructorHook = null;
+    });
+
     testWidgets('BindingTagsPage should have specified widgets.',
         (WidgetTester tester) async {
       final memo = Memo();
@@ -62,7 +68,5 @@ void main() {
       expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
       expect(find.byIcon(Icons.check_circle_outline), findsNWidgets(4));
     });
-
-    MemoStoreLocalSaver.constructorHook = null;
   });
 }

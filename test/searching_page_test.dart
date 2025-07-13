@@ -29,16 +29,20 @@ Future<void> init(WidgetTester tester) async {
 
 void main() {
   group('SearchingPage', () {
-    testWidgets('SearchingPage shoud have specified widgets.',
-        (WidgetTester tester) async {
+    setUpAll(() {
       Settings.sharedPreferencesCreatorHook = () async {
         return MockSharedPreferencesWithCache();
       };
+    });
 
+    tearDownAll(() {
+      Settings.sharedPreferencesCreatorHook = null;
+    });
+
+    testWidgets('SearchingPage shoud have specified widgets.',
+        (WidgetTester tester) async {
       await init(tester);
       expect(find.text('Search memos'), findsWidgets);
-
-      Settings.sharedPreferencesCreatorHook = null;
     });
   });
 }

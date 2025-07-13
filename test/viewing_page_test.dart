@@ -30,14 +30,21 @@ Future<void> init(WidgetTester tester, Memo memo) async {
 }
 
 void main() {
-  MemoStoreLocalSaver.constructorHook = (memoStore, path) {
-    return MemoStoreMockLocalSaver(memoStore, path);
-  };
-  Settings.sharedPreferencesCreatorHook = () async {
-    return MockSharedPreferencesWithCache();
-  };
-
   group('ViewingPage', () {
+    setUpAll(() {
+      MemoStoreLocalSaver.constructorHook = (memoStore, path) {
+        return MemoStoreMockLocalSaver(memoStore, path);
+      };
+      Settings.sharedPreferencesCreatorHook = () async {
+        return MockSharedPreferencesWithCache();
+      };
+    });
+
+    tearDownAll(() {
+      Settings.sharedPreferencesCreatorHook = null;
+      MemoStoreLocalSaver.constructorHook = null;
+    });
+
     // TODO: Add tests fo TinyMarkdown viewing mode.
     testWidgets('ViewingPage should have specified widgets.',
         (WidgetTester tester) async {
@@ -82,8 +89,5 @@ void main() {
       await tester.pump();
       expect(find.text('Bind tags'), findsOneWidget);
     });
-
-    Settings.sharedPreferencesCreatorHook = null;
-    MemoStoreLocalSaver.constructorHook = null;
   });
 }
