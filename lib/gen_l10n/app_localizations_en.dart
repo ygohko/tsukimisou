@@ -54,8 +54,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
-  String get hideGoogleDriveSynchronization =>
-      'Hide Google Drive synchronization';
+  String get hideGoogleDriveIntegration => 'Hide Google Drive integration';
 
   @override
   String get about => 'About';

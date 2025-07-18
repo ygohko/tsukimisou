@@ -75,7 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Consumer<Settings>(
             builder: (context, settings, child) {
               return ListTile(
-                title: Text(localizations.hideGoogleDriveSynchronization),
+                title: Text(localizations.hideGoogleDriveIntegration),
                 trailing: Switch(
                   value: _synchronizingHidden,
                   onChanged: (bool value) {

@@ -53,7 +53,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settings => '設定';
 
   @override
-  String get hideGoogleDriveSynchronization => 'Google Drive同期を隠す';
+  String get hideGoogleDriveIntegration => 'Google Drive連携を隠す';
 
   @override
   String get about => 'このアプリについて';

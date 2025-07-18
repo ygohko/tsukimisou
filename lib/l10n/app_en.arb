@@ -59,9 +59,9 @@
     "@settings": {
         "description": "Text for settings list tile and app bar"
     },
-    "hideGoogleDriveSynchronization": "Hide Google Drive synchronization",
-    "@hideGoogleDriveSynchronization": {
-        "description": "Text for hide Google Drive synchronization list tile"
+    "hideGoogleDriveIntegration": "Hide Google Drive integration",
+    "@hideGoogleDriveIntegration": {
+        "description": "Text for hide Google Drive integration list tile"
     },
     "about": "About",
     "@about": {
