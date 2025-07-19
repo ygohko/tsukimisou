@@ -38,15 +38,14 @@ class Settings extends ChangeNotifier {
     _preferences ??= await _createPreferences();
   }
 
-  /// Gets whether synchronizing is hidden.
-  // TODO: Rename to getSynchronizationHidden().
-  bool getSynchronizingHidden() {
+  /// Gets whether synchronization is hidden.
+  bool getSynchronizationHidden() {
     final preferences = _preferences;
     if (preferences == null) {
       return false;
     }
 
-    final hidden = preferences.getBool('synchronizingHidden');
+    final hidden = preferences.getBool('synchronizationHidden');
     if (hidden == null) {
       return false;
     }
@@ -54,15 +53,15 @@ class Settings extends ChangeNotifier {
     return hidden;
   }
 
-  /// Sets whether synchronizing is hidden.
-  Future<void> setSynchronizingHidden(bool hidden) async {
+  /// Sets whether synchronization is hidden.
+  Future<void> setSynchronizationHidden(bool hidden) async {
     _preferences ??= await _createPreferences();
     final preferences = _preferences;
     if (preferences == null) {
       return;
     }
 
-    await preferences.setBool('synchronizingHidden', hidden);
+    await preferences.setBool('synchronizationHidden', hidden);
     notifyListeners();
   }
 

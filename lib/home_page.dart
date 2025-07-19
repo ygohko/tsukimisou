@@ -509,7 +509,7 @@ class _HomePageState extends State<HomePage> {
         final lastMerged = DateTime.fromMillisecondsSinceEpoch(
             Provider.of<MemoStore>(context, listen: false).lastMerged);
         late final bool unsynchronized;
-        if (!settings.getSynchronizingHidden() &&
+        if (!settings.getSynchronizationHidden() &&
             lastModified.isAfter(lastMerged)) {
           unsynchronized = true;
         } else {
@@ -546,7 +546,7 @@ class _HomePageState extends State<HomePage> {
     late final int integrationSubtitleIndex;
     late final int synchronizeIndex;
     late final int othersDividerIndex;
-    final hidden = settings.getSynchronizingHidden();
+    final hidden = settings.getSynchronizationHidden();
     if (!hidden) {
       integrationDividerIndex = tagsEndIndex + 1;
       integrationSubtitleIndex = integrationDividerIndex + 1;

@@ -22,21 +22,21 @@ void main() {
     });
 
     test(
-        'Settings.getSynchronizingHidden() should get whether synchronizing is hidden',
+        'Settings.getSynchronizationHidden() should get whether synchronization is hidden',
         () async {
       final settings = Settings();
       await settings.init();
-      final hidden = settings.getSynchronizingHidden();
+      final hidden = settings.getSynchronizationHidden();
       expect(hidden, false);
     });
 
     test(
-        'Settings.setSynchronizingHidden() should set whether synchronizing is hidden',
+        'Settings.setSynchronizationHidden() should set whether synchronization is hidden',
         () async {
       final settings = Settings();
       await settings.init();
-      await settings.setSynchronizingHidden(true);
-      final hidden = settings.getSynchronizingHidden();
+      await settings.setSynchronizationHidden(true);
+      final hidden = settings.getSynchronizationHidden();
       expect(hidden, true);
     });
 

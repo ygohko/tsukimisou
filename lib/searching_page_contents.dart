@@ -76,7 +76,7 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
           final lastModified =
               DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
           late final bool unsynchronized;
-          if (!settings.getSynchronizingHidden() &&
+          if (!settings.getSynchronizationHidden() &&
               lastModified.isAfter(lastMerged)) {
             unsynchronized = true;
           } else {

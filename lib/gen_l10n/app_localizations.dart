@@ -177,11 +177,11 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settings;
 
-  /// Text for hide Google Drive synchronization list tile
+  /// Text for hide Google Drive integration list tile
   ///
   /// In en, this message translates to:
-  /// **'Hide Google Drive synchronization'**
-  String get hideGoogleDriveSynchronization;
+  /// **'Hide Google Drive integration'**
+  String get hideGoogleDriveIntegration;
 
   /// Text for about list tile
   ///
