@@ -37,7 +37,7 @@ void main() {
         (WidgetTester tester) async {
       await init(tester);
       expect(find.text('Settings'), findsOneWidget);
-      expect(find.text('Hide Google Drive synchronization'), findsOneWidget);
+      expect(find.text('Hide Google Drive integration'), findsOneWidget);
     });
   });
 }
