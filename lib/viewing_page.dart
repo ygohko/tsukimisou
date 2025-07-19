@@ -93,7 +93,7 @@ class _ViewingPageState extends State<ViewingPage>
         Provider.of<MemoStore>(context, listen: false).lastMerged);
     final settings = Provider.of<Settings>(context, listen: false);
     late final bool unsynchronized;
-    if (!settings.getSynchronizingHidden() &&
+    if (!settings.getSynchronizationHidden() &&
         lastModified.isAfter(lastMerged)) {
       unsynchronized = true;
     } else {
@@ -248,7 +248,7 @@ class _ViewingPageState extends State<ViewingPage>
               onTap: _chooseViewingMode,
             ),
             const Divider(),
-            if (!settings.getSynchronizingHidden() && unsynchronized) ...[
+            if (!settings.getSynchronizationHidden() && unsynchronized) ...[
               ListTile(
                 title: Text(
                   localizations.unsynchronized,

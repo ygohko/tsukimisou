@@ -43,15 +43,15 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  var _synchronizingHidden = false;
+  var _synchronizationHidden = false;
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context, listen: false);
-    final hidden = settings.getSynchronizingHidden();
+    final hidden = settings.getSynchronizationHidden();
     setState(() {
-      _synchronizingHidden = hidden;
+      _synchronizationHidden = hidden;
     });
   }
 
@@ -77,13 +77,13 @@ class _SettingsPageState extends State<SettingsPage> {
               return ListTile(
                 title: Text(localizations.hideGoogleDriveIntegration),
                 trailing: Switch(
-                  value: _synchronizingHidden,
+                  value: _synchronizationHidden,
                   onChanged: (bool value) {
-                    _setSynchronizingHidden(value);
+                    _setSynchronizationHidden(value);
                   },
                 ),
                 onTap: () {
-                  _setSynchronizingHidden(!_synchronizingHidden);
+                  _setSynchronizationHidden(!_synchronizationHidden);
                 },
               );
             },
@@ -101,12 +101,12 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _setSynchronizingHidden(bool hidden) async {
+  void _setSynchronizationHidden(bool hidden) async {
     setState(() {
-      _synchronizingHidden = hidden;
+      _synchronizationHidden = hidden;
     });
     final settings = Provider.of<Settings>(context, listen: false);
-    await settings.setSynchronizingHidden(_synchronizingHidden);
+    await settings.setSynchronizationHidden(_synchronizationHidden);
   }
 
   void _showAbout() async {
