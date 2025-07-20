@@ -376,7 +376,7 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
       }
       updateHeaders(accessToken);
     } on Exception catch (exception, stackTrace) {
-      throw AuthenticationException('A exception thrown when sigining in to Google. exception: $exception, stackTrace: $stackTrace');
+      throw AuthenticationException('An exception thrown when signing in to Google. exception: $exception, stackTrace: $stackTrace');
     }
   }
 }
