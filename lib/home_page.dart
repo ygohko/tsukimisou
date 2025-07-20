@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
         return;
       }
       await common_uis.showErrorDialog(context, localizations.loadingWasFailed,
-          localizations.couldNotLoadMemoStoreFromGoogleDrive + '\nexception: {exception}\n\nstackTrace: {stackTrace}', localizations.ok);
+          localizations.couldNotLoadMemoStoreFromGoogleDrive + '\nexception: ${exception}\n\nstackTrace: ${stackTrace}', localizations.ok);
       return;
     }
     _fileLockedCount = 0;
