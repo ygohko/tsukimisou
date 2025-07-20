@@ -375,8 +375,8 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
         throw AuthenticationException('Failed to sign in to Google.');
       }
       updateHeaders(accessToken);
-    } on Exception {
-      throw AuthenticationException('Failed to sign in to Google.');
+    } on Exception catch (exception, stackTrace) {
+      throw AuthenticationException('An exception thrown when signing in to Google. exception: $exception, stackTrace: $stackTrace');
     }
   }
 }
@@ -385,6 +385,11 @@ class AuthenticationException implements Exception {
   final String message;
 
   AuthenticationException(this.message);
+
+  @override
+  String toString() {
+    return 'AuthenticationException: ${message}';
+  }
 }
 
 class FileNotFoundException extends HttpException {
