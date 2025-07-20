@@ -228,7 +228,7 @@ class _HomePageState extends State<HomePage> {
           localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
           localizations.ok);
       return;
-    } on Exception {
+    } on Exception catch (exception, stackTrace) {
       // Other failure.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
         return;
       }
       await common_uis.showErrorDialog(context, localizations.loadingWasFailed,
-          localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
+          localizations.couldNotLoadMemoStoreFromGoogleDrive + '\nexception: {exception}\n\nstackTrace: {stackTrace}', localizations.ok);
       return;
     }
     _fileLockedCount = 0;
