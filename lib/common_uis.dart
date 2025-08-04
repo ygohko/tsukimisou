@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022 - 2025 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -67,7 +67,7 @@ class TsukimisouColors {
   static final codeText= Color(0xFFEFEFFF);
 
   /// Color for code background.
-  static final codeBackground = Color(0xBF00003F);
+  static final codeBackground = Color(0x9F00001F);
 
   /// Color for block quote indicator.
   static const blockQuoteIndicator = Colors.grey;
