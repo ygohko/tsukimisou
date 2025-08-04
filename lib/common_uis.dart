@@ -67,7 +67,7 @@ class TsukimisouColors {
   static final codeText= Color(0xFFEFEFFF);
 
   /// Color for code background.
-  static final codeBackground = Color(0xFF00003F);
+  static final codeBackground = Color(0xBF00003F);
 
   /// Color for block quote indicator.
   static const blockQuoteIndicator = Colors.grey;
