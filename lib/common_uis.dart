@@ -64,10 +64,10 @@ class TsukimisouColors {
   static const checkBoxChecked = Colors.green;
 
   /// Color for code text.
-  static final codeText= Color(0xFFEFEFFF);
+  static final codeText= Color(0xFFFFFFFF);
 
   /// Color for code background.
-  static final codeBackground = Color(0x9F00001F);
+  static final codeBackground = Color(0x9F00000F);
 
   /// Color for block quote indicator.
   static const blockQuoteIndicator = Colors.grey;
