@@ -284,11 +284,20 @@ class MarkdownParser {
             break;
 
           case _LineKind.code:
-            widget = Text.rich(
-              TextSpan(
-                style: TsukimisouTextStyles.viewingPageCode(_context),
-                children: processedLine.spans,
-              ),
+            widget = Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    color: TsukimisouColors.codeBackground,
+                    child: Text.rich(
+                      TextSpan(
+                        style: TsukimisouTextStyles.viewingPageCodeBlock(_context),
+                        children: processedLine.spans,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             );
             break;
 
@@ -485,7 +494,7 @@ class MarkdownParser {
         if (aLine.isNotEmpty) {
           _processedLine.spans.add(TextSpan(
             text: aLine,
-            style: TsukimisouTextStyles.viewingPageCode(_context),
+            style: TsukimisouTextStyles.viewingPageCodeSpan(_context),
           ));
         }
         _spanState = _SpanState.normal;
