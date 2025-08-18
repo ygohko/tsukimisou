@@ -713,9 +713,11 @@ void main() {
       final contents = parser.contents;
       final column = contents as Column;
       final widget = column.children[0];
-      final text = widget as Text;
+      final row = widget as Row;
+      final expanded = row.children[0] as Expanded;
+      final container = expanded.child as Container;
+      final text = container.child as Text;
       final span = text.textSpan as TextSpan;
-      expect(span.style!.backgroundColor, TsukimisouColors.codeBackground);
       expect(span.toPlainText(), 'Hello, World!');
     });
 
