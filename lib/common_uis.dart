@@ -110,8 +110,8 @@ class TsukimisouTextStyles {
     return style;
   }
 
-  /// Text style for code spans and code blocks on vieweing page.
-  static TextStyle viewingPageCode(BuildContext context) {
+  /// Text style for code spans on vieweing page.
+  static TextStyle viewingPageCodeSpan(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyMedium;
     style ??= const TextStyle();
     style = GoogleFonts.mPlus1Code(textStyle: style);
@@ -124,6 +124,19 @@ class TsukimisouTextStyles {
     return style;
   }
 
+  /// Text style for code blocks on vieweing page.
+  static TextStyle viewingPageCodeBlock(BuildContext context) {
+    var style = Theme.of(context).textTheme.bodyMedium;
+    style ??= const TextStyle();
+    style = GoogleFonts.mPlus1Code(textStyle: style);
+    style = style.apply(
+      color: TsukimisouColors.codeText,
+      fontWeightDelta: 2,
+    );
+
+    return style;
+  }
+  
   /// Text style for text field on editing page.
   static TextStyle editingPageTextField(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyMedium;

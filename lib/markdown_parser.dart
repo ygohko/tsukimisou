@@ -288,10 +288,10 @@ class MarkdownParser {
               children: [
                 Expanded(
                   child: Container(
-                    color: Colors.blue,
+                    color: TsukimisouColors.codeBackground,
                     child: Text.rich(
                       TextSpan(
-                        style: TsukimisouTextStyles.viewingPageCode(_context),
+                        style: TsukimisouTextStyles.viewingPageCodeBlock(_context),
                         children: processedLine.spans,
                       ),
                     ),
@@ -502,7 +502,7 @@ class MarkdownParser {
         if (aLine.isNotEmpty) {
           _processedLine.spans.add(TextSpan(
             text: aLine,
-            style: TsukimisouTextStyles.viewingPageCode(_context),
+            style: TsukimisouTextStyles.viewingPageCodeSpan(_context),
           ));
         }
         _spanState = _SpanState.normal;
