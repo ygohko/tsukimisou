@@ -284,14 +284,18 @@ class MarkdownParser {
             break;
 
           case _LineKind.code:
-            widget = Container(
-              color: Colors.blue,
-              child: Text.rich(
-                TextSpan(
-                  style: TsukimisouTextStyles.viewingPageCode(_context),
-                  children: processedLine.spans,
+            widget = Row(
+              children: [
+                Container(
+                  color: Colors.blue,
+                  child: Text.rich(
+                    TextSpan(
+                      style: TsukimisouTextStyles.viewingPageCode(_context),
+                      children: processedLine.spans,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             );
             /*
             widget = Text.rich(
