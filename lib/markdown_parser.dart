@@ -299,14 +299,6 @@ class MarkdownParser {
                 ),
               ],
             );
-            /*
-            widget = Text.rich(
-              TextSpan(
-                style: TsukimisouTextStyles.viewingPageCode(_context),
-                children: processedLine.spans,
-              ),
-            );
-            */
             break;
 
           case _LineKind.blockQuote:

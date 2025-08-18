@@ -136,7 +136,7 @@ class TsukimisouTextStyles {
 
     return style;
   }
-  
+
   /// Text style for text field on editing page.
   static TextStyle editingPageTextField(BuildContext context) {
     var style = Theme.of(context).textTheme.bodyMedium;
