@@ -389,7 +389,7 @@ class AuthenticationException implements Exception {
 
   @override
   String toString() {
-    return 'AuthenticationException: ${message}';
+    return 'AuthenticationException: $message';
   }
 }
 
