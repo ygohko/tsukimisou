@@ -291,7 +291,8 @@ class MarkdownParser {
                     color: TsukimisouColors.codeBlockBackground,
                     child: Text.rich(
                       TextSpan(
-                        style: TsukimisouTextStyles.viewingPageCodeBlock(_context),
+                        style:
+                            TsukimisouTextStyles.viewingPageCodeBlock(_context),
                         children: processedLine.spans,
                       ),
                     ),
