@@ -66,8 +66,11 @@ class TsukimisouColors {
   /// Color for code text.
   static const codeText = Color(0xFFFFFFFF);
 
-  /// Color for code background.
-  static const codeBackground = Color(0x9F00000F);
+  /// Color for code span background.
+  static const codeSpanBackground = Color(0x9F00000F);
+
+  /// Color for code block background.
+  static const codeBlockBackground = Color(0xFF00003F);
 
   /// Color for block quote indicator.
   static const blockQuoteIndicator = Colors.grey;
@@ -117,7 +120,7 @@ class TsukimisouTextStyles {
     style = GoogleFonts.mPlus1Code(textStyle: style);
     style = style.apply(
       color: TsukimisouColors.codeText,
-      backgroundColor: TsukimisouColors.codeBackground,
+      backgroundColor: TsukimisouColors.codeSpanBackground,
       fontWeightDelta: 2,
     );
 

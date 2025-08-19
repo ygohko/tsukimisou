@@ -764,7 +764,7 @@ void main() {
       final text = widget as Text;
       final span = text.textSpan as TextSpan;
       final aSpan = span.children![0] as TextSpan;
-      expect(aSpan.style!.backgroundColor, TsukimisouColors.codeBackground);
+      expect(aSpan.style!.backgroundColor, TsukimisouColors.codeSpanBackground);
       expect(aSpan.toPlainText(), 'Hello, World!');
     });
 
