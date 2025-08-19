@@ -288,7 +288,7 @@ class MarkdownParser {
               children: [
                 Expanded(
                   child: Container(
-                    color: TsukimisouColors.codeBackground,
+                    color: Color(0xFF00003F), // TsukimisouColors.codeBackground,
                     child: Text.rich(
                       TextSpan(
                         style: TsukimisouTextStyles.viewingPageCodeBlock(_context),
