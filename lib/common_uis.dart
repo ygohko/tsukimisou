@@ -67,7 +67,7 @@ class TsukimisouColors {
   static const codeText = Color(0xFFEFEFFF);
 
   /// Color for code span background.
-  static const codeSpanBackground = Color(0x9F00000F);
+  static const codeSpanBackground = Color(0x6FBFBFBF);
 
   /// Color for code block background.
   static const codeBlockBackground = Color(0xFF00002F);
@@ -119,7 +119,6 @@ class TsukimisouTextStyles {
     style ??= const TextStyle();
     style = GoogleFonts.mPlus1Code(textStyle: style);
     style = style.apply(
-      color: TsukimisouColors.codeText,
       backgroundColor: TsukimisouColors.codeSpanBackground,
       fontWeightDelta: 2,
     );
