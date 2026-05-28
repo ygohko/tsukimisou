@@ -48,6 +48,9 @@ class DiffGenerator {
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(_aText, _bText);
     diffMatchPatch.diffCleanupSemantic(diffs);
+
+    print('diffs.length: ${diffs.length}');
+    
     if (diffs.isEmpty) {
       _result = '';
 
@@ -68,7 +71,13 @@ class DiffGenerator {
     var inserted = false;
     var deleted = false;
     for (final diff in diffs) {
+
+      print('diff: $diff');
+      
       var aLines = _lines(diff.text);
+
+      print('aLines: $aLines');
+
       for (var line in aLines) {
         if (diff.operation == DIFF_EQUAL) {
           notModifiedLine += line;
