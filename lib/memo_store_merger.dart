@@ -22,6 +22,7 @@
 
 import 'package:diff_match_patch/diff_match_patch.dart';
 
+import 'diff_generator.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 
@@ -77,7 +78,12 @@ class MemoStoreMerger {
 
           case _Operation.merge:
             if (memo.text != fromMemo.text) {
-              memo.text = _diffText(memo.text, fromMemo.text);
+              final generator = DiffGenerator(memo.text, fromMemo.text);
+              generator.execute();
+              final result = generator.result;
+              if (result != null) {
+                memo.text = result;
+              }
             }
             var tags = [...memo.tags];
             for (final tag in fromMemo.tags) {
