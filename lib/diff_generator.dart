@@ -33,6 +33,9 @@ class DiffGenerator {
   final String _aText;
   final String _bText;
   String? _result;
+  String _conflictWarningText = "This memo has conflicts.";
+  String _localMarkerText = "Local";
+  String _cloudMarkerText = "Cloud";
 
   DiffGenerator(this._aText, this._bText);
 
