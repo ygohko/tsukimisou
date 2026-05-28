@@ -24,154 +24,120 @@ import 'package:tsukimisou/diff_generator.dart';
 void main() {
   group('DiffGenerator', () {
     test('should return null when texts are identical', () {
-      final generator = DiffGenerator('hello
+      final generator = DiffGenerator('''hello
 world
-', 'hello
+''', '''hello
 world
-');
+''');
       generator.execute();
       expect(generator.result, isNull);
     });
 
     test('should generate diff for insertion', () {
       final generator =
-          DiffGenerator('hello
+          DiffGenerator('''hello
 world
-', 'hello
+''', '''hello
 new
 world
-');
+''');
       generator.execute();
-      final expected = 'This memo has conflicts.
+      final expected = '''This memo has conflicts.
 
-'
-          'hello
-'
-          '<<< Cloud <<<
-'
-          'new
-'
-          '<<<<<<<<<<
-'
-          'world
-';
+hello
+<<< Cloud <<<
+new
+<<<<<<<<<<
+world
+''';
       expect(generator.result, equals(expected));
     });
 
     test('should generate diff for deletion', () {
       final generator =
-          DiffGenerator('hello
+          DiffGenerator('''hello
 new
 world
-', 'hello
+''', '''hello
 world
-');
+''');
       generator.execute();
-      final expected = 'This memo has conflicts.
+      final expected = '''This memo has conflicts.
 
-'
-          'hello
-'
-          '>>> Local >>>
-'
-          'new
-'
-          '>>>>>>>>>>
-'
-          'world
-';
+hello
+>>> Local >>>
+new
+>>>>>>>>>>
+world
+''';
       expect(generator.result, equals(expected));
     });
 
     test('should generate diff for replacement', () {
       final generator =
-          DiffGenerator('hello
+          DiffGenerator('''hello
 old
 world
-', 'hello
+''', '''hello
 new
 world
-');
+''');
       generator.execute();
-      final expected = 'This memo has conflicts.
+      final expected = '''This memo has conflicts.
 
-'
-          'hello
-'
-          '<<< Cloud <<<
-'
-          'new
-'
-          '<<<<<<<<<<
-'
-          '>>> Local >>>
-'
-          'old
-'
-          '>>>>>>>>>>
-'
-          'world
-';
+hello
+<<< Cloud <<<
+new
+<<<<<<<<<<
+>>> Local >>>
+old
+>>>>>>>>>>
+world
+''';
       expect(generator.result, equals(expected));
     });
 
     test('should generate diff for complex changes', () {
       final generator = DiffGenerator(
-          'first
+          '''first
 second
 third
-', 'first
+''', '''first
 -second-
 third
 fourth
-');
+''');
       generator.execute();
-      final expected = 'This memo has conflicts.
+      final expected = '''This memo has conflicts.
 
-'
-          'first
-'
-          '<<< Cloud <<<
-'
-          '-second-
-'
-          '<<<<<<<<<<
-'
-          '>>> Local >>>
-'
-          'second
-'
-          '>>>>>>>>>>
-'
-          'third
-'
-          '<<< Cloud <<<
-'
-          'fourth
-'
-          '<<<<<<<<<<
-';
+first
+<<< Cloud <<<
+-second-
+<<<<<<<<<<
+>>> Local >>>
+second
+>>>>>>>>>>
+third
+<<< Cloud <<<
+fourth
+<<<<<<<<<<
+''';
       expect(generator.result, equals(expected));
     });
 
     test('should handle texts without trailing newline', () {
-      final generator = DiffGenerator('hello
-world', 'hello
+      final generator = DiffGenerator('''hello
+world''', '''hello
 new
-world');
+world''');
       generator.execute();
-      final expected = 'This memo has conflicts.
+      final expected = '''This memo has conflicts.
 
-'
-          'hello
-'
-          '<<< Cloud <<<
-'
-          'new
-'
-          '<<<<<<<<<<
-'
-          'world';
+hello
+<<< Cloud <<<
+new
+<<<<<<<<<<
+world''';
       expect(generator.result, equals(expected));
     });
   });
