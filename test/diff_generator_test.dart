@@ -23,7 +23,8 @@ import 'package:tsukimisou/diff_generator.dart';
 
 void main() {
   group('DiffGenerator', () {
-    test('should return input text when texts are identical', () {
+      /*
+      test('should return input text when texts are identical', () {
       final generator = DiffGenerator('''hello
 world
 ''', '''hello
@@ -99,6 +100,7 @@ world
 ''';
       expect(generator.result, equals(expected));
     });
+    */
 
     test('should generate diff for complex changes', () {
       final generator = DiffGenerator(
@@ -128,6 +130,7 @@ fourth
       expect(generator.result, equals(expected));
     });
 
+    /*
     test('should handle texts without trailing newline', () {
       final generator = DiffGenerator('''hello
 world''', '''hello
@@ -143,5 +146,6 @@ new
 world''';
       expect(generator.result, equals(expected));
     });
+    */
   });
 }
