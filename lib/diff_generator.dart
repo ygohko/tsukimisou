@@ -40,10 +40,17 @@ class DiffGenerator {
   DiffGenerator(this._aText, this._bText);
 
   void execute() {
+    if (_aText == _bText) {
+      _result = _aText;
+
+      return;
+    }
     final diffMatchPatch = DiffMatchPatch();
     final diffs = diffMatchPatch.diff(_aText, _bText);
     diffMatchPatch.diffCleanupSemantic(diffs);
     if (diffs.isEmpty) {
+      _result = '';
+
       return;
     }
     final lastDiffIndex = diffs.length - 1;

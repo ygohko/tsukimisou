@@ -23,14 +23,17 @@ import 'package:tsukimisou/diff_generator.dart';
 
 void main() {
   group('DiffGenerator', () {
-    test('should return null when texts are identical', () {
+    test('should return input text when texts are identical', () {
       final generator = DiffGenerator('''hello
 world
 ''', '''hello
 world
 ''');
       generator.execute();
-      expect(generator.result, isNull);
+      final expected = '''hello
+world
+''';
+      expect(generator.result, expected);
     });
 
     test('should generate diff for insertion', () {
