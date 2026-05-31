@@ -17,8 +17,7 @@ world
     });
 
     test('should generate diff for insertion', () {
-      final generator =
-          DiffGenerator('''hello
+      final generator = DiffGenerator('''hello
 world
 ''', '''hello
 new
@@ -37,8 +36,7 @@ world
     });
 
     test('should generate diff for insertion (no trailing LF)', () {
-      final generator =
-          DiffGenerator('''hello
+      final generator = DiffGenerator('''hello
 world''', '''hello
 new
 world''');
@@ -54,8 +52,7 @@ world''';
     });
 
     test('should generate diff for deletion', () {
-      final generator =
-          DiffGenerator('''hello
+      final generator = DiffGenerator('''hello
 new
 world
 ''', '''hello
@@ -74,8 +71,7 @@ world
     });
 
     test('should generate diff for replacement', () {
-      final generator =
-          DiffGenerator('''hello
+      final generator = DiffGenerator('''hello
 old
 world
 ''', '''hello
@@ -98,8 +94,7 @@ world
     });
 
     test('should generate diff for complex changes', () {
-      final generator = DiffGenerator(
-          '''first
+      final generator = DiffGenerator('''first
 second
 third
 ''', '''first
