@@ -278,7 +278,8 @@ List<_DiffComponent> _patienceDiff(List<String> a, List<String> b) {
     return fallbackTable.diff().map((c) {
       return switch (c) {
         _LcsInsertion(value: var elemB) => _Insertion(b[elemB.index]),
-        _LcsUnchanged(a: var elemA, b: var elemB) => _Unchanged(a[elemA.index], b[elemB.index]),
+        _LcsUnchanged(a: var elemA, b: var elemB) =>
+          _Unchanged(a[elemA.index], b[elemB.index]),
         _LcsDeletion(value: var elemA) => _Deletion(a[elemA.index]),
       };
     }).toList();
@@ -353,8 +354,7 @@ class _LcsInsertion extends _LcsDiffComponent {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _LcsInsertion && value == other.value;
+      identical(this, other) || other is _LcsInsertion && value == other.value;
 
   @override
   int get hashCode => value.hashCode;
@@ -386,8 +386,7 @@ class _LcsDeletion extends _LcsDiffComponent {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _LcsDeletion && value == other.value;
+      identical(this, other) || other is _LcsDeletion && value == other.value;
 
   @override
   int get hashCode => value.hashCode;
