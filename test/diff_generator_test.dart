@@ -10,7 +10,7 @@ world
 world
 ''');
       generator.execute();
-      final expected = '''hello
+      const expected = '''hello
 world
 ''';
       expect(generator.result, expected);
@@ -25,7 +25,7 @@ new
 world
 ''');
       generator.execute();
-      final expected = '''This memo has conflicts.
+      const expected = '''This memo has conflicts.
 
 hello
 <<< Cloud <<<
@@ -43,7 +43,7 @@ world''', '''hello
 new
 world''');
       generator.execute();
-      final expected = '''This memo has conflicts.
+      const expected = '''This memo has conflicts.
 
 hello
 <<< Cloud <<<
@@ -62,7 +62,7 @@ world
 world
 ''');
       generator.execute();
-      final expected = '''This memo has conflicts.
+      const expected = '''This memo has conflicts.
 
 hello
 >>> Local >>>
@@ -83,7 +83,7 @@ new
 world
 ''');
       generator.execute();
-      final expected = '''This memo has conflicts.
+      const expected = '''This memo has conflicts.
 
 hello
 <<< Cloud <<<
@@ -108,7 +108,7 @@ third
 fourth
 ''');
       generator.execute();
-      final expected = '''This memo has conflicts.
+      const expected = '''This memo has conflicts.
 
 first
 <<< Cloud <<<
@@ -131,7 +131,7 @@ world''', '''hello
 new
 world''');
       generator.execute();
-      final expected = '''This memo has conflicts.
+      const expected = '''This memo has conflicts.
 
 hello
 <<< Cloud <<<
