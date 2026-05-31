@@ -141,6 +141,18 @@ class DiffGenerator {
 
   String? get result => _result;
 
+  set conflictWarningText(String text) {
+    _conflictWarningText = text;
+  }
+
+  set localMarkerText(String text) {
+    _localMarkerText = text;
+  }
+
+  set cloudMarkerText(String text) {
+    _cloudMarkerText = text;
+  }
+
   static String _removeLastLf(String string) {
     final length = string.length;
     if (length < 1) {

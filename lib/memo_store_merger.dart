@@ -70,6 +70,9 @@ class MemoStoreMerger {
           case _Operation.merge:
             if (memo.text != fromMemo.text) {
               final generator = DiffGenerator(memo.text, fromMemo.text);
+              generator.conflictWarningText = _conflictWarningText;
+              generator.localMarkerText = _localMarkerText;
+              generator.cloudMarkerText = _cloudMarkerText;
               generator.execute();
               final result = generator.result;
               if (result != null) {
