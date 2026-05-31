@@ -24,6 +24,7 @@ import 'dart:math' as math;
 
 enum _DiffType { insertion, unchanged, deletion }
 
+/// Generator for generating a diff of two texts.
 class DiffGenerator {
   final String _aText;
   final String _bText;
@@ -32,8 +33,10 @@ class DiffGenerator {
   String _localMarkerText = "Local";
   String _cloudMarkerText = "Cloud";
 
+  /// Creates a DiffGenerator.
   DiffGenerator(this._aText, this._bText);
 
+  /// Executes the diff generation.
   void execute() {
     if (_aText == _bText) {
       _result = _aText;
@@ -139,16 +142,20 @@ class DiffGenerator {
     _result = result;
   }
 
+  /// Result of the diff generation.
   String? get result => _result;
 
+  /// Sets a conflict warning text.
   set conflictWarningText(String text) {
     _conflictWarningText = text;
   }
 
+  /// Sets a local marker text.
   set localMarkerText(String text) {
     _localMarkerText = text;
   }
 
+  /// Sets a cloud marker text.
   set cloudMarkerText(String text) {
     _cloudMarkerText = text;
   }
