@@ -20,8 +20,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'package:diff_match_patch/diff_match_patch.dart';
-
 import 'diff_generator.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -30,13 +28,6 @@ enum _Operation {
   keep,
   overwrite,
   merge,
-}
-
-class _Line {
-  String text = '';
-  int operation = 0;
-
-  _Line(this.text, this.operation);
 }
 
 class MemoStoreMerger {
@@ -177,121 +168,5 @@ class MemoStoreMerger {
     }
 
     return _Operation.merge;
-  }
-
-  String _diffText(String toText, String fromText) {
-    final diffMatchPatch = DiffMatchPatch();
-    final diffs = diffMatchPatch.diff(toText, fromText);
-    diffMatchPatch.diffCleanupSemantic(diffs);
-    if (diffs.isEmpty) {
-      return '';
-    }
-    final lastDiffIndex = diffs.length - 1;
-    late final bool hasLastLf;
-    if (diffs[lastDiffIndex].text.endsWith('\n')) {
-      hasLastLf = true;
-    } else {
-      hasLastLf = false;
-      diffs[lastDiffIndex].text += '\n';
-    }
-    final lines = <_Line>[];
-    var notModifiedLine = '';
-    var insertedLine = '';
-    var deletedLine = '';
-    var inserted = false;
-    var deleted = false;
-    for (final diff in diffs) {
-      var aLines = _lines(diff.text);
-      for (var line in aLines) {
-        if (diff.operation == DIFF_EQUAL) {
-          notModifiedLine += line;
-          insertedLine += line;
-          deletedLine += line;
-        } else if (diff.operation == DIFF_INSERT) {
-          insertedLine += line;
-          inserted = true;
-        } else if (diff.operation == DIFF_DELETE) {
-          deletedLine += line;
-          deleted = true;
-        }
-
-        if (line.endsWith('\n')) {
-          if (inserted) {
-            lines.add(_Line(insertedLine, 1));
-          }
-          if (deleted) {
-            lines.add(_Line(deletedLine, -1));
-          }
-          if (!inserted && !deleted) {
-            lines.add(_Line(notModifiedLine, 0));
-          }
-          notModifiedLine = '';
-          insertedLine = '';
-          deletedLine = '';
-          inserted = false;
-          deleted = false;
-        }
-      }
-    }
-    if (inserted) {
-      lines.add(_Line(insertedLine, 1));
-    }
-    if (deleted) {
-      lines.add(_Line(deletedLine, -1));
-    }
-    if (!inserted && !deleted) {
-      lines.add(_Line(notModifiedLine, 0));
-    }
-
-    var result = '$_conflictWarningText\n\n';
-    var currentOperation = 0;
-    for (final line in lines) {
-      final operation = line.operation;
-      if (currentOperation == -1 && operation != -1) {
-        result += '>>>>>>>>>>\n';
-      }
-      if (currentOperation == 1 && operation != 1) {
-        result += '<<<<<<<<<<\n';
-      }
-      if (operation == -1 && currentOperation != -1) {
-        result += '>>> $_localMarkerText >>>\n';
-      }
-      if (operation == 1 && currentOperation != 1) {
-        result += '<<< $_cloudMarkerText <<<\n';
-      }
-      currentOperation = operation;
-      result += line.text;
-    }
-    if (currentOperation == -1) {
-      result += '>>>>>>>>>>\n';
-    }
-    if (currentOperation == 1) {
-      result += '<<<<<<<<<<\n';
-    }
-
-    if (!hasLastLf) {
-      result = result.substring(0, result.length - 1);
-    }
-
-    return result;
-  }
-
-  List<String> _lines(String text) {
-    var done = false;
-    final result = <String>[];
-    while (!done) {
-      final index = text.indexOf('\n');
-      if (index < 0) {
-        if (text != '') {
-          result.add(text);
-        }
-        done = true;
-      } else {
-        result.add(text.substring(0, index + 1));
-        text = text.substring(index + 1);
-      }
-    }
-
-    return result;
   }
 }
