@@ -422,9 +422,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      // drawerEdgeDragWidth: 0.0,
       drawerEnableOpenDragGesture: false,
-      endDrawerEnableOpenDragGesture: false,
     );
   }
 
