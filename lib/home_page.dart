@@ -494,6 +494,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
+      drawerEnableOpenDragGesture: false,
     );
   }
 
