@@ -19,6 +19,7 @@ void main() {
       final memo = Memo();
       memo.text = 'This is a test.';
       memoStore.addMemo(memo);
+      memoStore.archiveHashes['test_archive'] = 'testhash';
       final memoStoreSaver = MemoStoreLocalSaver(memoStore, './test.json');
       await memoStoreSaver.execute();
       final file = File('./test.json');
@@ -26,7 +27,9 @@ void main() {
       expect(exists, true);
       final string = await file.readAsString();
       final deserialized = jsonDecode(string);
+      expect(deserialized['version'], 4);
       expect(deserialized['memos'][0]['text'], 'This is a test.');
+      expect(deserialized['archiveHashes']['test_archive'], 'testhash');
       await file.delete();
     });
 

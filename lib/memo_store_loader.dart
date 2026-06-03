@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, 2025 Yasuaki Gohko
+ * Copyright (c) 2022, 2025, 2026 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -40,6 +40,8 @@ class MemoStoreLoader {
       _deserializeV1V2(decoded, version);
     } else if (version == 3) {
       _deserializeV3(decoded);
+    } else if (version == 4) {
+      _deserializeV4(decoded);
     } else {
       throw FileNotCompatibleException('File not compatible.');
     }
@@ -47,6 +49,7 @@ class MemoStoreLoader {
 
   void _deserializeV1V2(Map decoded, int version) {
     _memoStore.clearMemos();
+    _memoStore.archiveHashes.clear();
     _memoStore.lastMerged = decoded['lastMerged'];
     final deserializedIds = decoded['removedMemoIds'];
     final removedMemoIds = <String>[];
@@ -85,6 +88,7 @@ class MemoStoreLoader {
 
   void _deserializeV3(Map decoded) {
     _memoStore.clearMemos();
+    _memoStore.archiveHashes.clear();
     _memoStore.lastMerged = decoded['lastMerged'];
     final deserializedIds = decoded['removedMemoIds'];
     final removedMemoIds = <String>[];
@@ -115,6 +119,51 @@ class MemoStoreLoader {
       memo.beforeModifiedHash = deserializedMemo['beforeModifiedHash'];
       _memoStore.addMemo(memo);
     }
+  }
+
+  void _deserializeV4(Map decoded) {
+    _memoStore.clearMemos();
+    _memoStore.lastMerged = decoded['lastMerged'];
+    final deserializedIds = decoded['removedMemoIds'];
+    final removedMemoIds = <String>[];
+    for (var removedMemoId in deserializedIds) {
+      if (removedMemoId is String) {
+        removedMemoIds.add(removedMemoId);
+      }
+    }
+    _memoStore.removedMemoIds = removedMemoIds;
+    final deserializedMemos = decoded['memos'];
+    for (var deserializedMemo in deserializedMemos) {
+      final memo = Memo();
+      memo.id = deserializedMemo['id'];
+      memo.text = deserializedMemo['text'];
+      final deserializedTags = deserializedMemo['tags'];
+      final tags = <String>[];
+      for (var tag in deserializedTags) {
+        if (tag is String) {
+          tags.add(tag);
+        }
+      }
+      memo.tags = tags;
+      memo.name = deserializedMemo['name'];
+      memo.viewingMode = deserializedMemo['viewingMode'];
+      memo.lastModified = deserializedMemo['lastModified'];
+      memo.revision = deserializedMemo['revision'];
+      memo.lastMergedRevision = deserializedMemo['lastMergedRevision'];
+      memo.beforeModifiedHash = deserializedMemo['beforeModifiedHash'];
+      _memoStore.addMemo(memo);
+    }
+
+    final deserializedArchiveHashes = decoded['archiveHashes'];
+    final archiveHashes = <String, String>{};
+    if (deserializedArchiveHashes != null) {
+      deserializedArchiveHashes.forEach((key, value) {
+        if (key is String && value is String) {
+          archiveHashes[key] = value;
+        }
+      });
+    }
+    _memoStore.archiveHashes = archiveHashes;
   }
 }
 
