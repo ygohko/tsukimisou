@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yasuaki Gohko
+ * Copyright (c) 2022, 2026 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,6 +20,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
 import 'memo.dart';
@@ -33,6 +36,12 @@ class MemoStore extends ChangeNotifier {
 
   /// Epoch milliseconds from last merged.
   var lastMerged = 0;
+
+  /// Hashes of archive memo stores.
+  var archiveHashes = <String, String>{};
+
+  /// Archive memo stores.
+  var archiveMemoStores = <String, MemoStore>{};
 
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
@@ -71,8 +80,27 @@ class MemoStore extends ChangeNotifier {
     }
     result.removedMemoIds = [...removedMemoIds];
     result.lastMerged = lastMerged;
+    result.archiveHashes = {...archiveHashes};
+    archiveMemoStores.forEach((key, value) {
+      result.archiveMemoStores[key] = value.copy();
+    });
 
     return result;
+  }
+
+  /// Returns a JSON serializable object.
+  dynamic toSerializable() {
+    final serializableMemos = [];
+    for (var i = 0; i < memos.length; i++) {
+      serializableMemos.add(memos[i].toSerializable());
+    }
+    return {
+      'version': 4,
+      'memos': serializableMemos,
+      'lastMerged': lastMerged,
+      'removedMemoIds': removedMemoIds,
+      'archiveHashes': archiveHashes,
+    };
   }
 
   /// Memo that has given ID.
@@ -109,5 +137,13 @@ class MemoStore extends ChangeNotifier {
     }
 
     return tags;
+  }
+
+  /// Returns a hash of this memo store.
+  String get hash {
+    final jsonString = json.encode(toSerializable());
+    final bytes = utf8.encode(jsonString);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
   }
 }
