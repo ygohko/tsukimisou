@@ -175,5 +175,61 @@ void main() {
       expect(tags.length, 1);
       expect(tags[0], 'test');
     });
+
+    test('archiveMemo should move a memo to a new archive', () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memo.lastModified = 1672531200000; // 2023-01-01
+      memoStore.addMemo(memo);
+
+      late String requestedName;
+      final archive = MemoStore();
+      MemoStore.onArchiveMemoStoreRequired = (name) {
+        requestedName = name;
+        return archive;
+      };
+
+      memoStore.archiveMemo(memo);
+
+      expect(memoStore.memos.contains(memo), isFalse);
+      expect(requestedName, '2023');
+      expect(memoStore.archiveMemoStores['2023'], archive);
+      expect(archive.memos.contains(memo), isTrue);
+      expect(memoStore.archiveHashes['2023'], archive.hash);
+    });
+
+    test('archiveMemo should move a memo to an existing archive', () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memo.lastModified = 1672531200000; // 2023-01-01
+      memoStore.addMemo(memo);
+      final archive = MemoStore();
+      memoStore.archiveMemoStores['2023'] = archive;
+
+      var callbackCalled = false;
+      MemoStore.onArchiveMemoStoreRequired = (name) {
+        callbackCalled = true;
+        return MemoStore();
+      };
+
+      memoStore.archiveMemo(memo);
+
+      expect(memoStore.memos.contains(memo), isFalse);
+      expect(callbackCalled, isFalse);
+      expect(archive.memos.contains(memo), isTrue);
+      expect(memoStore.archiveHashes['2023'], archive.hash);
+    });
+
+    test('archiveMemo should throw if callback is not set', () {
+      final memoStore = MemoStore();
+      final memo = Memo();
+      memoStore.addMemo(memo);
+
+      // This is a static property, so we need to null it out for this test
+      // and restore it later if other tests need it.
+      MemoStore.onArchiveMemoStoreRequired = null;
+
+      expect(() => memoStore.archiveMemo(memo), throwsException);
+    });
   });
 }
