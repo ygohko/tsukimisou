@@ -45,7 +45,7 @@ class MemoStore extends ChangeNotifier {
   /// Archive memo stores.
   var archiveMemoStores = <String, MemoStore>{};
 
-  static ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
+  ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
 
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
@@ -172,7 +172,7 @@ class MemoStore extends ChangeNotifier {
     return digest.toString();
   }
 
-  static set onArchiveMemoStoreRequired(
+  set onArchiveMemoStoreRequired(
       ArchiveMemoStoreRequiredCallback? callback) {
     _onArchiveMemoStoreRequired = callback;
   }

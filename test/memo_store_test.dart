@@ -184,7 +184,7 @@ void main() {
 
       late String requestedName;
       final archive = MemoStore();
-      MemoStore.onArchiveMemoStoreRequired = (name) {
+      memoStore.onArchiveMemoStoreRequired = (name) {
         requestedName = name;
         return archive;
       };
@@ -207,7 +207,7 @@ void main() {
       memoStore.archiveMemoStores['2023'] = archive;
 
       var callbackCalled = false;
-      MemoStore.onArchiveMemoStoreRequired = (name) {
+      memoStore.onArchiveMemoStoreRequired = (name) {
         callbackCalled = true;
         return MemoStore();
       };
@@ -224,11 +224,6 @@ void main() {
       final memoStore = MemoStore();
       final memo = Memo();
       memoStore.addMemo(memo);
-
-      // This is a static property, so we need to null it out for this test
-      // and restore it later if other tests need it.
-      MemoStore.onArchiveMemoStoreRequired = null;
-
       expect(() => memoStore.archiveMemo(memo), throwsException);
     });
   });
