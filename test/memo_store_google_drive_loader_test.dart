@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:test/test.dart';
 import 'package:tsukimisou/memo_store.dart';
 import 'package:tsukimisou/memo_store_google_drive_loader.dart';
@@ -16,7 +14,7 @@ void main() {
       final memoStore = MemoStore();
       memoStore.archiveHashes['dummy'] = 'dummy_hash';
       final loader = MemoStoreGoogleDriveLoader(memoStore, 'test.json');
-      final json =
+      const json =
           '{"version":3,"memos":[{"id":"123","lastModified":1656491551473,"text":"This is a test.","tags":[],"name":"Hello, World","viewingMode":"Plain","revision":1,"lastMergedRevision":0,"beforeModifiedHash":"12345"}],"lastMerged":1656491551473,"removedMemoIds":[]}';
       loader.deserialize(json);
       expect(memoStore.memos.length, 1);
@@ -27,7 +25,7 @@ void main() {
     test('should load from version 4 JSON', () {
       final memoStore = MemoStore();
       final loader = MemoStoreGoogleDriveLoader(memoStore, 'test.json');
-      final json =
+      const json =
           '{"version":4,"memos":[{"id":"123","lastModified":1656491551473,"text":"This is a test.","tags":[],"name":"Hello, World","viewingMode":"Plain","revision":1,"lastMergedRevision":0,"beforeModifiedHash":"12345"}],"lastMerged":1656491551473,"removedMemoIds":[],"archiveHashes":{"test_archive":"testhash"}}';
       loader.deserialize(json);
       expect(memoStore.memos.length, 1);
