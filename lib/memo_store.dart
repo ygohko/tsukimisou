@@ -27,6 +27,8 @@ import 'package:flutter/foundation.dart';
 
 import 'memo.dart';
 
+typedef ArchiveMemoStoreRequiredCallback = MemoStore Function(String name);
+
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
   var memos = <Memo>[];
@@ -43,6 +45,8 @@ class MemoStore extends ChangeNotifier {
   /// Archive memo stores.
   var archiveMemoStores = <String, MemoStore>{};
 
+  ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
+
   /// Adds a memo to this memo store.
   void addMemo(Memo memo) {
     memos.add(memo);
@@ -57,6 +61,27 @@ class MemoStore extends ChangeNotifier {
     if (!removedMemoIds.contains(memo.id)) {
       removedMemoIds.add(memo.id);
     }
+    memos.remove(memo);
+    notifyListeners();
+  }
+
+  /// Archives a memo.
+  void archiveMemo(Memo memo) {
+    final lastModified =
+        DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+    final year = lastModified.year.toString();
+    var archiveMemoStore = archiveMemoStores[year];
+    if (archiveMemoStore == null) {
+      final callback = _onArchiveMemoStoreRequired;
+      if (callback == null) {
+        throw Exception('onArchiveMemoStoreRequired is not set.');
+      }
+      archiveMemoStore = callback(year);
+      archiveMemoStores[year] = archiveMemoStore;
+    }
+
+    archiveMemoStore.addMemo(memo);
+    archiveHashes[year] = archiveMemoStore.hash;
     memos.remove(memo);
     notifyListeners();
   }
@@ -145,5 +170,10 @@ class MemoStore extends ChangeNotifier {
     final bytes = utf8.encode(jsonString);
     final digest = sha256.convert(bytes);
     return digest.toString();
+  }
+
+  set onArchiveMemoStoreRequired(
+      ArchiveMemoStoreRequiredCallback? callback) {
+    _onArchiveMemoStoreRequired = callback;
   }
 }
