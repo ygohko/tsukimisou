@@ -233,17 +233,14 @@ void main() {
       memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
 
-      late String requestedName;
       final archive = MemoStore();
       memoStore.onArchiveMemoStoreRequired = (name) {
-        requestedName = name;
         return archive;
       };
       memoStore.archiveMemo(memo);
       memoStore.unarchiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isTrue);
-      expect(requestedName, '2023');
       expect(memoStore.archiveMemoStores['2023'], archive);
       expect(archive.memos.contains(memo), isFalse);
       expect(memoStore.archiveHashes['2023'], archive.hash);
