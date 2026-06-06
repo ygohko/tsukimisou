@@ -82,6 +82,7 @@ class MemoStore extends ChangeNotifier {
       archiveMemoStores[year] = archiveMemoStore;
     }
 
+    memo.archiveName = year;
     archiveMemoStore.addMemo(memo);
     archiveHashes[year] = archiveMemoStore.hash;
     memos.remove(memo);
