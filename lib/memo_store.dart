@@ -88,6 +88,29 @@ class MemoStore extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Unarchives a memo.
+  void unarchiveMemo(Memo memo) {
+    final archiveName = memo.archiveName;
+    if (archiveName == null) {
+      // Do nothing.
+      return;
+    }
+    var archiveMemoStore = archiveMemoStores[archiveName];
+    if (archiveMemoStore == null) {
+      final callback = _onArchiveMemoStoreRequired;
+      if (callback == null) {
+        throw Exception('onArchiveMemoStoreRequired is not set.');
+      }
+      archiveMemoStore = callback(archiveName);
+      archiveMemoStores[archiveName] = archiveMemoStore;
+    }
+
+    archiveMemoStore.removeMemo(memo);
+    memo.archiveName = null;
+    addMemo(memo);
+    archiveHashes[archiveName] = archiveMemoStore.hash;
+  }
+
   /// Clears memos from this memo store.
   void clearMemos() {
     memos.clear();
