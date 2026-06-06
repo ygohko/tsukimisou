@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022, 2026 Yasuaki Gohko
+ * Copyright (c) 2026 Yasuaki Gohko
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,6 +25,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
+import 'annotations.dart';
 import 'memo.dart';
 
 typedef ArchiveMemoStoreRequiredCallback = MemoStore Function(String name);
@@ -43,6 +44,7 @@ class MemoStore extends ChangeNotifier {
   var archiveHashes = <String, String>{};
 
   /// Archive memo stores.
+  @doNotSerialize
   var archiveMemoStores = <String, MemoStore>{};
 
   ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
