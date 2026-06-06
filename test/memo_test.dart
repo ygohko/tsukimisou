@@ -70,5 +70,19 @@ void main() {
       memo.beforeModifiedHash = 'abc123';
       expect(memo.beforeModifiedHash, 'abc123');
     });
+
+    test('Memo.archiveName should be get and set.', () {
+      final memo = Memo();
+      expect(memo.archiveName, isNull);
+      memo.archiveName = '2023';
+      expect(memo.archiveName, '2023');
+    });
+
+    test('copy should copy archiveName properly.', () {
+      final memo = Memo();
+      memo.archiveName = '2023';
+      final copied = memo.copy();
+      expect(copied.archiveName, '2023');
+    });
   });
 }

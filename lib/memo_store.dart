@@ -25,6 +25,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
+import 'annotations.dart';
 import 'memo.dart';
 
 typedef ArchiveMemoStoreRequiredCallback = MemoStore Function(String name);
@@ -43,6 +44,7 @@ class MemoStore extends ChangeNotifier {
   var archiveHashes = <String, String>{};
 
   /// Archive memo stores.
+  @doNotSerialize
   var archiveMemoStores = <String, MemoStore>{};
 
   ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
@@ -80,10 +82,34 @@ class MemoStore extends ChangeNotifier {
       archiveMemoStores[year] = archiveMemoStore;
     }
 
+    memo.archiveName = year;
     archiveMemoStore.addMemo(memo);
     archiveHashes[year] = archiveMemoStore.hash;
     memos.remove(memo);
     notifyListeners();
+  }
+
+  /// Unarchives a memo.
+  void unarchiveMemo(Memo memo) {
+    final archiveName = memo.archiveName;
+    if (archiveName == null) {
+      // Do nothing.
+      return;
+    }
+    var archiveMemoStore = archiveMemoStores[archiveName];
+    if (archiveMemoStore == null) {
+      final callback = _onArchiveMemoStoreRequired;
+      if (callback == null) {
+        throw Exception('onArchiveMemoStoreRequired is not set.');
+      }
+      archiveMemoStore = callback(archiveName);
+      archiveMemoStores[archiveName] = archiveMemoStore;
+    }
+
+    archiveMemoStore.removeMemo(memo);
+    memo.archiveName = null;
+    addMemo(memo);
+    archiveHashes[archiveName] = archiveMemoStore.hash;
   }
 
   /// Clears memos from this memo store.
