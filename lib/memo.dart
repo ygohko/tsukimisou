@@ -25,9 +25,15 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
+import 'annotations.dart';
+
 class Memo {
   /// A ID of this memo.
   var id = '';
+
+  /// Name of archive that this memo is archived in.
+  @doNotSerialize
+  String? archiveName;
 
   /// Epoch milliseconds from last modified.
   var lastModified = 0;
@@ -71,6 +77,7 @@ class Memo {
     result._tags = [..._tags];
     result._name = _name;
     result._viewingMode = _viewingMode;
+    result.archiveName = archiveName;
 
     return result;
   }
