@@ -157,6 +157,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get archive => 'Archive';
+
+  @override
   String get edit => 'Edit';
 
   @override

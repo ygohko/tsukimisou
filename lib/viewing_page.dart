@@ -157,7 +157,7 @@ class _ViewingPageState extends State<ViewingPage>
       IconButton(
         icon: const Icon(Icons.archive_outlined),
         onPressed: _archive,
-        tooltip: 'Archive',
+        tooltip: localizations.archive,
       ),
       IconButton(
         icon: const Icon(Icons.edit),
@@ -360,8 +360,8 @@ class _ViewingPageState extends State<ViewingPage>
     } on Exception {
       await common_uis.showErrorDialog(
         context,
-        'Moving failed',
-        'Could not archive the memo.',
+        localizations.savingWasFailed,
+        localizations.couldNotSaveMemoStoreToLocalStorage,
         localizations.ok);
 
       return;

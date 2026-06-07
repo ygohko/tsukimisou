@@ -188,6 +188,10 @@
     "@delete": {
         "description": "Tooltip for Delete button"
     },
+    "archive": "Archive",
+    "@archive": {
+        "description": "Tooltip for Archive button"
+    },
     "edit": "Edit",
     "@edit": {
         "description": "Tooltip for Edit button"

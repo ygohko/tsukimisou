@@ -156,6 +156,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get delete => '削除';
 
   @override
+  String get archive => 'アーカイブ';
+
+  @override
   String get edit => '編集';
 
   @override
