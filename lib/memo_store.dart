@@ -45,6 +45,7 @@ class MemoStore extends ChangeNotifier {
 
   /// Archive memo stores.
   @doNotSerialize
+  @visibleForTesting
   var archiveMemoStores = <String, MemoStore>{};
 
   ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
@@ -68,25 +69,33 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Archives a memo.
-  void archiveMemo(Memo memo) {
+  MemoStore archiveMemo(Memo memo) {
     final lastModified =
         DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-    final year = lastModified.year.toString();
-    var archiveMemoStore = archiveMemoStores[year];
-    if (archiveMemoStore == null) {
-      final callback = _onArchiveMemoStoreRequired;
-      if (callback == null) {
-        throw Exception('onArchiveMemoStoreRequired is not set.');
+    final archiveName = lastModified.year.toString();
+    MemoStore? archiveMemoStore;
+    if (archiveHashes.containsKey(archiveName)) {
+      archiveMemoStore = archiveMemoStores[archiveName];
+      if (archiveMemoStore == null) {
+        final callback = _onArchiveMemoStoreRequired;
+        if (callback == null) {
+          throw Exception('onArchiveMemoStoreRequired is not set.');
+        }
+        archiveMemoStore = callback(archiveName);
+        archiveMemoStores[archiveName] = archiveMemoStore;
       }
-      archiveMemoStore = callback(year);
-      archiveMemoStores[year] = archiveMemoStore;
+    } else {
+      archiveMemoStore = MemoStore();
+      archiveMemoStores[archiveName] = archiveMemoStore;
     }
 
-    memo.archiveName = year;
+    memo.archiveName = archiveName;
     archiveMemoStore.addMemo(memo);
-    archiveHashes[year] = archiveMemoStore.hash;
+    archiveHashes[archiveName] = archiveMemoStore.hash;
     memos.remove(memo);
     notifyListeners();
+
+    return archiveMemoStore;
   }
 
   /// Unarchives a memo.

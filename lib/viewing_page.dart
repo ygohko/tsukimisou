@@ -34,6 +34,7 @@ import 'editing_page.dart';
 import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
@@ -152,6 +153,11 @@ class _ViewingPageState extends State<ViewingPage>
         icon: const Icon(Icons.delete),
         onPressed: _delete,
         tooltip: localizations.delete,
+      ),
+      IconButton(
+        icon: const Icon(Icons.archive_outlined),
+        onPressed: _archive,
+        tooltip: localizations.archive,
       ),
       IconButton(
         icon: const Icon(Icons.edit),
@@ -336,6 +342,55 @@ class _ViewingPageState extends State<ViewingPage>
     if (mounted) {
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> _archive() async {
+    final localizations = AppLocalizations.of(context)!;
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    memoStore.onArchiveMemoStoreRequired = (name) {
+      final memoStore = MemoStore();
+      final loader = MemoStoreLocalLoader(memoStore, 'Archive-$name.json');
+      loader.execute();
+
+      return memoStore;
+    };
+    late final MemoStore archiveMemoStore;
+    try {
+      archiveMemoStore = memoStore.archiveMemo(_memo);
+    } on Exception {
+      await common_uis.showErrorDialog(
+        context,
+        localizations.savingWasFailed,
+        localizations.couldNotSaveMemoStoreToLocalStorage,
+        localizations.ok);
+
+      return;
+    }
+    final archiveName = _memo.archiveName;
+    if (archiveName != null) {
+      return;
+    }
+
+    final saver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
+    final archiveSaver =
+        await MemoStoreLocalSaver.fromFileName(archiveMemoStore, 'Archive-$archiveName.json');
+    try {
+      saver.execute();
+      archiveSaver.execute();
+    } on IOException {
+      if (mounted) {
+        // Save error
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
+      }
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
+    }   
   }
 
   void _bindTags() async {

@@ -357,6 +357,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// Tooltip for Archive button
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get archive;
+
   /// Tooltip for Edit button
   ///
   /// In en, this message translates to:
