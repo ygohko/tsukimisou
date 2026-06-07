@@ -154,6 +154,11 @@ class _ViewingPageState extends State<ViewingPage>
         tooltip: localizations.delete,
       ),
       IconButton(
+        icon: const Icon(Icons.archive_outlined),
+        onPressed: _archive,
+        tooltip: 'Archive',
+      ),
+      IconButton(
         icon: const Icon(Icons.edit),
         onPressed: _edit,
         tooltip: localizations.edit,
@@ -336,6 +341,44 @@ class _ViewingPageState extends State<ViewingPage>
     if (mounted) {
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> _archive() async {
+    final localizations = AppLocalizations.of(context)!;
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    // TODO: Set archive loader callback.
+    late final String archiveName;
+    try {
+      archiveName = memoStore.archiveMemo(_memo);
+    } on Exception {
+      await common_uis.showErrorDialog(
+        context,
+        'Moving failed',
+        'Could not archive the memo.',
+        localizations.ok);
+      return;
+    }
+
+    final saver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
+    final archiveSaver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'Archive-$archiveName.json');
+    try {
+      saver.execute();
+      archiveSaver.execute();
+    } on IOException {
+      if (mounted) {
+        // Save error
+        await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
+      }
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
+    }   
   }
 
   void _bindTags() async {

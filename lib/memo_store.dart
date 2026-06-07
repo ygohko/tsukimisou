@@ -68,25 +68,27 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Archives a memo.
-  void archiveMemo(Memo memo) {
+  String archiveMemo(Memo memo) {
     final lastModified =
         DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
-    final year = lastModified.year.toString();
-    var archiveMemoStore = archiveMemoStores[year];
+    final archiveName = lastModified.year.toString();
+    var archiveMemoStore = archiveMemoStores[archiveName];
     if (archiveMemoStore == null) {
       final callback = _onArchiveMemoStoreRequired;
       if (callback == null) {
         throw Exception('onArchiveMemoStoreRequired is not set.');
       }
-      archiveMemoStore = callback(year);
-      archiveMemoStores[year] = archiveMemoStore;
+      archiveMemoStore = callback(archiveName);
+      archiveMemoStores[archiveName] = archiveMemoStore;
     }
 
-    memo.archiveName = year;
+    memo.archiveName = archiveName;
     archiveMemoStore.addMemo(memo);
-    archiveHashes[year] = archiveMemoStore.hash;
+    archiveHashes[archiveName] = archiveMemoStore.hash;
     memos.remove(memo);
     notifyListeners();
+
+    return archiveName;
   }
 
   /// Unarchives a memo.
