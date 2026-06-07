@@ -45,6 +45,7 @@ class MemoStore extends ChangeNotifier {
 
   /// Archive memo stores.
   @doNotSerialize
+  @visibleForTesting
   var archiveMemoStores = <String, MemoStore>{};
 
   ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;
@@ -68,7 +69,7 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Archives a memo.
-  String archiveMemo(Memo memo) {
+  MemoStore archiveMemo(Memo memo) {
     final lastModified =
         DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
     final archiveName = lastModified.year.toString();
@@ -94,7 +95,7 @@ class MemoStore extends ChangeNotifier {
     memos.remove(memo);
     notifyListeners();
 
-    return archiveName;
+    return archiveMemoStore;
   }
 
   /// Unarchives a memo.

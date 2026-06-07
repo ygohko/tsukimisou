@@ -354,9 +354,9 @@ class _ViewingPageState extends State<ViewingPage>
 
       return memoStore;
     };
-    late final String archiveName;
+    late final MemoStore archiveMemoStore;
     try {
-      archiveName = memoStore.archiveMemo(_memo);
+      archiveMemoStore = memoStore.archiveMemo(_memo);
     } on Exception {
       await common_uis.showErrorDialog(
         context,
@@ -366,7 +366,10 @@ class _ViewingPageState extends State<ViewingPage>
 
       return;
     }
-    final archiveMemoStore = memoStore.archiveMemoStores[archiveName]!;
+    final archiveName = _memo.archiveName;
+    if (archiveName != null) {
+      return;
+    }
 
     final saver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
