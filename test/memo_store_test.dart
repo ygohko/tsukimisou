@@ -182,20 +182,16 @@ void main() {
       memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
 
-      late String requestedName;
-      final archive = MemoStore();
       memoStore.onArchiveMemoStoreRequired = (name) {
-        requestedName = name;
-        return archive;
+        return MemoStore();
       };
-
-      memoStore.archiveMemo(memo);
+      final archiveMemoStore = memoStore.archiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isFalse);
-      expect(requestedName, '2023');
-      expect(memoStore.archiveMemoStores['2023'], archive);
-      expect(archive.memos.contains(memo), isTrue);
-      expect(memoStore.archiveHashes['2023'], archive.hash);
+      expect(memo.archiveName!, '2023');
+      expect(memoStore.archiveMemoStores['2023'], archiveMemoStore);
+      expect(archiveMemoStore.memos.contains(memo), isTrue);
+      expect(memoStore.archiveHashes['2023'], archiveMemoStore.hash);
     });
 
     test('archiveMemo should move a memo to an existing archive', () {
@@ -205,25 +201,27 @@ void main() {
       memoStore.addMemo(memo);
       final archive = MemoStore();
       memoStore.archiveMemoStores['2023'] = archive;
+      memoStore.archiveHashes['2023'] = archive.hash;
 
       var callbackCalled = false;
       memoStore.onArchiveMemoStoreRequired = (name) {
         callbackCalled = true;
         return MemoStore();
       };
-
-      memoStore.archiveMemo(memo);
+      final archiveMemoStore = memoStore.archiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isFalse);
       expect(callbackCalled, isFalse);
-      expect(archive.memos.contains(memo), isTrue);
+      expect(archiveMemoStore.memos.contains(memo), isTrue);
       expect(memoStore.archiveHashes['2023'], archive.hash);
     });
 
     test('archiveMemo should throw if callback is not set', () {
       final memoStore = MemoStore();
       final memo = Memo();
+      memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
+      memoStore.archiveHashes['2023'] = '012345678';
       expect(() => memoStore.archiveMemo(memo), throwsException);
     });
 
@@ -233,17 +231,16 @@ void main() {
       memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
 
-      final archive = MemoStore();
       memoStore.onArchiveMemoStoreRequired = (name) {
-        return archive;
+        return MemoStore();
       };
-      memoStore.archiveMemo(memo);
+      final archiveMemoStore = memoStore.archiveMemo(memo);
       memoStore.unarchiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isTrue);
-      expect(memoStore.archiveMemoStores['2023'], archive);
-      expect(archive.memos.contains(memo), isFalse);
-      expect(memoStore.archiveHashes['2023'], archive.hash);
+      expect(memoStore.archiveMemoStores['2023'], archiveMemoStore);
+      expect(archiveMemoStore.memos.contains(memo), isFalse);
+      expect(memoStore.archiveHashes['2023'], archiveMemoStore.hash);
     });
   });
 }
