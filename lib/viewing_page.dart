@@ -34,6 +34,7 @@ import 'editing_page.dart';
 import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
@@ -346,7 +347,13 @@ class _ViewingPageState extends State<ViewingPage>
   Future<void> _archive() async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    // TODO: Set archive loader callback.
+    memoStore.onArchiveMemoStoreRequired = (name) {
+      final memoStore = MemoStore();
+      final loader = MemoStoreLocalLoader(memoStore, 'Archive-$name.json');
+      loader.execute();
+
+      return memoStore;
+    };
     late final String archiveName;
     try {
       archiveName = memoStore.archiveMemo(_memo);
@@ -356,13 +363,15 @@ class _ViewingPageState extends State<ViewingPage>
         'Moving failed',
         'Could not archive the memo.',
         localizations.ok);
+
       return;
     }
+    final archiveMemoStore = memoStore.archiveMemoStores[archiveName]!;
 
     final saver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     final archiveSaver =
-        await MemoStoreLocalSaver.fromFileName(memoStore, 'Archive-$archiveName.json');
+        await MemoStoreLocalSaver.fromFileName(archiveMemoStore, 'Archive-$archiveName.json');
     try {
       saver.execute();
       archiveSaver.execute();

@@ -72,13 +72,19 @@ class MemoStore extends ChangeNotifier {
     final lastModified =
         DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
     final archiveName = lastModified.year.toString();
-    var archiveMemoStore = archiveMemoStores[archiveName];
-    if (archiveMemoStore == null) {
-      final callback = _onArchiveMemoStoreRequired;
-      if (callback == null) {
-        throw Exception('onArchiveMemoStoreRequired is not set.');
+    MemoStore? archiveMemoStore;
+    if (archiveHashes.containsKey(archiveName)) {
+      archiveMemoStore = archiveMemoStores[archiveName];
+      if (archiveMemoStore == null) {
+        final callback = _onArchiveMemoStoreRequired;
+        if (callback == null) {
+          throw Exception('onArchiveMemoStoreRequired is not set.');
+        }
+        archiveMemoStore = callback(archiveName);
+        archiveMemoStores[archiveName] = archiveMemoStore;
       }
-      archiveMemoStore = callback(archiveName);
+    } else {
+      archiveMemoStore = MemoStore();
       archiveMemoStores[archiveName] = archiveMemoStore;
     }
 
