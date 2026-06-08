@@ -150,7 +150,7 @@ class _ViewingPageState extends State<ViewingPage>
         tooltip: localizations.share,
       ),
       IconButton(
-        icon: const Icon(Icons.delete),
+        icon: const Icon(Icons.delete_outlined),
         onPressed: _delete,
         tooltip: localizations.delete,
       ),
