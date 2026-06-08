@@ -569,75 +569,79 @@ class _HomePageState extends State<HomePage> {
         Radius.circular(40.0),
       ),
     );
-    return ListView.builder(
-      padding: const EdgeInsets.all(10.0),
-      primary: primary,
-      itemCount: drawerItemCount,
-      itemBuilder: (context, i) {
-        if (i == allMemosIndex) {
-          return ListTile(
-            title: Text(localizations.allMemos),
-            onTap: _disableFiltering,
-            selected: !_filteringEnabled && !_searching,
-            selectedColor:
-                common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-            selectedTileColor:
-                common_uis.TsukimisouColors.scheme.primaryContainer,
-            shape: border,
-          );
-        } else if (i == tagsSubtitleIndex) {
-          return common_uis.subtitle(context, localizations.tags);
-        } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
-          final tag = tags[i - tagsBeginIndex];
-          return ListTile(
-            title: Text(tag),
-            onTap: () async {
-              await _filter(tag);
-            },
-            selected: _filteringEnabled && _filteringTag == tag && !_searching,
-            selectedColor:
-                common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-            selectedTileColor:
-                common_uis.TsukimisouColors.scheme.primaryContainer,
-            shape: border,
-          );
-        } else if (i == integrationDividerIndex) {
-          return const Divider();
-        } else if (i == integrationSubtitleIndex) {
-          return common_uis.subtitle(
-              context, localizations.googleDriveIntegration);
-        } else if (i == synchronizeIndex) {
-          return ListTile(
+
+    final children = [
+      ListTile(
+        title: Text(localizations.allMemos),
+        onTap: _disableFiltering,
+        selected: !_filteringEnabled && !_searching,
+        selectedColor:
+        common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+        selectedTileColor:
+        common_uis.TsukimisouColors.scheme.primaryContainer,
+        shape: border,
+      ),
+      common_uis.subtitle(context, localizations.tags),
+   
+    ];
+    for (final tag in tags) {
+      children.add(ListTile(
+          title: Text(tag),
+          onTap: () async {
+            await _filter(tag);
+          },
+          selected: _filteringEnabled && _filteringTag == tag && !_searching,
+          selectedColor:
+          common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+          selectedTileColor:
+          common_uis.TsukimisouColors.scheme.primaryContainer,
+          shape: border,
+        )
+      );
+    }
+    if (!hidden) {
+      children.addAll(
+        [
+          const Divider(),
+          common_uis.subtitle(
+            context, localizations.googleDriveIntegration),
+          ListTile(
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
             enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
             shape: border,
-          );
-        } else if (i == othersDividerIndex) {
-          return const Divider();
-        } else if (i == othersSubtitleIndex) {
-          return common_uis.subtitle(context, localizations.others);
-        } else if (i == settingsIndex) {
-          return ListTile(
-            title: Text(localizations.settings),
-            onTap: _showSettings,
-            shape: border,
-          );
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                localizations.showingMemos(
-                    _shownMemos.length, memoStore.memos.length, tags.length),
-                style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(
-                    context),
-              ),
+          ),
+        ]
+      );
+    }
+    children.addAll(
+      [
+        const Divider(),
+        common_uis.subtitle(context, localizations.others),
+        ListTile(
+          title: Text(localizations.settings),
+          onTap: _showSettings,
+          shape: border,
+        ),
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              localizations.showingMemos(
+                _shownMemos.length, memoStore.memos.length, tags.length),
+              style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(
+                context),
             ),
-          );
-        }
-      },
+          ),
+        ),
+      ]
+    );
+    
+    return ListView(
+      padding: const EdgeInsets.all(10.0),
+      primary: primary,
+      children: children,
     );
   }
 
