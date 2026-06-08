@@ -52,7 +52,7 @@ void main() {
       await init(tester, memo);
       expect(find.byIcon(Icons.close), findsOneWidget);
       expect(find.byIcon(Icons.share), findsOneWidget);
-      expect(find.byIcon(Icons.delete), findsOneWidget);
+      expect(find.byIcon(Icons.delete_outlined), findsOneWidget);
       expect(find.byIcon(Icons.edit), findsOneWidget);
       expect(find.textContaining('Test'), findsWidgets);
       expect(find.textContaining('This is a test.'), findsOneWidget);
@@ -65,7 +65,7 @@ void main() {
         (WidgetTester tester) async {
       final memo = Memo();
       await init(tester, memo);
-      await tester.tap(find.byIcon(Icons.delete));
+      await tester.tap(find.byIcon(Icons.delete_outlined));
       await tester.pump();
       expect(find.text('Delete this memo?'), findsOneWidget);
     });
