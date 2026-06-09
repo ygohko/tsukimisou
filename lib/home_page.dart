@@ -604,7 +604,7 @@ class _HomePageState extends State<HomePage> {
         [
           const Divider(),
           common_uis.subtitle(
-            context, localizations.googleDriveIntegration),
+            context, 'Archives'),
         ]
       );
       final names = List.from(memoStore.archiveHashes.keys);
