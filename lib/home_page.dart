@@ -582,7 +582,7 @@ class _HomePageState extends State<HomePage> {
         shape: border,
       ),
       common_uis.subtitle(context, localizations.tags),
-   
+      
     ];
     for (final tag in tags) {
       children.add(ListTile(
@@ -598,6 +598,27 @@ class _HomePageState extends State<HomePage> {
           shape: border,
         )
       );
+    }
+    if (memoStore.archiveHashes.isNotEmpty) {
+      children.addAll(
+        [
+          const Divider(),
+          common_uis.subtitle(
+            context, localizations.googleDriveIntegration),
+        ]
+      );
+      final names = List.from(memoStore.archiveHashes.keys);
+      names.sort();
+      for (final name in names) {
+        children.add(
+          ListTile(
+            title: Text(name),
+            onTap: () {},
+            enabled: true!,
+            shape: border,
+          )
+        );  
+      }
     }
     if (!hidden) {
       children.addAll(
