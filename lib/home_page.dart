@@ -533,36 +533,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   ListView _drawerListView(bool primary) {
-    const allMemosIndex = 0;
-    const tagsSubtitleIndex = 1;
-    const tagsBeginIndex = 2;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final appState = Provider.of<AppState>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
     final tagScores = settings.getTagScores();
     tags.sortByScores(tagScores);
-    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    late final int integrationDividerIndex;
-    late final int integrationSubtitleIndex;
-    late final int synchronizeIndex;
-    late final int othersDividerIndex;
     final hidden = settings.getSynchronizationHidden();
-    if (!hidden) {
-      integrationDividerIndex = tagsEndIndex + 1;
-      integrationSubtitleIndex = integrationDividerIndex + 1;
-      synchronizeIndex = integrationSubtitleIndex + 1;
-      othersDividerIndex = synchronizeIndex + 1;
-    } else {
-      integrationDividerIndex = -1;
-      integrationSubtitleIndex = -1;
-      synchronizeIndex = -1;
-      othersDividerIndex = tagsEndIndex + 1;
-    }
-    final othersSubtitleIndex = othersDividerIndex + 1;
-    final settingsIndex = othersSubtitleIndex + 1;
-    final footerIndex = settingsIndex + 1;
-    final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     const border = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
@@ -613,8 +590,9 @@ class _HomePageState extends State<HomePage> {
         children.add(
           ListTile(
             title: Text(name),
+            trailing: Icon(Icons.check_circle_outline),
             onTap: () {},
-            enabled: true!,
+            enabled: true,
             shape: border,
           )
         );  
