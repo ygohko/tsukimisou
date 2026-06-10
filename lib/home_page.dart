@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
+  final _shownArchiveNames = <String>[];
   var _commonUiInitialized = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
@@ -587,11 +588,17 @@ class _HomePageState extends State<HomePage> {
       final names = List.from(memoStore.archiveHashes.keys);
       names.sort();
       for (final name in names) {
+        final shown = _shownArchiveNames.contains(name);
         children.add(
           ListTile(
             title: Text(name),
-            trailing: Icon(Icons.check_circle_outline),
-            onTap: () {},
+            trailing: Icon(
+              shown ? Icons.check_circle : Icons.check_circle_outline,
+              color: shown ? common_uis.TsukimisouColors.scheme.primary : null,
+            ),
+            onTap: () {
+              _toggleShownArchives(name);
+            },
             enabled: true,
             shape: border,
           )
@@ -683,6 +690,24 @@ class _HomePageState extends State<HomePage> {
     });
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
+    }
+  }
+
+  void _toggleShownArchives(String name) {
+    if (_shownArchiveNames.contains(name)) {
+      setState(() {
+        _shownArchiveNames.remove(name);
+
+        // TODO: Uofate shown memos.
+
+    });
+    } else {
+      setState(() {
+        _shownArchiveNames.add(name);
+
+        // TODO: Uofate shown memos.
+
+      });
     }
   }
 
