@@ -704,16 +704,13 @@ class _HomePageState extends State<HomePage> {
     if (_shownArchiveNames.contains(name)) {
       setState(() {
         _shownArchiveNames.remove(name);
-
-        // TODO: Uofate shown memos.
-
-    });
+        _updateShownMemos();
+      });
     } else {
+      memoStore.archiveMemoStore(name);
       setState(() {
         _shownArchiveNames.add(name);
-
-        // TODO: Uofate shown memos.
-
+        _updateShownMemos();
       });
     }
   }

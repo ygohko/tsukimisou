@@ -185,6 +185,25 @@ class MemoStore extends ChangeNotifier {
     return null;
   }
 
+  /// Archive that has given name.
+  MemoStore archiveMemoStore(String name) {
+    if (!archiveHashes.containsKey(name)) {
+      throw Exception('Archive not found');
+    }
+
+    var archiveMemoStore = archiveMemoStores[archiveName];
+    if (archiveMemoStore == null) {
+      final callback = _onArchiveMemoStoreRequired;
+      if (callback == null) {
+        throw Exception('onArchiveMemoStoreRequired is not set.');
+      }
+      archiveMemoStore = callback(archiveName);
+      archiveMemoStores[archiveName] = archiveMemoStore;
+    }
+
+    return archiveMemoStore;
+  }
+  
   /// Tags bound for memos
   List<String> get tags {
     var tags = <String>[];
