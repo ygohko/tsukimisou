@@ -114,6 +114,13 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader =
         await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
+    memoStore.onArchiveMemoStoreRequired = (name) {
+      final memoStore = MemoStore();
+      final loader = MemoStoreLocalLoader(memoStore, 'Archive-$name.json');
+      loader.execute();
+
+      return memoStore;
+    };
     try {
       await memoStoreLoader.execute();
     } on FileNotCompatibleException {

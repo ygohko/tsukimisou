@@ -34,7 +34,6 @@ import 'editing_page.dart';
 import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
-import 'memo_store_local_loader.dart';
 import 'memo_store_local_saver.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
@@ -347,13 +346,6 @@ class _ViewingPageState extends State<ViewingPage>
   Future<void> _archive() async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    memoStore.onArchiveMemoStoreRequired = (name) {
-      final memoStore = MemoStore();
-      final loader = MemoStoreLocalLoader(memoStore, 'Archive-$name.json');
-      loader.execute();
-
-      return memoStore;
-    };
     late final MemoStore archiveMemoStore;
     try {
       archiveMemoStore = memoStore.archiveMemo(_memo);
