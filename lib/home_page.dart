@@ -707,7 +707,6 @@ class _HomePageState extends State<HomePage> {
         _updateShownMemos();
       });
     } else {
-      memoStore.archiveMemoStore(name);
       setState(() {
         _shownArchiveNames.add(name);
         _updateShownMemos();
@@ -717,12 +716,17 @@ class _HomePageState extends State<HomePage> {
 
   void _updateShownMemos() {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memos = memoStore.memos;
+    final sourceMemos = [...memoStore.memos];
+    for (final name in memoStore.archiveHashes.keys) {
+      final archiveMemoStore = memoStore.archiveMemoStore(name);
+      sourceMemos.addAll(archiveMemoStore.memos);
+    }
+
     if (!_filteringEnabled) {
-      _shownMemos = [...memos];
+      _shownMemos = [...sourceMemos];
     } else {
       _shownMemos.clear();
-      for (final memo in memos) {
+      for (final memo in sourceMemos) {
         if (memo.tags.contains(_filteringTag)) {
           _shownMemos.add(memo);
         }
@@ -730,8 +734,9 @@ class _HomePageState extends State<HomePage> {
     }
     if (_shownMemos.isEmpty) {
       _filteringEnabled = false;
-      _shownMemos = [...memos];
+      _shownMemos = [...sourceMemos];
     }
+    
     _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
   }
 }

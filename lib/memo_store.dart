@@ -191,14 +191,14 @@ class MemoStore extends ChangeNotifier {
       throw Exception('Archive not found');
     }
 
-    var archiveMemoStore = archiveMemoStores[archiveName];
+    var archiveMemoStore = archiveMemoStores[name];
     if (archiveMemoStore == null) {
       final callback = _onArchiveMemoStoreRequired;
       if (callback == null) {
         throw Exception('onArchiveMemoStoreRequired is not set.');
       }
-      archiveMemoStore = callback(archiveName);
-      archiveMemoStores[archiveName] = archiveMemoStore;
+      archiveMemoStore = callback(name);
+      archiveMemoStores[name] = archiveMemoStore;
     }
 
     return archiveMemoStore;
