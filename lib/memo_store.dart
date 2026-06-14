@@ -28,7 +28,8 @@ import 'package:flutter/foundation.dart';
 import 'annotations.dart';
 import 'memo.dart';
 
-typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(String name);
+typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(
+    String name);
 
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
@@ -70,8 +71,7 @@ class MemoStore extends ChangeNotifier {
 
   /// Archives a memo.
   Future<MemoStore> archiveMemo(Memo memo) async {
-    final lastModified =
-        DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
+    final lastModified = DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
     final archiveName = lastModified.year.toString();
     MemoStore? archiveMemoStore;
     if (archiveHashes.containsKey(archiveName)) {
@@ -236,8 +236,7 @@ class MemoStore extends ChangeNotifier {
     return digest.toString();
   }
 
-  set onArchiveMemoStoreRequired(
-      ArchiveMemoStoreRequiredCallback? callback) {
+  set onArchiveMemoStoreRequired(ArchiveMemoStoreRequiredCallback? callback) {
     _onArchiveMemoStoreRequired = callback;
   }
 }
