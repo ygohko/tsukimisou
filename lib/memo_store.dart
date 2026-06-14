@@ -95,7 +95,7 @@ class MemoStore extends ChangeNotifier {
     memo.archiveName = archiveName;
     archiveMemoStore.addMemo(memo);
     archiveHashes[archiveName] = archiveMemoStore.hash;
-    memos.remove(memo);
+    removeMemo(memo);
     notifyListeners();
 
     print('memos.length: ${memos.length}');
