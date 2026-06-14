@@ -116,7 +116,8 @@ class _HomePageState extends State<HomePage> {
         await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
     memoStore.onArchiveMemoStoreRequired = (name) async {
       final memoStore = MemoStore();
-      final loader = await MemoStoreLocalLoader.fromFileName(memoStore, 'Archive-$name.json');
+      final loader = await MemoStoreLocalLoader.fromFileName(
+          memoStore, 'Archive-$name.json');
       await loader.execute();
 
       return memoStore;
@@ -560,96 +561,81 @@ class _HomePageState extends State<HomePage> {
         title: Text(localizations.allMemos),
         onTap: _disableFiltering,
         selected: !_filteringEnabled && !_searching,
-        selectedColor:
-        common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-        selectedTileColor:
-        common_uis.TsukimisouColors.scheme.primaryContainer,
+        selectedColor: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+        selectedTileColor: common_uis.TsukimisouColors.scheme.primaryContainer,
         shape: border,
       ),
       common_uis.subtitle(context, localizations.tags),
     ];
     for (final tag in tags) {
       children.add(ListTile(
-          title: Text(tag),
-          onTap: () async {
-            await _filter(tag);
-          },
-          selected: _filteringEnabled && _filteringTag == tag && !_searching,
-          selectedColor:
-          common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-          selectedTileColor:
-          common_uis.TsukimisouColors.scheme.primaryContainer,
-          shape: border,
-        )
-      );
+        title: Text(tag),
+        onTap: () async {
+          await _filter(tag);
+        },
+        selected: _filteringEnabled && _filteringTag == tag && !_searching,
+        selectedColor: common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+        selectedTileColor: common_uis.TsukimisouColors.scheme.primaryContainer,
+        shape: border,
+      ));
     }
     if (memoStore.archiveHashes.isNotEmpty) {
-      children.addAll(
-        [
-          const Divider(),
-          common_uis.subtitle(
-            context, 'Archives'),
-        ]
-      );
+      children.addAll([
+        const Divider(),
+        common_uis.subtitle(context, 'Archives'),
+      ]);
       final names = List.from(memoStore.archiveHashes.keys);
       names.sort();
       for (final name in names) {
         final shown = _shownArchiveNames.contains(name);
-        children.add(
-          ListTile(
-            title: Text(name),
-            trailing: Icon(
-              shown ? Icons.check_circle : Icons.check_circle_outline,
-              color: shown ? common_uis.TsukimisouColors.scheme.primary : null,
-            ),
-            onTap: () {
-              _toggleShownArchives(name);
-            },
-            enabled: true,
-            shape: border,
-          )
-        );
+        children.add(ListTile(
+          title: Text(name),
+          trailing: Icon(
+            shown ? Icons.check_circle : Icons.check_circle_outline,
+            color: shown ? common_uis.TsukimisouColors.scheme.primary : null,
+          ),
+          onTap: () {
+            _toggleShownArchives(name);
+          },
+          enabled: true,
+          shape: border,
+        ));
       }
     }
     if (!hidden) {
-      children.addAll(
-        [
-          const Divider(),
-          common_uis.subtitle(
-            context, localizations.googleDriveIntegration),
-          ListTile(
-            title: Text(localizations.synchronize),
-            onTap: _mergeWithGoogleDrive,
-            enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
-            shape: border,
-          ),
-        ]
-      );
-    }
-    children.addAll(
-      [
+      children.addAll([
         const Divider(),
-        common_uis.subtitle(context, localizations.others),
+        common_uis.subtitle(context, localizations.googleDriveIntegration),
         ListTile(
-          title: Text(localizations.settings),
-          onTap: _showSettings,
+          title: Text(localizations.synchronize),
+          onTap: _mergeWithGoogleDrive,
+          enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
           shape: border,
         ),
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              localizations.showingMemos(
+      ]);
+    }
+    children.addAll([
+      const Divider(),
+      common_uis.subtitle(context, localizations.others),
+      ListTile(
+        title: Text(localizations.settings),
+        onTap: _showSettings,
+        shape: border,
+      ),
+      Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            localizations.showingMemos(
                 _shownMemos.length, memoStore.memos.length, tags.length),
-              style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(
-                context),
-            ),
+            style:
+                common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
           ),
         ),
-      ]
-    );
-    
+      ),
+    ]);
+
     return ListView(
       padding: const EdgeInsets.all(10.0),
       primary: primary,
@@ -713,11 +699,10 @@ class _HomePageState extends State<HomePage> {
         if (mounted) {
           final localizations = AppLocalizations.of(context)!;
           await common_uis.showErrorDialog(
-            context,
-            localizations.loadingWasFailed,
-            localizations.couldNotLoadMemoStoreFromGoogleDrive,
-            localizations.ok
-          );
+              context,
+              localizations.loadingWasFailed,
+              localizations.couldNotLoadMemoStoreFromGoogleDrive,
+              localizations.ok);
         }
 
         return;
@@ -733,7 +718,7 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final sourceMemos = [...memoStore.memos];
     for (final name in _shownArchiveNames) {
-      final archiveMemoStore =  memoStore.archiveMemoStoreIfLoaded(name);
+      final archiveMemoStore = memoStore.archiveMemoStoreIfLoaded(name);
       if (archiveMemoStore != null) {
         sourceMemos.addAll(archiveMemoStore.memos);
       }

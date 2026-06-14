@@ -352,10 +352,10 @@ class _ViewingPageState extends State<ViewingPage>
     } on Exception {
       if (mounted) {
         await common_uis.showErrorDialog(
-          context,
-          localizations.savingWasFailed,
-          localizations.couldNotSaveMemoStoreToLocalStorage,
-          localizations.ok);
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok);
       }
 
       return;
@@ -367,8 +367,8 @@ class _ViewingPageState extends State<ViewingPage>
 
     final saver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
-    final archiveSaver =
-        await MemoStoreLocalSaver.fromFileName(archiveMemoStore, 'Archive-$archiveName.json');
+    final archiveSaver = await MemoStoreLocalSaver.fromFileName(
+        archiveMemoStore, 'Archive-$archiveName.json');
     try {
       saver.execute();
       archiveSaver.execute();
@@ -385,7 +385,7 @@ class _ViewingPageState extends State<ViewingPage>
 
     if (mounted) {
       Navigator.of(context).pop();
-    }   
+    }
   }
 
   void _bindTags() async {

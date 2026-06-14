@@ -77,13 +77,12 @@ void main() {
       expect(newMemoStore.archiveHashes['test_archive'], 'testhash');
       expect(newMemoStore.archiveMemoStores.length, 1);
       expect(newMemoStore.archiveMemoStores['test_archive'], isNotNull);
-      expect(
-          newMemoStore.archiveMemoStores['test_archive']!.memos.length, 1);
+      expect(newMemoStore.archiveMemoStores['test_archive']!.memos.length, 1);
       expect(newMemoStore.archiveMemoStores['test_archive']!.memos[0].text,
           'archived');
       expect(
-          identical(
-              newMemoStore.archiveMemoStores['test_archive'], archivedMemoStore),
+          identical(newMemoStore.archiveMemoStores['test_archive'],
+              archivedMemoStore),
           isFalse);
 
       // Modify original and check if copy is unaffected
