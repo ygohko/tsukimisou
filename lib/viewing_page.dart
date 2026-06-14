@@ -362,10 +362,18 @@ class _ViewingPageState extends State<ViewingPage>
 
       return;
     }
+
+    print('1');
+
     final archiveName = _memo.archiveName;
-    if (archiveName != null) {
+    if (archiveName == null) {
+
+      print('2');
+
       return;
     }
+
+    print('3');
 
     final saver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
@@ -384,6 +392,9 @@ class _ViewingPageState extends State<ViewingPage>
             localizations.ok);
       }
     }
+
+    print('4');
+
     if (mounted) {
       Navigator.of(context).pop();
     }   

@@ -89,11 +89,16 @@ class MemoStore extends ChangeNotifier {
       archiveMemoStores[archiveName] = archiveMemoStore;
     }
 
+    print('archiveName: $archiveName');
+    print('memos.length: ${memos.length}');
+
     memo.archiveName = archiveName;
     archiveMemoStore.addMemo(memo);
     archiveHashes[archiveName] = archiveMemoStore.hash;
     memos.remove(memo);
     notifyListeners();
+
+    print('memos.length: ${memos.length}');
 
     return archiveMemoStore;
   }
