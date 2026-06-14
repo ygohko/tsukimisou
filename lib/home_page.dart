@@ -731,10 +731,7 @@ class _HomePageState extends State<HomePage> {
   void _updateShownMemos() {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final sourceMemos = [...memoStore.memos];
-
-    // TODO: Apply _shownArchiveNames.
-
-    for (final name in memoStore.archiveHashes.keys) {
+    for (final name in _shownArchiveNames) {
       final archiveMemoStore =  memoStore.archiveMemoStoreIfLoaded(name);
       if (archiveMemoStore != null) {
         sourceMemos.addAll(archiveMemoStore.memos);
