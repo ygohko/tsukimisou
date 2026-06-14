@@ -710,13 +710,15 @@ class _HomePageState extends State<HomePage> {
       try {
         await memoStore.archiveMemoStore(name);
       } on Exception {
-        final localizations = AppLocalizations.of(context)!;
-        await common_uis.showErrorDialog(
-          context,
-          localizations.loadingWasFailed,
-          localizations.couldNotLoadMemoStoreFromGoogleDrive,
-          localizations.ok
-        );
+        if (mounted) {
+          final localizations = AppLocalizations.of(context)!;
+          await common_uis.showErrorDialog(
+            context,
+            localizations.loadingWasFailed,
+            localizations.couldNotLoadMemoStoreFromGoogleDrive,
+            localizations.ok
+          );
+        }
 
         return;
       }

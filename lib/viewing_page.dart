@@ -349,16 +349,14 @@ class _ViewingPageState extends State<ViewingPage>
     late final MemoStore archiveMemoStore;
     try {
       archiveMemoStore = await memoStore.archiveMemo(_memo);
-    } on Exception catch(exception, stackTrace) {
-
-      print('exception: $exception');
-      print('stackTrace: $stackTrace');
-
-      await common_uis.showErrorDialog(
-        context,
-        localizations.savingWasFailed,
-        localizations.couldNotSaveMemoStoreToLocalStorage,
-        localizations.ok);
+    } on Exception {
+      if (mounted) {
+        await common_uis.showErrorDialog(
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok);
+      }
 
       return;
     }

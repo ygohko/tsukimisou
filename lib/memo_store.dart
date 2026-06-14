@@ -79,6 +79,7 @@ class MemoStore extends ChangeNotifier {
       if (archiveMemoStore == null) {
         final callback = _onArchiveMemoStoreRequired;
         if (callback == null) {
+          // TODO: Define custom Exceptions.
           throw Exception('onArchiveMemoStoreRequired is not set.');
         }
         archiveMemoStore = await callback(archiveName);
