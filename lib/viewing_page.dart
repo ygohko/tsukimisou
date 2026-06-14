@@ -348,8 +348,12 @@ class _ViewingPageState extends State<ViewingPage>
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     late final MemoStore archiveMemoStore;
     try {
-      archiveMemoStore = memoStore.archiveMemo(_memo);
-    } on Exception {
+      archiveMemoStore = await memoStore.archiveMemo(_memo);
+    } on Exception catch(exception, stackTrace) {
+
+      print('exception: $exception');
+      print('stackTrace: $stackTrace');
+
       await common_uis.showErrorDialog(
         context,
         localizations.savingWasFailed,

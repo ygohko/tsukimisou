@@ -114,10 +114,10 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader =
         await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
-    memoStore.onArchiveMemoStoreRequired = (name) {
+    memoStore.onArchiveMemoStoreRequired = (name) async {
       final memoStore = MemoStore();
-      final loader = MemoStoreLocalLoader(memoStore, 'Archive-$name.json');
-      loader.execute();
+      final loader = await MemoStoreLocalLoader.fromFileName(memoStore, 'Archive-$name.json');
+      await loader.execute();
 
       return memoStore;
     };
@@ -700,13 +700,27 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _toggleShownArchives(String name) {
+  Future<void> _toggleShownArchives(String name) async {
     if (_shownArchiveNames.contains(name)) {
       setState(() {
         _shownArchiveNames.remove(name);
         _updateShownMemos();
       });
     } else {
+      final memoStore = Provider.of<MemoStore>(context, listen: false);
+      try {
+        await memoStore.archiveMemoStore(name);
+      } on Exception {
+        final localizations = AppLocalizations.of(context)!;
+        await common_uis.showErrorDialog(
+          context,
+          localizations.loadingWasFailed,
+          localizations.couldNotLoadMemoStoreFromGoogleDrive,
+          localizations.ok
+        );
+
+        return;
+      }
       setState(() {
         _shownArchiveNames.add(name);
         _updateShownMemos();
@@ -718,8 +732,10 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final sourceMemos = [...memoStore.memos];
     for (final name in memoStore.archiveHashes.keys) {
-      final archiveMemoStore = memoStore.archiveMemoStore(name);
-      sourceMemos.addAll(archiveMemoStore.memos);
+      final archiveMemoStore =  memoStore.archiveMemoStoreIfLoaded(name);
+      if (archiveMemoStore != null) {
+        sourceMemos.addAll(archiveMemoStore.memos);
+      }
     }
 
     if (!_filteringEnabled) {
