@@ -176,16 +176,16 @@ void main() {
       expect(tags[0], 'test');
     });
 
-    test('archiveMemo should move a memo to a new archive', () {
+    test('archiveMemo should move a memo to a new archive', () async {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
 
-      memoStore.onArchiveMemoStoreRequired = (name) {
+      memoStore.onArchiveMemoStoreRequired = (name) async {
         return MemoStore();
       };
-      final archiveMemoStore = memoStore.archiveMemo(memo);
+      final archiveMemoStore = await memoStore.archiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isFalse);
       expect(memo.archiveName!, '2023');
@@ -194,7 +194,7 @@ void main() {
       expect(memoStore.archiveHashes['2023'], archiveMemoStore.hash);
     });
 
-    test('archiveMemo should move a memo to an existing archive', () {
+    test('archiveMemo should move a memo to an existing archive', () async {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.lastModified = 1672531200000; // 2023-01-01
@@ -204,11 +204,11 @@ void main() {
       memoStore.archiveHashes['2023'] = archive.hash;
 
       var callbackCalled = false;
-      memoStore.onArchiveMemoStoreRequired = (name) {
+      memoStore.onArchiveMemoStoreRequired = (name) async {
         callbackCalled = true;
         return MemoStore();
       };
-      final archiveMemoStore = memoStore.archiveMemo(memo);
+      final archiveMemoStore = await memoStore.archiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isFalse);
       expect(callbackCalled, isFalse);
@@ -225,17 +225,17 @@ void main() {
       expect(() => memoStore.archiveMemo(memo), throwsException);
     });
 
-    test('unarchiveMemo should move a memo to a new archive', () {
+    test('unarchiveMemo should move a memo to a new archive', () async {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
 
-      memoStore.onArchiveMemoStoreRequired = (name) {
+      memoStore.onArchiveMemoStoreRequired = (name) async {
         return MemoStore();
       };
-      final archiveMemoStore = memoStore.archiveMemo(memo);
-      memoStore.unarchiveMemo(memo);
+      final archiveMemoStore = await memoStore.archiveMemo(memo);
+      await memoStore.unarchiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isTrue);
       expect(memoStore.archiveMemoStores['2023'], archiveMemoStore);

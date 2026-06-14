@@ -28,7 +28,7 @@ import 'package:flutter/foundation.dart';
 import 'annotations.dart';
 import 'memo.dart';
 
-typedef ArchiveMemoStoreRequiredCallback = MemoStore Function(String name);
+typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(String name);
 
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
@@ -69,7 +69,7 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Archives a memo.
-  MemoStore archiveMemo(Memo memo) {
+  Future<MemoStore> archiveMemo(Memo memo) async {
     final lastModified =
         DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
     final archiveName = lastModified.year.toString();
@@ -79,9 +79,10 @@ class MemoStore extends ChangeNotifier {
       if (archiveMemoStore == null) {
         final callback = _onArchiveMemoStoreRequired;
         if (callback == null) {
+          // TODO: Define custom Exceptions.
           throw Exception('onArchiveMemoStoreRequired is not set.');
         }
-        archiveMemoStore = callback(archiveName);
+        archiveMemoStore = await callback(archiveName);
         archiveMemoStores[archiveName] = archiveMemoStore;
       }
     } else {
@@ -92,14 +93,14 @@ class MemoStore extends ChangeNotifier {
     memo.archiveName = archiveName;
     archiveMemoStore.addMemo(memo);
     archiveHashes[archiveName] = archiveMemoStore.hash;
-    memos.remove(memo);
+    removeMemo(memo);
     notifyListeners();
 
     return archiveMemoStore;
   }
 
   /// Unarchives a memo.
-  void unarchiveMemo(Memo memo) {
+  Future<void> unarchiveMemo(Memo memo) async {
     final archiveName = memo.archiveName;
     if (archiveName == null) {
       // Do nothing.
@@ -111,7 +112,7 @@ class MemoStore extends ChangeNotifier {
       if (callback == null) {
         throw Exception('onArchiveMemoStoreRequired is not set.');
       }
-      archiveMemoStore = callback(archiveName);
+      archiveMemoStore = await callback(archiveName);
       archiveMemoStores[archiveName] = archiveMemoStore;
     }
 
@@ -183,6 +184,34 @@ class MemoStore extends ChangeNotifier {
     }
 
     return null;
+  }
+
+  /// Archive that has given name.
+  Future<MemoStore> archiveMemoStore(String name) async {
+    if (!archiveHashes.containsKey(name)) {
+      throw Exception('Archive not found');
+    }
+
+    var archiveMemoStore = archiveMemoStores[name];
+    if (archiveMemoStore == null) {
+      final callback = _onArchiveMemoStoreRequired;
+      if (callback == null) {
+        throw Exception('onArchiveMemoStoreRequired is not set.');
+      }
+      archiveMemoStore = await callback(name);
+      archiveMemoStores[name] = archiveMemoStore;
+    }
+
+    return archiveMemoStore;
+  }
+
+  /// Archive that has given name.
+  MemoStore? archiveMemoStoreIfLoaded(String name) {
+    if (!archiveHashes.containsKey(name)) {
+      throw Exception('Archive not found');
+    }
+
+    return archiveMemoStores[name];
   }
 
   /// Tags bound for memos

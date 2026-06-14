@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
+  final _shownArchiveNames = <String>[];
   var _commonUiInitialized = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
@@ -113,6 +114,13 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memoStoreLoader =
         await MemoStoreLocalLoader.fromFileName(memoStore, 'MemoStore.json');
+    memoStore.onArchiveMemoStoreRequired = (name) async {
+      final memoStore = MemoStore();
+      final loader = await MemoStoreLocalLoader.fromFileName(memoStore, 'Archive-$name.json');
+      await loader.execute();
+
+      return memoStore;
+    };
     try {
       await memoStoreLoader.execute();
     } on FileNotCompatibleException {
@@ -533,111 +541,119 @@ class _HomePageState extends State<HomePage> {
   }
 
   ListView _drawerListView(bool primary) {
-    const allMemosIndex = 0;
-    const tagsSubtitleIndex = 1;
-    const tagsBeginIndex = 2;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final appState = Provider.of<AppState>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
     final tags = memoStore.tags;
     final tagScores = settings.getTagScores();
     tags.sortByScores(tagScores);
-    final tagsEndIndex = tagsBeginIndex + tags.length - 1;
-    late final int integrationDividerIndex;
-    late final int integrationSubtitleIndex;
-    late final int synchronizeIndex;
-    late final int othersDividerIndex;
     final hidden = settings.getSynchronizationHidden();
-    if (!hidden) {
-      integrationDividerIndex = tagsEndIndex + 1;
-      integrationSubtitleIndex = integrationDividerIndex + 1;
-      synchronizeIndex = integrationSubtitleIndex + 1;
-      othersDividerIndex = synchronizeIndex + 1;
-    } else {
-      integrationDividerIndex = -1;
-      integrationSubtitleIndex = -1;
-      synchronizeIndex = -1;
-      othersDividerIndex = tagsEndIndex + 1;
-    }
-    final othersSubtitleIndex = othersDividerIndex + 1;
-    final settingsIndex = othersSubtitleIndex + 1;
-    final footerIndex = settingsIndex + 1;
-    final drawerItemCount = footerIndex + 1;
     final localizations = AppLocalizations.of(context)!;
     const border = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(
         Radius.circular(40.0),
       ),
     );
-    return ListView.builder(
-      padding: const EdgeInsets.all(10.0),
-      primary: primary,
-      itemCount: drawerItemCount,
-      itemBuilder: (context, i) {
-        if (i == allMemosIndex) {
-          return ListTile(
-            title: Text(localizations.allMemos),
-            onTap: _disableFiltering,
-            selected: !_filteringEnabled && !_searching,
-            selectedColor:
-                common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-            selectedTileColor:
-                common_uis.TsukimisouColors.scheme.primaryContainer,
-            shape: border,
-          );
-        } else if (i == tagsSubtitleIndex) {
-          return common_uis.subtitle(context, localizations.tags);
-        } else if (i >= tagsBeginIndex && i <= tagsEndIndex) {
-          final tag = tags[i - tagsBeginIndex];
-          return ListTile(
-            title: Text(tag),
-            onTap: () async {
-              await _filter(tag);
+
+    final children = [
+      ListTile(
+        title: Text(localizations.allMemos),
+        onTap: _disableFiltering,
+        selected: !_filteringEnabled && !_searching,
+        selectedColor:
+        common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+        selectedTileColor:
+        common_uis.TsukimisouColors.scheme.primaryContainer,
+        shape: border,
+      ),
+      common_uis.subtitle(context, localizations.tags),
+    ];
+    for (final tag in tags) {
+      children.add(ListTile(
+          title: Text(tag),
+          onTap: () async {
+            await _filter(tag);
+          },
+          selected: _filteringEnabled && _filteringTag == tag && !_searching,
+          selectedColor:
+          common_uis.TsukimisouColors.scheme.onPrimaryContainer,
+          selectedTileColor:
+          common_uis.TsukimisouColors.scheme.primaryContainer,
+          shape: border,
+        )
+      );
+    }
+    if (memoStore.archiveHashes.isNotEmpty) {
+      children.addAll(
+        [
+          const Divider(),
+          common_uis.subtitle(
+            context, 'Archives'),
+        ]
+      );
+      final names = List.from(memoStore.archiveHashes.keys);
+      names.sort();
+      for (final name in names) {
+        final shown = _shownArchiveNames.contains(name);
+        children.add(
+          ListTile(
+            title: Text(name),
+            trailing: Icon(
+              shown ? Icons.check_circle : Icons.check_circle_outline,
+              color: shown ? common_uis.TsukimisouColors.scheme.primary : null,
+            ),
+            onTap: () {
+              _toggleShownArchives(name);
             },
-            selected: _filteringEnabled && _filteringTag == tag && !_searching,
-            selectedColor:
-                common_uis.TsukimisouColors.scheme.onPrimaryContainer,
-            selectedTileColor:
-                common_uis.TsukimisouColors.scheme.primaryContainer,
+            enabled: true,
             shape: border,
-          );
-        } else if (i == integrationDividerIndex) {
-          return const Divider();
-        } else if (i == integrationSubtitleIndex) {
-          return common_uis.subtitle(
-              context, localizations.googleDriveIntegration);
-        } else if (i == synchronizeIndex) {
-          return ListTile(
+          )
+        );
+      }
+    }
+    if (!hidden) {
+      children.addAll(
+        [
+          const Divider(),
+          common_uis.subtitle(
+            context, localizations.googleDriveIntegration),
+          ListTile(
             title: Text(localizations.synchronize),
             onTap: _mergeWithGoogleDrive,
             enabled: !(appState.mergingWithGoogleDrive || _savingToGoogleDrive),
             shape: border,
-          );
-        } else if (i == othersDividerIndex) {
-          return const Divider();
-        } else if (i == othersSubtitleIndex) {
-          return common_uis.subtitle(context, localizations.others);
-        } else if (i == settingsIndex) {
-          return ListTile(
-            title: Text(localizations.settings),
-            onTap: _showSettings,
-            shape: border,
-          );
-        } else {
-          return Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                localizations.showingMemos(
-                    _shownMemos.length, memoStore.memos.length, tags.length),
-                style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(
-                    context),
-              ),
+          ),
+        ]
+      );
+    }
+    children.addAll(
+      [
+        const Divider(),
+        common_uis.subtitle(context, localizations.others),
+        ListTile(
+          title: Text(localizations.settings),
+          onTap: _showSettings,
+          shape: border,
+        ),
+        Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              localizations.showingMemos(
+                _shownMemos.length, memoStore.memos.length, tags.length),
+              style: common_uis.TsukimisouTextStyles.homePageDrawerFooter(
+                context),
             ),
-          );
-        }
-      },
+          ),
+        ),
+      ]
+    );
+    
+    return ListView(
+      padding: const EdgeInsets.all(10.0),
+      primary: primary,
+      children: children,
     );
   }
 
@@ -683,14 +699,51 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _toggleShownArchives(String name) async {
+    if (_shownArchiveNames.contains(name)) {
+      setState(() {
+        _shownArchiveNames.remove(name);
+        _updateShownMemos();
+      });
+    } else {
+      final memoStore = Provider.of<MemoStore>(context, listen: false);
+      try {
+        await memoStore.archiveMemoStore(name);
+      } on Exception {
+        if (mounted) {
+          final localizations = AppLocalizations.of(context)!;
+          await common_uis.showErrorDialog(
+            context,
+            localizations.loadingWasFailed,
+            localizations.couldNotLoadMemoStoreFromGoogleDrive,
+            localizations.ok
+          );
+        }
+
+        return;
+      }
+      setState(() {
+        _shownArchiveNames.add(name);
+        _updateShownMemos();
+      });
+    }
+  }
+
   void _updateShownMemos() {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final memos = memoStore.memos;
+    final sourceMemos = [...memoStore.memos];
+    for (final name in _shownArchiveNames) {
+      final archiveMemoStore =  memoStore.archiveMemoStoreIfLoaded(name);
+      if (archiveMemoStore != null) {
+        sourceMemos.addAll(archiveMemoStore.memos);
+      }
+    }
+
     if (!_filteringEnabled) {
-      _shownMemos = [...memos];
+      _shownMemos = [...sourceMemos];
     } else {
       _shownMemos.clear();
-      for (final memo in memos) {
+      for (final memo in sourceMemos) {
         if (memo.tags.contains(_filteringTag)) {
           _shownMemos.add(memo);
         }
@@ -698,8 +751,9 @@ class _HomePageState extends State<HomePage> {
     }
     if (_shownMemos.isEmpty) {
       _filteringEnabled = false;
-      _shownMemos = [...memos];
+      _shownMemos = [...sourceMemos];
     }
+
     _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
   }
 }
