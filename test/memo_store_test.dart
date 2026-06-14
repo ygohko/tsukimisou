@@ -235,7 +235,7 @@ void main() {
         return MemoStore();
       };
       final archiveMemoStore = await memoStore.archiveMemo(memo);
-      memoStore.unarchiveMemo(memo);
+      await memoStore.unarchiveMemo(memo);
 
       expect(memoStore.memos.contains(memo), isTrue);
       expect(memoStore.archiveMemoStores['2023'], archiveMemoStore);
