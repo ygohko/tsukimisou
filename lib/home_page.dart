@@ -567,7 +567,6 @@ class _HomePageState extends State<HomePage> {
         shape: border,
       ),
       common_uis.subtitle(context, localizations.tags),
-      
     ];
     for (final tag in tags) {
       children.add(ListTile(
@@ -609,7 +608,7 @@ class _HomePageState extends State<HomePage> {
             enabled: true,
             shape: border,
           )
-        );  
+        );
       }
     }
     if (!hidden) {
@@ -752,7 +751,7 @@ class _HomePageState extends State<HomePage> {
       _filteringEnabled = false;
       _shownMemos = [...sourceMemos];
     }
-    
+
     _shownMemos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
   }
 }
