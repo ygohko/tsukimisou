@@ -248,6 +248,9 @@ class _HomePageState extends State<HomePage> {
           localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
       return;
     }
+
+    // TODO: Set onArchiveMemoStoreRequired for fromMemoStore.
+
     _fileLockedCount = 0;
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
