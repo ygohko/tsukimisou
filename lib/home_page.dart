@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage> {
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
-    merger.execute();
+    await merger.execute();
 
     final localSaver =
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
