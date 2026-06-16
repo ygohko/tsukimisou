@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
       final loader = await MemoStoreLocalLoader.fromFileName(
           memoStore, 'Archive-$name.json');
       await loader.execute();
-
       return memoStore;
     };
     try {
@@ -248,12 +247,15 @@ class _HomePageState extends State<HomePage> {
           localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
       return;
     }
+    fromMemoStore.onArchiveMemoStoreRequired = (name) async {
+      final memoStore = MemoStore();
+      final loader = MemoStoreGoogleDriveLoader(memoStore, 'Archive-$name.json');
+      await loader.execute();
+      return memoStore;
+    };
 
     _fileLockedCount = 0;
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
-
-    // TODO: Set onArchiveMemoStoreRequired for fromMemoStore.
-
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
@@ -716,7 +718,6 @@ class _HomePageState extends State<HomePage> {
               localizations.couldNotLoadMemoStoreFromGoogleDrive,
               localizations.ok);
         }
-
         return;
       }
       setState(() {
