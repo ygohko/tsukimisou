@@ -249,14 +249,23 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    // TODO: Set onArchiveMemoStoreRequired for fromMemoStore.
-
     _fileLockedCount = 0;
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+
+    // TODO: Set onArchiveMemoStoreRequired for fromMemoStore.
+
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
-    await merger.execute();
+    try {
+      await merger.execute();
+    } on Exception {
+      if (mounted) {
+        await common_uis.showErrorDialog(context, 'Synchronization failed',
+          'Could not synchronize memo store.', localizations.ok);
+        return;
+      }
+    }
 
     final localSaver =
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
