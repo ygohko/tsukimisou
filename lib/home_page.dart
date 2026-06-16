@@ -255,7 +255,8 @@ class _HomePageState extends State<HomePage> {
     };
 
     _fileLockedCount = 0;
-    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    // TODO: First try with missingArchivesIgnored: false, and if that failed retry with true.
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore, missingArchivesIgnored: true);
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
@@ -265,6 +266,7 @@ class _HomePageState extends State<HomePage> {
       if (mounted) {
         await common_uis.showErrorDialog(context, 'Synchronization failed',
           'Could not synchronize memo store.', localizations.ok);
+        // TODO: Restore UIs correctly.
         return;
       }
     }
