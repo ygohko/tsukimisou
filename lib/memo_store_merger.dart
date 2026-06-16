@@ -40,9 +40,14 @@ class MemoStoreMerger {
   String _conflictWarningText = "This memo has conflicts.";
   String _localMarkerText = "Local";
   String _cloudMarkerText = "Cloud";
+  bool _missingArchivesIgnored = false;
 
   /// Creates a memo store manager.
-  MemoStoreMerger(this.toMemoStore, this.fromMemoStore);
+  MemoStoreMerger(this.toMemoStore, this.fromMemoStore, { bool? missingArchivesIgnored }) {
+    if (missingArchivesIgnored != null) {
+      _missingArchivesIgnored = missingArchivesIgnored;
+    }
+  }
 
   /// Executes this memo store manager.
   Future<void> execute() async {
@@ -152,7 +157,16 @@ class MemoStoreMerger {
     for (final name in archivesToMerge) {
       MemoStore toArchive;
       if (toMemoStore.archiveHashes.containsKey(name)) {
-        toArchive = await toMemoStore.archiveMemoStore(name);
+        try {
+          toArchive = await toMemoStore.archiveMemoStore(name);
+        } on Exception {
+          if (_missingArchivesIgnored) {
+            toArchive = MemoStore();
+            toMemoStore.archiveMemoStores[name] = toArchive;
+          } else {
+            rethrow;
+          }
+        }
       } else {
         toArchive = MemoStore();
         toMemoStore.archiveMemoStores[name] = toArchive;
@@ -160,7 +174,16 @@ class MemoStoreMerger {
 
       MemoStore fromArchive;
       if (fromMemoStore.archiveHashes.containsKey(name)) {
-        fromArchive = await fromMemoStore.archiveMemoStore(name);
+        try {
+          fromArchive = await fromMemoStore.archiveMemoStore(name);
+        } on Exception {
+          if (_missingArchivesIgnored) {
+            fromArchive = MemoStore();
+            fromMemoStore.archiveMemoStores[name] = fromArchive;
+          } else {
+            rethrow;
+          }
+        }
       } else {
         fromArchive = MemoStore();
         fromMemoStore.archiveMemoStores[name] = fromArchive;
