@@ -303,6 +303,9 @@ class _HomePageState extends State<HomePage> {
             localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
       }
     }
+
+    // TODO: Save updated archive MemoStores.
+    
     setState(() {
       _savingToGoogleDrive = false;
     });
