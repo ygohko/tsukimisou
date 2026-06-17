@@ -264,8 +264,7 @@ class _HomePageState extends State<HomePage> {
       await merger.execute();
     } on Exception {
       if (mounted) {
-        await common_uis.showErrorDialog(context, 'Synchronization failed',
-          'Could not synchronize memo store.', localizations.ok);
+        await common_uis.showErrorDialog(context, localizations.synchronizationWasFailed, localizations.couldNotSynchronizeWithGoogleDrive, localizations.ok);
         // TODO: Restore UIs correctly.
         return;
       }

@@ -231,6 +231,18 @@ abstract class AppLocalizations {
   /// **'Unlock'**
   String get unlock;
 
+  /// Title for synchronization error dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Synchronization was faild'**
+  String get synchronizationWasFailed;
+
+  /// Text for synchronization error dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not synchronize with Google Drive.'**
+  String get couldNotSynchronizeWithGoogleDrive;
+
   /// Text to indicate this memo has confilicts.
   ///
   /// In en, this message translates to:
