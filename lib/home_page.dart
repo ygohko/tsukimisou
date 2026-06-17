@@ -174,6 +174,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _mergeWithGoogleDrive() async {
+    // TODO: Divide this.
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
@@ -304,7 +305,19 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    // TODO: Save updated archive MemoStores.
+    final updatedArchiveNames = merger.updatedArchiveNames;
+    for (final name in updatedArchiveNames) {
+      final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'Archive-$name.json');
+      try {
+        await saver.execute();
+      } on Exception {
+        // Saving failed.
+        if (mounted) {
+          await common_uis.showErrorDialog(context, localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
+        }
+      }      
+    }
     
     setState(() {
       _savingToGoogleDrive = false;
