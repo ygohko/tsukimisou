@@ -16,7 +16,7 @@ void main() {
 
     test(
         'MemoStoreMerger should keep memos in toMemoStore if it is modified after last merged.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       fromMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
@@ -26,13 +26,13 @@ void main() {
       toMemoStore.addMemo(memo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
     });
 
     test(
         'MemoStoreMerger should not remove memos in toMemoStore if it is synchronized and modified before last merged.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final memo = Memo();
@@ -44,13 +44,13 @@ void main() {
       toMemoStore.addMemo(memo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
     });
 
     test(
         'MemoStoreMerger should not remove memos in toMemoStore if it is not synchronized.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final memo = Memo();
@@ -60,25 +60,25 @@ void main() {
       toMemoStore.addMemo(memo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
     });
 
     test('MemoStoreMerger should move memos that are only in fromMemoStore.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final memo = Memo();
       fromMemoStore.addMemo(memo);
       expect(toMemoStore.memos.length, 0);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
     });
 
     test(
         'MemoStoreMerger should not move memos that its ID is in removed memo IDs.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final memo = Memo();
@@ -86,11 +86,12 @@ void main() {
       toMemoStore.removedMemoIds.add(memo.id);
       expect(toMemoStore.memos.length, 0);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 0);
     });
 
-    test('MemoStoreMerger should update memos if from memos are modified.', () {
+    test('MemoStoreMerger should update memos if from memos are modified.',
+        () async {
       final toMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
@@ -102,13 +103,13 @@ void main() {
       fromMemo.text = "This is a from memo.";
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.text.contains('This is a from memo.'), true);
     });
 
     test('MemoStoreMerger should not update memos if toMemos are modified.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
@@ -119,14 +120,14 @@ void main() {
       final fromMemoStore = toMemoStore.copy();
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.text.contains('This is a to memo.'), true);
     });
 
     test(
         'MemoStoreMerger should make conficted memos if both memos in fromMemoStore and toMemoStore are modified.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a to memo.";
@@ -140,14 +141,14 @@ void main() {
       fromMemo.text = "This is a from memo.";
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.text.contains('Local'), true);
     });
 
     test(
         'MemoStoreMerger should not make conficted memos if both memos in fromMemoStore and toMemoStore are modified but these texts are same.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final toMemo = Memo();
@@ -159,14 +160,14 @@ void main() {
       fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.text.contains('This memo is conflicted.'), false);
     });
 
     test(
         'MemoStoreMerger should update memo\'s tags if from memos are modified.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final toMemo = Memo();
@@ -180,7 +181,7 @@ void main() {
       fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.text.contains('This is a from memo.'), true);
       expect(toMemo.tags.length, 3);
@@ -188,7 +189,7 @@ void main() {
 
     test(
         'MemoStoreMerger should merge memo\'s tags if both memos in fromMemoStore and toMemoStore are modified.',
-        () {
+        () async {
       final toMemoStore = MemoStore();
       final fromMemoStore = MemoStore();
       final toMemo = Memo();
@@ -202,9 +203,65 @@ void main() {
       fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
       final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
-      memoStoreMerger.execute();
+      await memoStoreMerger.execute();
       expect(toMemoStore.memos.length, 1);
       expect(toMemo.tags.length, 6);
+    });
+
+    test('MemoStoreMerger should merge archives.', () async {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+
+      final toArchive = MemoStore();
+      final toMemo = Memo();
+      toMemo.text = 'This is a to memo in archive.';
+      toArchive.addMemo(toMemo);
+      toMemoStore.archiveMemoStores['2023'] = toArchive;
+      toMemoStore.archiveHashes['2023'] = toArchive.hash;
+
+      final fromArchive = MemoStore();
+      final fromMemo = Memo();
+      fromMemo.text = 'This is a from memo in archive.';
+      fromArchive.addMemo(fromMemo);
+      fromMemoStore.archiveMemoStores['2023'] = fromArchive;
+      fromMemoStore.archiveHashes['2023'] = fromArchive.hash;
+
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      await memoStoreMerger.execute();
+
+      final mergedArchive = toMemoStore.archiveMemoStores['2023']!;
+      expect(mergedArchive.memos.length, 2);
+      expect(toMemoStore.archiveHashes['2023'], mergedArchive.hash);
+    });
+
+    test('MemoStoreMerger should merge archives with lazy loading.', () async {
+      final toMemoStore = MemoStore();
+      final fromMemoStore = MemoStore();
+
+      final toArchive = MemoStore();
+      final toMemo = Memo();
+      toMemo.text = 'This is a to memo in archive.';
+      toArchive.addMemo(toMemo);
+      toMemoStore.archiveHashes['2023'] = toArchive.hash;
+      toMemoStore.onArchiveMemoStoreRequired = (name) async {
+        return toArchive;
+      };
+
+      final fromArchive = MemoStore();
+      final fromMemo = Memo();
+      fromMemo.text = 'This is a from memo in archive.';
+      fromArchive.addMemo(fromMemo);
+      fromMemoStore.archiveHashes['2023'] = fromArchive.hash;
+      fromMemoStore.onArchiveMemoStoreRequired = (name) async {
+        return fromArchive;
+      };
+
+      final memoStoreMerger = MemoStoreMerger(toMemoStore, fromMemoStore);
+      await memoStoreMerger.execute();
+
+      final mergedArchive = toMemoStore.archiveMemoStores['2023']!;
+      expect(mergedArchive.memos.length, 2);
+      expect(toMemoStore.archiveHashes['2023'], mergedArchive.hash);
     });
   });
 }

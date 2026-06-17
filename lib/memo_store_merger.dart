@@ -40,12 +40,17 @@ class MemoStoreMerger {
   String _conflictWarningText = "This memo has conflicts.";
   String _localMarkerText = "Local";
   String _cloudMarkerText = "Cloud";
+  bool _missingArchivesIgnored = false;
 
   /// Creates a memo store manager.
-  MemoStoreMerger(this.toMemoStore, this.fromMemoStore);
+  MemoStoreMerger(this.toMemoStore, this.fromMemoStore, { bool? missingArchivesIgnored }) {
+    if (missingArchivesIgnored != null) {
+      _missingArchivesIgnored = missingArchivesIgnored;
+    }
+  }
 
   /// Executes this memo store manager.
-  void execute() {
+  Future<void> execute() async {
     // Update memos if needed.
     for (final memo in toMemoStore.memos) {
       final fromMemo = fromMemoStore.memoFromId(memo.id);
@@ -136,6 +141,63 @@ class MemoStoreMerger {
     }
     toMemoStore.removedMemoIds = removedMemoIds;
     toMemoStore.lastMerged = DateTime.now().millisecondsSinceEpoch;
+
+    // Get archives that need to be merged.
+    final archiveNames = <String>{};
+    archiveNames.addAll(toMemoStore.archiveHashes.keys);
+    archiveNames.addAll(fromMemoStore.archiveHashes.keys);
+
+    final archivesToMerge = <String>[];
+    for (final name in archiveNames) {
+      if (toMemoStore.archiveHashes[name] != fromMemoStore.archiveHashes[name]) {
+        archivesToMerge.add(name);
+      }
+    }
+
+    for (final name in archivesToMerge) {
+      MemoStore toArchive;
+      if (toMemoStore.archiveHashes.containsKey(name)) {
+        try {
+          toArchive = await toMemoStore.archiveMemoStore(name);
+        } on Exception {
+          if (_missingArchivesIgnored) {
+            toArchive = MemoStore();
+            toMemoStore.archiveMemoStores[name] = toArchive;
+          } else {
+            rethrow;
+          }
+        }
+      } else {
+        toArchive = MemoStore();
+        toMemoStore.archiveMemoStores[name] = toArchive;
+      }
+
+      MemoStore fromArchive;
+      if (fromMemoStore.archiveHashes.containsKey(name)) {
+        try {
+          fromArchive = await fromMemoStore.archiveMemoStore(name);
+        } on Exception {
+          if (_missingArchivesIgnored) {
+            fromArchive = MemoStore();
+            fromMemoStore.archiveMemoStores[name] = fromArchive;
+          } else {
+            rethrow;
+          }
+        }
+      } else {
+        fromArchive = MemoStore();
+        fromMemoStore.archiveMemoStores[name] = fromArchive;
+      }
+
+      final merger = MemoStoreMerger(toArchive, fromArchive);
+      merger.conflictWarningText = _conflictWarningText;
+      merger.localMarkerText = _localMarkerText;
+      merger.cloudMarkerText = _cloudMarkerText;
+      await merger.execute();
+
+      toMemoStore.archiveHashes[name] = toArchive.hash;
+    }
+
     toMemoStore.markAsChanged();
   }
 

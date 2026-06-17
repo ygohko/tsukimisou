@@ -82,6 +82,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get unlock => 'ロック解除';
 
   @override
+  String get synchronizationWasFailed => '同期に失敗しました';
+
+  @override
+  String get couldNotSynchronizeWithGoogleDrive =>
+      'メモストアのGoogle Driveとの同期ができませんでした。';
+
+  @override
   String get thisMemoHasConflicts => 'このメモには衝突があります。';
 
   @override

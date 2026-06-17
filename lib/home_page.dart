@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
       final loader = await MemoStoreLocalLoader.fromFileName(
           memoStore, 'Archive-$name.json');
       await loader.execute();
-
       return memoStore;
     };
     try {
@@ -248,12 +247,28 @@ class _HomePageState extends State<HomePage> {
           localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
       return;
     }
+    fromMemoStore.onArchiveMemoStoreRequired = (name) async {
+      final memoStore = MemoStore();
+      final loader = MemoStoreGoogleDriveLoader(memoStore, 'Archive-$name.json');
+      await loader.execute();
+      return memoStore;
+    };
+
     _fileLockedCount = 0;
-    final merger = MemoStoreMerger(toMemoStore, fromMemoStore);
+    // TODO: First try with missingArchivesIgnored: false, and if that failed retry with true.
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore, missingArchivesIgnored: true);
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
-    merger.execute();
+    try {
+      await merger.execute();
+    } on Exception {
+      if (mounted) {
+        await common_uis.showErrorDialog(context, localizations.synchronizationWasFailed, localizations.couldNotSynchronizeWithGoogleDrive, localizations.ok);
+        // TODO: Restore UIs correctly.
+        return;
+      }
+    }
 
     final localSaver =
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
@@ -704,7 +719,6 @@ class _HomePageState extends State<HomePage> {
               localizations.couldNotLoadMemoStoreFromGoogleDrive,
               localizations.ok);
         }
-
         return;
       }
       setState(() {

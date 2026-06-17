@@ -95,6 +95,14 @@
     "@unlock": {
         "description": "Text for unlock button"
     },
+    "synchronizationWasFailed": "Synchronization was failed",
+    "@synchronizationWasFailed": {
+        "description": "Title for synchronization error dialog."
+    },
+    "couldNotSynchronizeWithGoogleDrive": "Could not synchronize with Google Drive.",
+    "@couldNotSynchronizeWithGoogleDrive": {
+        "description": "Text for synchronization error dialog."
+    },
     "thisMemoHasConflicts": "This memo has conflicts.",
     "@thisMemoHasConflicts": {
         "description": "Text to indicate this memo has confilicts."

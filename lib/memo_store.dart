@@ -46,7 +46,6 @@ class MemoStore extends ChangeNotifier {
 
   /// Archive memo stores.
   @doNotSerialize
-  @visibleForTesting
   var archiveMemoStores = <String, MemoStore>{};
 
   ArchiveMemoStoreRequiredCallback? _onArchiveMemoStoreRequired;

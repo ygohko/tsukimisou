@@ -83,6 +83,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unlock => 'Unlock';
 
   @override
+  String get synchronizationWasFailed => 'Synchronization was failed';
+
+  @override
+  String get couldNotSynchronizeWithGoogleDrive =>
+      'Could not synchronize with Google Drive.';
+
+  @override
   String get thisMemoHasConflicts => 'This memo has conflicts.';
 
   @override

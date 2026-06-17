@@ -21,6 +21,8 @@
     "memoStoreIsLockedByOtherDevice": "メモストアが他のデバイスにロックされています。後ほど再度お試しください。",
     "memoStoreIsStillLocked": "メモストアはまだロックされていますが、他のデバイスが同期中ではないのなら強制的にロック解除することもできます。ロック解除しますか?",
     "unlock": "ロック解除",
+    "synchronizationWasFailed": "同期に失敗しました",
+    "couldNotSynchronizeWithGoogleDrive": "メモストアのGoogle Driveとの同期ができませんでした。",
     "thisMemoHasConflicts": "このメモには衝突があります。",
     "local": "ローカル",
     "cloud": "クラウド",
