@@ -95,7 +95,7 @@
     "@unlock": {
         "description": "Text for unlock button"
     },
-    "synchronizationWasFailed": "Synchronization was faild",
+    "synchronizationWasFailed": "Synchronization was failed",
     "@synchronizationWasFailed": {
         "description": "Title for synchronization error dialog."
     },

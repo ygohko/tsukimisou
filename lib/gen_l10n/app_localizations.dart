@@ -234,7 +234,7 @@ abstract class AppLocalizations {
   /// Title for synchronization error dialog.
   ///
   /// In en, this message translates to:
-  /// **'Synchronization was faild'**
+  /// **'Synchronization was failed'**
   String get synchronizationWasFailed;
 
   /// Text for synchronization error dialog.
