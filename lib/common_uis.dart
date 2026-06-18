@@ -354,6 +354,7 @@ Future<bool> showConfirmationDialog(
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String title, String content,
   String acceptingText, { Exception? exception, StackTrace? stackTrace }) async {
+  final localizations = AppLocalizations.of(context)!;
   const platform = LocalPlatform();
   if (!platform.isIOS) {
     final actions = <Widget>[];
@@ -364,7 +365,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
             final text = 'exception: $exception\n\nstackTrace: $stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
-          child: Text('Copy exception'),
+          child: Text(localizations.copyException),
         ),
       );
     }
@@ -396,7 +397,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
             final text = 'exception: $exception\n\nstackTrace: $stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
-          child: Text('Copy exception'),
+          child: Text(localizations.copyException),
         ),
       );
     }
