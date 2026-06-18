@@ -22,6 +22,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
@@ -352,23 +353,40 @@ Future<bool> showConfirmationDialog(
 
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String title, String content,
-    String acceptingText) async {
+    String acceptingText, { Exception? exception, StackTrace? stackTrace }) async {
   const platform = LocalPlatform();
   if (!platform.isIOS) {
+    final actions = <Widget>[];
+    if (appFlavor == 'development') {
+      actions.add(
+        TextButton(
+          child: Text('Copy exception'),
+          onPressed: () {
+            final text = 'exception: $exception\n\nstackTrace: $stackTrace';
+            Clipboard.setData(ClipboardData(text: text));
+          },
+        ),
+      );
+    }
+    actions.add(
+      TextButton(
+        child: Text(acceptingText),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+    );
+
     await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
               title: Text(title),
               content: content != '' ? Text(content) : null,
-              actions: [
-                TextButton(
-                    child: Text(acceptingText),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-              ]);
-        });
+              actions: actions,
+            );
+          },
+        );
   } else {
     await showCupertinoDialog(
         context: context,
