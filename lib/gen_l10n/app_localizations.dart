@@ -405,6 +405,12 @@ abstract class AppLocalizations {
   /// **'This action cannot be undone.'**
   String get thisActionCannotBeUndone;
 
+  /// Text for Copy exception button
+  ///
+  /// In en, this message translates to:
+  /// **'Copy exception'**
+  String get copyException;
+
   /// Text for Cancel button
   ///
   /// In en, this message translates to:

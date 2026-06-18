@@ -181,6 +181,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get thisActionCannotBeUndone => 'この操作は元に戻せません。';
 
   @override
+  String get copyException => '例外をコピー';
+
+  @override
   String get cancel => 'キャンセル';
 
   @override

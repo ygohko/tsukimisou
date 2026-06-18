@@ -182,6 +182,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thisActionCannotBeUndone => 'This action cannot be undone.';
 
   @override
+  String get copyException => 'Copy exception';
+
+  @override
   String get cancel => 'Cancel';
 
   @override

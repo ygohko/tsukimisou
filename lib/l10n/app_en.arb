@@ -220,6 +220,10 @@
     "@thisActionCannotBeUndone": {
         "description": "Text for dialog when showing before destructive actions."
     },
+    "copyException": "Copy exception",
+    "@copyException": {
+        "description": "Text for Copy exception button"
+    },
     "cancel": "Cancel",
     "@cancel": {
         "description": "Text for Cancel button"

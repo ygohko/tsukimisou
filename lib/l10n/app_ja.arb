@@ -50,6 +50,7 @@
     "confirm": "確認",
     "deleteThisMemo": "このメモを削除しますか?",
     "thisActionCannotBeUndone": "この操作は元に戻せません。",
+    "copyException": "例外をコピー",
     "cancel": "キャンセル",
     "ok": "OK",
     "error": "エラー",
