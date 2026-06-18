@@ -353,58 +353,73 @@ Future<bool> showConfirmationDialog(
 
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String title, String content,
-    String acceptingText, { Exception? exception, StackTrace? stackTrace }) async {
+  String acceptingText, { Exception? exception, StackTrace? stackTrace }) async {
   const platform = LocalPlatform();
   if (!platform.isIOS) {
     final actions = <Widget>[];
     if (appFlavor == 'development') {
       actions.add(
         TextButton(
-          child: Text('Copy exception'),
           onPressed: () {
             final text = 'exception: $exception\n\nstackTrace: $stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
+          child: Text('Copy exception'),
         ),
       );
     }
     actions.add(
       TextButton(
-        child: Text(acceptingText),
         onPressed: () {
           Navigator.of(context).pop();
         },
+        child: Text(acceptingText),
       ),
     );
 
     await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text(title),
-              content: content != '' ? Text(content) : null,
-              actions: actions,
-            );
-          },
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: content != '' ? Text(content) : null,
+          actions: actions,
         );
+      },
+    );
   } else {
+    final actions = <Widget>[];
+    if (appFlavor == 'development') {
+      actions.add(
+        CupertinoDialogAction(
+          onPressed: () {
+            final text = 'exception: $exception\n\nstackTrace: $stackTrace';
+            Clipboard.setData(ClipboardData(text: text));
+          },
+          child: Text('Copy exception'),
+        ),
+      );
+    }
+    actions.add(
+      CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      ),
+    );
+
     await showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(acceptingText),
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: actions,
+        );
+      },
+    );
   }
 }
 
