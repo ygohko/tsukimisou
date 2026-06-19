@@ -22,6 +22,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
@@ -352,41 +353,74 @@ Future<bool> showConfirmationDialog(
 
 /// Shows dialogs to indicate errors.
 Future<void> showErrorDialog(BuildContext context, String title, String content,
-    String acceptingText) async {
+  String acceptingText, { Exception? exception, StackTrace? stackTrace }) async {
+  final localizations = AppLocalizations.of(context)!;
   const platform = LocalPlatform();
   if (!platform.isIOS) {
+    final actions = <Widget>[];
+    if (appFlavor == 'development') {
+      actions.add(
+        TextButton(
+          onPressed: () {
+            final text = 'exception: $exception\n\nstackTrace: $stackTrace';
+            Clipboard.setData(ClipboardData(text: text));
+          },
+          child: Text(localizations.copyException),
+        ),
+      );
+    }
+    actions.add(
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      ),
+    );
+
     await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text(title),
-              content: content != '' ? Text(content) : null,
-              actions: [
-                TextButton(
-                    child: Text(acceptingText),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-              ]);
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: content != '' ? Text(content) : null,
+          actions: actions,
+        );
+      },
+    );
   } else {
+    final actions = <Widget>[];
+    if (appFlavor == 'development') {
+      actions.add(
+        CupertinoDialogAction(
+          onPressed: () {
+            final text = 'exception: $exception\n\nstackTrace: $stackTrace';
+            Clipboard.setData(ClipboardData(text: text));
+          },
+          child: Text(localizations.copyException),
+        ),
+      );
+    }
+    actions.add(
+      CupertinoDialogAction(
+        isDefaultAction: true,
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text(acceptingText),
+      ),
+    );
+
     await showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(acceptingText),
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: actions,
+        );
+      },
+    );
   }
 }
 
