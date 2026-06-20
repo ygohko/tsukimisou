@@ -310,6 +310,9 @@ class _HomePageState extends State<HomePage> {
       }
       return;
     }
+
+    // TODO: Save updated archive MemoStore to local.
+
     messenger.hideCurrentMaterialBanner();
     appState.mergingWithGoogleDrive = false;
 
