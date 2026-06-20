@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _mergeWithGoogleDrive() async {
-    // TODO: Divide this.
+    // TODO: Divide this method.
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
@@ -190,7 +190,7 @@ class _HomePageState extends State<HomePage> {
       await loader.execute();
     } on FileNotFoundException {
       // Loading failure can be ignored because the file may not exists. Do nothing.
-    } on FileLockedException {
+    } on FileLockedException catch (exception, stackTrace) {
       // Loading failure caused by locked memo store.
       _fileLockedCount++;
       if (_fileLockedCount < 3) {
@@ -203,7 +203,10 @@ class _HomePageState extends State<HomePage> {
             context,
             localizations.memoStoreIsLocked,
             localizations.memoStoreIsLockedByOtherDevice,
-            localizations.ok);
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
         return;
       } else {
         // Confirm to force unlock
@@ -224,7 +227,7 @@ class _HomePageState extends State<HomePage> {
         }
         return;
       }
-    } on FileNotCompatibleException {
+    } on FileNotCompatibleException catch (exception, stackTrace) {
       // Not compatible error.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -235,17 +238,26 @@ class _HomePageState extends State<HomePage> {
           context,
           localizations.memoStoreIsNotCompatible,
           localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
-          localizations.ok);
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       return;
-    } on Exception {
+    } on Exception catch (exception, stackTrace) {
       // Other failure.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
       if (!mounted) {
         return;
       }
-      await common_uis.showErrorDialog(context, localizations.loadingWasFailed,
-          localizations.couldNotLoadMemoStoreFromGoogleDrive, localizations.ok);
+      await common_uis.showErrorDialog(
+        context,
+        localizations.loadingWasFailed,
+        localizations.couldNotLoadMemoStoreFromGoogleDrive,
+        localizations.ok,
+        exception: exception,
+        stackTrace: stackTrace,
+      );
       return;
     }
     fromMemoStore.onArchiveMemoStoreRequired = (name) async {
@@ -263,9 +275,16 @@ class _HomePageState extends State<HomePage> {
     merger.cloudMarkerText = localizations.cloud;
     try {
       await merger.execute();
-    } on Exception {
+    } on Exception catch (exception, stackTrace) {
       if (mounted) {
-        await common_uis.showErrorDialog(context, localizations.synchronizationWasFailed, localizations.couldNotSynchronizeWithGoogleDrive, localizations.ok);
+        await common_uis.showErrorDialog(
+          context,
+          localizations.synchronizationWasFailed,
+          localizations.couldNotSynchronizeWithGoogleDrive,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
         // TODO: Restore UIs correctly.
         return;
       }
@@ -275,7 +294,7 @@ class _HomePageState extends State<HomePage> {
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
-    } on FileSystemException {
+    } on FileSystemException catch (exception, stackTrace) {
       // Saving failed.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
@@ -284,7 +303,10 @@ class _HomePageState extends State<HomePage> {
             context,
             localizations.savingWasFailed,
             localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok);
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
       }
       return;
     }
@@ -297,11 +319,17 @@ class _HomePageState extends State<HomePage> {
     final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
-    } on Exception {
+    } on Exception catch (exception, stackTrace) {
       // Saving failed.
       if (mounted) {
-        await common_uis.showErrorDialog(context, localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
+        await common_uis.showErrorDialog(
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToGoogleDrive,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       }
     }
 
@@ -310,15 +338,21 @@ class _HomePageState extends State<HomePage> {
       final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'Archive-$name.json');
       try {
         await saver.execute();
-      } on Exception {
+      } on Exception catch (exception, stackTrace) {
         // Saving failed.
         if (mounted) {
-          await common_uis.showErrorDialog(context, localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToGoogleDrive, localizations.ok);
+          await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToGoogleDrive,
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
         }
-      }      
+      }
     }
-    
+
     setState(() {
       _savingToGoogleDrive = false;
     });
