@@ -311,8 +311,26 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    // TODO: Save updated archive MemoStore to local.
-
+    final updatedArchiveNames = merger.updatedArchiveNames;
+    for (final name in updatedArchiveNames) {
+      final saver = await MemoStoreLocalSaver.fromFileName(toMemoStore, 'Archive-$name.json');
+      try {
+        await saver.execute();
+      } on Exception catch (exception, stackTrace) {
+        // Saving failed.
+        if (mounted) {
+          await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
+        }
+      }
+    }
+    
     messenger.hideCurrentMaterialBanner();
     appState.mergingWithGoogleDrive = false;
 
@@ -336,7 +354,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    final updatedArchiveNames = merger.updatedArchiveNames;
     for (final name in updatedArchiveNames) {
       final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'Archive-$name.json');
       try {
