@@ -37,10 +37,11 @@ class MemoStoreMerger {
   /// Memo store that memos are merged from.
   final MemoStore fromMemoStore;
 
-  String _conflictWarningText = "This memo has conflicts.";
-  String _localMarkerText = "Local";
-  String _cloudMarkerText = "Cloud";
-  bool _missingArchivesIgnored = false;
+  var _conflictWarningText = "This memo has conflicts.";
+  var _localMarkerText = "Local";
+  var _cloudMarkerText = "Cloud";
+  final _updatedArchiveNames = <String>[];
+  var _missingArchivesIgnored = false;
 
   /// Creates a memo store manager.
   MemoStoreMerger(this.toMemoStore, this.fromMemoStore, { bool? missingArchivesIgnored }) {
@@ -196,6 +197,7 @@ class MemoStoreMerger {
       await merger.execute();
 
       toMemoStore.archiveHashes[name] = toArchive.hash;
+      _updatedArchiveNames.add(name);
     }
 
     toMemoStore.markAsChanged();
@@ -216,6 +218,10 @@ class MemoStoreMerger {
     _cloudMarkerText = text;
   }
 
+  /// Updated archive names.
+  List<String> get updatedArchiveNames => _updatedArchiveNames;
+
+  // TODO: Add static.
   _Operation _operation(Memo toMemo, Memo fromMemo) {
     if (toMemo.hash == fromMemo.hash) {
       return _Operation.keep;
