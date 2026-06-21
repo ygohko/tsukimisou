@@ -358,7 +358,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   const platform = LocalPlatform();
   if (!platform.isIOS) {
     final actions = <Widget>[];
-    if (appFlavor == 'development') {
+    if (isDevelopmentFlavor()) {
       actions.add(
         TextButton(
           onPressed: () {
@@ -518,6 +518,25 @@ bool hasLargeScreen() {
   }
 
   return false;
+}
+
+/// Returns whether this application is development flavor.
+bool isDevelopmentFlavor() {
+  const platform = LocalPlatform();
+  if (platform.isMobile) {
+    if (isDevelopmentFlavor()) {
+      return true;
+    }
+
+    return false;
+  }
+  
+  final flavor = String.fromEnvironment("FLAVOR");
+  if (flavor == "development") {
+    return true;
+  }
+
+  return true;
 }
 
 /// Returns contents of memo cards.
