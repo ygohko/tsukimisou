@@ -119,11 +119,23 @@ class MemoStore extends ChangeNotifier {
     memo.archiveName = null;
     addMemo(memo);
     archiveHashes[archiveName] = archiveMemoStore.hash;
+    notifyListeners();
   }
 
   /// Clears memos from this memo store.
   void clearMemos() {
     memos.clear();
+    notifyListeners();
+  }
+
+  /// Removes a archive from this memo store.
+  void removeArchive(String name) {
+    if (archiveHashes.containsKey(name)) {
+      archiveHashes.remove(name);
+    }
+    if (archiveMemoStores.containsKey(name)) {
+      archiveMemoStores.remove(name);
+    }
     notifyListeners();
   }
 

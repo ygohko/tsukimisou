@@ -40,6 +40,11 @@ typedef DialogTransitionBuilder = AnimatedWidget Function(
 
 late Size _size;
 
+enum ArchiveNotFoundDialogResult {
+  ok,
+  removeThisArchive,
+}
+
 class MemoDialogsSize {
   /// Width of memo dialogs.
   static const width = 520.0;
@@ -424,7 +429,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
-Future<void> showArchiveNotFoundDialog(BuildContext context, { Exception? exception, StackTrace? stackTrace }) async {
+Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(BuildContext context, { Exception? exception, StackTrace? stackTrace }) async {
   final actions = <Widget>[];
   if (isDevelopmentFlavor()) {
     actions.add(
@@ -441,20 +446,20 @@ Future<void> showArchiveNotFoundDialog(BuildContext context, { Exception? except
     [
       TextButton(
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(ArchiveNotFoundDialogResult.removeThisArchive);
         },
         child: Text('Remove this archive'),
       ),
       TextButton(
         onPressed: () {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(ArchiveNotFoundDialogResult.ok);
         },
         child: Text('OK'),
       ),
     ]
   );
 
-  await showDialog(
+  final result = await showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
@@ -464,6 +469,11 @@ Future<void> showArchiveNotFoundDialog(BuildContext context, { Exception? except
       );
     }
   );
+  if (result == null) {
+    return ArchiveNotFoundDialogResult.ok;
+  }
+
+  return result;
 }
 
 /// Shows dialogs with transition.
