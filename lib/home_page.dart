@@ -793,7 +793,6 @@ class _HomePageState extends State<HomePage> {
         if (result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
           memoStore.removeArchive(name);
         }
-
         return;
       }
       setState(() {
