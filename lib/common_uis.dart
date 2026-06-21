@@ -582,6 +582,7 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   );
 }
 
+/// Returns rich text contents.
 Widget richTextContents(BuildContext context, String text,
     {MemoLinkCallback? onMemoLinkRequested}) {
   final parser =
@@ -591,6 +592,7 @@ Widget richTextContents(BuildContext context, String text,
   return parser.contents;
 }
 
+/// Returns a indicator used when there are no memmos.
 Widget noMemosIndicator(BuildContext context, IconData icon, String text) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
