@@ -780,14 +780,63 @@ class _HomePageState extends State<HomePage> {
       final memoStore = Provider.of<MemoStore>(context, listen: false);
       try {
         await memoStore.archiveMemoStore(name);
-      } on Exception {
+      } on Exception catch (exception, stackTrace) {
         if (mounted) {
+
+          // TODO: Show archive not found dialog.
+
+          /*
+          final actions = <Widget>[];
+          if (common_uis.isDevelopmentFlavor()) {
+            actions.add(
+              TextButton(
+                onPressed: () {
+                  final text = '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+                  Clipboard.setData(ClipboardData(text: text));
+                },
+                child: TextButton('Copy exception'),
+              ),
+            );
+          }
+          actions.addAll(
+            [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: TextButton('Remove this archive'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: TextButton('OK'),
+              ),
+            ]
+          );
+
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                context: context,
+                title: Text('Archive not found'),
+                content: Text('Could not load archive memo store from local storage.'),
+                actions: actions,
+              );
+            }
+          );
+          */
+          
+
+          /*
           final localizations = AppLocalizations.of(context)!;
           await common_uis.showErrorDialog(
               context,
               localizations.loadingWasFailed,
               localizations.couldNotLoadMemoStoreFromGoogleDrive,
               localizations.ok);
+          */
         }
         return;
       }

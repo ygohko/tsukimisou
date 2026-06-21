@@ -424,6 +424,48 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
+Future<void> showArchiveNotFoundDialog(BuildContext context, { Exception? exception, StackTrace? stackTrace }) async {
+  final actions = <Widget>[];
+  if (isDevelopmentFlavor()) {
+    actions.add(
+      TextButton(
+        onPressed: () {
+          final text = '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+          Clipboard.setData(ClipboardData(text: text));
+        },
+        child: Text('Copy exception'),
+      ),
+    );
+  }
+  actions.addAll(
+    [
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text('Remove this archive'),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text('OK'),
+      ),
+    ]
+  );
+
+  await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Archive not found'),
+        content: Text('Could not load archive memo store from local storage.'),
+        actions: actions,
+      );
+    }
+  );
+}
+
 /// Shows dialogs with transition.
 Future<T?> showTransitioningDialog<T>({
   required BuildContext context,
