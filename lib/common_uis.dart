@@ -358,11 +358,11 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   const platform = LocalPlatform();
   if (!platform.isIOS) {
     final actions = <Widget>[];
-    if (appFlavor == 'development') {
+    if (isDevelopmentFlavor()) {
       actions.add(
         TextButton(
           onPressed: () {
-            final text = 'exception: $exception\n\nstackTrace: $stackTrace';
+            final text = '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
           child: Text(localizations.copyException),
@@ -394,7 +394,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
       actions.add(
         CupertinoDialogAction(
           onPressed: () {
-            final text = 'exception: $exception\n\nstackTrace: $stackTrace';
+            final text = '## Exception\n\n$exception\n\n## Stack trace\n\n$stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
           child: Text(localizations.copyException),
@@ -520,6 +520,25 @@ bool hasLargeScreen() {
   return false;
 }
 
+/// Returns whether this application is development flavor.
+bool isDevelopmentFlavor() {
+  const platform = LocalPlatform();
+  if (platform.isMobile) {
+    if (appFlavor == "development") {
+      return true;
+    }
+
+    return false;
+  }
+  
+  const flavor = String.fromEnvironment("FLAVOR");
+  if (flavor == "development") {
+    return true;
+  }
+
+  return false;
+}
+
 /// Returns contents of memo cards.
 Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   final localizations = AppLocalizations.of(context)!;
@@ -563,6 +582,7 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   );
 }
 
+/// Returns rich text contents.
 Widget richTextContents(BuildContext context, String text,
     {MemoLinkCallback? onMemoLinkRequested}) {
   final parser =
@@ -572,6 +592,7 @@ Widget richTextContents(BuildContext context, String text,
   return parser.contents;
 }
 
+/// Returns a indicator used when there are no memmos.
 Widget noMemosIndicator(BuildContext context, IconData icon, String text) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
