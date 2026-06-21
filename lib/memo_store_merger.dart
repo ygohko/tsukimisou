@@ -190,7 +190,7 @@ class MemoStoreMerger {
         fromMemoStore.archiveMemoStores[name] = fromArchive;
       }
 
-      final merger = MemoStoreMerger(toArchive, fromArchive);
+      final merger = MemoStoreMerger(toArchive, fromArchive, missingArchivesIgnored: true);
       merger.conflictWarningText = _conflictWarningText;
       merger.localMarkerText = _localMarkerText;
       merger.cloudMarkerText = _cloudMarkerText;
