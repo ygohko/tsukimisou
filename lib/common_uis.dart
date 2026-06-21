@@ -40,6 +40,11 @@ typedef DialogTransitionBuilder = AnimatedWidget Function(
 
 late Size _size;
 
+enum ArchiveNotFoundDialogResult {
+  ok,
+  removeThisArchive,
+}
+
 class MemoDialogsSize {
   /// Width of memo dialogs.
   static const width = 520.0;
@@ -422,6 +427,54 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
       },
     );
   }
+}
+
+Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(BuildContext context, { Exception? exception, StackTrace? stackTrace }) async {
+  final localizations = AppLocalizations.of(context)!;
+  final actions = <Widget>[];
+  if (isDevelopmentFlavor()) {
+    actions.add(
+      TextButton(
+        onPressed: () {
+          final text = '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+          Clipboard.setData(ClipboardData(text: text));
+        },
+        child: Text('Copy exception'),
+      ),
+    );
+  }
+  actions.addAll(
+    [
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(ArchiveNotFoundDialogResult.removeThisArchive);
+        },
+        child: Text('Remove this archive'),
+      ),
+      TextButton(
+        onPressed: () {
+          Navigator.of(context).pop(ArchiveNotFoundDialogResult.ok);
+        },
+        child: Text('OK'),
+      ),
+    ]
+  );
+
+  final result = await showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text(localizations.archiveNotFound),
+        content: Text(localizations.cloudNotLoadArchiveMemoStoreFromLocalStorage),
+        actions: actions,
+      );
+    }
+  );
+  if (result == null) {
+    return ArchiveNotFoundDialogResult.ok;
+  }
+
+  return result;
 }
 
 /// Shows dialogs with transition.

@@ -780,14 +780,18 @@ class _HomePageState extends State<HomePage> {
       final memoStore = Provider.of<MemoStore>(context, listen: false);
       try {
         await memoStore.archiveMemoStore(name);
-      } on Exception {
-        if (mounted) {
-          final localizations = AppLocalizations.of(context)!;
-          await common_uis.showErrorDialog(
-              context,
-              localizations.loadingWasFailed,
-              localizations.couldNotLoadMemoStoreFromGoogleDrive,
-              localizations.ok);
+      } on Exception catch (exception, stackTrace) {
+        if (!mounted) {
+          return;
+        }
+
+        final result = await common_uis.showArchiveNotFoundDialog(
+          context,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
+        if (result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
+          memoStore.removeArchive(name);
         }
         return;
       }

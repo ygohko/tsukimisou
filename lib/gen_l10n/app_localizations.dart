@@ -321,6 +321,18 @@ abstract class AppLocalizations {
   /// **'Linked memo is not found.'**
   String get linkedMemoIsNotFound;
 
+  /// Title for archive not found error dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive not found'**
+  String get archiveNotFound;
+
+  /// Text for archive not found error dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load archive memo store from local storage.'**
+  String get cloudNotLoadArchiveMemoStoreFromLocalStorage;
+
   /// Text for tags list tile
   ///
   /// In en, this message translates to:
