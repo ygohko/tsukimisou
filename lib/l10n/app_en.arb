@@ -155,6 +155,14 @@
     "@linkedMemoIsNotFound": {
         "description": "Text for linked memo not found error dialog."
     },
+    "archiveNotFound": "Archive not found",
+    "@archiveNotFound": {
+        "description": "Title for archive not found error dialog."
+    },
+    "cloudNotLoadArchiveMemoStoreFromLocalStorage": "Could not load archive memo store from local storage.",
+    "@cloudNotLoadArchiveMemoStoreFromLocalStorage": {
+        "description": "Text for archive not found error dialog."
+    },
     "boundTags": "Tags: {tags}",
     "@boundTags": {
         "description": "Text for tags list tile",

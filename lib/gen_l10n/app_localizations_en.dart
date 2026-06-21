@@ -134,6 +134,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get linkedMemoIsNotFound => 'Linked memo is not found.';
 
   @override
+  String get archiveNotFound => 'Archive not found';
+
+  @override
+  String get cloudNotLoadArchiveMemoStoreFromLocalStorage =>
+      'Could not load archive memo store from local storage.';
+
+  @override
   String boundTags(Object tags) {
     return 'Tags: $tags';
   }

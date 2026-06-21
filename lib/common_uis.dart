@@ -430,6 +430,7 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
 }
 
 Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(BuildContext context, { Exception? exception, StackTrace? stackTrace }) async {
+  final localizations = AppLocalizations.of(context)!;
   final actions = <Widget>[];
   if (isDevelopmentFlavor()) {
     actions.add(
@@ -463,8 +464,8 @@ Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(BuildContext conte
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Archive not found'),
-        content: Text('Could not load archive memo store from local storage.'),
+        title: Text(localizations.archiveNotFound),
+        content: Text(localizations.cloudNotLoadArchiveMemoStoreFromLocalStorage),
         actions: actions,
       );
     }

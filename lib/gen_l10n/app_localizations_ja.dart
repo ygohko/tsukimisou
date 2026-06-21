@@ -133,6 +133,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get linkedMemoIsNotFound => 'リンク先のメモが見つかりません。';
 
   @override
+  String get archiveNotFound => 'アーカイブがみつかりません';
+
+  @override
+  String get cloudNotLoadArchiveMemoStoreFromLocalStorage =>
+      'アーカイブのメモストアのローカルストレージからの読み込みができませんでした。';
+
+  @override
   String boundTags(Object tags) {
     return 'タグ: $tags';
   }
