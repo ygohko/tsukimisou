@@ -524,14 +524,14 @@ bool hasLargeScreen() {
 bool isDevelopmentFlavor() {
   const platform = LocalPlatform();
   if (platform.isMobile) {
-    if (isDevelopmentFlavor()) {
+    if (appFlavor == "development") {
       return true;
     }
 
     return false;
   }
   
-  final flavor = String.fromEnvironment("FLAVOR");
+  const flavor = String.fromEnvironment("FLAVOR");
   if (flavor == "development") {
     return true;
   }
