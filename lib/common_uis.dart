@@ -536,7 +536,7 @@ bool isDevelopmentFlavor() {
     return true;
   }
 
-  return true;
+  return false;
 }
 
 /// Returns contents of memo cards.
