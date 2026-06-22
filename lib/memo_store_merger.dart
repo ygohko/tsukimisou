@@ -181,6 +181,8 @@ class MemoStoreMerger {
           if (_missingArchivesIgnored) {
             fromArchive = MemoStore();
             fromMemoStore.archiveMemoStores[name] = fromArchive;
+            // Missing archive must be updated.
+            _updatedArchiveNames.add(name);
           } else {
             rethrow;
           }
