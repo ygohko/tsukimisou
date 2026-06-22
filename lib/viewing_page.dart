@@ -365,6 +365,7 @@ class _ViewingPageState extends State<ViewingPage>
       }
       if (name != null && result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
         memoStore.removeArchive(name);
+        // TODO: Continue with empty archive MemoStore.
       }
 
       return;
