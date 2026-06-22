@@ -313,7 +313,6 @@ class _HomePageState extends State<HomePage> {
 
     final updatedArchiveNames = merger.updatedArchiveNames;
     for (final name in updatedArchiveNames) {
-      // TODO: Save archive MemoStores.
       final memoStore = await toMemoStore.archiveMemoStore(name);
       final saver = await MemoStoreLocalSaver.fromFileName(memoStore, 'Archive-$name.json');
       try {
