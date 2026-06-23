@@ -356,7 +356,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     for (final name in updatedArchiveNames) {
-      final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'Archive-$name.json');
+      final memoStore = await toMemoStore.archiveMemoStore(name);
+      final saver = MemoStoreGoogleDriveSaver(memoStore, 'Archive-$name.json');
       try {
         await saver.execute();
       } on Exception catch (exception, stackTrace) {

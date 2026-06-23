@@ -181,6 +181,8 @@ class MemoStoreMerger {
           if (_missingArchivesIgnored) {
             fromArchive = MemoStore();
             fromMemoStore.archiveMemoStores[name] = fromArchive;
+            // Missing archive must be updated.
+            _updatedArchiveNames.add(name);
           } else {
             rethrow;
           }
@@ -197,7 +199,9 @@ class MemoStoreMerger {
       await merger.execute();
 
       toMemoStore.archiveHashes[name] = toArchive.hash;
-      _updatedArchiveNames.add(name);
+      if (!_updatedArchiveNames.contains(name)) {
+        _updatedArchiveNames.add(name);
+      }
     }
 
     toMemoStore.markAsChanged();
