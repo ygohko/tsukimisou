@@ -365,10 +365,10 @@ class _ViewingPageState extends State<ViewingPage>
       }
       if (name != null && result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
         memoStore.removeArchive(name);
-        // TODO: Continue with empty archive MemoStore.
+        archiveMemoStore = await memoStore.archiveMemo(_memo);
+      } else {
+        return;
       }
-
-      return;
     }
     final archiveName = _memo.archiveName;
     if (archiveName == null) {
