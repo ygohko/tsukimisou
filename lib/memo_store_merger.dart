@@ -199,7 +199,9 @@ class MemoStoreMerger {
       await merger.execute();
 
       toMemoStore.archiveHashes[name] = toArchive.hash;
-      _updatedArchiveNames.add(name);
+      if (!_updatedArchiveNames.contains(name)) {
+        _updatedArchiveNames.add(name);
+      }
     }
 
     toMemoStore.markAsChanged();
