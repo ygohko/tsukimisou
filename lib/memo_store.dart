@@ -31,13 +31,17 @@ import 'memo.dart';
 typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(
     String name);
 
-// TODO: Add doc comments.
 class ArchiveNotFoundException implements Exception {
+  /// Message of this exception.
   final String message;
+  /// Archive name that is not found.
   final String? name;
+  /// Cause exception.
   final Exception? causeException;
+  /// Cause stack trace.
   final StackTrace? causeStackTrace;
 
+  /// Creates a archive not found exception.
   ArchiveNotFoundException(this.message, { this.name , this.causeException, this.causeStackTrace });
 
   @override
