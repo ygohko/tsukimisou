@@ -35,12 +35,14 @@ typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(
 class ArchiveNotFoundException implements Exception {
   final String message;
   final String? name;
+  final Exception? causeException;
+  final StackTrace? causeStackTrace;
 
-  ArchiveNotFoundException(this.message, { this.name });
+  ArchiveNotFoundException(this.message, { this.name , this.causeException, this.causeStackTrace });
 
   @override
   String toString() {
-    return 'AuthenticationException: $message, name: $name';
+    return 'AuthenticationException: $message, name: $name, causeException: $causeException, causeStackTrace: $causeStackTrace';
   }
 }
 
@@ -96,8 +98,8 @@ class MemoStore extends ChangeNotifier {
         }
         try {
           archiveMemoStore = await callback(archiveName);
-        } on Exception {
-          throw ArchiveNotFoundException('Could not found archive memo store.', name: archiveName);
+        } on Exception catch (exception, stackTrace) {
+          throw ArchiveNotFoundException('Could not found archive memo store.', name: archiveName, causeException: exception, causeStackTrace: stackTrace);
         }
         archiveMemoStores[archiveName] = archiveMemoStore;
       }
