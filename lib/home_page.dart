@@ -312,15 +312,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     final updatedArchiveNames = merger.updatedArchiveNames;
-
-    // TODO: Upload archive MemoStores if it does not exist in Google Drive.
-    print('updatedArchiveNames: $updatedArchiveNames');
-
     for (final name in updatedArchiveNames) {
       final memoStore = await toMemoStore.archiveMemoStore(name);
-
-      print('memoStore.memos.length: ${memoStore.memos.length}');
-
       final saver = await MemoStoreLocalSaver.fromFileName(memoStore, 'Archive-$name.json');
       try {
         await saver.execute();
@@ -364,9 +357,6 @@ class _HomePageState extends State<HomePage> {
 
     for (final name in updatedArchiveNames) {
       final memoStore = await toMemoStore.archiveMemoStore(name);
-
-      print('memoStore.memos.length: ${memoStore.memos.length}');
-
       final saver = MemoStoreGoogleDriveSaver(memoStore, 'Archive-$name.json');
       try {
         await saver.execute();
