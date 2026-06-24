@@ -350,18 +350,25 @@ class _ViewingPageState extends State<ViewingPage>
     try {
       archiveMemoStore = await memoStore.archiveMemo(_memo);
     } on Exception catch (exception, stackTrace) {
-      if (mounted) {
-        await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+      if (!mounted) {
+        return;
       }
 
-      return;
+      final result = await common_uis.showArchiveNotFoundDialog(
+        context,
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+      String? name;
+      if (exception is ArchiveNotFoundException) {
+        name = exception.name;
+      }
+      if (name != null && result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
+        memoStore.removeArchive(name);
+        archiveMemoStore = await memoStore.archiveMemo(_memo);
+      } else {
+        return;
+      }
     }
     final archiveName = _memo.archiveName;
     if (archiveName == null) {

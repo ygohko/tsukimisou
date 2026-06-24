@@ -31,6 +31,25 @@ import 'memo.dart';
 typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(
     String name);
 
+class ArchiveNotFoundException implements Exception {
+  /// Message of this exception.
+  final String message;
+  /// Archive name that is not found.
+  final String? name;
+  /// Cause exception.
+  final Exception? causeException;
+  /// Cause stack trace.
+  final StackTrace? causeStackTrace;
+
+  /// Creates a archive not found exception.
+  ArchiveNotFoundException(this.message, { this.name , this.causeException, this.causeStackTrace });
+
+  @override
+  String toString() {
+    return 'ArchiveNotFoundException: $message, name: $name, causeException: $causeException, causeStackTrace: $causeStackTrace';
+  }
+}
+
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
   var memos = <Memo>[];
@@ -81,7 +100,11 @@ class MemoStore extends ChangeNotifier {
           // TODO: Define custom Exceptions.
           throw Exception('onArchiveMemoStoreRequired is not set.');
         }
-        archiveMemoStore = await callback(archiveName);
+        try {
+          archiveMemoStore = await callback(archiveName);
+        } on Exception catch (exception, stackTrace) {
+          throw ArchiveNotFoundException('Could not find archive memo store.', name: archiveName, causeException: exception, causeStackTrace: stackTrace);
+        }
         archiveMemoStores[archiveName] = archiveMemoStore;
       }
     } else {
