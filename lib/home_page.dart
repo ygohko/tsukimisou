@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void didChangeDependencies() async {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context);
     await settings.init();
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _addMemo({String? initialText}) async {
+  Future<void> _addMemo({String? initialText}) async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
@@ -404,7 +404,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _showSettings() async {
+  Future<void> _showSettings() async {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
       await Navigator.of(context).push(

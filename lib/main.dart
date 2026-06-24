@@ -28,7 +28,7 @@ import 'app_state.dart';
 import 'memo_store.dart';
 import 'settings.dart';
 
-void main() async {
+Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
