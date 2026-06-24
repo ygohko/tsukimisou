@@ -363,7 +363,8 @@ class _ViewingPageState extends State<ViewingPage>
       if (exception is ArchiveNotFoundException) {
         name = exception.name;
       }
-      if (name != null && result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
+      if (name != null &&
+          result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
         memoStore.removeArchive(name);
         archiveMemoStore = await memoStore.archiveMemo(_memo);
       } else {
@@ -386,13 +387,13 @@ class _ViewingPageState extends State<ViewingPage>
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       }
     }
 
