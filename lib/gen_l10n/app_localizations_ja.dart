@@ -191,6 +191,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get copyException => '例外をコピー';
 
   @override
+  String get removeThisArchive => 'このアーカイブを削除';
+
+  @override
   String get cancel => 'キャンセル';
 
   @override

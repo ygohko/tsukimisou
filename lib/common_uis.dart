@@ -446,7 +446,7 @@ Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(
               '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
           Clipboard.setData(ClipboardData(text: text));
         },
-        child: Text('Copy exception'),
+        child: Text(localizations.copyException),
       ),
     );
   }
@@ -456,13 +456,13 @@ Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(
         Navigator.of(context)
             .pop(ArchiveNotFoundDialogResult.removeThisArchive);
       },
-      child: Text('Remove this archive'),
+      child: Text(localizations.removeThisArchive),
     ),
     TextButton(
       onPressed: () {
         Navigator.of(context).pop(ArchiveNotFoundDialogResult.ok);
       },
-      child: Text('OK'),
+      child: Text(localizations.ok),
     ),
   ]);
 

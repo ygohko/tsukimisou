@@ -232,6 +232,10 @@
     "@copyException": {
         "description": "Text for Copy exception button"
     },
+    "removeThisArchive": "Remove this archive",
+    "@removeThisArchive": {
+        "description": "Text for remove this archive button"
+    },
     "cancel": "Cancel",
     "@cancel": {
         "description": "Text for Cancel button"
