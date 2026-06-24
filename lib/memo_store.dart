@@ -46,7 +46,7 @@ class ArchiveNotFoundException implements Exception {
 
   @override
   String toString() {
-    return 'AuthenticationException: $message, name: $name, causeException: $causeException, causeStackTrace: $causeStackTrace';
+    return 'ArchiveNotFoundException: $message, name: $name, causeException: $causeException, causeStackTrace: $causeStackTrace';
   }
 }
 
@@ -103,7 +103,7 @@ class MemoStore extends ChangeNotifier {
         try {
           archiveMemoStore = await callback(archiveName);
         } on Exception catch (exception, stackTrace) {
-          throw ArchiveNotFoundException('Could not found archive memo store.', name: archiveName, causeException: exception, causeStackTrace: stackTrace);
+          throw ArchiveNotFoundException('Could not find archive memo store.', name: archiveName, causeException: exception, causeStackTrace: stackTrace);
         }
         archiveMemoStores[archiveName] = archiveMemoStore;
       }
