@@ -514,19 +514,7 @@ class _ViewingPageState extends State<ViewingPage>
     for (final name in viewingModeNames) {
       tiles.add(
         ListTile(
-          leading: Radio(
-              value: name,
-              groupValue: _memo.viewingMode,
-              onChanged: (value) async {
-                if (value != null) {
-                  _memo.beginModification();
-                  _memo.viewingMode = value;
-                  await _save();
-                }
-                if (mounted) {
-                  Navigator.of(context).pop();
-                }
-              }),
+          leading: Radio(value: name),
           title: Text(name),
           onTap: () async {
             _memo.beginModification();
@@ -546,9 +534,22 @@ class _ViewingPageState extends State<ViewingPage>
         return AlertDialog(
           content: SizedBox(
             width: 200.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: tiles,
+            child: RadioGroup(
+              groupValue: _memo.viewingMode,
+              onChanged: (value) async {
+                if (value != null) {
+                  _memo.beginModification();
+                  _memo.viewingMode = value;
+                  await _save();
+                }
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: tiles,
+              ),
             ),
           ),
         );
