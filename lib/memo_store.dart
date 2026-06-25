@@ -34,15 +34,19 @@ typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(
 class ArchiveNotFoundException implements Exception {
   /// Message of this exception.
   final String message;
+
   /// Archive name that is not found.
   final String? name;
+
   /// Cause exception.
   final Exception? causeException;
+
   /// Cause stack trace.
   final StackTrace? causeStackTrace;
 
   /// Creates a archive not found exception.
-  ArchiveNotFoundException(this.message, { this.name , this.causeException, this.causeStackTrace });
+  ArchiveNotFoundException(this.message,
+      {this.name, this.causeException, this.causeStackTrace});
 
   @override
   String toString() {
@@ -103,7 +107,10 @@ class MemoStore extends ChangeNotifier {
         try {
           archiveMemoStore = await callback(archiveName);
         } on Exception catch (exception, stackTrace) {
-          throw ArchiveNotFoundException('Could not find archive memo store.', name: archiveName, causeException: exception, causeStackTrace: stackTrace);
+          throw ArchiveNotFoundException('Could not find archive memo store.',
+              name: archiveName,
+              causeException: exception,
+              causeStackTrace: stackTrace);
         }
         archiveMemoStores[archiveName] = archiveMemoStore;
       }

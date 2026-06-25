@@ -46,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
   var _synchronizationHidden = false;
 
   @override
-  void didChangeDependencies() async {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context, listen: false);
     final hidden = settings.getSynchronizationHidden();
@@ -101,7 +101,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _setSynchronizationHidden(bool hidden) async {
+  Future<void> _setSynchronizationHidden(bool hidden) async {
     setState(() {
       _synchronizationHidden = hidden;
     });
@@ -109,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
     await settings.setSynchronizationHidden(_synchronizationHidden);
   }
 
-  void _showAbout() async {
+  Future<void> _showAbout() async {
     final appState = Provider.of<AppState>(context, listen: false);
     if (!appState.licensesAdded) {
       _addLicenses();
@@ -131,12 +131,12 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  void _showPrivacyPolicy() async {
+  Future<void> _showPrivacyPolicy() async {
     await launchUrl(
         Uri.parse('https://sites.gonypage.jp/home/tsukimisou/privacy-policy'));
   }
 
-  void _addLicenses() async {
+  Future<void> _addLicenses() async {
     LicenseRegistry.addLicense(() async* {
       var text = await rootBundle.loadString('assets/licenses/noto_fonts.txt');
       yield LicenseEntryWithLineBreaks(

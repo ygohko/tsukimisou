@@ -126,7 +126,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     );
   }
 
-  void _addTag() async {
+  Future<void> _addTag() async {
     final localizations = AppLocalizations.of(context)!;
     final controller = TextEditingController();
     var accepted = false;
@@ -196,7 +196,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
     controller.dispose();
   }
 
-  void _apply(bool didPop, Object? result) async {
+  Future<void> _apply(bool didPop, Object? result) async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     var applyingNeeded = false;

@@ -423,6 +423,12 @@ abstract class AppLocalizations {
   /// **'Copy exception'**
   String get copyException;
 
+  /// Text for remove this archive button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this archive'**
+  String get removeThisArchive;
+
   /// Text for Cancel button
   ///
   /// In en, this message translates to:

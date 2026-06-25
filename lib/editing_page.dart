@@ -125,7 +125,7 @@ class _EditingPageState extends State<EditingPage> {
     );
   }
 
-  void _save() async {
+  Future<void> _save() async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = widget.memo;
@@ -162,7 +162,7 @@ class _EditingPageState extends State<EditingPage> {
     }
   }
 
-  void _confirm(bool didPop, Object? result) async {
+  Future<void> _confirm(bool didPop, Object? result) async {
     if (didPop) {
       return;
     }

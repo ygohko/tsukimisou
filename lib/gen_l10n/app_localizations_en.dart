@@ -192,6 +192,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get copyException => 'Copy exception';
 
   @override
+  String get removeThisArchive => 'Remove this archive';
+
+  @override
   String get cancel => 'Cancel';
 
   @override

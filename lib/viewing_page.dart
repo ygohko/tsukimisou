@@ -268,7 +268,7 @@ class _ViewingPageState extends State<ViewingPage>
     );
   }
 
-  void _edit() async {
+  Future<void> _edit() async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
@@ -304,12 +304,12 @@ class _ViewingPageState extends State<ViewingPage>
     setState(() {});
   }
 
-  void _share() async {
+  Future<void> _share() async {
     final localizations = AppLocalizations.of(context)!;
     await Share.share(_memo.text, subject: localizations.sharedFromTsukimisou);
   }
 
-  void _delete() async {
+  Future<void> _delete() async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final accepted = await common_uis.showConfirmationDialog(
@@ -363,7 +363,8 @@ class _ViewingPageState extends State<ViewingPage>
       if (exception is ArchiveNotFoundException) {
         name = exception.name;
       }
-      if (name != null && result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
+      if (name != null &&
+          result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
         memoStore.removeArchive(name);
         archiveMemoStore = await memoStore.archiveMemo(_memo);
       } else {
@@ -386,13 +387,13 @@ class _ViewingPageState extends State<ViewingPage>
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       }
     }
 
@@ -401,7 +402,7 @@ class _ViewingPageState extends State<ViewingPage>
     }
   }
 
-  void _bindTags() async {
+  Future<void> _bindTags() async {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
     final tagScores = settings.getTagScores();
@@ -440,7 +441,7 @@ class _ViewingPageState extends State<ViewingPage>
     setState(() {});
   }
 
-  void _modifyName() async {
+  Future<void> _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     _textEditingController.text = _memo.name;
@@ -505,7 +506,7 @@ class _ViewingPageState extends State<ViewingPage>
     }
   }
 
-  void _chooseViewingMode() async {
+  Future<void> _chooseViewingMode() async {
     // TODO: Add constants.dart?
     const viewingModeNames = ['Plain', 'TinyMarkdown'];
 
@@ -576,7 +577,7 @@ class _ViewingPageState extends State<ViewingPage>
     }
   }
 
-  void _showLinkedMemo(String memoName) async {
+  Future<void> _showLinkedMemo(String memoName) async {
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final memo = memoStore.memoFromName(memoName);

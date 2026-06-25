@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  void didChangeDependencies() async {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     final settings = Provider.of<Settings>(context);
     await settings.init();
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _addMemo({String? initialText}) async {
+  Future<void> _addMemo({String? initialText}) async {
     if (!common_uis.hasLargeScreen()) {
       await Navigator.of(context).push(PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) {
@@ -200,13 +200,13 @@ class _HomePageState extends State<HomePage> {
           return;
         }
         await common_uis.showErrorDialog(
-            context,
-            localizations.memoStoreIsLocked,
-            localizations.memoStoreIsLockedByOtherDevice,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.memoStoreIsLocked,
+          localizations.memoStoreIsLockedByOtherDevice,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
         return;
       } else {
         // Confirm to force unlock
@@ -235,13 +235,13 @@ class _HomePageState extends State<HomePage> {
         return;
       }
       await common_uis.showErrorDialog(
-          context,
-          localizations.memoStoreIsNotCompatible,
-          localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
-          localizations.ok,
-          exception: exception,
-          stackTrace: stackTrace,
-        );
+        context,
+        localizations.memoStoreIsNotCompatible,
+        localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
+        localizations.ok,
+        exception: exception,
+        stackTrace: stackTrace,
+      );
       return;
     } on Exception catch (exception, stackTrace) {
       // Other failure.
@@ -262,14 +262,16 @@ class _HomePageState extends State<HomePage> {
     }
     fromMemoStore.onArchiveMemoStoreRequired = (name) async {
       final memoStore = MemoStore();
-      final loader = MemoStoreGoogleDriveLoader(memoStore, 'Archive-$name.json');
+      final loader =
+          MemoStoreGoogleDriveLoader(memoStore, 'Archive-$name.json');
       await loader.execute();
       return memoStore;
     };
 
     _fileLockedCount = 0;
     // TODO: First try with missingArchivesIgnored: false, and if that failed retry with true.
-    final merger = MemoStoreMerger(toMemoStore, fromMemoStore, missingArchivesIgnored: true);
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore,
+        missingArchivesIgnored: true);
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
@@ -300,13 +302,13 @@ class _HomePageState extends State<HomePage> {
       appState.mergingWithGoogleDrive = false;
       if (mounted) {
         await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       }
       return;
     }
@@ -314,7 +316,8 @@ class _HomePageState extends State<HomePage> {
     final updatedArchiveNames = merger.updatedArchiveNames;
     for (final name in updatedArchiveNames) {
       final memoStore = await toMemoStore.archiveMemoStore(name);
-      final saver = await MemoStoreLocalSaver.fromFileName(memoStore, 'Archive-$name.json');
+      final saver = await MemoStoreLocalSaver.fromFileName(
+          memoStore, 'Archive-$name.json');
       try {
         await saver.execute();
       } on Exception catch (exception, stackTrace) {
@@ -331,7 +334,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
     }
-    
+
     messenger.hideCurrentMaterialBanner();
     appState.mergingWithGoogleDrive = false;
 
@@ -401,7 +404,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _showSettings() async {
+  Future<void> _showSettings() async {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
       await Navigator.of(context).push(
@@ -792,7 +795,8 @@ class _HomePageState extends State<HomePage> {
           exception: exception,
           stackTrace: stackTrace,
         );
-        if (result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
+        if (result ==
+            common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
           memoStore.removeArchive(name);
         }
         return;

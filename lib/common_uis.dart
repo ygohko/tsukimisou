@@ -357,8 +357,9 @@ Future<bool> showConfirmationDialog(
 }
 
 /// Shows dialogs to indicate errors.
-Future<void> showErrorDialog(BuildContext context, String title, String content,
-  String acceptingText, { Exception? exception, StackTrace? stackTrace }) async {
+Future<void> showErrorDialog(
+    BuildContext context, String title, String content, String acceptingText,
+    {Exception? exception, StackTrace? stackTrace}) async {
   final localizations = AppLocalizations.of(context)!;
   const platform = LocalPlatform();
   if (!platform.isIOS) {
@@ -367,7 +368,8 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
       actions.add(
         TextButton(
           onPressed: () {
-            final text = '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+            final text =
+                '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
           child: Text(localizations.copyException),
@@ -399,7 +401,8 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
       actions.add(
         CupertinoDialogAction(
           onPressed: () {
-            final text = '## Exception\n\n$exception\n\n## Stack trace\n\n$stackTrace';
+            final text =
+                '## Exception\n\n$exception\n\n## Stack trace\n\n$stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
           child: Text(localizations.copyException),
@@ -429,47 +432,50 @@ Future<void> showErrorDialog(BuildContext context, String title, String content,
   }
 }
 
-Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(BuildContext context, { Exception? exception, StackTrace? stackTrace }) async {
+Future<ArchiveNotFoundDialogResult> showArchiveNotFoundDialog(
+    BuildContext context,
+    {Exception? exception,
+    StackTrace? stackTrace}) async {
   final localizations = AppLocalizations.of(context)!;
   final actions = <Widget>[];
   if (isDevelopmentFlavor()) {
     actions.add(
       TextButton(
         onPressed: () {
-          final text = '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+          final text =
+              '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
           Clipboard.setData(ClipboardData(text: text));
         },
-        child: Text('Copy exception'),
+        child: Text(localizations.copyException),
       ),
     );
   }
-  actions.addAll(
-    [
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop(ArchiveNotFoundDialogResult.removeThisArchive);
-        },
-        child: Text('Remove this archive'),
-      ),
-      TextButton(
-        onPressed: () {
-          Navigator.of(context).pop(ArchiveNotFoundDialogResult.ok);
-        },
-        child: Text('OK'),
-      ),
-    ]
-  );
+  actions.addAll([
+    TextButton(
+      onPressed: () {
+        Navigator.of(context)
+            .pop(ArchiveNotFoundDialogResult.removeThisArchive);
+      },
+      child: Text(localizations.removeThisArchive),
+    ),
+    TextButton(
+      onPressed: () {
+        Navigator.of(context).pop(ArchiveNotFoundDialogResult.ok);
+      },
+      child: Text(localizations.ok),
+    ),
+  ]);
 
   final result = await showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Text(localizations.archiveNotFound),
-        content: Text(localizations.cloudNotLoadArchiveMemoStoreFromLocalStorage),
-        actions: actions,
-      );
-    }
-  );
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(localizations.archiveNotFound),
+          content:
+              Text(localizations.cloudNotLoadArchiveMemoStoreFromLocalStorage),
+          actions: actions,
+        );
+      });
   if (result == null) {
     return ArchiveNotFoundDialogResult.ok;
   }
@@ -583,7 +589,7 @@ bool isDevelopmentFlavor() {
 
     return false;
   }
-  
+
   const flavor = String.fromEnvironment("FLAVOR");
   if (flavor == "development") {
     return true;

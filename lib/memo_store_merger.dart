@@ -44,7 +44,8 @@ class MemoStoreMerger {
   var _missingArchivesIgnored = false;
 
   /// Creates a memo store manager.
-  MemoStoreMerger(this.toMemoStore, this.fromMemoStore, { bool? missingArchivesIgnored }) {
+  MemoStoreMerger(this.toMemoStore, this.fromMemoStore,
+      {bool? missingArchivesIgnored}) {
     if (missingArchivesIgnored != null) {
       _missingArchivesIgnored = missingArchivesIgnored;
     }
@@ -150,7 +151,8 @@ class MemoStoreMerger {
 
     final archivesToMerge = <String>[];
     for (final name in archiveNames) {
-      if (toMemoStore.archiveHashes[name] != fromMemoStore.archiveHashes[name]) {
+      if (toMemoStore.archiveHashes[name] !=
+          fromMemoStore.archiveHashes[name]) {
         archivesToMerge.add(name);
       }
     }
@@ -192,7 +194,8 @@ class MemoStoreMerger {
         fromMemoStore.archiveMemoStores[name] = fromArchive;
       }
 
-      final merger = MemoStoreMerger(toArchive, fromArchive, missingArchivesIgnored: true);
+      final merger =
+          MemoStoreMerger(toArchive, fromArchive, missingArchivesIgnored: true);
       merger.conflictWarningText = _conflictWarningText;
       merger.localMarkerText = _localMarkerText;
       merger.cloudMarkerText = _cloudMarkerText;
