@@ -143,28 +143,41 @@ class _ViewingPageState extends State<ViewingPage>
         ),
       );
     }
-    actions.addAll([
+    actions.add(
       IconButton(
         icon: const Icon(Icons.share),
         onPressed: _share,
         tooltip: localizations.share,
-      ),
-      IconButton(
-        icon: const Icon(Icons.delete_outlined),
-        onPressed: _delete,
-        tooltip: localizations.delete,
-      ),
-      IconButton(
-        icon: const Icon(Icons.archive_outlined),
-        onPressed: _archive,
-        tooltip: localizations.archive,
-      ),
-      IconButton(
-        icon: const Icon(Icons.edit),
-        onPressed: _edit,
-        tooltip: localizations.edit,
-      ),
-    ]);
+      )
+    );
+    if (archiveName == null) {
+      actions.addAll([
+          IconButton(
+            icon: const Icon(Icons.delete_outlined),
+            onPressed: _delete,
+            tooltip: localizations.delete,
+          ),
+          IconButton(
+            icon: const Icon(Icons.archive_outlined),
+            onPressed: _archive,
+            tooltip: localizations.archive,
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: _edit,
+            tooltip: localizations.edit,
+          ),
+        ]
+      );
+    } else {
+      actions.add(
+        IconButton(
+          icon: const Icon(Icons.unarchive_outlined),
+          onPressed: null,
+          tooltip: localizations.unarchive,
+        )
+      );
+    }
     late final Widget textContents;
     // TODO: Consider expandable implementation.
     if (_memo.viewingMode == 'TinyMarkdown') {

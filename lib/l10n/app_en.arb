@@ -215,6 +215,10 @@
     "@archive": {
         "description": "Tooltip for Archive button"
     },
+    "unarchive": "Unarchive",
+    "@unarchive": {
+        "description": "Tooltip for Unarchive button"
+    },
     "edit": "Edit",
     "@edit": {
         "description": "Tooltip for Edit button"

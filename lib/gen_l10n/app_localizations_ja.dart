@@ -178,6 +178,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get archive => 'アーカイブ';
 
   @override
+  String get unarchive => 'アーカイブ解除';
+
+  @override
   String get edit => '編集';
 
   @override

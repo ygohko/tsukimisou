@@ -393,6 +393,12 @@ abstract class AppLocalizations {
   /// **'Archive'**
   String get archive;
 
+  /// Tooltip for Unarchive button
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchive'**
+  String get unarchive;
+
   /// Tooltip for Edit button
   ///
   /// In en, this message translates to:

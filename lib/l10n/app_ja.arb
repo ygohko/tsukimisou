@@ -48,6 +48,7 @@
     "share": "共有",
     "delete": "削除",
     "archive": "アーカイブ",
+    "unarchive": "アーカイブ解除",
     "edit": "編集",
     "sharedFromTsukimisou": "Tukimisouからの共有",
     "confirm": "確認",
