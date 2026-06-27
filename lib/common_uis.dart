@@ -631,6 +631,21 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
       ),
     );
   }
+  final archiveName = memo.archiveName;
+  if (archiveName != null) {
+
+    print('archiveName: $archiveName');
+
+    contents.add(
+      Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          'In archive $archiveName',
+          style: attributeStyle
+        ),
+      )
+    );
+  }
 
   return Padding(
     padding: const EdgeInsets.all(12.0),
