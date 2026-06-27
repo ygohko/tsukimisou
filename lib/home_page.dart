@@ -817,11 +817,6 @@ class _HomePageState extends State<HomePage> {
     for (final name in _shownArchiveNames) {
       final archiveMemoStore = memoStore.archiveMemoStoreIfLoaded(name);
       if (archiveMemoStore != null) {
-
-        for (final memo in archiveMemoStore.memos) {
-          print('memo.text: ${memo.text}, memo.archiveName: ${memo.archiveName}');
-        }
-
         sourceMemos.addAll(archiveMemoStore.memos);
       }
     }
