@@ -32,6 +32,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unsynchronized => 'Unsynchronized';
 
   @override
+  String inArchive(Object name) {
+    return 'In archive $name';
+  }
+
+  @override
   String get addAMemo => 'Add a memo';
 
   @override
@@ -172,6 +177,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get archive => 'Archive';
+
+  @override
+  String get unarchive => 'Unarchive';
 
   @override
   String get edit => 'Edit';

@@ -119,6 +119,9 @@ class _HomePageState extends State<HomePage> {
       final loader = await MemoStoreLocalLoader.fromFileName(
           memoStore, 'Archive-$name.json');
       await loader.execute();
+      for (final memo in memoStore.memos) {
+        memo.archiveName = name;
+      }
       return memoStore;
     };
     try {

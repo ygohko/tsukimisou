@@ -135,6 +135,12 @@ abstract class AppLocalizations {
   /// **'Unsynchronized'**
   String get unsynchronized;
 
+  /// Indicattion for memos that is archived
+  ///
+  /// In en, this message translates to:
+  /// **'In archive {name}'**
+  String inArchive(Object name);
+
   /// Tooltip for add a memo button
   ///
   /// In en, this message translates to:
@@ -386,6 +392,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Archive'**
   String get archive;
+
+  /// Tooltip for Unarchive button
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchive'**
+  String get unarchive;
 
   /// Tooltip for Edit button
   ///

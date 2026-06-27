@@ -31,6 +31,13 @@
     "@unsynchronized": {
         "description": "Indicattion for memos that is not synchronized"
     },
+    "inArchive": "In archive {name}",
+    "@inArchive": {
+        "description": "Indicattion for memos that is archived",
+        "placeholders": {
+            "name": {}
+        }
+    },
     "addAMemo": "Add a memo",
     "@addAMemo": {
         "description": "Tooltip for add a memo button"
@@ -207,6 +214,10 @@
     "archive": "Archive",
     "@archive": {
         "description": "Tooltip for Archive button"
+    },
+    "unarchive": "Unarchive",
+    "@unarchive": {
+        "description": "Tooltip for Unarchive button"
     },
     "edit": "Edit",
     "@edit": {
