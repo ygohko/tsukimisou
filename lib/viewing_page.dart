@@ -106,6 +106,7 @@ class _ViewingPageState extends State<ViewingPage>
     if (tagsString != '') {
       tagsString = tagsString.substring(0, tagsString.length - 2);
     }
+    final archiveName = _memo.archiveName;
     final textStyle =
         common_uis.TsukimisouTextStyles.viewingPageMemoText(context);
     final attributeStyle =
@@ -257,6 +258,15 @@ class _ViewingPageState extends State<ViewingPage>
               ListTile(
                 title: Text(
                   localizations.unsynchronized,
+                  style: attributeStyle,
+                ),
+              ),
+              const Divider(),
+            ],
+            if (archiveName != null) ...[
+              ListTile(
+                title: Text(
+                  localizations.inArchive(archiveName),
                   style: attributeStyle,
                 ),
               ),

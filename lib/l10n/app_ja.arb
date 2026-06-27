@@ -5,6 +5,7 @@
     "allMemos": "すべてのメモ",
     "updated": "更新: {dateTime}",
     "unsynchronized": "未同期",
+    "inArchive": "アーカイブ {name}内",
     "addAMemo": "メモを追加",
     "toCreateANewMemo": "メモを追加ボタンを押して、新しいメモを作成してください",
     "tags": "タグ",

@@ -640,7 +640,7 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
       Align(
         alignment: Alignment.centerRight,
         child: Text(
-          'In archive $archiveName',
+          localizations.inArchive(archiveName),
           style: attributeStyle
         ),
       )

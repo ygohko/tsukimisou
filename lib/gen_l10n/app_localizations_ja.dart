@@ -32,6 +32,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get unsynchronized => '未同期';
 
   @override
+  String inArchive(Object name) {
+    return 'アーカイブ $name内';
+  }
+
+  @override
   String get addAMemo => 'メモを追加';
 
   @override
