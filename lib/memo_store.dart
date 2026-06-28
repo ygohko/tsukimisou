@@ -129,11 +129,11 @@ class MemoStore extends ChangeNotifier {
   }
 
   /// Unarchives a memo.
-  Future<void> unarchiveMemo(Memo memo) async {
+  Future<MemoStore> unarchiveMemo(Memo memo) async {
     final archiveName = memo.archiveName;
     if (archiveName == null) {
       // Do nothing.
-      return;
+      throw Exception('This memo is not archived.');
     }
     var archiveMemoStore = archiveMemoStores[archiveName];
     if (archiveMemoStore == null) {
@@ -150,6 +150,8 @@ class MemoStore extends ChangeNotifier {
     addMemo(memo);
     archiveHashes[archiveName] = archiveMemoStore.hash;
     notifyListeners();
+
+    return archiveMemoStore;
   }
 
   /// Clears memos from this memo store.
