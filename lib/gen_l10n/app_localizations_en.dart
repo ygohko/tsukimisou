@@ -146,6 +146,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not load archive memo store from local storage.';
 
   @override
+  String get unarchivingWasFailed => 'Unarchiving was failed';
+
+  @override
+  String get couldNotUnarchiveMemo => 'Could not unarchive memo.';
+
+  @override
   String boundTags(Object tags) {
     return 'Tags: $tags';
   }

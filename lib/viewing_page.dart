@@ -173,7 +173,7 @@ class _ViewingPageState extends State<ViewingPage>
       actions.add(
         IconButton(
           icon: const Icon(Icons.unarchive_outlined),
-          onPressed: null,
+          onPressed: _unarchive,
           tooltip: localizations.unarchive,
         )
       );
@@ -423,6 +423,57 @@ class _ViewingPageState extends State<ViewingPage>
     if (mounted) {
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> _unarchive() async {
+    final localizations = AppLocalizations.of(context)!;
+    final memoStore = Provider.of<MemoStore>(context, listen: false);
+    final archiveName = _memo.archiveName;
+    if (archiveName == null) {
+      return;
+    }
+    late final MemoStore archiveMemoStore;
+    try {
+      archiveMemoStore = await memoStore.unarchiveMemo(_memo);
+    } on Exception catch (exception, stackTrace) {
+      if (!mounted) {
+        return;
+      }
+
+      await common_uis.showErrorDialog(
+        context,
+        localizations.unarchivingWasFailed,
+        localizations.couldNotUnarchiveMemo,
+        localizations.ok,
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+
+      return;
+    }
+
+    final saver =
+        await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
+    final archiveSaver = await MemoStoreLocalSaver.fromFileName(
+        archiveMemoStore, 'Archive-$archiveName.json');
+    try {
+      saver.execute();
+      archiveSaver.execute();
+    } on IOException catch (exception, stackTrace) {
+      if (mounted) {
+        // Save error
+        await common_uis.showErrorDialog(
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
+      }
+    }
+    
+    setState(() {});
   }
 
   Future<void> _bindTags() async {

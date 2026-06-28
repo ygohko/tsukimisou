@@ -170,6 +170,14 @@
     "@cloudNotLoadArchiveMemoStoreFromLocalStorage": {
         "description": "Text for archive not found error dialog."
     },
+    "unarchivingWasFailed": "Unarchiving was failed",
+    "@unarchivingWasFailed": {
+        "description": "Title for unarchiving failed error dialog."
+    },
+    "couldNotUnarchiveMemo": "Could not unarchive memo.",
+    "@couldNotUnarchiveMemo": {
+        "description": "Text for unarchiving failed error dialog."
+    },
     "boundTags": "Tags: {tags}",
     "@boundTags": {
         "description": "Text for tags list tile",
