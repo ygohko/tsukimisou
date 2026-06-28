@@ -339,6 +339,18 @@ abstract class AppLocalizations {
   /// **'Could not load archive memo store from local storage.'**
   String get cloudNotLoadArchiveMemoStoreFromLocalStorage;
 
+  /// Title for unarchiving failed error dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Unarchiving was failed'**
+  String get unarchivingWasFailed;
+
+  /// Text for unarchiving failed error dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not unarchive memo.'**
+  String get couldNotUnarchiveMemo;
+
   /// Text for tags list tile
   ///
   /// In en, this message translates to:

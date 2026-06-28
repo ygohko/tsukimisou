@@ -39,6 +39,8 @@
     "linkedMemoIsNotFound": "リンク先のメモが見つかりません。",
     "archiveNotFound": "アーカイブがみつかりません",
     "cloudNotLoadArchiveMemoStoreFromLocalStorage": "アーカイブのメモストアのローカルストレージからの読み込みができませんでした。",
+    "unarchivingWasFailed": "アーカイブ解除に失敗しました",
+    "couldNotUnarchiveMemo": "メモのアーカイブ解除ができませんでした。",
     "boundTags": "タグ: {tags}",
     "name": "名前: {name}",
     "viewingMode": "表示モード: {viewingMode}",

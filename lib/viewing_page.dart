@@ -442,8 +442,8 @@ class _ViewingPageState extends State<ViewingPage>
 
       await common_uis.showErrorDialog(
         context,
-        'Unarchiving was failed',
-        'Could not unarchive this memo.',
+        localizations.unarchivingWasFailed,
+        localizations.couldNotUnarchiveMemo,
         localizations.ok,
         exception: exception,
         stackTrace: stackTrace,

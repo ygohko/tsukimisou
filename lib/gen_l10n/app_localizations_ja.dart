@@ -145,6 +145,12 @@ class AppLocalizationsJa extends AppLocalizations {
       'アーカイブのメモストアのローカルストレージからの読み込みができませんでした。';
 
   @override
+  String get unarchivingWasFailed => 'アーカイブ解除に失敗しました';
+
+  @override
+  String get couldNotUnarchiveMemo => 'メモのアーカイブ解除ができませんでした。';
+
+  @override
   String boundTags(Object tags) {
     return 'タグ: $tags';
   }
