@@ -434,7 +434,6 @@ class _ViewingPageState extends State<ViewingPage>
           ),
         ),
         backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
-        // margin: EdgeInsetsGeometry.all(0.0), 
         width: 300.0,
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
