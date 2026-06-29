@@ -62,6 +62,7 @@ class _ViewingPageState extends State<ViewingPage>
   final _scrollController = ScrollController();
   Animation<Offset> _animation =
       const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   late Memo _memo;
   final _previousMemos = <Memo>[];
   var _fullScreen = false;
@@ -217,75 +218,78 @@ class _ViewingPageState extends State<ViewingPage>
       curve: Curves.easeOutCubic,
       width: width,
       height: height,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: common_uis.hasLargeScreen()
-              ? const CloseButton()
-              : const BackButton(),
-          title: Text(_memo.name),
-          actions: actions,
-        ),
-        body: ListView(
-          controller: _scrollController,
-          children: [
-            ClipRect(
-              child: SlideTransition(
-                position: _animation,
-                child: Card(
-                  color: common_uis.TsukimisouColors.memoCard,
-                  elevation: 2.0,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: textContents,
+      child: ScaffoldMessenger(
+        key: _scaffoldMessengerKey,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: common_uis.hasLargeScreen()
+            ? const CloseButton()
+            : const BackButton(),
+            title: Text(_memo.name),
+            actions: actions,
+          ),
+          body: ListView(
+            controller: _scrollController,
+            children: [
+              ClipRect(
+                child: SlideTransition(
+                  position: _animation,
+                  child: Card(
+                    color: common_uis.TsukimisouColors.memoCard,
+                    elevation: 2.0,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: textContents,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            ListTile(
-              title: Text(localizations.updated(dateTime.toDetailedString()),
-                  style: attributeStyle),
-            ),
-            const Divider(),
-            ListTile(
-              title: Text(localizations.boundTags(tagsString),
-                  style: attributeStyle),
-              onTap: _bindTags,
-            ),
-            const Divider(),
-            ListTile(
-              title:
-                  Text(localizations.name(_memo.name), style: attributeStyle),
-              onTap: _modifyName,
-            ),
-            const Divider(),
-            ListTile(
-              title: Text(localizations.viewingMode(_memo.viewingMode),
-                  style: attributeStyle),
-              onTap: _chooseViewingMode,
-            ),
-            const Divider(),
-            if (!settings.getSynchronizationHidden() && unsynchronized) ...[
               ListTile(
-                title: Text(
-                  localizations.unsynchronized,
-                  style: attributeStyle,
-                ),
+                title: Text(localizations.updated(dateTime.toDetailedString()),
+                  style: attributeStyle),
               ),
               const Divider(),
+              ListTile(
+                title: Text(localizations.boundTags(tagsString),
+                  style: attributeStyle),
+                onTap: _bindTags,
+              ),
+              const Divider(),
+              ListTile(
+                title:
+                Text(localizations.name(_memo.name), style: attributeStyle),
+                onTap: _modifyName,
+              ),
+              const Divider(),
+              ListTile(
+                title: Text(localizations.viewingMode(_memo.viewingMode),
+                  style: attributeStyle),
+                onTap: _chooseViewingMode,
+              ),
+              const Divider(),
+              if (!settings.getSynchronizationHidden() && unsynchronized) ...[
+                ListTile(
+                  title: Text(
+                    localizations.unsynchronized,
+                    style: attributeStyle,
+                  ),
+                ),
+                const Divider(),
+              ],
+              if (archiveName != null) ...[
+                ListTile(
+                  title: Text(
+                    localizations.inArchive(archiveName),
+                    style: attributeStyle,
+                  ),
+                ),
+                const Divider(),
+              ]
             ],
-            if (archiveName != null) ...[
-              ListTile(
-                title: Text(
-                  localizations.inArchive(archiveName),
-                  style: attributeStyle,
-                ),
-              ),
-              const Divider(),
-            ]
-          ],
+          ),
         ),
       ),
     );
@@ -423,7 +427,17 @@ class _ViewingPageState extends State<ViewingPage>
     if (mounted) {
       Navigator.of(context).pop();
       final snackBar = SnackBar(
-        content: Text('Memo archived!'),
+        content: Text(
+          'Memo archived.',
+          style: TextStyle(
+            color: common_uis.TsukimisouColors.scheme.onSecondary,
+          ),
+        ),
+        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
+        // margin: EdgeInsetsGeometry.all(0.0), 
+        width: 300.0,
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -480,9 +494,18 @@ class _ViewingPageState extends State<ViewingPage>
     setState(() {});
     if (mounted) {
       final snackBar = SnackBar(
-        content: Text('Memo unarchived!'),
+        content: Text(
+          'Memo unarchived.',
+          style: TextStyle(
+            color: common_uis.TsukimisouColors.scheme.onSecondary,
+          ),
+        ),
+        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
+        width: 300.0,
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
       );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      _scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
     }
   }
 
