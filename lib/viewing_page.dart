@@ -478,6 +478,12 @@ class _ViewingPageState extends State<ViewingPage>
     }
     
     setState(() {});
+    if (mounted) {
+      final snackBar = SnackBar(
+        content: Text('Memo unarchived!'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Future<void> _bindTags() async {
