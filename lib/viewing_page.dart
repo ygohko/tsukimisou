@@ -428,7 +428,7 @@ class _ViewingPageState extends State<ViewingPage>
       Navigator.of(context).pop();
       final snackBar = SnackBar(
         content: Text(
-          'Memo archived.',
+          localizations.memoArchived,
           style: TextStyle(
             color: common_uis.TsukimisouColors.scheme.onSecondary,
           ),
@@ -495,7 +495,7 @@ class _ViewingPageState extends State<ViewingPage>
     if (mounted) {
       final snackBar = SnackBar(
         content: Text(
-          'Memo unarchived.',
+          localizations.memoUnarchived,
           style: TextStyle(
             color: common_uis.TsukimisouColors.scheme.onSecondary,
           ),

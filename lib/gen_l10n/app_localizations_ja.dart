@@ -193,6 +193,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sharedFromTsukimisou => 'Tukimisouからの共有';
 
   @override
+  String get memoArchived => 'メモをアーカイブしました。';
+
+  @override
+  String get memoUnarchived => 'メモをアーカイブ解除しました。';
+
+  @override
   String get confirm => '確認';
 
   @override
