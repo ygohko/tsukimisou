@@ -235,6 +235,14 @@
     "@sharedFromTsukimisou": {
         "description": "Subject when sharing a memo"
     },
+    "memoArchived": "Memo archived.",
+    "@memoArchived": {
+        "description": "Snack bar text when memo is archived."
+    },
+    "memoUnarchived": "Memo unarchived.",
+    "@memoUnarchived": {
+        "description": "Snack bar text when memo is unarchived."
+    },
     "confirm": "Confirm",
     "@confirm": {
         "description": "Title for confirmation dialog"

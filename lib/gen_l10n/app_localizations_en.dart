@@ -194,6 +194,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharedFromTsukimisou => 'Shared from Tukimisou';
 
   @override
+  String get memoArchived => 'Memo archived.';
+
+  @override
+  String get memoUnarchived => 'Memo unarchived.';
+
+  @override
   String get confirm => 'Confirm';
 
   @override

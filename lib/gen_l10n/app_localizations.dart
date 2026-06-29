@@ -423,6 +423,18 @@ abstract class AppLocalizations {
   /// **'Shared from Tukimisou'**
   String get sharedFromTsukimisou;
 
+  /// Snack bar text when memo is archived.
+  ///
+  /// In en, this message translates to:
+  /// **'Memo archived.'**
+  String get memoArchived;
+
+  /// Snack bar text when memo is unarchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Memo unarchived.'**
+  String get memoUnarchived;
+
   /// Title for error dialog
   ///
   /// In en, this message translates to:

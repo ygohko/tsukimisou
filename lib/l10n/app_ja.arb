@@ -53,6 +53,8 @@
     "unarchive": "アーカイブ解除",
     "edit": "編集",
     "sharedFromTsukimisou": "Tukimisouからの共有",
+    "memoArchived": "メモをアーカイブしました。",
+    "memoUnarchived": "メモをアーカイブ解除しました。",
     "confirm": "確認",
     "deleteThisMemo": "このメモを削除しますか?",
     "thisActionCannotBeUndone": "この操作は元に戻せません。",
