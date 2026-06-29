@@ -422,6 +422,10 @@ class _ViewingPageState extends State<ViewingPage>
 
     if (mounted) {
       Navigator.of(context).pop();
+      final snackBar = SnackBar(
+        content: Text('Memo archived!'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
