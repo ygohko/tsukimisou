@@ -32,6 +32,7 @@ import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
+import 'home_page.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_local_saver.dart';
@@ -46,9 +47,10 @@ enum _Direction {
 class ViewingPage extends StatefulWidget {
   final Memo memo;
   final bool fullScreen;
+  final GlobalKey<HomePageState>? homePageStateKey;
 
   /// Creates a viewing page.
-  const ViewingPage({Key? key, required this.memo, this.fullScreen = true})
+  const ViewingPage({Key? key, required this.memo, this.fullScreen = true, this.homePageStateKey })
       : super(key: key);
 
   @override
