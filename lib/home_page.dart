@@ -91,6 +91,10 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  void showSnackBar(SnackBar snackBar) {
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   Future<void> _initAsync() async {
     await _load();
     const platform = LocalPlatform();

@@ -429,19 +429,22 @@ class _ViewingPageState extends State<ViewingPage>
 
     if (mounted) {
       Navigator.of(context).pop();
-      final snackBar = SnackBar(
-        content: Text(
-          localizations.memoArchived,
-          style: TextStyle(
-            color: common_uis.TsukimisouColors.scheme.onSecondary,
+      final key = widget.homePageStateKey;
+      if (key != null) {
+        final snackBar = SnackBar(
+          content: Text(
+            localizations.memoArchived,
+            style: TextStyle(
+              color: common_uis.TsukimisouColors.scheme.onSecondary,
+            ),
           ),
-        ),
-        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
-        width: 300.0,
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
+          width: 300.0,
+          behavior: SnackBarBehavior.floating,
+          showCloseIcon: true,
+        );
+        key.currentState!.showSnackBar(snackBar);
+      }
     }
   }
 
