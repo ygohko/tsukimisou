@@ -173,6 +173,7 @@ class _ViewingPageState extends State<ViewingPage>
     } else {
       actions.add(
         IconButton(
+          key: const ValueKey('unarchiveMemoButton'),
           icon: const Icon(Icons.unarchive_outlined),
           onPressed: _unarchive,
           tooltip: localizations.unarchive,
