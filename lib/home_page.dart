@@ -51,10 +51,10 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
   var _savingToGoogleDrive = false;
   var _searching = false;
   var _fileLockedCount = 0;
-
+  
   @override
   void initState() {
     super.initState();
