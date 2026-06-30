@@ -63,7 +63,7 @@ class HomePageState extends State<HomePage> {
   var _savingToGoogleDrive = false;
   var _searching = false;
   var _fileLockedCount = 0;
-  
+
   @override
   void initState() {
     super.initState();

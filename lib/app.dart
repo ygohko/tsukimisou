@@ -61,7 +61,9 @@ class App extends StatelessWidget {
         Locale('ja', ''),
       ],
       title: 'Tsukimisou',
-      home: const HomePage(),
+      home: HomePage(
+        key: GlobalKey<HomePageState>(),
+      ),
     );
   }
 }
