@@ -96,8 +96,12 @@ class HomePageState extends State<HomePage> {
     setState(() {
       _actionButtonShown = false;
     });
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    // kokokara-
+    final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    controller.closed.then((reason) {
+      setState(() {
+        _actionButtonShown = true;
+      });
+    });
   }
 
   Future<void> _initAsync() async {
@@ -513,7 +517,7 @@ class HomePageState extends State<HomePage> {
           },
         ),
       ),
-      floatingActionButton: Consumer<AppState>(
+      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
         builder: (context, appState, child) {
           return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
@@ -521,7 +525,7 @@ class HomePageState extends State<HomePage> {
             child: const Icon(Icons.add),
           );
         },
-      ),
+      ) : null,
       drawer: SafeArea(
         bottom: false,
         child: Drawer(
@@ -597,7 +601,7 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: Consumer<AppState>(
+      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
         builder: (context, appState, child) {
           return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
@@ -605,7 +609,7 @@ class HomePageState extends State<HomePage> {
             child: const Icon(Icons.add),
           );
         },
-      ),
+      ) : null,
     );
   }
 
