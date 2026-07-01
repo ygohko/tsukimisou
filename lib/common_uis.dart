@@ -27,6 +27,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
 import 'extensions.dart';
+import 'home_page.dart';
 import 'markdown_parser.dart';
 import 'memo.dart';
 import 'viewing_page.dart';
@@ -521,12 +522,12 @@ Future<T?> showTransitioningDialog<T>({
 }
 
 /// Views this memo.
-Future<void> viewMemo(BuildContext context, Memo memo) async {
+Future<void> viewMemo(BuildContext context, Memo memo, { GlobalKey<HomePageState>? homePageStateKey }) async {
   if (!hasLargeScreen()) {
     await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) {
-          return ViewingPage(memo: memo);
+          return ViewingPage(memo: memo, homePageStateKey: homePageStateKey);
         },
       ),
     );
@@ -537,7 +538,7 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
         return Center(
           child: Dialog(
             insetPadding: const EdgeInsets.all(0.0),
-            child: ViewingPage(memo: memo, fullScreen: false),
+            child: ViewingPage(memo: memo, fullScreen: false, homePageStateKey: homePageStateKey),
           ),
         );
       },

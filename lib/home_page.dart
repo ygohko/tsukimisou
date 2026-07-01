@@ -629,7 +629,7 @@ class HomePageState extends State<HomePage> {
             onTap: appState.mergingWithGoogleDrive
                 ? null
                 : () {
-                    common_uis.viewMemo(context, memo);
+                    common_uis.viewMemo(context, memo, homePageStateKey: widget.key as GlobalKey<HomePageState>);
                   },
             child: common_uis.memoCardContents(context, memo, unsynchronized),
           ),
