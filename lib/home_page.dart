@@ -62,6 +62,7 @@ class HomePageState extends State<HomePage> {
   var _commonUiInitialized = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
+  var _actionButtonShown = true;
   var _fileLockedCount = 0;
 
   @override
@@ -92,7 +93,11 @@ class HomePageState extends State<HomePage> {
   }
 
   void showSnackBar(SnackBar snackBar) {
+    setState(() {
+      _actionButtonShown = false;
+    });
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // kokokara-
   }
 
   Future<void> _initAsync() async {
