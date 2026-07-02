@@ -243,6 +243,10 @@
     "@memoUnarchived": {
         "description": "Snack bar text when memo is unarchived."
     },
+    "memoDeleted": "Memo deleted.",
+    "@memoDeleted": {
+        "description": "Snack bar text when memo is deleted."
+    },
     "confirm": "Confirm",
     "@confirm": {
         "description": "Title for confirmation dialog"
