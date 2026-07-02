@@ -93,15 +93,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void showSnackBar(SnackBar snackBar) {
-    final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    controller.closed.then((reason) {
-      setState(() {
-        _actionButtonShown = true;
-      });
-    });
-  }
-
   Future<void> _initAsync() async {
     await _load();
     const platform = LocalPlatform();
@@ -183,7 +174,7 @@ class _HomePageState extends State<HomePage> {
         behavior: SnackBarBehavior.floating,
         showCloseIcon: true,
       );
-      showSnackBar(snackBar);
+      _showSnackBar(snackBar);
     } else {
       // TODO: Show SnackBar when memo is deleted.
       setState(() {
@@ -484,6 +475,15 @@ class _HomePageState extends State<HomePage> {
         duration: common_uis.Durations.editing,
       );
     }
+  }
+
+  void _showSnackBar(SnackBar snackBar) {
+    final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    controller.closed.then((reason) {
+      setState(() {
+        _actionButtonShown = true;
+      });
+    });
   }
 
   void _showSynchronizingBanner() {
