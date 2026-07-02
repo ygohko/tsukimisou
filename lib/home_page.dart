@@ -184,6 +184,11 @@ class HomePageState extends State<HomePage> {
         showCloseIcon: true,
       );
       showSnackBar(snackBar);
+    } else {
+      // TODO: Show SnackBar when memo is deleted.
+      setState(() {
+        _actionButtonShown = true;
+      });
     }
   }
 
