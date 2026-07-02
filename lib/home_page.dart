@@ -63,7 +63,7 @@ class HomePageState extends State<HomePage> {
   var _commonUiInitialized = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
-  var _snackBarShown = false;
+  var _actionButtonShown = true;
   var _fileLockedCount = 0;
 
   @override
@@ -94,13 +94,10 @@ class HomePageState extends State<HomePage> {
   }
 
   void showSnackBar(SnackBar snackBar) {
-    setState(() {
-      _snackBarShown = true;
-    });
     final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
     controller.closed.then((reason) {
       setState(() {
-        _snackBarShown = false;
+        _actionButtonShown = true;
       });
     });
   }
@@ -158,8 +155,14 @@ class HomePageState extends State<HomePage> {
   }
 
   Future<void> _viewMemo(Memo memo) async {
+    setState(() {
+      _actionButtonShown = false;
+    });
     final result = await common_uis.viewMemo(context, memo);
     if (result == null) {
+      setState(() {
+        _actionButtonShown = true;
+      });
       return;
     }
     if (!mounted) {
@@ -545,7 +548,7 @@ class HomePageState extends State<HomePage> {
           },
         ),
       ),
-      floatingActionButton: _snackBarShown ? null : Consumer<AppState>(
+      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
         builder: (context, appState, child) {
           return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
@@ -553,7 +556,7 @@ class HomePageState extends State<HomePage> {
             child: const Icon(Icons.add),
           );
         },
-      ),
+      ) : null,
       drawer: SafeArea(
         bottom: false,
         child: Drawer(
@@ -629,7 +632,7 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: _snackBarShown ? null : Consumer<AppState>(
+      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
         builder: (context, appState, child) {
           return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
@@ -637,7 +640,7 @@ class HomePageState extends State<HomePage> {
             child: const Icon(Icons.add),
           );
         },
-      ),
+      ) : null,
     );
   }
 
