@@ -27,7 +27,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
 import 'extensions.dart';
-import 'home_page.dart';
 import 'markdown_parser.dart';
 import 'memo.dart';
 import 'viewing_page.dart';
@@ -522,23 +521,24 @@ Future<T?> showTransitioningDialog<T>({
 }
 
 /// Views this memo.
-Future<void> viewMemo(BuildContext context, Memo memo, { GlobalKey<HomePageState>? homePageStateKey }) async {
+Future<ViewingPageResult?> viewMemo(BuildContext context, Memo memo) async {
+  ViewingPageResult? result;
   if (!hasLargeScreen()) {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
+    result = await Navigator.of(context).push(
+      MaterialPageRoute<ViewingPageResult>(
         builder: (context) {
-          return ViewingPage(memo: memo, homePageStateKey: homePageStateKey);
+          return ViewingPage(memo: memo);
         },
       ),
     );
   } else {
-    await showTransitioningDialog(
+    result = await showTransitioningDialog(
       context: context,
       builder: (context) {
         return Center(
           child: Dialog(
             insetPadding: const EdgeInsets.all(0.0),
-            child: ViewingPage(memo: memo, fullScreen: false, homePageStateKey: homePageStateKey),
+            child: ViewingPage(memo: memo, fullScreen: false),
           ),
         );
       },
@@ -548,6 +548,8 @@ Future<void> viewMemo(BuildContext context, Memo memo, { GlobalKey<HomePageState
       duration: const Duration(milliseconds: 500),
     );
   }
+
+  return result;
 }
 
 /// Creates a subtitle.

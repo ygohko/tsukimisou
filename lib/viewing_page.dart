@@ -39,6 +39,13 @@ import 'memo_store_local_saver.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
+enum ViewingPageResult {
+  // TODO: Remove if unneeded.
+  closed,
+  deleted,
+  archived,
+}
+
 enum _Direction {
   forward,
   backward,
@@ -369,7 +376,7 @@ class _ViewingPageState extends State<ViewingPage>
       }
     }
     if (mounted) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(ViewingPageResult.deleted);
     }
   }
 
@@ -428,7 +435,8 @@ class _ViewingPageState extends State<ViewingPage>
     }
 
     if (mounted) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(ViewingPageResult.archived);
+      /*
       final key = widget.homePageStateKey;
       if (key != null) {
         final snackBar = SnackBar(
@@ -445,6 +453,7 @@ class _ViewingPageState extends State<ViewingPage>
         );
         key.currentState!.showSnackBar(snackBar);
       }
+      */
     }
   }
 
