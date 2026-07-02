@@ -176,10 +176,20 @@ class _HomePageState extends State<HomePage> {
       );
       _showSnackBar(snackBar);
     } else {
-      // TODO: Show SnackBar when memo is deleted.
-      setState(() {
-        _actionButtonShown = true;
-      });
+      final localizations = AppLocalizations.of(context)!;
+      final snackBar = SnackBar(
+        content: Text(
+          localizations.memoDeleted,
+          style: TextStyle(
+            color: common_uis.TsukimisouColors.scheme.onSecondary,
+          ),
+        ),
+        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
+        width: 300.0,
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+      );
+      _showSnackBar(snackBar);
     }
   }
 
