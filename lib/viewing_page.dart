@@ -38,6 +38,13 @@ import 'memo_store_local_saver.dart';
 import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
+enum ViewingPageResult {
+  // TODO: Remove if unneeded.
+  closed,
+  deleted,
+  archived,
+}
+
 enum _Direction {
   forward,
   backward,
@@ -367,7 +374,7 @@ class _ViewingPageState extends State<ViewingPage>
       }
     }
     if (mounted) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(ViewingPageResult.deleted);
     }
   }
 
@@ -426,20 +433,7 @@ class _ViewingPageState extends State<ViewingPage>
     }
 
     if (mounted) {
-      Navigator.of(context).pop();
-      final snackBar = SnackBar(
-        content: Text(
-          localizations.memoArchived,
-          style: TextStyle(
-            color: common_uis.TsukimisouColors.scheme.onSecondary,
-          ),
-        ),
-        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
-        width: 300.0,
-        behavior: SnackBarBehavior.floating,
-        showCloseIcon: true,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.of(context).pop(ViewingPageResult.archived);
     }
   }
 

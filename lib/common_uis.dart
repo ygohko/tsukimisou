@@ -521,17 +521,18 @@ Future<T?> showTransitioningDialog<T>({
 }
 
 /// Views this memo.
-Future<void> viewMemo(BuildContext context, Memo memo) async {
+Future<ViewingPageResult?> viewMemo(BuildContext context, Memo memo) async {
+  ViewingPageResult? result;
   if (!hasLargeScreen()) {
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
+    result = await Navigator.of(context).push(
+      MaterialPageRoute<ViewingPageResult>(
         builder: (context) {
           return ViewingPage(memo: memo);
         },
       ),
     );
   } else {
-    await showTransitioningDialog(
+    result = await showTransitioningDialog(
       context: context,
       builder: (context) {
         return Center(
@@ -547,6 +548,8 @@ Future<void> viewMemo(BuildContext context, Memo memo) async {
       duration: const Duration(milliseconds: 500),
     );
   }
+
+  return result;
 }
 
 /// Creates a subtitle.

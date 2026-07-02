@@ -31,6 +31,7 @@ import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
 import 'extensions.dart';
+import 'gen_l10n/app_localizations.dart';
 import 'google_drive_file.dart';
 import 'memo.dart';
 import 'memo_store.dart';
@@ -44,7 +45,7 @@ import 'searching_page.dart';
 import 'searching_page_contents.dart';
 import 'settings.dart';
 import 'settings_page.dart';
-import 'gen_l10n/app_localizations.dart';
+import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
   /// Creates a home page.
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   var _commonUiInitialized = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
+  var _actionButtonShown = true;
   var _fileLockedCount = 0;
 
   @override
@@ -140,6 +142,44 @@ class _HomePageState extends State<HomePage> {
     } on IOException {
       // Load error
       // Do nothing for now
+    }
+  }
+
+  Future<void> _viewMemo(Memo memo) async {
+    setState(() {
+      _actionButtonShown = false;
+    });
+    final result = await common_uis.viewMemo(context, memo);
+    if (result == null) {
+      setState(() {
+        _actionButtonShown = true;
+      });
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+
+    if (result == ViewingPageResult.archived) {
+      final localizations = AppLocalizations.of(context)!;
+      final snackBar = SnackBar(
+        content: Text(
+          localizations.memoArchived,
+          style: TextStyle(
+            color: common_uis.TsukimisouColors.scheme.onSecondary,
+          ),
+        ),
+        backgroundColor: common_uis.TsukimisouColors.scheme.secondary,
+        width: 300.0,
+        behavior: SnackBarBehavior.floating,
+        showCloseIcon: true,
+      );
+      _showSnackBar(snackBar);
+    } else {
+      // TODO: Show SnackBar when memo is deleted.
+      setState(() {
+        _actionButtonShown = true;
+      });
     }
   }
 
@@ -437,6 +477,15 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _showSnackBar(SnackBar snackBar) {
+    final controller = ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    controller.closed.then((reason) {
+      setState(() {
+        _actionButtonShown = true;
+      });
+    });
+  }
+
   void _showSynchronizingBanner() {
     final localizations = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showMaterialBanner(
@@ -504,7 +553,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      floatingActionButton: Consumer<AppState>(
+      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
         builder: (context, appState, child) {
           return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
@@ -512,7 +561,7 @@ class _HomePageState extends State<HomePage> {
             child: const Icon(Icons.add),
           );
         },
-      ),
+      ) : null,
       drawer: SafeArea(
         bottom: false,
         child: Drawer(
@@ -588,7 +637,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: Consumer<AppState>(
+      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
         builder: (context, appState, child) {
           return FloatingActionButton(
             onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
@@ -596,7 +645,7 @@ class _HomePageState extends State<HomePage> {
             child: const Icon(Icons.add),
           );
         },
-      ),
+      ) : null,
     );
   }
 
@@ -625,7 +674,7 @@ class _HomePageState extends State<HomePage> {
             onTap: appState.mergingWithGoogleDrive
                 ? null
                 : () {
-                    common_uis.viewMemo(context, memo);
+                    _viewMemo(memo);
                   },
             child: common_uis.memoCardContents(context, memo, unsynchronized),
           ),
