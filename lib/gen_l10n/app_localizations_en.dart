@@ -200,6 +200,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get memoUnarchived => 'Memo unarchived.';
 
   @override
+  String get memoDeleted => 'Memo deleted.';
+
+  @override
   String get confirm => 'Confirm';
 
   @override

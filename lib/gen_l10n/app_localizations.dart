@@ -435,6 +435,12 @@ abstract class AppLocalizations {
   /// **'Memo unarchived.'**
   String get memoUnarchived;
 
+  /// Snack bar text when memo is deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Memo deleted.'**
+  String get memoDeleted;
+
   /// Title for error dialog
   ///
   /// In en, this message translates to:

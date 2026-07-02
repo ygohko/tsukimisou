@@ -199,6 +199,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get memoUnarchived => 'メモをアーカイブ解除しました。';
 
   @override
+  String get memoDeleted => 'メモを削除しました。';
+
+  @override
   String get confirm => '確認';
 
   @override
