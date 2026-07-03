@@ -39,8 +39,6 @@ import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
 enum ViewingPageResult {
-  // TODO: Remove if unneeded.
-  closed,
   deleted,
   archived,
 }
