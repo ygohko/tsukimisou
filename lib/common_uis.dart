@@ -636,15 +636,10 @@ Widget memoCardContents(BuildContext context, Memo memo, bool unsynchronized) {
   }
   final archiveName = memo.archiveName;
   if (archiveName != null) {
-    contents.add(
-      Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          localizations.inArchive(archiveName),
-          style: attributeStyle
-        ),
-      )
-    );
+    contents.add(Align(
+      alignment: Alignment.centerRight,
+      child: Text(localizations.inArchive(archiveName), style: attributeStyle),
+    ));
   }
 
   return Padding(

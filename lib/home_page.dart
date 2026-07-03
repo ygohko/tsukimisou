@@ -563,15 +563,17 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
-        builder: (context, appState, child) {
-          return FloatingActionButton(
-            onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
-            tooltip: localizations.addAMemo,
-            child: const Icon(Icons.add),
-          );
-        },
-      ) : null,
+      floatingActionButton: _actionButtonShown
+          ? Consumer<AppState>(
+              builder: (context, appState, child) {
+                return FloatingActionButton(
+                  onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
+                  tooltip: localizations.addAMemo,
+                  child: const Icon(Icons.add),
+                );
+              },
+            )
+          : null,
       drawer: SafeArea(
         bottom: false,
         child: Drawer(
@@ -647,15 +649,17 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: _actionButtonShown ? Consumer<AppState>(
-        builder: (context, appState, child) {
-          return FloatingActionButton(
-            onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
-            tooltip: localizations.addAMemo,
-            child: const Icon(Icons.add),
-          );
-        },
-      ) : null,
+      floatingActionButton: _actionButtonShown
+          ? Consumer<AppState>(
+              builder: (context, appState, child) {
+                return FloatingActionButton(
+                  onPressed: appState.mergingWithGoogleDrive ? null : _addMemo,
+                  tooltip: localizations.addAMemo,
+                  child: const Icon(Icons.add),
+                );
+              },
+            )
+          : null,
     );
   }
 
