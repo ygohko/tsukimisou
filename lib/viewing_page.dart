@@ -151,41 +151,36 @@ class _ViewingPageState extends State<ViewingPage>
         ),
       );
     }
-    actions.add(
-      IconButton(
-        icon: const Icon(Icons.share),
-        onPressed: _share,
-        tooltip: localizations.share,
-      )
-    );
+    actions.add(IconButton(
+      icon: const Icon(Icons.share),
+      onPressed: _share,
+      tooltip: localizations.share,
+    ));
     if (archiveName == null) {
       actions.addAll([
-          IconButton(
-            icon: const Icon(Icons.delete_outlined),
-            onPressed: _delete,
-            tooltip: localizations.delete,
-          ),
-          IconButton(
-            icon: const Icon(Icons.archive_outlined),
-            onPressed: _archive,
-            tooltip: localizations.archive,
-          ),
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: _edit,
-            tooltip: localizations.edit,
-          ),
-        ]
-      );
-    } else {
-      actions.add(
         IconButton(
-          key: const ValueKey('unarchiveMemoButton'),
-          icon: const Icon(Icons.unarchive_outlined),
-          onPressed: _unarchive,
-          tooltip: localizations.unarchive,
-        )
-      );
+          icon: const Icon(Icons.delete_outlined),
+          onPressed: _delete,
+          tooltip: localizations.delete,
+        ),
+        IconButton(
+          icon: const Icon(Icons.archive_outlined),
+          onPressed: _archive,
+          tooltip: localizations.archive,
+        ),
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: _edit,
+          tooltip: localizations.edit,
+        ),
+      ]);
+    } else {
+      actions.add(IconButton(
+        key: const ValueKey('unarchiveMemoButton'),
+        icon: const Icon(Icons.unarchive_outlined),
+        onPressed: _unarchive,
+        tooltip: localizations.unarchive,
+      ));
     }
     late final Widget textContents;
     // TODO: Consider expandable implementation.
@@ -231,8 +226,8 @@ class _ViewingPageState extends State<ViewingPage>
         child: Scaffold(
           appBar: AppBar(
             leading: common_uis.hasLargeScreen()
-            ? const CloseButton()
-            : const BackButton(),
+                ? const CloseButton()
+                : const BackButton(),
             title: Text(_memo.name),
             actions: actions,
           ),
@@ -257,24 +252,24 @@ class _ViewingPageState extends State<ViewingPage>
               ),
               ListTile(
                 title: Text(localizations.updated(dateTime.toDetailedString()),
-                  style: attributeStyle),
+                    style: attributeStyle),
               ),
               const Divider(),
               ListTile(
                 title: Text(localizations.boundTags(tagsString),
-                  style: attributeStyle),
+                    style: attributeStyle),
                 onTap: _bindTags,
               ),
               const Divider(),
               ListTile(
                 title:
-                Text(localizations.name(_memo.name), style: attributeStyle),
+                    Text(localizations.name(_memo.name), style: attributeStyle),
                 onTap: _modifyName,
               ),
               const Divider(),
               ListTile(
                 title: Text(localizations.viewingMode(_memo.viewingMode),
-                  style: attributeStyle),
+                    style: attributeStyle),
                 onTap: _chooseViewingMode,
               ),
               const Divider(),
@@ -484,7 +479,7 @@ class _ViewingPageState extends State<ViewingPage>
         );
       }
     }
-    
+
     setState(() {});
     if (mounted) {
       final snackBar = SnackBar(
