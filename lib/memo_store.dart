@@ -54,6 +54,29 @@ class ArchiveNotFoundException implements Exception {
   }
 }
 
+class NotArchivedException implements Exception {
+  /// Message of this exception.
+  final String message;
+
+  /// Archive name that is not found.
+  final String? name;
+
+  /// Cause exception.
+  final Exception? causeException;
+
+  /// Cause stack trace.
+  final StackTrace? causeStackTrace;
+
+  /// Creates a not archived exception.
+  NotArchivedException(this.message,
+      {this.name, this.causeException, this.causeStackTrace});
+
+  @override
+  String toString() {
+    return 'NotArchivedException: $message, name: $name, causeException: $causeException, causeStackTrace: $causeStackTrace';
+  }
+}
+
 class CallbackNotSetError extends Error {
   /// Message of this error.
   final String message;
@@ -114,8 +137,7 @@ class MemoStore extends ChangeNotifier {
       if (archiveMemoStore == null) {
         final callback = _onArchiveMemoStoreRequired;
         if (callback == null) {
-          // TODO: Define custom Exceptions.
-          throw Exception('onArchiveMemoStoreRequired is not set.');
+          throw CallbackNotSetError('onArchiveMemoStoreRequired is not set.');
         }
         try {
           archiveMemoStore = await callback(archiveName);
@@ -145,8 +167,7 @@ class MemoStore extends ChangeNotifier {
   Future<MemoStore> unarchiveMemo(Memo memo) async {
     final archiveName = memo.archiveName;
     if (archiveName == null) {
-      // Do nothing.
-      throw Exception('This memo is not archived.');
+      throw NotArchivedException('This memo is not archived.');
     }
     var archiveMemoStore = archiveMemoStores[archiveName];
     if (archiveMemoStore == null) {
@@ -245,7 +266,7 @@ class MemoStore extends ChangeNotifier {
   /// Archive that has given name.
   Future<MemoStore> archiveMemoStore(String name) async {
     if (!archiveHashes.containsKey(name)) {
-      throw Exception('Archive not found');
+      throw ArchiveNotFoundException('Archive not found');
     }
 
     var archiveMemoStore = archiveMemoStores[name];
@@ -264,7 +285,7 @@ class MemoStore extends ChangeNotifier {
   /// Archive that has given name.
   MemoStore? archiveMemoStoreIfLoaded(String name) {
     if (!archiveHashes.containsKey(name)) {
-      throw Exception('Archive not found');
+      throw ArchiveNotFoundException('Archive not found');
     }
 
     return archiveMemoStores[name];
