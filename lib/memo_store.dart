@@ -54,6 +54,19 @@ class ArchiveNotFoundException implements Exception {
   }
 }
 
+class CallbackNotSetError extends Error {
+  /// Message of this error.
+  final String message;
+
+  /// Creates a callback not set error.
+  CallbackNotSetError(this.message);
+
+  @override
+  String toString() {
+    return 'CallbackNotSetError: $message, stackTrace: $stackTrace';
+  }
+}
+
 class MemoStore extends ChangeNotifier {
   /// Memos that are stored in this memo store.
   var memos = <Memo>[];
@@ -139,7 +152,7 @@ class MemoStore extends ChangeNotifier {
     if (archiveMemoStore == null) {
       final callback = _onArchiveMemoStoreRequired;
       if (callback == null) {
-        throw Exception('onArchiveMemoStoreRequired is not set.');
+        throw CallbackNotSetError('onArchiveMemoStoreRequired is not set.');
       }
       archiveMemoStore = await callback(archiveName);
       archiveMemoStores[archiveName] = archiveMemoStore;
@@ -239,7 +252,7 @@ class MemoStore extends ChangeNotifier {
     if (archiveMemoStore == null) {
       final callback = _onArchiveMemoStoreRequired;
       if (callback == null) {
-        throw Exception('onArchiveMemoStoreRequired is not set.');
+        throw CallbackNotSetError('onArchiveMemoStoreRequired is not set.');
       }
       archiveMemoStore = await callback(name);
       archiveMemoStores[name] = archiveMemoStore;
