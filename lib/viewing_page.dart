@@ -377,7 +377,7 @@ class _ViewingPageState extends State<ViewingPage>
     late final MemoStore archiveMemoStore;
     try {
       archiveMemoStore = await memoStore.archiveMemo(_memo);
-    } on Exception catch (exception, stackTrace) {
+    } on ArchiveNotFoundException catch (exception, stackTrace) {
       if (!mounted) {
         return;
       }
@@ -387,10 +387,7 @@ class _ViewingPageState extends State<ViewingPage>
         exception: exception,
         stackTrace: stackTrace,
       );
-      String? name;
-      if (exception is ArchiveNotFoundException) {
-        name = exception.name;
-      }
+      final name = exception.name;
       if (name != null &&
           result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
         memoStore.removeArchive(name);
@@ -440,7 +437,7 @@ class _ViewingPageState extends State<ViewingPage>
     late final MemoStore archiveMemoStore;
     try {
       archiveMemoStore = await memoStore.unarchiveMemo(_memo);
-    } on Exception catch (exception, stackTrace) {
+    } on NotArchivedException catch (exception, stackTrace) {
       if (!mounted) {
         return;
       }
