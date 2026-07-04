@@ -58,9 +58,6 @@ class NotArchivedException implements Exception {
   /// Message of this exception.
   final String message;
 
-  /// Archive name that is not found.
-  final String? name;
-
   /// Cause exception.
   final Exception? causeException;
 
@@ -69,11 +66,11 @@ class NotArchivedException implements Exception {
 
   /// Creates a not archived exception.
   NotArchivedException(this.message,
-      {this.name, this.causeException, this.causeStackTrace});
+      {this.causeException, this.causeStackTrace});
 
   @override
   String toString() {
-    return 'NotArchivedException: $message, name: $name, causeException: $causeException, causeStackTrace: $causeStackTrace';
+    return 'NotArchivedException: $message, causeException: $causeException, causeStackTrace: $causeStackTrace';
   }
 }
 
