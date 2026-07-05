@@ -245,7 +245,41 @@ class _HomePageState extends State<HomePage> {
     _fileLockedCount = 0;
 
     // TODO: First try with missingArchivesIgnored: false, and if that failed retry with true.
-    final merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, true);
+
+    MemoStoreMerger? merger;
+    try {
+      merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, false);
+    } on Exception catch (exception, stackTrace) {
+      if (mounted) {
+        final accepted = await common_uis.showConfirmationDialog(
+            context,
+            'Could not load archive memo stores',
+            'Loading archive memo stores may be failed. Retry with ignoring missing memo stores?',
+            'Retry',
+            localizations.cancel,
+            false);
+        if (!accepted) {
+          return;
+        }
+      }
+    }
+    if (merger == null) {
+      try {
+        merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, true);
+      } on Exception catch (exception, stackTrace) {
+        if (mounted) {
+          await common_uis.showErrorDialog(
+            context,
+            localizations.synchronizationWasFailed,
+            localizations.couldNotSynchronizeWithGoogleDrive,
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
+          return;
+        }
+      }
+    }
     if (merger == null) {
       return;
     }

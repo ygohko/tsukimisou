@@ -162,11 +162,14 @@ class MemoStoreMerger {
       if (toMemoStore.archiveHashes.containsKey(name)) {
         try {
           toArchive = await toMemoStore.archiveMemoStore(name);
-        } on ArchiveNotFoundException {
+        } on Exception {
           if (_missingArchivesIgnored) {
             toArchive = MemoStore();
             toMemoStore.archiveMemoStores[name] = toArchive;
           } else {
+
+            // TODO: Throw custom exception?
+
             rethrow;
           }
         }
@@ -179,13 +182,16 @@ class MemoStoreMerger {
       if (fromMemoStore.archiveHashes.containsKey(name)) {
         try {
           fromArchive = await fromMemoStore.archiveMemoStore(name);
-        } on ArchiveNotFoundException {
+        } on Exception {
           if (_missingArchivesIgnored) {
             fromArchive = MemoStore();
             fromMemoStore.archiveMemoStores[name] = fromArchive;
             // Missing archive must be updated.
             _updatedArchiveNames.add(name);
           } else {
+
+            // TODO: Throw custom exception?
+
             rethrow;
           }
         }
