@@ -167,9 +167,6 @@ class MemoStoreMerger {
             toArchive = MemoStore();
             toMemoStore.archiveMemoStores[name] = toArchive;
           } else {
-
-            // TODO: Throw custom exception?
-
             rethrow;
           }
         }
@@ -189,9 +186,6 @@ class MemoStoreMerger {
             // Missing archive must be updated.
             _updatedArchiveNames.add(name);
           } else {
-
-            // TODO: Throw custom exception?
-
             rethrow;
           }
         }
