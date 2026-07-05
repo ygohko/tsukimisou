@@ -95,6 +95,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not synchronize with Google Drive.';
 
   @override
+  String get loadingArchiveMemoStoresFailed =>
+      'Loading archive memo stores failed';
+
+  @override
+  String get couldNotLoadArchiveMemoStores =>
+      'Could not load archive memo stores. Retry with ignoring missing memo stores?';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
   String get thisMemoHasConflicts => 'This memo has conflicts.';
 
   @override

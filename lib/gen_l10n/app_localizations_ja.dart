@@ -94,6 +94,16 @@ class AppLocalizationsJa extends AppLocalizations {
       'メモストアのGoogle Driveとの同期ができませんでした。';
 
   @override
+  String get loadingArchiveMemoStoresFailed => 'アーカイブ先のメモストアの読み込みが失敗しました';
+
+  @override
+  String get couldNotLoadArchiveMemoStores =>
+      'アーカイブ先のメモストアを読み込みできませんでした。失われたメモストアを無視してリトライしますか?';
+
+  @override
+  String get retry => 'リトライ';
+
+  @override
   String get thisMemoHasConflicts => 'このメモには衝突があります。';
 
   @override
