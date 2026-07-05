@@ -221,7 +221,8 @@ void main() {
       memo.lastModified = 1672531200000; // 2023-01-01
       memoStore.addMemo(memo);
       memoStore.archiveHashes['2023'] = '012345678';
-      expect(() => memoStore.archiveMemo(memo), throwsA(isA<CallbackNotSetError>()));
+      expect(() => memoStore.archiveMemo(memo),
+          throwsA(isA<CallbackNotSetError>()));
     });
 
     test('unarchiveMemo should move a memo to a new archive', () async {
