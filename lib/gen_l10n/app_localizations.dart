@@ -249,6 +249,24 @@ abstract class AppLocalizations {
   /// **'Could not synchronize with Google Drive.'**
   String get couldNotSynchronizeWithGoogleDrive;
 
+  /// Title for loading archive memo store failed error dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Loading archive memo stores failed'**
+  String get loadingArchiveMemoStoresFailed;
+
+  /// text for loading archive memo store failed error dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load archive memo stores. Retry with ignoring missing memo stores?'**
+  String get couldNotLoadArchiveMemoStores;
+
+  /// text for retry button
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// Text to indicate this memo has confilicts.
   ///
   /// In en, this message translates to:

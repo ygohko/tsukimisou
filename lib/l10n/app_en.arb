@@ -110,6 +110,18 @@
     "@couldNotSynchronizeWithGoogleDrive": {
         "description": "Text for synchronization error dialog."
     },
+    "loadingArchiveMemoStoresFailed": "Loading archive memo stores failed",
+    "@loadingArchiveMemoStoresFailed": {
+        "description": "Title for loading archive memo store failed error dialog"
+    },
+    "couldNotLoadArchiveMemoStores": "Could not load archive memo stores. Retry with ignoring missing memo stores?",
+    "@couldNotLoadArchiveMemoStores": {
+        "description": "text for loading archive memo store failed error dialog"
+    },
+    "retry": "Retry",
+    "@retry": {
+        "description": "text for retry button"
+    },
     "thisMemoHasConflicts": "This memo has conflicts.",
     "@thisMemoHasConflicts": {
         "description": "Text to indicate this memo has confilicts."

@@ -241,21 +241,18 @@ class _HomePageState extends State<HomePage> {
     if (fromMemoStore == null) {
       return;
     }
-
     _fileLockedCount = 0;
-
-    // TODO: First try with missingArchivesIgnored: false, and if that failed retry with true.
 
     MemoStoreMerger? merger;
     try {
       merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, false);
-    } on Exception catch (exception, stackTrace) {
+    } on Exception {
       if (mounted) {
         final accepted = await common_uis.showConfirmationDialog(
             context,
-            'Could not load archive memo stores',
-            'Loading archive memo stores may be failed. Retry with ignoring missing memo stores?',
-            'Retry',
+            localizations.loadingArchiveMemoStoresFailed,
+            localizations.couldNotLoadArchiveMemoStores,
+            localizations.retry,
             localizations.cancel,
             false);
         if (!accepted) {
