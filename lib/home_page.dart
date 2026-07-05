@@ -228,15 +228,29 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _mergeWithGoogleDrive() async {
     // TODO: Divide this method.
+
+    // Load from MemoStore.
+
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
     }
+
+
+
+
     final localizations = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
     final appState = Provider.of<AppState>(context, listen: false);
     appState.mergingWithGoogleDrive = true;
     _showSynchronizingBanner();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
+    final fromMemoStore = await _loadFromMemoStore(localizations, messenger, appState);
+    if (fromMemoStore == null) {
+      return;
+    }
+
+
+    /*
     final fromMemoStore = MemoStore();
     final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
@@ -320,9 +334,22 @@ class _HomePageState extends State<HomePage> {
       await loader.execute();
       return memoStore;
     };
+    */
+
+    // Merge MemoStores.
 
     _fileLockedCount = 0;
+
+
+
     // TODO: First try with missingArchivesIgnored: false, and if that failed retry with true.
+
+    final merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, true);
+    if (merger == null) {
+      return;
+    }
+
+    /*
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore,
         missingArchivesIgnored: true);
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
@@ -344,7 +371,16 @@ class _HomePageState extends State<HomePage> {
         return;
       }
     }
+    */
 
+    // Save MemoStores.
+
+    var result = await _saveMergedMemoStoresLocal(toMemoStore, merger, localizations, messenger, appState);
+    if (!result) {
+      return;
+    }
+
+    /*
     final localSaver =
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
@@ -387,6 +423,7 @@ class _HomePageState extends State<HomePage> {
         }
       }
     }
+    */
 
     messenger.hideCurrentMaterialBanner();
     appState.mergingWithGoogleDrive = false;
@@ -394,6 +431,11 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _savingToGoogleDrive = true;
     });
+
+
+    result = await _saveMergedMemoStoresLocal(toMemoStore, merger, localizations, messenger, appState);
+
+    /*
     final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
@@ -430,10 +472,214 @@ class _HomePageState extends State<HomePage> {
         }
       }
     }
+    */
 
     setState(() {
       _savingToGoogleDrive = false;
     });
+  }
+
+  Future<MemoStore?> _loadFromMemoStore(AppLocalizations localizations, ScaffoldMessengerState messenger, AppState appState) async {
+    final fromMemoStore = MemoStore();
+    final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
+    try {
+      await loader.execute();
+    } on FileNotFoundException {
+      // Loading failure can be ignored because the file may not exists. Do nothing.
+    } on FileLockedException catch (exception, stackTrace) {
+      // Loading failure caused by locked memo store.
+      _fileLockedCount++;
+      if (_fileLockedCount < 3) {
+        messenger.hideCurrentMaterialBanner();
+        appState.mergingWithGoogleDrive = false;
+        if (!mounted) {
+          return null;
+        }
+        await common_uis.showErrorDialog(
+          context,
+          localizations.memoStoreIsLocked,
+          localizations.memoStoreIsLockedByOtherDevice,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
+        return null;
+      } else {
+        // Confirm to force unlock
+        messenger.hideCurrentMaterialBanner();
+        appState.mergingWithGoogleDrive = false;
+        if (!mounted) {
+          return null;
+        }
+        final accepted = await common_uis.showConfirmationDialog(
+            context,
+            localizations.memoStoreIsLocked,
+            localizations.memoStoreIsStillLocked,
+            localizations.unlock,
+            localizations.cancel,
+            false);
+        if (accepted) {
+          await _unlockGoogleDrive();
+        }
+        return null;
+      }
+    } on FileNotCompatibleException catch (exception, stackTrace) {
+      // Not compatible error.
+      messenger.hideCurrentMaterialBanner();
+      appState.mergingWithGoogleDrive = false;
+      if (!mounted) {
+        return null;
+      }
+      await common_uis.showErrorDialog(
+        context,
+        localizations.memoStoreIsNotCompatible,
+        localizations.memoStoreOnTheGoogleDriveIsNotCompatible,
+        localizations.ok,
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+      return null;
+    } on Exception catch (exception, stackTrace) {
+      // Other failure.
+      messenger.hideCurrentMaterialBanner();
+      appState.mergingWithGoogleDrive = false;
+      if (!mounted) {
+        return null;
+      }
+      await common_uis.showErrorDialog(
+        context,
+        localizations.loadingWasFailed,
+        localizations.couldNotLoadMemoStoreFromGoogleDrive,
+        localizations.ok,
+        exception: exception,
+        stackTrace: stackTrace,
+      );
+      return null;
+    }
+    fromMemoStore.onArchiveMemoStoreRequired = (name) async {
+      final memoStore = MemoStore();
+      final loader =
+          MemoStoreGoogleDriveLoader(memoStore, 'Archive-$name.json');
+      await loader.execute();
+      return memoStore;
+    };
+
+    return fromMemoStore;
+  }
+
+  Future<MemoStoreMerger?> _mergeMemoStores(MemoStore toMemoStore, MemoStore fromMemoStore, AppLocalizations localizations, bool missingArchivesIgnored) async {
+    final merger = MemoStoreMerger(toMemoStore, fromMemoStore,
+        missingArchivesIgnored: missingArchivesIgnored);
+    merger.conflictWarningText = localizations.thisMemoHasConflicts;
+    merger.localMarkerText = localizations.local;
+    merger.cloudMarkerText = localizations.cloud;
+    try {
+      await merger.execute();
+    } on Exception catch (exception, stackTrace) {
+      if (mounted) {
+        await common_uis.showErrorDialog(
+          context,
+          localizations.synchronizationWasFailed,
+          localizations.couldNotSynchronizeWithGoogleDrive,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
+        // TODO: Restore UIs correctly.
+        return null;
+      }
+    }
+
+    return merger;
+  }
+
+  Future<bool> _saveMergedMemoStoresLocal(MemoStore toMemoStore, MemoStoreMerger merger, AppLocalizations localizations, ScaffoldMessengerState messenger, AppState appState) async {
+    final localSaver =
+    await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
+    try {
+      localSaver.execute();
+    } on FileSystemException catch (exception, stackTrace) {
+      // Saving failed.
+      messenger.hideCurrentMaterialBanner();
+      appState.mergingWithGoogleDrive = false;
+      if (mounted) {
+        await common_uis.showErrorDialog(
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
+      }
+      return false;
+    }
+
+    final updatedArchiveNames = merger.updatedArchiveNames;
+    for (final name in updatedArchiveNames) {
+      final memoStore = await toMemoStore.archiveMemoStore(name);
+      final saver = await MemoStoreLocalSaver.fromFileName(
+        memoStore, 'Archive-$name.json');
+      try {
+        await saver.execute();
+      } on Exception catch (exception, stackTrace) {
+        // Saving failed.
+        if (mounted) {
+          await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToLocalStorage,
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
+        }
+      }
+    }
+
+    return true;
+  }
+
+  Future<bool> _saveMergedMemoStoresGoogleDrive(MemoStore toMemoStore, MemoStoreMerger merger, AppLocalizations localizations, ScaffoldMessengerState messenger, AppState appState) async {
+    final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
+    try {
+      await saver.execute();
+    } on Exception catch (exception, stackTrace) {
+      // Saving failed.
+      if (mounted) {
+        await common_uis.showErrorDialog(
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToGoogleDrive,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
+      }
+    }
+
+    final updatedArchiveNames = merger.updatedArchiveNames;
+    for (final name in updatedArchiveNames) {
+      final memoStore = await toMemoStore.archiveMemoStore(name);
+      final saver = MemoStoreGoogleDriveSaver(memoStore, 'Archive-$name.json');
+      try {
+        await saver.execute();
+      } on Exception catch (exception, stackTrace) {
+        // Saving failed.
+        if (mounted) {
+          await common_uis.showErrorDialog(
+            context,
+            localizations.savingWasFailed,
+            localizations.couldNotSaveMemoStoreToGoogleDrive,
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
+        }
+      }
+    }
+
+    return true;
   }
 
   Future<void> _unlockGoogleDrive() async {
