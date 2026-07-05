@@ -237,7 +237,8 @@ class _HomePageState extends State<HomePage> {
     appState.mergingWithGoogleDrive = true;
     _showSynchronizingBanner();
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
-    final fromMemoStore = await _loadFromMemoStore(localizations, messenger, appState);
+    final fromMemoStore =
+        await _loadFromMemoStore(localizations, messenger, appState);
     if (fromMemoStore == null) {
       return;
     }
@@ -245,7 +246,8 @@ class _HomePageState extends State<HomePage> {
 
     MemoStoreMerger? merger;
     try {
-      merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, false);
+      merger = await _mergeMemoStores(
+          toMemoStore, fromMemoStore, localizations, false);
     } on Exception {
       if (mounted) {
         final accepted = await common_uis.showConfirmationDialog(
@@ -262,7 +264,8 @@ class _HomePageState extends State<HomePage> {
     }
     if (merger == null) {
       try {
-        merger = await _mergeMemoStores(toMemoStore, fromMemoStore, localizations, true);
+        merger = await _mergeMemoStores(
+            toMemoStore, fromMemoStore, localizations, true);
       } on Exception catch (exception, stackTrace) {
         if (mounted) {
           await common_uis.showErrorDialog(
@@ -281,7 +284,8 @@ class _HomePageState extends State<HomePage> {
       return;
     }
 
-    var result = await _saveMergedMemoStoresLocal(toMemoStore, merger, localizations, messenger, appState);
+    var result = await _saveMergedMemoStoresLocal(
+        toMemoStore, merger, localizations, messenger, appState);
     if (!result) {
       return;
     }
@@ -292,14 +296,16 @@ class _HomePageState extends State<HomePage> {
       _savingToGoogleDrive = true;
     });
 
-    result = await _saveMergedMemoStoresGoogleDrive(toMemoStore, merger, localizations, messenger, appState);
+    result = await _saveMergedMemoStoresGoogleDrive(
+        toMemoStore, merger, localizations, messenger, appState);
 
     setState(() {
       _savingToGoogleDrive = false;
     });
   }
 
-  Future<MemoStore?> _loadFromMemoStore(AppLocalizations localizations, ScaffoldMessengerState messenger, AppState appState) async {
+  Future<MemoStore?> _loadFromMemoStore(AppLocalizations localizations,
+      ScaffoldMessengerState messenger, AppState appState) async {
     final fromMemoStore = MemoStore();
     final loader = MemoStoreGoogleDriveLoader(fromMemoStore, 'MemoStore.json');
     try {
@@ -387,7 +393,11 @@ class _HomePageState extends State<HomePage> {
     return fromMemoStore;
   }
 
-  Future<MemoStoreMerger?> _mergeMemoStores(MemoStore toMemoStore, MemoStore fromMemoStore, AppLocalizations localizations, bool missingArchivesIgnored) async {
+  Future<MemoStoreMerger?> _mergeMemoStores(
+      MemoStore toMemoStore,
+      MemoStore fromMemoStore,
+      AppLocalizations localizations,
+      bool missingArchivesIgnored) async {
     final merger = MemoStoreMerger(toMemoStore, fromMemoStore,
         missingArchivesIgnored: missingArchivesIgnored);
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
@@ -413,9 +423,14 @@ class _HomePageState extends State<HomePage> {
     return merger;
   }
 
-  Future<bool> _saveMergedMemoStoresLocal(MemoStore toMemoStore, MemoStoreMerger merger, AppLocalizations localizations, ScaffoldMessengerState messenger, AppState appState) async {
+  Future<bool> _saveMergedMemoStoresLocal(
+      MemoStore toMemoStore,
+      MemoStoreMerger merger,
+      AppLocalizations localizations,
+      ScaffoldMessengerState messenger,
+      AppState appState) async {
     final localSaver =
-    await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
+        await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
     } on FileSystemException catch (exception, stackTrace) {
@@ -439,7 +454,7 @@ class _HomePageState extends State<HomePage> {
     for (final name in updatedArchiveNames) {
       final memoStore = await toMemoStore.archiveMemoStore(name);
       final saver = await MemoStoreLocalSaver.fromFileName(
-        memoStore, 'Archive-$name.json');
+          memoStore, 'Archive-$name.json');
       try {
         await saver.execute();
       } on Exception catch (exception, stackTrace) {
@@ -460,7 +475,12 @@ class _HomePageState extends State<HomePage> {
     return true;
   }
 
-  Future<bool> _saveMergedMemoStoresGoogleDrive(MemoStore toMemoStore, MemoStoreMerger merger, AppLocalizations localizations, ScaffoldMessengerState messenger, AppState appState) async {
+  Future<bool> _saveMergedMemoStoresGoogleDrive(
+      MemoStore toMemoStore,
+      MemoStoreMerger merger,
+      AppLocalizations localizations,
+      ScaffoldMessengerState messenger,
+      AppState appState) async {
     final saver = MemoStoreGoogleDriveSaver(toMemoStore, 'MemoStore.json');
     try {
       await saver.execute();
