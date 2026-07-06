@@ -31,7 +31,7 @@ import 'gen_l10n/app_localizations.dart';
 
 class App extends StatelessWidget {
   /// Creates a app.
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {

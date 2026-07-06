@@ -40,12 +40,11 @@ class BindingTagsPage extends StatefulWidget {
 
   /// Creates a binding tags page.
   const BindingTagsPage(
-      {Key? key,
+      {super.key,
       required this.memo,
       required this.additionalTags,
       required this.tagScores,
-      this.fullScreen = true})
-      : super(key: key);
+      this.fullScreen = true});
 
   @override
   State<BindingTagsPage> createState() => _BindingTagsPageState();

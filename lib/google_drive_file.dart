@@ -358,10 +358,7 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
       final scopes = [DriveApi.driveFileScope];
       var authorization =
           await account.authorizationClient.authorizationForScopes(scopes);
-      if (authorization == null) {
-        authorization =
-            await account.authorizationClient.authorizeScopes(scopes);
-      }
+      authorization ??= await account.authorizationClient.authorizeScopes(scopes);
       final token = authorization.accessToken;
       _accessToken = token;
       updateHeaders(token);
@@ -384,9 +381,9 @@ class AuthenticationException implements Exception {
 }
 
 class FileNotFoundException extends HttpException {
-  FileNotFoundException(String message, {Uri? uri}) : super(message, uri: uri);
+  FileNotFoundException(super.message, {super.uri});
 }
 
 class FileLockedException extends HttpException {
-  FileLockedException(String message, {Uri? uri}) : super(message, uri: uri);
+  FileLockedException(super.message, {super.uri});
 }

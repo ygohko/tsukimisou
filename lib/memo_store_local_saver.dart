@@ -69,8 +69,7 @@ class MemoStoreLocalSaver extends MemoStoreSaver {
     _constructorHook = hook;
   }
 
-  MemoStoreLocalSaver._private(MemoStore memoStore, this._path)
-      : super(memoStore);
+  MemoStoreLocalSaver._private(super.memoStore, this._path);
 }
 
 class MemoStoreMockLocalSaver extends MemoStoreSaver
@@ -79,7 +78,7 @@ class MemoStoreMockLocalSaver extends MemoStoreSaver
   final String _path;
 
   /// Creates a memo store saver.
-  MemoStoreMockLocalSaver(MemoStore memoStore, this._path) : super(memoStore);
+  MemoStoreMockLocalSaver(super.memoStore, this._path);
 
   /// Executes this memo store saver.
   @override

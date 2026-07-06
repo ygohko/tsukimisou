@@ -222,11 +222,11 @@ class DialogToDialogTransition extends AnimatedWidget {
 
   /// Creates a dialog to dialog transition.
   const DialogToDialogTransition(
-      {Key? key,
+      {super.key,
       required Animation<double> phase,
       this.alignment = Alignment.center,
       required this.child})
-      : super(key: key, listenable: phase);
+      : super(listenable: phase);
 
   Animation<double> get _phase => listenable as Animation<double>;
 

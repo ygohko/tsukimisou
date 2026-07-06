@@ -53,8 +53,7 @@ class ViewingPage extends StatefulWidget {
   final bool fullScreen;
 
   /// Creates a viewing page.
-  const ViewingPage({Key? key, required this.memo, this.fullScreen = true})
-      : super(key: key);
+  const ViewingPage({super.key, required this.memo, this.fullScreen = true});
 
   @override
   State<ViewingPage> createState() => _ViewingPageState();

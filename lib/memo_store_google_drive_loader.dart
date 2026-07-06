@@ -54,8 +54,7 @@ class MemoStoreGoogleDriveLoader extends MemoStoreLoader {
     _constructorHook = hook;
   }
 
-  MemoStoreGoogleDriveLoader._private(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  MemoStoreGoogleDriveLoader._private(super.memoStore, this._fileName);
 }
 
 class MemoStoreMockGoogleDriveLoader extends MemoStoreLoader
@@ -64,8 +63,7 @@ class MemoStoreMockGoogleDriveLoader extends MemoStoreLoader
   final String _fileName;
 
   /// Creates a memo store loader.
-  MemoStoreMockGoogleDriveLoader(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  MemoStoreMockGoogleDriveLoader(super.memoStore, this._fileName);
 
   /// Executes this memo store loader.
   @override
