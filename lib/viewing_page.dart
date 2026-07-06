@@ -334,7 +334,12 @@ class _ViewingPageState extends State<ViewingPage>
 
   Future<void> _share() async {
     final localizations = AppLocalizations.of(context)!;
-    await Share.share(_memo.text, subject: localizations.sharedFromTsukimisou);
+    await SharePlus.instance.share(
+      ShareParams(
+        text: _memo.text,
+        subject: localizations.sharedFromTsukimisou,
+      ),
+    );
   }
 
   Future<void> _delete() async {
