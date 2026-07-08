@@ -27,11 +27,12 @@ import 'package:provider/provider.dart';
 import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'extensions.dart';
+import 'gen_l10n/app_localizations.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_searcher.dart';
 import 'settings.dart';
-import 'gen_l10n/app_localizations.dart';
+import 'viewing_page.dart';
 
 class SearchingPageContents extends StatefulWidget {
   final List<String> shownArchiveNames;
@@ -90,9 +91,9 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             child: InkWell(
               onTap: appState.mergingWithGoogleDrive
                   ? null
-                  : () async {
-                      await common_uis.viewMemo(context, memo);
-                    },
+                  : () {
+                    _viewMemo(memo);
+                  },
               child: common_uis.memoCardContents(context, memo, unsynchronized),
             ),
           );
@@ -160,5 +161,16 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
   void _clear() {
     _controller.clear();
     _focusNode.requestFocus();
+  }
+
+  void _viewMemo(Memo memo) async {
+    final result = await common_uis.viewMemo(context, memo);
+    if (result == null) {
+      return;
+    }
+    if (result == ViewingPageResult.deleted || result == ViewingPageResult.archived) {
+      final query = _controller.text;
+      _search(query);
+    }
   }
 }
