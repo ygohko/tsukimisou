@@ -150,9 +150,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
         memos.addAll(searcher.results);
       }
     }
+    memos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
 
-    // TODO: Sort memos.
-    
     setState(() {
       _memos = memos;
     });
