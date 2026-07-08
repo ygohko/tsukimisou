@@ -531,7 +531,7 @@ class _HomePageState extends State<HomePage> {
     await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return const SearchingPage();
+          return SearchingPage(shownArchiveNames: _shownArchiveNames);
         },
       ),
     );
@@ -721,7 +721,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 } else {
-                  rightPaneWidget = const SearchingPageContents();
+                  rightPaneWidget = SearchingPageContents(shownArchiveNames: _shownArchiveNames);
                 }
                 const platform = LocalPlatform();
                 if (platform.isMobile) {

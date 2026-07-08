@@ -34,8 +34,10 @@ import 'settings.dart';
 import 'gen_l10n/app_localizations.dart';
 
 class SearchingPageContents extends StatefulWidget {
+  final List<String> shownArchiveNames;
+
   /// Creates a searching page contents.
-  const SearchingPageContents({Key? key}) : super(key: key);
+  const SearchingPageContents({Key? key, required this.shownArchiveNames}) : super(key: key);
 
   @override
   State<SearchingPageContents> createState() => _SearchingPageContentsState();
@@ -139,8 +141,20 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final searcher = MemoStoreSearcher(memoStore, query);
     searcher.execute();
+    final memos = [...searcher.results];
+    for (final name in widget.shownArchiveNames) {
+      final aMemoStore = memoStore.archiveMemoStoreIfLoaded(name);
+      if (aMemoStore != null) {
+        final searcher = MemoStoreSearcher(aMemoStore, query);
+        searcher.execute();
+        memos.addAll(searcher.results);
+      }
+    }
+
+    // TODO: Sort memos.
+    
     setState(() {
-      _memos = [...searcher.results];
+      _memos = memos;
     });
   }
 
