@@ -26,8 +26,10 @@ import 'searching_page_contents.dart';
 import 'gen_l10n/app_localizations.dart';
 
 class SearchingPage extends StatefulWidget {
+  final List<String> shownArchiveNames;
+
   /// Creates a searching page.
-  const SearchingPage({Key? key}) : super(key: key);
+  const SearchingPage({Key? key, required this.shownArchiveNames}) : super(key: key);
 
   @override
   State<SearchingPage> createState() => _SearchingPageState();
@@ -41,7 +43,7 @@ class _SearchingPageState extends State<SearchingPage> {
       appBar: AppBar(
         title: Text(localizations.searchTitle),
       ),
-      body: const SearchingPageContents(),
+      body: SearchingPageContents(shownArchiveNames: widget.shownArchiveNames),
     );
   }
 }

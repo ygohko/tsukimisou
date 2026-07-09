@@ -27,15 +27,18 @@ import 'package:provider/provider.dart';
 import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'extensions.dart';
+import 'gen_l10n/app_localizations.dart';
 import 'memo.dart';
 import 'memo_store.dart';
 import 'memo_store_searcher.dart';
 import 'settings.dart';
-import 'gen_l10n/app_localizations.dart';
+import 'viewing_page.dart';
 
 class SearchingPageContents extends StatefulWidget {
+  final List<String> shownArchiveNames;
+
   /// Creates a searching page contents.
-  const SearchingPageContents({Key? key}) : super(key: key);
+  const SearchingPageContents({Key? key, required this.shownArchiveNames}) : super(key: key);
 
   @override
   State<SearchingPageContents> createState() => _SearchingPageContentsState();
@@ -88,9 +91,9 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
             child: InkWell(
               onTap: appState.mergingWithGoogleDrive
                   ? null
-                  : () async {
-                      await common_uis.viewMemo(context, memo);
-                    },
+                  : () {
+                    _viewMemo(memo);
+                  },
               child: common_uis.memoCardContents(context, memo, unsynchronized),
             ),
           );
@@ -139,13 +142,35 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final searcher = MemoStoreSearcher(memoStore, query);
     searcher.execute();
+    final memos = [...searcher.results];
+    for (final name in widget.shownArchiveNames) {
+      final aMemoStore = memoStore.archiveMemoStoreIfLoaded(name);
+      if (aMemoStore != null) {
+        final searcher = MemoStoreSearcher(aMemoStore, query);
+        searcher.execute();
+        memos.addAll(searcher.results);
+      }
+    }
+    memos.sort((a, b) => b.lastModified.compareTo(a.lastModified));
+
     setState(() {
-      _memos = [...searcher.results];
+      _memos = memos;
     });
   }
 
   void _clear() {
     _controller.clear();
     _focusNode.requestFocus();
+  }
+
+  void _viewMemo(Memo memo) async {
+    final result = await common_uis.viewMemo(context, memo);
+    if (result == null) {
+      return;
+    }
+    if (result == ViewingPageResult.deleted || result == ViewingPageResult.archived) {
+      final query = _controller.text;
+      _search(query);
+    }
   }
 }

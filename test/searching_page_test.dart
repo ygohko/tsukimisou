@@ -21,7 +21,7 @@ Future<void> init(WidgetTester tester) async {
         localizationsDelegates: [
           AppLocalizations.delegate,
         ],
-        home: SearchingPage(),
+        home: SearchingPage(shownArchiveNames: []),
       ),
     ),
   );
