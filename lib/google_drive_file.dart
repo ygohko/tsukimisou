@@ -349,7 +349,7 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
     }
 
     final signIn = GoogleSignIn.instance;
-    await signIn.initialize();
+    await signIn.initialize(serverClientId: getIdentifier());
 
     try {
       var account = await signIn.attemptLightweightAuthentication();
