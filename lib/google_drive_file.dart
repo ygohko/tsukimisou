@@ -288,7 +288,11 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
     }
 
     // Try to refresh credentials
-    final id = ClientId(getIdentifier(), getSecret());
+    const platform = LocalPlatform();
+    final id = switch (platform.isAndroid) {
+      true => ClientId(getIdentifierAndroid(), getSecretAndroid()),
+      _ => ClientId(getIdentifier(), getSecret()),
+    };
     final scopes = [DriveApi.driveFileScope];
     final savedRefreshToken = await storage.read(key: 'refreshToken');
     if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
@@ -349,7 +353,12 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
     }
 
     final signIn = GoogleSignIn.instance;
-    await signIn.initialize(serverClientId: getIdentifier());
+    const platform = LocalPlatform();
+    final identifier = switch (platform.isAndroid) {
+      true => getIdentifierAndroid(),
+      _ => getIdentifier(),
+    };
+    await signIn.initialize(serverClientId: identifier);
 
     try {
       var account = await signIn.attemptLightweightAuthentication();
