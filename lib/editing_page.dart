@@ -39,8 +39,7 @@ class EditingPage extends StatefulWidget {
 
   /// Creates a editing page.
   const EditingPage(
-      {Key? key, this.memo, this.initialText, this.fullScreen = true})
-      : super(key: key);
+      {super.key, this.memo, this.initialText, this.fullScreen = true});
 
   @override
   State<EditingPage> createState() => _EditingPageState();

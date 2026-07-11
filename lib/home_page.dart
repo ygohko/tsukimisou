@@ -49,7 +49,7 @@ import 'viewing_page.dart';
 
 class HomePage extends StatefulWidget {
   /// Creates a home page.
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();

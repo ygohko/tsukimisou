@@ -29,3 +29,13 @@ String getIdentifier() {
 String getSecret() {
   return 'ENTER THE SECRET HERE';
 }
+
+/// Gets Google API's client identifier for Android.
+String getIdentifierAndroid() {
+  return 'ENTER THE IDENTIFIER HERE';
+}
+
+/// Gets Google API's client secret for Android.
+String getSecretAndroid() {
+  return 'ENTER THE SECRET HERE';
+}

@@ -53,8 +53,7 @@ class ViewingPage extends StatefulWidget {
   final bool fullScreen;
 
   /// Creates a viewing page.
-  const ViewingPage({Key? key, required this.memo, this.fullScreen = true})
-      : super(key: key);
+  const ViewingPage({super.key, required this.memo, this.fullScreen = true});
 
   @override
   State<ViewingPage> createState() => _ViewingPageState();
@@ -334,7 +333,12 @@ class _ViewingPageState extends State<ViewingPage>
 
   Future<void> _share() async {
     final localizations = AppLocalizations.of(context)!;
-    await Share.share(_memo.text, subject: localizations.sharedFromTsukimisou);
+    await SharePlus.instance.share(
+      ShareParams(
+        text: _memo.text,
+        subject: localizations.sharedFromTsukimisou,
+      ),
+    );
   }
 
   Future<void> _delete() async {

@@ -288,7 +288,11 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
     }
 
     // Try to refresh credentials
-    final id = ClientId(getIdentifier(), getSecret());
+    const platform = LocalPlatform();
+    final id = switch (platform.isAndroid) {
+      true => ClientId(getIdentifierAndroid(), getSecretAndroid()),
+      _ => ClientId(getIdentifier(), getSecret()),
+    };
     final scopes = [DriveApi.driveFileScope];
     final savedRefreshToken = await storage.read(key: 'refreshToken');
     if (savedRefreshToken != null && savedData != null && savedExpiry != null) {
@@ -337,44 +341,36 @@ class _AuthenticatableDesktopClient extends _AuthenticatableClient {
 }
 
 class _AuthenticatableMobileClient extends _AuthenticatableClient {
-  static GoogleSignIn? _signIn;
+  static String? _accessToken;
 
   /// Authenticates this client.
   @override
   Future<void> authenticate() async {
-    var signIn = _signIn;
-    if (signIn != null) {
-      final account = signIn.currentUser;
-      if (account == null) {
-        throw AuthenticationException('Failed to sign in to Google.');
-      }
-      final authentication = await account.authentication;
-      final accessToken = authentication.accessToken;
-      if (accessToken == null) {
-        throw AuthenticationException('Failed to sign in to Google.');
-      }
+    final accessToken = _accessToken;
+    if (accessToken != null) {
       updateHeaders(accessToken);
-
       return;
     }
 
-    _signIn = GoogleSignIn(scopes: [DriveApi.driveFileScope]);
-    signIn = _signIn;
-    if (signIn == null) {
-      throw AuthenticationException('Failed to sign in to Google.');
-    }
+    final signIn = GoogleSignIn.instance;
+    const platform = LocalPlatform();
+    final identifier = switch (platform.isAndroid) {
+      true => getIdentifierAndroid(),
+      _ => getIdentifier(),
+    };
+    await signIn.initialize(serverClientId: identifier);
+
     try {
-      var account = await signIn.signInSilently();
-      account ??= await signIn.signIn();
-      if (account == null) {
-        throw AuthenticationException('Failed to sign in to Google.');
-      }
-      final authentication = await account.authentication;
-      final accessToken = authentication.accessToken;
-      if (accessToken == null) {
-        throw AuthenticationException('Failed to sign in to Google.');
-      }
-      updateHeaders(accessToken);
+      var account = await signIn.attemptLightweightAuthentication();
+      account ??= await signIn.authenticate();
+
+      final scopes = [DriveApi.driveFileScope];
+      var authorization =
+          await account.authorizationClient.authorizationForScopes(scopes);
+      authorization ??= await account.authorizationClient.authorizeScopes(scopes);
+      final token = authorization.accessToken;
+      _accessToken = token;
+      updateHeaders(token);
     } on Exception catch (exception, stackTrace) {
       throw AuthenticationException(
           'An exception thrown when signing in to Google. exception: $exception, stackTrace: $stackTrace');
@@ -394,9 +390,9 @@ class AuthenticationException implements Exception {
 }
 
 class FileNotFoundException extends HttpException {
-  FileNotFoundException(String message, {Uri? uri}) : super(message, uri: uri);
+  FileNotFoundException(super.message, {super.uri});
 }
 
 class FileLockedException extends HttpException {
-  FileLockedException(String message, {Uri? uri}) : super(message, uri: uri);
+  FileLockedException(super.message, {super.uri});
 }

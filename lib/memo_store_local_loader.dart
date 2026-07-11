@@ -69,8 +69,7 @@ class MemoStoreLocalLoader extends MemoStoreLoader {
     _constructorHook = hook;
   }
 
-  MemoStoreLocalLoader._private(MemoStore memoStore, this._path)
-      : super(memoStore);
+  MemoStoreLocalLoader._private(super.memoStore, this._path);
 }
 
 class MemoStoreMockLocalLoader extends MemoStoreLoader
@@ -79,7 +78,7 @@ class MemoStoreMockLocalLoader extends MemoStoreLoader
   final String _path;
 
   /// Creates a memo store loader.
-  MemoStoreMockLocalLoader(MemoStore memoStore, this._path) : super(memoStore);
+  MemoStoreMockLocalLoader(super.memoStore, this._path);
 
   /// Executes this memo store loader.
   @override

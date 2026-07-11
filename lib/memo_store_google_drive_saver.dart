@@ -54,8 +54,7 @@ class MemoStoreGoogleDriveSaver extends MemoStoreSaver {
     _constructorHook = hook;
   }
 
-  MemoStoreGoogleDriveSaver._private(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  MemoStoreGoogleDriveSaver._private(super.memoStore, this._fileName);
 }
 
 class MemoStoreMockGoogleDriveSaver extends MemoStoreSaver
@@ -64,8 +63,7 @@ class MemoStoreMockGoogleDriveSaver extends MemoStoreSaver
   final String _fileName;
 
   /// Creates a memo store saver.
-  MemoStoreMockGoogleDriveSaver(MemoStore memoStore, this._fileName)
-      : super(memoStore);
+  MemoStoreMockGoogleDriveSaver(super.memoStore, this._fileName);
 
   /// Executes this memo store saver.
   @override

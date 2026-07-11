@@ -38,7 +38,7 @@ class SearchingPageContents extends StatefulWidget {
   final List<String> shownArchiveNames;
 
   /// Creates a searching page contents.
-  const SearchingPageContents({Key? key, required this.shownArchiveNames}) : super(key: key);
+  const SearchingPageContents({super.key, required this.shownArchiveNames});
 
   @override
   State<SearchingPageContents> createState() => _SearchingPageContentsState();

@@ -29,7 +29,7 @@ class SearchingPage extends StatefulWidget {
   final List<String> shownArchiveNames;
 
   /// Creates a searching page.
-  const SearchingPage({Key? key, required this.shownArchiveNames}) : super(key: key);
+  const SearchingPage({super.key, required this.shownArchiveNames});
 
   @override
   State<SearchingPage> createState() => _SearchingPageState();
