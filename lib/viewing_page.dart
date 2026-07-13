@@ -350,7 +350,8 @@ class _ViewingPageState extends State<ViewingPage>
         localizations.thisActionCannotBeUndone,
         localizations.ok,
         localizations.cancel,
-        true);
+        true,
+      );
     if (!accepted) {
       return;
     }
@@ -360,14 +361,17 @@ class _ViewingPageState extends State<ViewingPage>
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException {
+    } on Exception catch (exception, stackTrace) {
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
             context,
             localizations.savingWasFailed,
             localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok);
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
       }
     }
     if (mounted) {

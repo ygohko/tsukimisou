@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
     };
     try {
       await memoStoreLoader.execute();
-    } on FileNotCompatibleException {
+    } on FileNotCompatibleException catch (exception, stackTrace) {
       if (mounted) {
         // Not compatible error.
         // TODO: Showing error at here may cause problem. Check this later.
@@ -137,7 +137,9 @@ class _HomePageState extends State<HomePage> {
             context,
             localizations.memoStoreIsNotCompatible,
             localizations.memoStoreInTheLocalStorageIsNotCompatible,
-            localizations.ok);
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace);
       }
     } on IOException {
       // Load error
