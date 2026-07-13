@@ -20,8 +20,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
@@ -385,7 +383,7 @@ class _ViewingPageState extends State<ViewingPage>
     late final MemoStore archiveMemoStore;
     try {
       archiveMemoStore = await memoStore.archiveMemo(_memo);
-    } on ArchiveNotFoundException catch (exception, stackTrace) {
+    } on Exception catch (exception, stackTrace) {
       if (!mounted) {
         return;
       }
@@ -395,7 +393,10 @@ class _ViewingPageState extends State<ViewingPage>
         exception: exception,
         stackTrace: stackTrace,
       );
-      final name = exception.name;
+      final name = switch (exception) {
+        ArchiveNotFoundException exception => exception.name,
+        _ => null,
+      };
       if (name != null &&
           result == common_uis.ArchiveNotFoundDialogResult.removeThisArchive) {
         memoStore.removeArchive(name);
@@ -416,7 +417,7 @@ class _ViewingPageState extends State<ViewingPage>
     try {
       saver.execute();
       archiveSaver.execute();
-    } on IOException catch (exception, stackTrace) {
+    } on Exception catch (exception, stackTrace) {
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
@@ -445,7 +446,7 @@ class _ViewingPageState extends State<ViewingPage>
     late final MemoStore archiveMemoStore;
     try {
       archiveMemoStore = await memoStore.unarchiveMemo(_memo);
-    } on NotArchivedException catch (exception, stackTrace) {
+    } on Exception catch (exception, stackTrace) {
       if (!mounted) {
         return;
       }
@@ -469,7 +470,7 @@ class _ViewingPageState extends State<ViewingPage>
     try {
       saver.execute();
       archiveSaver.execute();
-    } on IOException catch (exception, stackTrace) {
+    } on Exception catch (exception, stackTrace) {
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
@@ -665,14 +666,17 @@ class _ViewingPageState extends State<ViewingPage>
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
     try {
       memoStoreSaver.execute();
-    } on IOException {
+    } on Exception catch (exception, stackTrace) {
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
             context,
             localizations.savingWasFailed,
             localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok);
+            localizations.ok,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
       }
     }
   }
