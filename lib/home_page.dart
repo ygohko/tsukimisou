@@ -435,7 +435,7 @@ class _HomePageState extends State<HomePage> {
         await MemoStoreLocalSaver.fromFileName(toMemoStore, 'MemoStore.json');
     try {
       localSaver.execute();
-    } on FileSystemException catch (exception, stackTrace) {
+    } on Exception catch (exception, stackTrace) {
       // Saving failed.
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
