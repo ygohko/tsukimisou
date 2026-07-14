@@ -408,6 +408,7 @@ class _HomePageState extends State<HomePage> {
     try {
       await merger.execute();
     } on Exception catch (exception, stackTrace) {
+      // TODO: Is exception handling needed?
       if (mounted) {
         await common_uis.showErrorDialog(
           context,
