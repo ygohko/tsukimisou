@@ -236,69 +236,72 @@ class _HomePageState extends State<HomePage> {
     final localizations = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
     final appState = Provider.of<AppState>(context, listen: false);
+    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
+    MemoStoreMerger? merger;
     appState.mergingWithGoogleDrive = true;
     _showSynchronizingBanner();
-    final toMemoStore = Provider.of<MemoStore>(context, listen: false);
-    final fromMemoStore =
-        await _loadFromMemoStore(localizations, messenger, appState);
-    if (fromMemoStore == null) {
-      return;
-    }
-    _fileLockedCount = 0;
 
-    MemoStoreMerger? merger;
     try {
-      merger = await _mergeMemoStores(
+      final fromMemoStore =
+      await _loadFromMemoStore(localizations, messenger, appState);
+      if (fromMemoStore == null) {
+        return;
+      }
+      _fileLockedCount = 0;
+
+      try {
+        merger = await _mergeMemoStores(
           toMemoStore, fromMemoStore, localizations, false);
-    } on Exception {
-      if (mounted) {
-        final accepted = await common_uis.showConfirmationDialog(
+      } on Exception {
+        if (mounted) {
+          final accepted = await common_uis.showConfirmationDialog(
             context,
             localizations.loadingArchiveMemoStoresFailed,
             localizations.couldNotLoadArchiveMemoStores,
             localizations.retry,
             localizations.cancel,
             false);
-        if (!accepted) {
-          return;
+          if (!accepted) {
+            return;
+          }
         }
       }
-    }
-    if (merger == null) {
-      try {
-        merger = await _mergeMemoStores(
+      if (merger == null) {
+        try {
+          merger = await _mergeMemoStores(
             toMemoStore, fromMemoStore, localizations, true);
-      } on Exception catch (exception, stackTrace) {
-        if (mounted) {
-          await common_uis.showErrorDialog(
-            context,
-            localizations.synchronizationWasFailed,
-            localizations.couldNotSynchronizeWithGoogleDrive,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
-          return;
+        } on Exception catch (exception, stackTrace) {
+          if (mounted) {
+            await common_uis.showErrorDialog(
+              context,
+              localizations.synchronizationWasFailed,
+              localizations.couldNotSynchronizeWithGoogleDrive,
+              localizations.ok,
+              exception: exception,
+              stackTrace: stackTrace,
+            );
+            return;
+          }
         }
       }
-    }
-    if (merger == null) {
-      return;
-    }
+      if (merger == null) {
+        return;
+      }
 
-    var result = await _saveMergedMemoStoresLocal(
+      final result = await _saveMergedMemoStoresLocal(
         toMemoStore, merger, localizations, messenger, appState);
-    if (!result) {
-      return;
+      if (!result) {
+        return;
+      }
+    } finally {
+      messenger.hideCurrentMaterialBanner();
+      appState.mergingWithGoogleDrive = false;
+      setState(() {
+          _savingToGoogleDrive = true;
+      });
     }
-
-    messenger.hideCurrentMaterialBanner();
-    appState.mergingWithGoogleDrive = false;
-    setState(() {
-      _savingToGoogleDrive = true;
-    });
-
-    result = await _saveMergedMemoStoresGoogleDrive(
+ 
+    await _saveMergedMemoStoresGoogleDrive(
         toMemoStore, merger, localizations, messenger, appState);
 
     setState(() {
@@ -405,24 +408,8 @@ class _HomePageState extends State<HomePage> {
     merger.conflictWarningText = localizations.thisMemoHasConflicts;
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
-    try {
-      await merger.execute();
-    } on Exception catch (exception, stackTrace) {
-      // TODO: Is exception handling needed?
-      if (mounted) {
-        await common_uis.showErrorDialog(
-          context,
-          localizations.synchronizationWasFailed,
-          localizations.couldNotSynchronizeWithGoogleDrive,
-          localizations.ok,
-          exception: exception,
-          stackTrace: stackTrace,
-        );
-        // TODO: Restore UIs correctly.
-        return null;
-      }
-    }
-
+    await merger.execute();
+ 
     return merger;
   }
 
