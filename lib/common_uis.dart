@@ -362,6 +362,19 @@ Future<bool> showConfirmationDialog(
         child: Text(acceptingText),
       );
     }
+    final actions = <Widget>[];
+    if (isDevelopmentFlavor()) {
+      actions.add(
+        TextButton(
+          onPressed: () {
+            final text =
+            '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+            Clipboard.setData(ClipboardData(text: text));
+          },
+          child: Text(localizations.copyException),
+        ),
+      );      
+    }
     await showCupertinoDialog(
         context: context,
         builder: (context) {
