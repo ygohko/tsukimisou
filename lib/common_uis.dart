@@ -277,30 +277,53 @@ Future<bool> showConfirmationDialog(
     String content,
     String acceptingText,
     String rejectingText,
-    bool destructive) async {
+    bool destructive,
+    {
+      Exception? exception,
+      StackTrace? stackTrace,
+    }
+  ) async {
   const platform = LocalPlatform();
+  final localizations = AppLocalizations.of(context)!;
   var accepted = false;
   if (!platform.isIOS) {
+    final actions = <Widget>[];
+    if (isDevelopmentFlavor()) {
+      actions.add(
+        TextButton(
+          onPressed: () {
+            final text =
+            '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+            Clipboard.setData(ClipboardData(text: text));
+          },
+          child: Text(localizations.copyException),
+        ),
+      );
+    }
+    actions.addAll(
+      [
+        TextButton(
+          child: Text(rejectingText),
+          onPressed: () {
+            Navigator.of(context).pop();
+        }),
+        TextButton(
+          child: Text(acceptingText),
+          onPressed: () {
+            accepted = true;
+            Navigator.of(context).pop();
+        }),
+      ]
+    );
     await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text(title),
-              content: Text(content),
-              actions: [
-                TextButton(
-                    child: Text(rejectingText),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                TextButton(
-                    child: Text(acceptingText),
-                    onPressed: () {
-                      accepted = true;
-                      Navigator.of(context).pop();
-                    }),
-              ]);
-        });
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: actions,
+        );
+    });
   } else {
     late final Widget leftWidget;
     if (destructive) {
