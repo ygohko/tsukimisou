@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
       try {
         merger = await _mergeMemoStores(
           toMemoStore, fromMemoStore, localizations, false);
-      } on Exception {
+      } on Exception catch (exception, stackTrace) {
         if (mounted) {
           final accepted = await common_uis.showConfirmationDialog(
             context,
@@ -260,7 +260,10 @@ class _HomePageState extends State<HomePage> {
             localizations.couldNotLoadArchiveMemoStores,
             localizations.retry,
             localizations.cancel,
-            false);
+            false,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
           if (!accepted) {
             return;
           }
@@ -348,7 +351,10 @@ class _HomePageState extends State<HomePage> {
             localizations.memoStoreIsStillLocked,
             localizations.unlock,
             localizations.cancel,
-            false);
+            false,
+            exception: exception,
+            stackTrace: stackTrace,
+          );
         if (accepted) {
           await _unlockGoogleDrive();
         }
