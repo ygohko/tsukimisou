@@ -365,7 +365,7 @@ Future<bool> showConfirmationDialog(
     final actions = <Widget>[];
     if (isDevelopmentFlavor()) {
       actions.add(
-        TextButton(
+        CupertinoDialogAction(
           onPressed: () {
             final text =
             '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
@@ -375,18 +375,23 @@ Future<bool> showConfirmationDialog(
         ),
       );      
     }
+    actions.addAll(
+      [
+        leftWidget,
+        rightWidget,
+      ]
+    );
+    
     await showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoAlertDialog(
-            title: Text(title),
-            content: Text(content),
-            actions: [
-              leftWidget,
-              rightWidget,
-            ],
-          );
-        });
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title: Text(title),
+          content: Text(content),
+          actions: actions,
+        );
+      }
+    );
   }
 
   return accepted;
