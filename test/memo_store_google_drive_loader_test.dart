@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_google_drive_loader.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_google_drive_loader.dart';
 
 void main() {
   group('MemoStoreGoogleDriveLoader', () {
