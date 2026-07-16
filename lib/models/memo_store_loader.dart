@@ -22,9 +22,9 @@
 
 import "dart:convert";
 
-import 'extensions.dart';
 import 'memo.dart';
 import 'memo_store.dart';
+import '../extensions.dart';
 
 class MemoStoreLoader {
   final MemoStore _memoStore;
