@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:test/test.dart';
-import 'package:tsukimisou/memo.dart';
-import 'package:tsukimisou/memo_store.dart';
+import 'package:tsukimisou/models/memo.dart';
+import 'package:tsukimisou/models/memo_store.dart';
 
 void main() {
   group('MemoStore', () {

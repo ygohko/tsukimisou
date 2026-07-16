@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_local_loader.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_local_loader.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

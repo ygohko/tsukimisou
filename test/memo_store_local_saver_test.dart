@@ -2,9 +2,9 @@ import "dart:convert";
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tsukimisou/memo.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_local_saver.dart';
+import 'package:tsukimisou/models/memo.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_local_saver.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
