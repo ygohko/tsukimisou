@@ -25,7 +25,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 
-import 'annotations.dart';
+import '../annotations.dart';
 
 class Memo {
   /// A ID of this memo.
