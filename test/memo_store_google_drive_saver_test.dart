@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:test/test.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_google_drive_saver.dart';
-import 'package:tsukimisou/memo.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_google_drive_saver.dart';
+import 'package:tsukimisou/models/memo.dart';
 
 void main() {
   group('MemoStoreGoogleDriveSaver', () {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tsukimisou/diff_generator.dart';
+import 'package:tsukimisou/models/diff_generator.dart';
 
 void main() {
   group('DiffGenerator', () {

@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:tsukimisou/memo.dart';
+import 'package:tsukimisou/models/memo.dart';
 
 void main() {
   group('Memo', () {

@@ -31,8 +31,8 @@ import 'package:http/http.dart';
 import 'package:platform/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'client_id.dart';
-import 'extensions.dart';
+import '../client_id.dart';
+import '../extensions.dart';
 
 class GoogleDriveFile {
   final String _fileName;

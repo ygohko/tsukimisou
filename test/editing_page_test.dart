@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:tsukimisou/editing_page.dart';
-import 'package:tsukimisou/memo.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_local_saver.dart';
+import 'package:tsukimisou/models/memo.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_local_saver.dart';
+import 'package:tsukimisou/uis/editing_page.dart';
 import 'package:tsukimisou/gen_l10n/app_localizations.dart';
 
 Future<void> init(WidgetTester tester, Memo? memo) async {

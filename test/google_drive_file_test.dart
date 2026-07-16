@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 
-import 'package:tsukimisou/google_drive_file.dart';
+import 'package:tsukimisou/models/google_drive_file.dart';
 
 void main() {
   group('GoogleDriveFile', () {

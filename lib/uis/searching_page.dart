@@ -23,7 +23,7 @@
 import 'package:flutter/material.dart';
 
 import 'searching_page_contents.dart';
-import 'gen_l10n/app_localizations.dart';
+import '../gen_l10n/app_localizations.dart';
 
 class SearchingPage extends StatefulWidget {
   final List<String> shownArchiveNames;

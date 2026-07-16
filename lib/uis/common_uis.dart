@@ -26,11 +26,11 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:platform/platform.dart';
 
-import 'extensions.dart';
-import 'markdown_parser.dart';
-import 'memo.dart';
 import 'viewing_page.dart';
-import 'gen_l10n/app_localizations.dart';
+import '../extensions.dart';
+import '../gen_l10n/app_localizations.dart';
+import '../models/markdown_parser.dart';
+import '../models/memo.dart';
 
 typedef DialogTransitionBuilder = AnimatedWidget Function(
     Animation<double> animation,

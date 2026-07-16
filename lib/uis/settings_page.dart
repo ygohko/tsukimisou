@@ -28,8 +28,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app_state.dart';
-import 'settings.dart';
-import 'gen_l10n/app_localizations.dart';
+import '../gen_l10n/app_localizations.dart';
+import '../models/settings.dart';
 
 /// Page to modify settings.
 class SettingsPage extends StatefulWidget {

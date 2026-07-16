@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:tsukimisou/settings.dart';
-import 'package:tsukimisou/settings_page.dart';
+import 'package:tsukimisou/models/settings.dart';
+import 'package:tsukimisou/uis/settings_page.dart';
 import 'package:tsukimisou/gen_l10n/app_localizations.dart';
 
 import 'mocks.dart';

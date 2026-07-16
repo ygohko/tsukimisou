@@ -30,22 +30,22 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
-import 'extensions.dart';
-import 'gen_l10n/app_localizations.dart';
-import 'google_drive_file.dart';
-import 'memo.dart';
-import 'memo_store.dart';
-import 'memo_store_google_drive_loader.dart';
-import 'memo_store_google_drive_saver.dart';
-import 'memo_store_loader.dart';
-import 'memo_store_local_loader.dart';
-import 'memo_store_local_saver.dart';
-import 'memo_store_merger.dart';
 import 'searching_page.dart';
 import 'searching_page_contents.dart';
-import 'settings.dart';
 import 'settings_page.dart';
 import 'viewing_page.dart';
+import '../extensions.dart';
+import '../gen_l10n/app_localizations.dart';
+import '../models/google_drive_file.dart';
+import '../models/memo.dart';
+import '../models/memo_store.dart';
+import '../models/memo_store_google_drive_loader.dart';
+import '../models/memo_store_google_drive_saver.dart';
+import '../models/memo_store_loader.dart';
+import '../models/memo_store_local_loader.dart';
+import '../models/memo_store_local_saver.dart';
+import '../models/memo_store_merger.dart';
+import '../models/settings.dart';
 
 class HomePage extends StatefulWidget {
   /// Creates a home page.

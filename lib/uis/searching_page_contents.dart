@@ -26,13 +26,13 @@ import 'package:provider/provider.dart';
 
 import 'app_state.dart';
 import 'common_uis.dart' as common_uis;
-import 'extensions.dart';
-import 'gen_l10n/app_localizations.dart';
-import 'memo.dart';
-import 'memo_store.dart';
-import 'memo_store_searcher.dart';
-import 'settings.dart';
 import 'viewing_page.dart';
+import '../extensions.dart';
+import '../gen_l10n/app_localizations.dart';
+import '../models/memo.dart';
+import '../models/memo_store.dart';
+import '../models/memo_store_searcher.dart';
+import '../models/settings.dart';
 
 class SearchingPageContents extends StatefulWidget {
   final List<String> shownArchiveNames;

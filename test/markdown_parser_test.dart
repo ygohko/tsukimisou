@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tsukimisou/common_uis.dart';
-import 'package:tsukimisou/markdown_parser.dart';
+import 'package:tsukimisou/uis/common_uis.dart';
+import 'package:tsukimisou/models/markdown_parser.dart';
 
 // These tests are extracted from CommonMark spec 0.31.2 by John MacFarlane,
 // licended under CC-BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).

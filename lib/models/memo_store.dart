@@ -25,8 +25,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
-import 'annotations.dart';
 import 'memo.dart';
+import '../annotations.dart';
 
 typedef ArchiveMemoStoreRequiredCallback = Future<MemoStore> Function(
     String name);

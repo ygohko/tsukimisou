@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
-import 'package:tsukimisou/memo.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_searcher.dart';
+import 'package:tsukimisou/models/memo.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_searcher.dart';
 
 void main() {
   group('MemoStoreSearcher', () {

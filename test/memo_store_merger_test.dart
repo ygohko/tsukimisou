@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:tsukimisou/memo.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/memo_store_merger.dart';
+import 'package:tsukimisou/models/memo.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/memo_store_merger.dart';
 
 void main() {
   group('MemoStoreMerger', () {

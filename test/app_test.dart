@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:tsukimisou/app.dart';
-import 'package:tsukimisou/app_state.dart';
-import 'package:tsukimisou/memo_store.dart';
-import 'package:tsukimisou/settings.dart';
+import 'package:tsukimisou/models/memo_store.dart';
+import 'package:tsukimisou/models/settings.dart';
+import 'package:tsukimisou/uis/app.dart';
+import 'package:tsukimisou/uis/app_state.dart';
 
 import 'mocks.dart';
 
