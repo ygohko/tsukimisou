@@ -29,7 +29,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'binding_tags_page.dart';
 import 'common_uis.dart' as common_uis;
 import 'editing_page.dart';
-import 'extensions.dart';
+import '../extensions.dart';
 import '../models/memo.dart';
 import '../models/memo_store.dart';
 import '../models/memo_store_local_saver.dart';
