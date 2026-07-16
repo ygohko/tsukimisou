@@ -23,10 +23,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'app.dart';
-import 'app_state.dart';
-import 'memo_store.dart';
-import 'settings.dart';
+import '../models/memo_store.dart';
+import '../models/settings.dart';
+import '../uis/app.dart';
+import '../uis/app_state.dart';
 
 Future<void> main() async {
   runApp(
