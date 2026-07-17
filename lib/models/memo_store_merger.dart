@@ -228,8 +228,7 @@ class MemoStoreMerger {
   /// Updated archive names.
   List<String> get updatedArchiveNames => _updatedArchiveNames;
 
-  // TODO: Add static.
-  _Operation _operation(Memo toMemo, Memo fromMemo) {
+  static _Operation _operation(Memo toMemo, Memo fromMemo) {
     if (toMemo.hash == fromMemo.hash) {
       return _Operation.keep;
     }
