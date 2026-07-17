@@ -92,8 +92,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
               onTap: appState.mergingWithGoogleDrive
                   ? null
                   : () {
-                    _viewMemo(memo);
-                  },
+                      _viewMemo(memo);
+                    },
               child: common_uis.memoCardContents(context, memo, unsynchronized),
             ),
           );
@@ -168,7 +168,8 @@ class _SearchingPageContentsState extends State<SearchingPageContents> {
     if (result == null) {
       return;
     }
-    if (result == ViewingPageResult.deleted || result == ViewingPageResult.archived) {
+    if (result == ViewingPageResult.deleted ||
+        result == ViewingPageResult.archived) {
       final query = _controller.text;
       _search(query);
     }

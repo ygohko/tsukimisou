@@ -367,7 +367,8 @@ class _AuthenticatableMobileClient extends _AuthenticatableClient {
       final scopes = [DriveApi.driveFileScope];
       var authorization =
           await account.authorizationClient.authorizationForScopes(scopes);
-      authorization ??= await account.authorizationClient.authorizeScopes(scopes);
+      authorization ??=
+          await account.authorizationClient.authorizeScopes(scopes);
       final token = authorization.accessToken;
       _accessToken = token;
       updateHeaders(token);
