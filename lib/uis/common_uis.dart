@@ -272,17 +272,15 @@ void showProgressIndicatorDialog(BuildContext context) {
 
 /// Shows dialogs to prompt confirmation.
 Future<bool> showConfirmationDialog(
-    BuildContext context,
-    String title,
-    String content,
-    String acceptingText,
-    String rejectingText,
-    bool destructive,
-    {
-      Exception? exception,
-      StackTrace? stackTrace,
-    }
-  ) async {
+  BuildContext context,
+  String title,
+  String content,
+  String acceptingText,
+  String rejectingText,
+  bool destructive, {
+  Exception? exception,
+  StackTrace? stackTrace,
+}) async {
   const platform = LocalPlatform();
   final localizations = AppLocalizations.of(context)!;
   var accepted = false;
@@ -293,37 +291,35 @@ Future<bool> showConfirmationDialog(
         TextButton(
           onPressed: () {
             final text =
-            '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+                '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
           child: Text(localizations.copyException),
         ),
       );
     }
-    actions.addAll(
-      [
-        TextButton(
+    actions.addAll([
+      TextButton(
           child: Text(rejectingText),
           onPressed: () {
             Navigator.of(context).pop();
-        }),
-        TextButton(
+          }),
+      TextButton(
           child: Text(acceptingText),
           onPressed: () {
             accepted = true;
             Navigator.of(context).pop();
-        }),
-      ]
-    );
+          }),
+    ]);
     await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: actions,
-        );
-    });
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: actions,
+          );
+        });
   } else {
     late final Widget leftWidget;
     if (destructive) {
@@ -368,30 +364,27 @@ Future<bool> showConfirmationDialog(
         CupertinoDialogAction(
           onPressed: () {
             final text =
-            '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
+                '## exception\n\n$exception\n\n## stackTrace\n\n$stackTrace';
             Clipboard.setData(ClipboardData(text: text));
           },
           child: Text(localizations.copyException),
         ),
-      );      
+      );
     }
-    actions.addAll(
-      [
-        leftWidget,
-        rightWidget,
-      ]
-    );
-    
+    actions.addAll([
+      leftWidget,
+      rightWidget,
+    ]);
+
     await showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: actions,
-        );
-      }
-    );
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text(title),
+            content: Text(content),
+            actions: actions,
+          );
+        });
   }
 
   return accepted;

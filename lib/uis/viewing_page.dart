@@ -343,13 +343,13 @@ class _ViewingPageState extends State<ViewingPage>
     final localizations = AppLocalizations.of(context)!;
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final accepted = await common_uis.showConfirmationDialog(
-        context,
-        localizations.deleteThisMemo,
-        localizations.thisActionCannotBeUndone,
-        localizations.ok,
-        localizations.cancel,
-        true,
-      );
+      context,
+      localizations.deleteThisMemo,
+      localizations.thisActionCannotBeUndone,
+      localizations.ok,
+      localizations.cancel,
+      true,
+    );
     if (!accepted) {
       return;
     }
@@ -363,13 +363,13 @@ class _ViewingPageState extends State<ViewingPage>
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       }
     }
     if (mounted) {
@@ -670,13 +670,13 @@ class _ViewingPageState extends State<ViewingPage>
       if (mounted) {
         // Save error
         await common_uis.showErrorDialog(
-            context,
-            localizations.savingWasFailed,
-            localizations.couldNotSaveMemoStoreToLocalStorage,
-            localizations.ok,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.savingWasFailed,
+          localizations.couldNotSaveMemoStoreToLocalStorage,
+          localizations.ok,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
       }
     }
   }

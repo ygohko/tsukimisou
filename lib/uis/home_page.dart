@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage> {
 
     try {
       final fromMemoStore =
-      await _loadFromMemoStore(localizations, messenger, appState);
+          await _loadFromMemoStore(localizations, messenger, appState);
       if (fromMemoStore == null) {
         return;
       }
@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> {
 
       try {
         merger = await _mergeMemoStores(
-          toMemoStore, fromMemoStore, localizations, false);
+            toMemoStore, fromMemoStore, localizations, false);
       } on Exception catch (exception, stackTrace) {
         if (mounted) {
           final accepted = await common_uis.showConfirmationDialog(
@@ -272,7 +272,7 @@ class _HomePageState extends State<HomePage> {
       if (merger == null) {
         try {
           merger = await _mergeMemoStores(
-            toMemoStore, fromMemoStore, localizations, true);
+              toMemoStore, fromMemoStore, localizations, true);
         } on Exception catch (exception, stackTrace) {
           if (mounted) {
             await common_uis.showErrorDialog(
@@ -292,7 +292,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       final result = await _saveMergedMemoStoresLocal(
-        toMemoStore, merger, localizations, messenger, appState);
+          toMemoStore, merger, localizations, messenger, appState);
       if (!result) {
         return;
       }
@@ -300,10 +300,10 @@ class _HomePageState extends State<HomePage> {
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
       setState(() {
-          _savingToGoogleDrive = true;
+        _savingToGoogleDrive = true;
       });
     }
- 
+
     await _saveMergedMemoStoresGoogleDrive(
         toMemoStore, merger, localizations, messenger, appState);
 
@@ -346,15 +346,15 @@ class _HomePageState extends State<HomePage> {
           return null;
         }
         final accepted = await common_uis.showConfirmationDialog(
-            context,
-            localizations.memoStoreIsLocked,
-            localizations.memoStoreIsStillLocked,
-            localizations.unlock,
-            localizations.cancel,
-            false,
-            exception: exception,
-            stackTrace: stackTrace,
-          );
+          context,
+          localizations.memoStoreIsLocked,
+          localizations.memoStoreIsStillLocked,
+          localizations.unlock,
+          localizations.cancel,
+          false,
+          exception: exception,
+          stackTrace: stackTrace,
+        );
         if (accepted) {
           await _unlockGoogleDrive();
         }
@@ -415,7 +415,7 @@ class _HomePageState extends State<HomePage> {
     merger.localMarkerText = localizations.local;
     merger.cloudMarkerText = localizations.cloud;
     await merger.execute();
- 
+
     return merger;
   }
 
@@ -717,7 +717,8 @@ class _HomePageState extends State<HomePage> {
                     },
                   );
                 } else {
-                  rightPaneWidget = SearchingPageContents(shownArchiveNames: _shownArchiveNames);
+                  rightPaneWidget = SearchingPageContents(
+                      shownArchiveNames: _shownArchiveNames);
                 }
                 const platform = LocalPlatform();
                 if (platform.isMobile) {
