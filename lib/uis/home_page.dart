@@ -824,7 +824,7 @@ class _HomePageState extends State<HomePage> {
         common_uis.subtitle(context, 'Archives'),
       ]);
       final names = List.from(memoStore.archiveHashes.keys);
-      names.sort();
+      names.sort((a, b) { return b.compareTo(a); });
       for (final name in names) {
         final shown = _shownArchiveNames.contains(name);
         children.add(ListTile(
