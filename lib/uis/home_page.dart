@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   var _filteringTag = '';
   var _filteringEnabled = false;
   final _shownArchiveNames = <String>[];
+  var _includesMain = true;
   var _commonUiInitialized = false;
   var _savingToGoogleDrive = false;
   var _searching = false;
@@ -840,6 +841,15 @@ class _HomePageState extends State<HomePage> {
           shape: border,
         ));
       }
+      children.add(ListTile(
+          title: Text("Include main"),
+          trailing: Switch(
+            value: _includesMain,
+            onChanged: _shownArchiveNames.isNotEmpty
+              ? _setIncludesMain : null,
+          ),
+        )
+      );
     }
     if (!hidden) {
       children.addAll([
@@ -928,6 +938,9 @@ class _HomePageState extends State<HomePage> {
     if (_shownArchiveNames.contains(name)) {
       setState(() {
         _shownArchiveNames.remove(name);
+        if (_shownArchiveNames.isEmpty) {
+          _includesMain = true;
+        }
         _updateShownMemos();
       });
     } else {
@@ -957,9 +970,19 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _setIncludesMain(bool includesMain) {
+    setState(() {
+      _includesMain = includesMain;
+      _updateShownMemos();
+    });
+  }
+
   void _updateShownMemos() {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
-    final sourceMemos = [...memoStore.memos];
+    final sourceMemos = <Memo>[];
+    if (_includesMain) {
+      sourceMemos.addAll(memoStore.memos);
+    }
     for (final name in _shownArchiveNames) {
       final archiveMemoStore = memoStore.archiveMemoStoreIfLoaded(name);
       if (archiveMemoStore != null) {
