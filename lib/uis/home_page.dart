@@ -822,6 +822,7 @@ class _HomePageState extends State<HomePage> {
     if (memoStore.archiveHashes.isNotEmpty) {
       children.addAll([
         const Divider(),
+        // TODO: Localize this.
         common_uis.subtitle(context, 'Archives'),
       ]);
       final names = List.from(memoStore.archiveHashes.keys);
@@ -842,12 +843,18 @@ class _HomePageState extends State<HomePage> {
         ));
       }
       children.add(ListTile(
+          // TODO: Localize this.
           title: Text("Include main"),
+          onTap: () {
+            _setIncludesMain(!_includesMain);
+          },
           trailing: Switch(
             value: _includesMain,
             onChanged: _shownArchiveNames.isNotEmpty
-              ? _setIncludesMain : null,
+            ? _setIncludesMain : null,
           ),
+          enabled: _shownArchiveNames.isNotEmpty,
+          shape: border,
         )
       );
     }
