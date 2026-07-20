@@ -50,6 +50,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get googleDriveIntegration => 'Google Drive integration';
 
   @override
+  String get archives => 'Archives';
+
+  @override
+  String get includeMain => 'Include main';
+
+  @override
   String get synchronize => 'Synchronize';
 
   @override

@@ -49,6 +49,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get googleDriveIntegration => 'Google Drive連携';
 
   @override
+  String get archives => 'アーカイブ';
+
+  @override
+  String get includeMain => 'メインを含む';
+
+  @override
   String get synchronize => '同期';
 
   @override

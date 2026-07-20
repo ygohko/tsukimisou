@@ -165,6 +165,18 @@ abstract class AppLocalizations {
   /// **'Google Drive integration'**
   String get googleDriveIntegration;
 
+  /// Subtitle for archives group of drawer
+  ///
+  /// In en, this message translates to:
+  /// **'Archives'**
+  String get archives;
+
+  /// text for include main list tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Include main'**
+  String get includeMain;
+
   /// Text for synchronize list tile
   ///
   /// In en, this message translates to:

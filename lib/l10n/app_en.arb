@@ -54,6 +54,14 @@
     "@googleDriveIntegration": {
         "description": "Subtitle for Google Drive integration group of drawer"
     },
+    "archives": "Archives",
+    "@archives": {
+        "description": "Subtitle for archives group of drawer"
+    },
+    "includeMain": "Include main",
+    "@includeMain": {
+        "description": "text for include main list tile."
+    },
     "synchronize": "Synchronize",
     "@synchronize": {
         "description": "Text for synchronize list tile"

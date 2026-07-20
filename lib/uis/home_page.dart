@@ -822,8 +822,7 @@ class _HomePageState extends State<HomePage> {
     if (memoStore.archiveHashes.isNotEmpty) {
       children.addAll([
         const Divider(),
-        // TODO: Localize this.
-        common_uis.subtitle(context, 'Archives'),
+        common_uis.subtitle(context, localizations.archives),
       ]);
       final names = List.from(memoStore.archiveHashes.keys);
       names.sort((a, b) { return b.compareTo(a); });
@@ -843,8 +842,7 @@ class _HomePageState extends State<HomePage> {
         ));
       }
       children.add(ListTile(
-          // TODO: Localize this.
-          title: Text("Include main"),
+          title: Text(localizations.includeMain),
           onTap: () {
             _setIncludesMain(!_includesMain);
           },

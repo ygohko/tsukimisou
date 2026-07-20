@@ -11,6 +11,8 @@
     "tags": "タグ",
     "googleDriveIntegration": "Google Drive連携",
     "synchronize": "同期",
+    "archives": "アーカイブ",
+    "includeMain": "メインを含む",
     "others": "その他",
     "settings": "設定",
     "hideGoogleDriveIntegration": "Google Drive連携を隠す",
