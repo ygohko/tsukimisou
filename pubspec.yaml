@@ -55,6 +55,12 @@ dependencies:
   uuid: ^4.5.3
   win32: ^6.3.0
 
+  flutter_secure_storage_web: any
+  google_sign_in_web: any
+  url_launcher_web: any
+  flutter_web_plugins: any
+  material_ui: any
+  cupertino_ui: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
