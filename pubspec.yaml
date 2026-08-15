@@ -58,7 +58,6 @@ dependencies:
   flutter_secure_storage_web: any
   google_sign_in_web: any
   url_launcher_web: any
-  flutter_web_plugins: any
   material_ui: any
   cupertino_ui: any
 dev_dependencies:
