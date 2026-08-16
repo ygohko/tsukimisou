@@ -259,7 +259,7 @@ class _ViewingPageState extends State<ViewingPage>
               ListTile(
                 title:
                     Text(localizations.name(_memo.name), style: attributeStyle),
-                onTap: archiveName == null ? _modifyName: null,
+                onTap: archiveName == null ? _modifyName : null,
               ),
               const Divider(),
               ListTile(
