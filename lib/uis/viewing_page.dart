@@ -253,19 +253,19 @@ class _ViewingPageState extends State<ViewingPage>
               ListTile(
                 title: Text(localizations.boundTags(tagsString),
                     style: attributeStyle),
-                onTap: _bindTags,
+                onTap: archiveName == null ? _bindTags : null,
               ),
               const Divider(),
               ListTile(
                 title:
                     Text(localizations.name(_memo.name), style: attributeStyle),
-                onTap: _modifyName,
+                onTap: archiveName == null ? _modifyName : null,
               ),
               const Divider(),
               ListTile(
                 title: Text(localizations.viewingMode(_memo.viewingMode),
                     style: attributeStyle),
-                onTap: _chooseViewingMode,
+                onTap: archiveName == null ? _chooseViewingMode : null,
               ),
               const Divider(),
               if (!settings.getSynchronizationHidden() && unsynchronized) ...[
