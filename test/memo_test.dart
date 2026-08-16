@@ -29,10 +29,10 @@ void main() {
       expect(memo.text, 'This is a test.');
     });
 
-    test('Memo.tags should be get and set.', () {
+    test('Memo.tags should be get and setTags() should be executed.', () {
       final memo = Memo();
       expect(memo.tags, []);
-      memo.tags = ['This is a test.'];
+      memo.setTags(['This is a test.']);
       expect(memo.tags, ['This is a test.']);
     });
 

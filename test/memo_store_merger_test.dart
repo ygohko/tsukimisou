@@ -176,7 +176,7 @@ void main() {
       final fromMemo = Memo();
       fromMemo.text = "This is a from memo.";
       fromMemo.text = "This is a from memo.";
-      fromMemo.tags = ['a', 'b', 'c'];
+      fromMemo.setTags(['a', 'b', 'c']);
       fromMemo.id = toMemo.id;
       fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
@@ -194,11 +194,11 @@ void main() {
       final fromMemoStore = MemoStore();
       final toMemo = Memo();
       toMemo.text = "This is a memo.";
-      toMemo.tags = ['a', 'b', 'c'];
+      toMemo.setTags(['a', 'b', 'c']);
       toMemoStore.addMemo(toMemo);
       final fromMemo = Memo();
       fromMemo.text = "This is a memo.";
-      fromMemo.tags = ['a', 'd', 'e', 'f'];
+      fromMemo.setTags(['a', 'd', 'e', 'f']);
       fromMemo.id = toMemo.id;
       fromMemoStore.addMemo(fromMemo);
       expect(toMemoStore.memos.length, 1);
