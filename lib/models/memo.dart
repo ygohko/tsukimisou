@@ -110,10 +110,12 @@ class Memo {
   /// Tags added to this memo.
   List<String> get tags => _tags;
 
-  /// Tags added to this memo.
-  set tags(List<String> tags) {
+  /// Sets tags added to this memo.
+  void setTags(List<String> tags, { bool updatesLastModified = true }) {
     _tags = tags;
-    lastModified = DateTime.now().millisecondsSinceEpoch;
+    if (updatesLastModified) {
+      lastModified = DateTime.now().millisecondsSinceEpoch;
+    }
     revision++;
   }
 

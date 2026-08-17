@@ -71,7 +71,7 @@ class MemoStoreLoader {
           tags.add(tag);
         }
       }
-      memo.tags = tags;
+      memo.setTags(tags);
       final lastModified =
           DateTime.fromMillisecondsSinceEpoch(memo.lastModified);
       memo.name = lastModified.toDetailedString();
@@ -110,7 +110,7 @@ class MemoStoreLoader {
           tags.add(tag);
         }
       }
-      memo.tags = tags;
+      memo.setTags(tags);
       memo.name = deserializedMemo['name'];
       memo.viewingMode = deserializedMemo['viewingMode'];
       memo.lastModified = deserializedMemo['lastModified'];
@@ -144,7 +144,7 @@ class MemoStoreLoader {
           tags.add(tag);
         }
       }
-      memo.tags = tags;
+      memo.setTags(tags);
       memo.name = deserializedMemo['name'];
       memo.viewingMode = deserializedMemo['viewingMode'];
       memo.lastModified = deserializedMemo['lastModified'];

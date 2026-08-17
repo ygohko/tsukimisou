@@ -253,7 +253,16 @@ class _ViewingPageState extends State<ViewingPage>
               ListTile(
                 title: Text(localizations.boundTags(tagsString),
                     style: attributeStyle),
-                onTap: archiveName == null ? _bindTags : null,
+                onTap: archiveName == null
+                  ? () {
+                    _bindTags(true);
+                  }
+                  : null,
+                onLongPress: archiveName == null
+                  ? () {
+                    _bindTags(false);
+                  }
+                  : null,
               ),
               const Divider(),
               ListTile(
@@ -502,7 +511,7 @@ class _ViewingPageState extends State<ViewingPage>
     }
   }
 
-  Future<void> _bindTags() async {
+  Future<void> _bindTags(bool updatesLastModified) async {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
     final tagScores = settings.getTagScores();
@@ -512,7 +521,8 @@ class _ViewingPageState extends State<ViewingPage>
           return BindingTagsPage(
               memo: _memo,
               additionalTags: memoStore.tags,
-              tagScores: tagScores);
+              tagScores: tagScores,
+              updatesLastModified: updatesLastModified);
         },
       ));
     } else {
@@ -527,7 +537,8 @@ class _ViewingPageState extends State<ViewingPage>
                   memo: _memo,
                   additionalTags: memoStore.tags,
                   tagScores: tagScores,
-                  fullScreen: _fullScreen),
+                  fullScreen: _fullScreen,
+                  updatesLastModified: updatesLastModified),
             ),
           );
         },

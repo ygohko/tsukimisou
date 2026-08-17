@@ -67,7 +67,7 @@ class MemoStoreMerger {
 
           case _Operation.overwrite:
             memo.text = fromMemo.text;
-            memo.tags = [...fromMemo.tags];
+            memo.setTags([...fromMemo.tags]);
             memo.name = fromMemo.name;
             memo.viewingMode = fromMemo.viewingMode;
             memo.lastModified = fromMemo.lastModified;
@@ -92,7 +92,7 @@ class MemoStoreMerger {
                 tags.add(tag);
               }
             }
-            memo.tags = tags;
+            memo.setTags(tags);
             memo.name = fromMemo.name;
             memo.viewingMode = fromMemo.viewingMode;
             memo.lastModified = fromMemo.lastModified;

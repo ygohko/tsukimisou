@@ -33,7 +33,7 @@ void main() {
         (WidgetTester tester) async {
       final memo = Memo();
       memo.text = 'This is a test.';
-      memo.tags = ['a', 'b', 'c'];
+      memo.setTags(['a', 'b', 'c']);
       await init(tester, memo);
       expect(find.text('a'), findsOneWidget);
       expect(find.text('b'), findsOneWidget);
@@ -49,7 +49,7 @@ void main() {
         (WidgetTester tester) async {
       final memo = Memo();
       memo.text = 'This is a test.';
-      memo.tags = ['a', 'b', 'c'];
+      memo.setTags(['a', 'b', 'c']);
       await init(tester, memo);
       await tester.tap(find.text('d'));
       await tester.pump();
@@ -61,7 +61,7 @@ void main() {
         (WidgetTester tester) async {
       final memo = Memo();
       memo.text = 'This is a test.';
-      memo.tags = ['a', 'b', 'c'];
+      memo.setTags(['a', 'b', 'c']);
       await init(tester, memo);
       await tester.tap(find.text('a'));
       await tester.pump();

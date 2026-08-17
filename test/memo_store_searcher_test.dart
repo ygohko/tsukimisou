@@ -30,7 +30,7 @@ void main() {
       final memoStore = MemoStore();
       final memo = Memo();
       memo.text = '';
-      memo.tags = ['test', 'テスト'];
+      memo.setTags(['test', 'テスト']);
       memoStore.addMemo(memo);
       var searcher = MemoStoreSearcher(memoStore, 'test');
       searcher.execute();

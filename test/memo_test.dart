@@ -29,11 +29,25 @@ void main() {
       expect(memo.text, 'This is a test.');
     });
 
-    test('Memo.tags should be get and set.', () {
+    test('Memo.tags should be get and setTags() should be executed.', () {
       final memo = Memo();
       expect(memo.tags, []);
-      memo.tags = ['This is a test.'];
+      memo.setTags(['This is a test.']);
       expect(memo.tags, ['This is a test.']);
+    });
+
+    test('Memo.setTags() should update lastModified if updatesLastModified is true or omitted.', () {
+      final memo = Memo();
+      expect(memo.lastModified, 0);
+      memo.setTags(['a']);
+      expect(memo.lastModified, isNot(0));
+    });
+
+    test('Memo.setTags() should not update lastModified if updatesLastModified is false.', () {
+      final memo = Memo();
+      expect(memo.lastModified, 0);
+      memo.setTags(['a'], updatesLastModified: false);
+      expect(memo.lastModified, 0);
     });
 
     test('Memo.name should be get and set.', () {
