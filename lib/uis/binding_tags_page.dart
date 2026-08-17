@@ -37,6 +37,7 @@ class BindingTagsPage extends StatefulWidget {
   final List<String> additionalTags;
   final Map<String, double> tagScores;
   final bool fullScreen;
+  final bool updatesLastModified;
 
   /// Creates a binding tags page.
   const BindingTagsPage(
@@ -44,7 +45,8 @@ class BindingTagsPage extends StatefulWidget {
       required this.memo,
       required this.additionalTags,
       required this.tagScores,
-      this.fullScreen = true});
+      this.fullScreen = true,
+      this.updatesLastModified = true});
 
   @override
   State<BindingTagsPage> createState() => _BindingTagsPageState();
@@ -213,7 +215,7 @@ class _BindingTagsPageState extends State<BindingTagsPage> {
       return;
     }
     widget.memo.beginModification();
-    widget.memo.setTags([..._boundTags]);
+    widget.memo.setTags([..._boundTags], updatesLastModified: widget.updatesLastModified);
     memoStore.markAsChanged();
     final memoStoreSaver =
         await MemoStoreLocalSaver.fromFileName(memoStore, 'MemoStore.json');
