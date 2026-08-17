@@ -632,6 +632,13 @@ class _ViewingPageState extends State<ViewingPage>
       final viewHeight = MediaQuery.of(context).size.height;
       offsetY = positionY - (viewHeight * 0.5);
     }
+    var upperSizedBoxHeight = 0.0;
+    var lowerSizedBoxHeight = 0.0;
+    if (offsetY > 0.0) {
+      upperSizedBoxHeight = offsetY * 2.0;
+    } else if (offsetY < 0.0) {
+      lowerSizedBoxHeight = offsetY * -2.0;
+    }
 
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
@@ -654,29 +661,40 @@ class _ViewingPageState extends State<ViewingPage>
     await showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          content: SizedBox(
-            width: 200.0,
-            child: RadioGroup(
-              groupValue: _memo.viewingMode,
-              onChanged: (value) async {
-                if (value != null) {
-                  _memo.beginModification();
-                  _memo.viewingMode = value;
-                  await _save();
-                }
-                if (context.mounted) {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: tiles,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: upperSizedBoxHeight,
+            ),
+            AlertDialog(
+              content: SizedBox(
+                width: 200.0,
+                child: RadioGroup(
+                  groupValue: _memo.viewingMode,
+                  onChanged: (value) async {
+                    if (value != null) {
+                      _memo.beginModification();
+                      _memo.viewingMode = value;
+                      await _save();
+                    }
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: tiles,
+                  ),
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              height: lowerSizedBoxHeight,
+            ),
+          ],
         );
-      },
+      }
     );
     setState(() {});
   }
