@@ -64,6 +64,7 @@ class _ViewingPageState extends State<ViewingPage>
   final _scrollController = ScrollController();
   Animation<Offset> _animation =
       const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
+  final _viewingModeListTileKey = GlobalKey();
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   late Memo _memo;
   final _previousMemos = <Memo>[];
@@ -272,6 +273,7 @@ class _ViewingPageState extends State<ViewingPage>
               ),
               const Divider(),
               ListTile(
+                key: _viewingModeListTileKey,
                 title: Text(localizations.viewingMode(_memo.viewingMode),
                     style: attributeStyle),
                 onTap: archiveName == null ? _chooseViewingMode : null,
@@ -620,6 +622,16 @@ class _ViewingPageState extends State<ViewingPage>
   Future<void> _chooseViewingMode() async {
     // TODO: Add constants.dart?
     const viewingModeNames = ['Plain', 'TinyMarkdown'];
+
+    var offsetY = 0.0;
+    final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
+    if (renderBox is RenderBox) {
+      final position = renderBox.localToGlobal(Offset.zero);
+      final height = renderBox.size.height;
+      final positionY = position.dy + height * 0.5;
+      final viewHeight = MediaQuery.of(context).size.height;
+      offsetY = positionY - (viewHeight * 0.5);
+    }
 
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
