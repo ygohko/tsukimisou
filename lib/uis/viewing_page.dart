@@ -629,7 +629,13 @@ class _ViewingPageState extends State<ViewingPage>
       final position = renderBox.localToGlobal(Offset.zero);
       final height = renderBox.size.height;
       final positionY = position.dy + height * 0.5;
+      
+      print('positionY: $positionY');
+      
       final viewHeight = MediaQuery.of(context).size.height;
+
+      print('viewHeight: $viewHeight');
+
       offsetY = positionY - (viewHeight * 0.5);
     }
     var upperSizedBoxHeight = 0.0;
@@ -640,6 +646,9 @@ class _ViewingPageState extends State<ViewingPage>
       lowerSizedBoxHeight = offsetY * -2.0;
     }
 
+    print('upperSizedBoxHeight: $upperSizedBoxHeight');
+    print('lowerSizedBoxHeight: $lowerSizedBoxHeight');
+    
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
       tiles.add(
@@ -662,6 +671,7 @@ class _ViewingPageState extends State<ViewingPage>
       context: context,
       builder: (context) {
         return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
