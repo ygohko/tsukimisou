@@ -574,10 +574,17 @@ class _ViewingPageState extends State<ViewingPage>
 
       offsetY = positionY - (viewHeight * 0.5);
     }
-    var upperSizedBoxHeight = 0.0;
-    var lowerSizedBoxHeight = 0.0;
+
+    var upperSpacerFlex = 1;
+    var lowerSpacerFlex = 1;
     if (offsetY > 0.0) {
-      upperSizedBoxHeight = offsetY * 2.0;
+
+      final viewHeight = MediaQuery.of(context).size.height;
+      final spacerHeight = viewHeight - 400.0;
+      final upperSpacerHeight = ;
+      final lowerRatio = 
+
+
     } else if (offsetY < 0.0) {
       lowerSizedBoxHeight = offsetY * -2.0;
     }
@@ -596,51 +603,54 @@ class _ViewingPageState extends State<ViewingPage>
               SizedBox(
                 height: upperSizedBoxHeight,
               ),
-          AlertDialog(
-              title: Text(localizations.modifyTheName),
-              content: TextField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    hintText: localizations.enterTheMemoName,
-                    errorText: error ? localizations.nameAlreadyExists : null,
-                    border: const OutlineInputBorder(),
-                  ),
-                  autofocus: true,
-                  onSubmitted: (name) {
-                    final memo = memoStore.memoFromName(name);
-                    if (memo != null) {
-                      setState(() {
-                        error = true;
-                      });
-                    } else {
-                      Navigator.of(context).pop(name);
-                    }
-                  }),
-              actions: [
-                TextButton(
-                  child: Text(localizations.cancel),
-                  onPressed: () {
-                    Navigator.of(context).pop(null);
-                  },
-                ),
-                TextButton(
-                    child: Text(localizations.ok),
-                    onPressed: () {
-                      final name = _textEditingController.text;
+              SizedBox(
+                height: 400.0,
+                child: AlertDialog(
+                  title: Text(localizations.modifyTheName),
+                  content: TextField(
+                    controller: _textEditingController,
+                    decoration: InputDecoration(
+                      hintText: localizations.enterTheMemoName,
+                      errorText: error ? localizations.nameAlreadyExists : null,
+                      border: const OutlineInputBorder(),
+                    ),
+                    autofocus: true,
+                    onSubmitted: (name) {
                       final memo = memoStore.memoFromName(name);
                       if (memo != null) {
-                        if (memo != _memo) {
-                          setState(() {
+                        setState(() {
                             error = true;
-                          });
-                        } else {
-                          Navigator.of(context).pop(null);
-                        }
+                        });
                       } else {
                         Navigator.of(context).pop(name);
                       }
+                  }),
+                  actions: [
+                    TextButton(
+                      child: Text(localizations.cancel),
+                      onPressed: () {
+                        Navigator.of(context).pop(null);
+                      },
+                    ),
+                    TextButton(
+                      child: Text(localizations.ok),
+                      onPressed: () {
+                        final name = _textEditingController.text;
+                        final memo = memoStore.memoFromName(name);
+                        if (memo != null) {
+                          if (memo != _memo) {
+                            setState(() {
+                                error = true;
+                            });
+                          } else {
+                            Navigator.of(context).pop(null);
+                          }
+                        } else {
+                          Navigator.of(context).pop(name);
+                        }
                     }),
-              ]),
+                ]),
+              ),
               SizedBox(
                 height: lowerSizedBoxHeight,
               ),
