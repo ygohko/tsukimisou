@@ -66,6 +66,7 @@ class _ViewingPageState extends State<ViewingPage>
   Animation<Offset> _animation =
       const AlwaysStoppedAnimation<Offset>(Offset(0.0, 0.0));
   final _viewingModeListTileKey = GlobalKey();
+  final _modifyingNameListTileKey = GlobalKey();
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   late Memo _memo;
   final _previousMemos = <Memo>[];
@@ -278,6 +279,7 @@ class _ViewingPageState extends State<ViewingPage>
               ),
               const Divider(),
               ListTile(
+                key: _modifyingNameListTileKey,
                 title:
                     Text(localizations.name(_memo.name), style: attributeStyle),
                 onTap: archiveName == null ? _modifyName : null,
@@ -583,6 +585,30 @@ class _ViewingPageState extends State<ViewingPage>
 
   Future<void> _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
+
+    var offsetY = 0.0;
+    final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
+    if (renderBox is RenderBox) {
+      final position = renderBox.localToGlobal(Offset.zero);
+      final height = renderBox.size.height;
+      final positionY = position.dy + height * 0.5;
+      
+      print('positionY: $positionY');
+      
+      final viewHeight = MediaQuery.of(context).size.height;
+
+      print('viewHeight: $viewHeight');
+
+      offsetY = positionY - (viewHeight * 0.5);
+    }
+    var upperSizedBoxHeight = 0.0;
+    var lowerSizedBoxHeight = 0.0;
+    if (offsetY > 0.0) {
+      upperSizedBoxHeight = offsetY * 2.0;
+    } else if (offsetY < 0.0) {
+      lowerSizedBoxHeight = offsetY * -2.0;
+    }
+
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     _textEditingController.text = _memo.name;
     var error = false;
@@ -590,7 +616,14 @@ class _ViewingPageState extends State<ViewingPage>
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
-          return AlertDialog(
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: upperSizedBoxHeight,
+              ),
+          AlertDialog(
               title: Text(localizations.modifyTheName),
               content: TextField(
                   controller: _textEditingController,
@@ -634,7 +667,12 @@ class _ViewingPageState extends State<ViewingPage>
                         Navigator.of(context).pop(name);
                       }
                     }),
-              ]);
+              ]),
+              SizedBox(
+                height: lowerSizedBoxHeight,
+              ),
+            ],
+          );
         });
       },
     );
