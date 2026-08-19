@@ -630,7 +630,7 @@ class _ViewingPageState extends State<ViewingPage>
             mainAxisSize: MainAxisSize.min,
             children: [
               Spacer(
-                flex: upperSpacerFlex,
+                flex: 1, // upperSpacerFlex,
               ),
               SizedBox(
                 height: 400.0,
@@ -681,7 +681,7 @@ class _ViewingPageState extends State<ViewingPage>
                 ]),
               ),
               Spacer(
-                flex: lowerSpacerFlex,
+                flex: 1, // lowerSpacerFlex,
               ),
             ],
           );
