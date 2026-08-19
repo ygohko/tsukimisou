@@ -586,6 +586,7 @@ class _ViewingPageState extends State<ViewingPage>
   Future<void> _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
 
+    final dialogHeight = 400.0;
     var offsetY = 0.0;
     final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
@@ -604,16 +605,17 @@ class _ViewingPageState extends State<ViewingPage>
 
     var upperSpacerFlex = 1;
     var lowerSpacerFlex = 1;
-    if (offsetY > 0.0) {
-
-      final viewHeight = MediaQuery.of(context).size.height;
-      final spacerHeight = viewHeight - 400.0;
-      final upperSpacerHeight = ;
-      final lowerRatio = 
-
-
-    } else if (offsetY < 0.0) {
-      lowerSizedBoxHeight = offsetY * -2.0;
+    final viewHeight = MediaQuery.of(context).size.height;
+    final spacerHeight = viewHeight - dialogHeight;
+    final lowerSpacerHeight = viewHeight - (viewHeight * 0.5 + offsetY + dialogHeight * 0.5);
+    final upperSpacerHeight = spacerHeight - lowerSpacerHeight;
+    upperSpacerFlex = upperSpacerHeight.toInt();
+    if (upperSpacerFlex < 1) {
+      upperSpacerFlex = 1;
+    }
+    lowerSpacerFlex = lowerSpacerHeight.toInt();
+    if (lowerSpacerFlex < 1) {
+      lowerSpacerFlex = 1;
     }
 
     final memoStore = Provider.of<MemoStore>(context, listen: false);
@@ -627,8 +629,8 @@ class _ViewingPageState extends State<ViewingPage>
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                height: upperSizedBoxHeight,
+              Spacer(
+                flex: upperSpacerFlex,
               ),
               SizedBox(
                 height: 400.0,
@@ -678,8 +680,8 @@ class _ViewingPageState extends State<ViewingPage>
                     }),
                 ]),
               ),
-              SizedBox(
-                height: lowerSizedBoxHeight,
+              Spacer(
+                flex: lowerSpacerFlex,
               ),
             ],
           );
@@ -698,8 +700,9 @@ class _ViewingPageState extends State<ViewingPage>
     // TODO: Add constants.dart?
     const viewingModeNames = ['Plain', 'TinyMarkdown'];
 
+    final dialogHeight = 200.0;
     var offsetY = 0.0;
-    final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
+    final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final height = renderBox.size.height;
@@ -713,17 +716,22 @@ class _ViewingPageState extends State<ViewingPage>
 
       offsetY = positionY - (viewHeight * 0.5);
     }
-    var upperSizedBoxHeight = 0.0;
-    var lowerSizedBoxHeight = 0.0;
-    if (offsetY > 0.0) {
-      upperSizedBoxHeight = offsetY * 2.0;
-    } else if (offsetY < 0.0) {
-      lowerSizedBoxHeight = offsetY * -2.0;
+
+    var upperSpacerFlex = 1;
+    var lowerSpacerFlex = 1;
+    final viewHeight = MediaQuery.of(context).size.height;
+    final spacerHeight = viewHeight - dialogHeight;
+    final lowerSpacerHeight = viewHeight - (viewHeight * 0.5 + offsetY + dialogHeight * 0.5);
+    final upperSpacerHeight = spacerHeight - lowerSpacerHeight;
+    upperSpacerFlex = upperSpacerHeight.toInt();
+    if (upperSpacerFlex < 1) {
+      upperSpacerFlex = 1;
+    }
+    lowerSpacerFlex = lowerSpacerHeight.toInt();
+    if (lowerSpacerFlex < 1) {
+      lowerSpacerFlex = 1;
     }
 
-    print('upperSizedBoxHeight: $upperSizedBoxHeight');
-    print('lowerSizedBoxHeight: $lowerSizedBoxHeight');
-    
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
       tiles.add(
@@ -749,8 +757,8 @@ class _ViewingPageState extends State<ViewingPage>
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              height: upperSizedBoxHeight,
+            Spacer(
+              flex: upperSpacerFlex,
             ),
             AlertDialog(
               content: SizedBox(
@@ -774,8 +782,8 @@ class _ViewingPageState extends State<ViewingPage>
                 ),
               ),
             ),
-            SizedBox(
-              height: lowerSizedBoxHeight,
+            Spacer(
+              flex: lowerSpacerFlex,
             ),
           ],
         );
