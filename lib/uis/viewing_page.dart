@@ -723,8 +723,18 @@ class _ViewingPageState extends State<ViewingPage>
           builder: (context, setState) {
             var offsetY = 0.0;
             if (dialogCenterY != null) {
+              var centerY = dialogCenterY;
               final viewHeight = MediaQuery.of(context).size.height;
-              offsetY = dialogCenterY - (viewHeight * 0.5);
+              var difference = (centerY + dialogHeight * 0.5) - viewHeight;
+              if (difference > 0.0) {
+                centerY -= difference;
+              }
+              difference = centerY - dialogHeight * 0.5;
+              if (difference < 0.0) {
+                centerY -= difference;
+              }
+
+              offsetY = centerY - (viewHeight * 0.5);
             }
 
             return Transform(
