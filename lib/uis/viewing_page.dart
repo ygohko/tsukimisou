@@ -625,67 +625,56 @@ class _ViewingPageState extends State<ViewingPage>
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Spacer(
-                flex: 1, // upperSpacerFlex,
-              ),
-              SizedBox(
-                height: 400.0,
-                child: AlertDialog(
-                  title: Text(localizations.modifyTheName),
-                  content: TextField(
-                    controller: _textEditingController,
-                    decoration: InputDecoration(
-                      hintText: localizations.enterTheMemoName,
-                      errorText: error ? localizations.nameAlreadyExists : null,
-                      border: const OutlineInputBorder(),
-                    ),
-                    autofocus: true,
-                    onSubmitted: (name) {
+            return Transform(
+              transform: Matrix4.translationValues(0.0, offsetY, 0.0),
+              child: AlertDialog(
+                title: Text(localizations.modifyTheName),
+                content: TextField(
+                  controller: _textEditingController,
+                  decoration: InputDecoration(
+                    hintText: localizations.enterTheMemoName,
+                    errorText: error ? localizations.nameAlreadyExists : null,
+                    border: const OutlineInputBorder(),
+                  ),
+                  autofocus: true,
+                  onSubmitted: (name) {
+                    final memo = memoStore.memoFromName(name);
+                    if (memo != null) {
+                      setState(() {
+                          error = true;
+                      });
+                    } else {
+                      Navigator.of(context).pop(name);
+                    }
+                }),
+                actions: [
+                  TextButton(
+                    child: Text(localizations.cancel),
+                    onPressed: () {
+                      Navigator.of(context).pop(null);
+                    },
+                  ),
+                  TextButton(
+                    child: Text(localizations.ok),
+                    onPressed: () {
+                      final name = _textEditingController.text;
                       final memo = memoStore.memoFromName(name);
                       if (memo != null) {
-                        setState(() {
-                            error = true;
-                        });
+                        if (memo != _memo) {
+                          setState(() {
+                              error = true;
+                          });
+                        } else {
+                          Navigator.of(context).pop(null);
+                        }
                       } else {
                         Navigator.of(context).pop(name);
                       }
                   }),
-                  actions: [
-                    TextButton(
-                      child: Text(localizations.cancel),
-                      onPressed: () {
-                        Navigator.of(context).pop(null);
-                      },
-                    ),
-                    TextButton(
-                      child: Text(localizations.ok),
-                      onPressed: () {
-                        final name = _textEditingController.text;
-                        final memo = memoStore.memoFromName(name);
-                        if (memo != null) {
-                          if (memo != _memo) {
-                            setState(() {
-                                error = true;
-                            });
-                          } else {
-                            Navigator.of(context).pop(null);
-                          }
-                        } else {
-                          Navigator.of(context).pop(name);
-                        }
-                    }),
-                ]),
-              ),
-              Spacer(
-                flex: 1, // lowerSpacerFlex,
-              ),
-            ],
-          );
-        });
+              ]),
+            );
+          }
+        );
       },
     );
     if (name != null) {
@@ -753,39 +742,30 @@ class _ViewingPageState extends State<ViewingPage>
     await showDialog(
       context: context,
       builder: (context) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Spacer(
-              flex: upperSpacerFlex,
-            ),
-            AlertDialog(
-              content: SizedBox(
-                width: 200.0,
-                child: RadioGroup(
-                  groupValue: _memo.viewingMode,
-                  onChanged: (value) async {
-                    if (value != null) {
-                      _memo.beginModification();
-                      _memo.viewingMode = value;
-                      await _save();
-                    }
-                    if (context.mounted) {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: tiles,
-                  ),
+        return Transform(
+          transform: Matrix4.translationValues(0.0, offsetY, 0.0),
+          child: AlertDialog(
+            content: SizedBox(
+              width: 200.0,
+              child: RadioGroup(
+                groupValue: _memo.viewingMode,
+                onChanged: (value) async {
+                  if (value != null) {
+                    _memo.beginModification();
+                    _memo.viewingMode = value;
+                    await _save();
+                  }
+                  if (context.mounted) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: tiles,
                 ),
               ),
             ),
-            Spacer(
-              flex: lowerSpacerFlex,
-            ),
-          ],
+          ),
         );
       }
     );
