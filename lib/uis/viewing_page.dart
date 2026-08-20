@@ -663,35 +663,12 @@ class _ViewingPageState extends State<ViewingPage>
     const viewingModeNames = ['Plain', 'TinyMarkdown'];
 
     final dialogHeight = 200.0;
-    var offsetY = 0.0;
+    double? dialogCenterY;
     final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final height = renderBox.size.height;
-      final positionY = position.dy + height * 0.5;
-      
-      print('positionY: $positionY');
-      
-      final viewHeight = MediaQuery.of(context).size.height;
-
-      print('viewHeight: $viewHeight');
-
-      offsetY = positionY - (viewHeight * 0.5);
-    }
-
-    var upperSpacerFlex = 1;
-    var lowerSpacerFlex = 1;
-    final viewHeight = MediaQuery.of(context).size.height;
-    final spacerHeight = viewHeight - dialogHeight;
-    final lowerSpacerHeight = viewHeight - (viewHeight * 0.5 + offsetY + dialogHeight * 0.5);
-    final upperSpacerHeight = spacerHeight - lowerSpacerHeight;
-    upperSpacerFlex = upperSpacerHeight.toInt();
-    if (upperSpacerFlex < 1) {
-      upperSpacerFlex = 1;
-    }
-    lowerSpacerFlex = lowerSpacerHeight.toInt();
-    if (lowerSpacerFlex < 1) {
-      lowerSpacerFlex = 1;
+      dialogCenterY = position.dy + height * 0.5;
     }
 
     final tiles = <Widget>[];
@@ -715,30 +692,40 @@ class _ViewingPageState extends State<ViewingPage>
     await showDialog(
       context: context,
       builder: (context) {
-        return Transform(
-          transform: Matrix4.translationValues(0.0, offsetY, 0.0),
-          child: AlertDialog(
-            content: SizedBox(
-              width: 200.0,
-              child: RadioGroup(
-                groupValue: _memo.viewingMode,
-                onChanged: (value) async {
-                  if (value != null) {
-                    _memo.beginModification();
-                    _memo.viewingMode = value;
-                    await _save();
-                  }
-                  if (context.mounted) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: tiles,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            var offsetY = 0.0;
+            if (dialogCenterY != null) {
+              final viewHeight = MediaQuery.of(context).size.height;
+              offsetY = dialogCenterY - (viewHeight * 0.5);
+            }
+
+            return Transform(
+              transform: Matrix4.translationValues(0.0, offsetY, 0.0),
+              child: AlertDialog(
+                content: SizedBox(
+                  width: 200.0,
+                  child: RadioGroup(
+                    groupValue: _memo.viewingMode,
+                    onChanged: (value) async {
+                      if (value != null) {
+                        _memo.beginModification();
+                        _memo.viewingMode = value;
+                        await _save();
+                      }
+                      if (context.mounted) {
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: tiles,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          }
         );
       }
     );
