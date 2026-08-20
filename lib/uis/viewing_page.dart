@@ -664,7 +664,7 @@ class _ViewingPageState extends State<ViewingPage>
 
     final dialogHeight = 200.0;
     var offsetY = 0.0;
-    final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
+    final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final height = renderBox.size.height;
