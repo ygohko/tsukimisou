@@ -586,9 +586,9 @@ class _ViewingPageState extends State<ViewingPage>
   Future<void> _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
 
-    final dialogHeight = 400.0;
+    final dialogHeight = 200.0;
     double? dialogCenterY;
-    final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
+    final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final height = renderBox.size.height;
@@ -603,17 +603,28 @@ class _ViewingPageState extends State<ViewingPage>
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
             final viewHeight = MediaQuery.of(context).size.height;
+
+            print('viewHeight: $viewHeight');
+
             var offsetY = 0.0;
             if (dialogCenterY != null) {
               var centerY = dialogCenterY;
               var difference = (centerY + dialogHeight * 0.5) - viewHeight;
               if (difference > 0.0) {
                 centerY -= difference;
+
+                print('Lower limit exceeded'); 
+
               }
               difference = centerY - dialogHeight * 0.5;
               if (difference < 0.0) {
                 centerY -= difference;
+
+                print('Upper limit exceeded'); 
+
               }
+
+              print('centerY: $centerY');
 
               offsetY = centerY - (viewHeight * 0.5);
             }
