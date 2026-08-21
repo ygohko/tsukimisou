@@ -587,35 +587,12 @@ class _ViewingPageState extends State<ViewingPage>
     final localizations = AppLocalizations.of(context)!;
 
     final dialogHeight = 400.0;
-    var offsetY = 0.0;
-    final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
+    double? dialogCenterY;
+    final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final height = renderBox.size.height;
-      final positionY = position.dy + height * 0.5;
-      
-      print('positionY: $positionY');
-      
-      final viewHeight = MediaQuery.of(context).size.height;
-
-      print('viewHeight: $viewHeight');
-
-      offsetY = positionY - (viewHeight * 0.5);
-    }
-
-    var upperSpacerFlex = 1;
-    var lowerSpacerFlex = 1;
-    final viewHeight = MediaQuery.of(context).size.height;
-    final spacerHeight = viewHeight - dialogHeight;
-    final lowerSpacerHeight = viewHeight - (viewHeight * 0.5 + offsetY + dialogHeight * 0.5);
-    final upperSpacerHeight = spacerHeight - lowerSpacerHeight;
-    upperSpacerFlex = upperSpacerHeight.toInt();
-    if (upperSpacerFlex < 1) {
-      upperSpacerFlex = 1;
-    }
-    lowerSpacerFlex = lowerSpacerHeight.toInt();
-    if (lowerSpacerFlex < 1) {
-      lowerSpacerFlex = 1;
+      dialogCenterY = position.dy + height * 0.5;
     }
 
     final memoStore = Provider.of<MemoStore>(context, listen: false);
@@ -625,6 +602,22 @@ class _ViewingPageState extends State<ViewingPage>
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
+            final viewHeight = MediaQuery.of(context).size.height;
+            var offsetY = 0.0;
+            if (dialogCenterY != null) {
+              var centerY = dialogCenterY;
+              var difference = (centerY + dialogHeight * 0.5) - viewHeight;
+              if (difference > 0.0) {
+                centerY -= difference;
+              }
+              difference = centerY - dialogHeight * 0.5;
+              if (difference < 0.0) {
+                centerY -= difference;
+              }
+
+              offsetY = centerY - (viewHeight * 0.5);
+            }
+
             return Transform(
               transform: Matrix4.translationValues(0.0, offsetY, 0.0),
               child: AlertDialog(
@@ -721,10 +714,10 @@ class _ViewingPageState extends State<ViewingPage>
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
+            final viewHeight = MediaQuery.of(context).size.height;
             var offsetY = 0.0;
             if (dialogCenterY != null) {
               var centerY = dialogCenterY;
-              final viewHeight = MediaQuery.of(context).size.height;
               var difference = (centerY + dialogHeight * 0.5) - viewHeight;
               if (difference > 0.0) {
                 centerY -= difference;
