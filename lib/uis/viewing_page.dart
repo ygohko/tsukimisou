@@ -602,7 +602,8 @@ class _ViewingPageState extends State<ViewingPage>
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
-            final viewHeight = MediaQuery.of(context).size.height;
+            final query = MediaQuery.of(context);
+            final viewHeight = query.size.height - query.viewInsets.bottom;
 
             print('viewHeight: $viewHeight');
 
@@ -624,9 +625,11 @@ class _ViewingPageState extends State<ViewingPage>
 
               }
 
-              print('centerY: $centerY');
-
               offsetY = centerY - (viewHeight * 0.5);
+
+              print('offseetY: $offsetY');
+
+
             }
 
             return Transform(
