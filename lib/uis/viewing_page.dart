@@ -586,7 +586,7 @@ class _ViewingPageState extends State<ViewingPage>
   Future<void> _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
 
-    final dialogHeight = 200.0;
+    final dialogHeight = 250.0;
     double? dialogCenterY;
     final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
@@ -617,6 +617,7 @@ class _ViewingPageState extends State<ViewingPage>
                 print('Lower limit exceeded'); 
 
               }
+              /*
               difference = centerY - dialogHeight * 0.5;
               if (difference < 0.0) {
                 centerY -= difference;
@@ -624,61 +625,72 @@ class _ViewingPageState extends State<ViewingPage>
                 print('Upper limit exceeded'); 
 
               }
+              */
 
-              offsetY = centerY - (viewHeight * 0.5);
+              // Android
+              final dialogMargin = 47.0;
+              // Windows
+              // final dialogMargin = 24.0;
+              offsetY = centerY - dialogHeight * 0.5 - dialogMargin;
 
               print('offseetY: $offsetY');
-
+              print('padding.top: ${query.padding.top}');
+              print('viewInsets.top: ${query.viewInsets.top}');
+              print('viewPadding.top: ${query.viewPadding.top}');
 
             }
 
             return Transform(
               transform: Matrix4.translationValues(0.0, offsetY, 0.0),
-              child: AlertDialog(
-                title: Text(localizations.modifyTheName),
-                content: TextField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    hintText: localizations.enterTheMemoName,
-                    errorText: error ? localizations.nameAlreadyExists : null,
-                    border: const OutlineInputBorder(),
-                  ),
-                  autofocus: true,
-                  onSubmitted: (name) {
-                    final memo = memoStore.memoFromName(name);
-                    if (memo != null) {
-                      setState(() {
-                          error = true;
-                      });
-                    } else {
-                      Navigator.of(context).pop(name);
-                    }
-                }),
-                actions: [
-                  TextButton(
-                    child: Text(localizations.cancel),
-                    onPressed: () {
-                      Navigator.of(context).pop(null);
-                    },
-                  ),
-                  TextButton(
-                    child: Text(localizations.ok),
-                    onPressed: () {
-                      final name = _textEditingController.text;
-                      final memo = memoStore.memoFromName(name);
-                      if (memo != null) {
-                        if (memo != _memo) {
+              child: Column(
+                children: [
+                  AlertDialog(
+                    title: Text(localizations.modifyTheName),
+                    content: TextField(
+                      controller: _textEditingController,
+                      decoration: InputDecoration(
+                        hintText: localizations.enterTheMemoName,
+                        errorText: error ? localizations.nameAlreadyExists : null,
+                        border: const OutlineInputBorder(),
+                      ),
+                      autofocus: true,
+                      onSubmitted: (name) {
+                        final memo = memoStore.memoFromName(name);
+                        if (memo != null) {
                           setState(() {
                               error = true;
                           });
                         } else {
-                          Navigator.of(context).pop(null);
+                          Navigator.of(context).pop(name);
                         }
-                      } else {
-                        Navigator.of(context).pop(name);
-                      }
-                  }),
-              ]),
+                    }),
+                    actions: [
+                      TextButton(
+                        child: Text(localizations.cancel),
+                        onPressed: () {
+                          Navigator.of(context).pop(null);
+                        },
+                      ),
+                      TextButton(
+                        child: Text(localizations.ok),
+                        onPressed: () {
+                          final name = _textEditingController.text;
+                          final memo = memoStore.memoFromName(name);
+                          if (memo != null) {
+                            if (memo != _memo) {
+                              setState(() {
+                                  error = true;
+                              });
+                            } else {
+                              Navigator.of(context).pop(null);
+                            }
+                          } else {
+                            Navigator.of(context).pop(name);
+                          }
+                      }),
+                  ]),
+                ],
+              ),
             );
           }
         );
