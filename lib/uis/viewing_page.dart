@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
@@ -68,10 +69,15 @@ class _ViewingPageState extends State<ViewingPage>
   late Memo _memo;
   final _previousMemos = <Memo>[];
   var _fullScreen = false;
+  var _controlKeyPressed = false;
 
   @override
   void initState() {
     super.initState();
+    const platform = LocalPlatform();
+    if (platform.isDesktop) {
+      HardwareKeyboard.instance.addHandler(_handleKeyboard);
+    }
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     _memo = widget.memo;
@@ -83,11 +89,16 @@ class _ViewingPageState extends State<ViewingPage>
     _scrollController.dispose();
     _animationController.dispose();
     _textEditingController.dispose();
+    const platform = LocalPlatform();
+    if (platform.isDesktop) {
+      HardwareKeyboard.instance.removeHandler(_handleKeyboard);
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    const platform = LocalPlatform();
     final localizations = AppLocalizations.of(context)!;
     final dateTime = DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
     final lastModified =
@@ -255,10 +266,10 @@ class _ViewingPageState extends State<ViewingPage>
                     style: attributeStyle),
                 onTap: archiveName == null
                   ? () {
-                    _bindTags(true);
+                    _bindTags(!_controlKeyPressed);
                   }
                   : null,
-                onLongPress: archiveName == null
+                onLongPress: archiveName == null && !platform.isDesktop
                   ? () {
                     _bindTags(false);
                   }
@@ -300,6 +311,20 @@ class _ViewingPageState extends State<ViewingPage>
         ),
       ),
     );
+  }
+
+  bool _handleKeyboard(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+        _controlKeyPressed = true;
+      }
+    } else if (event is KeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+        _controlKeyPressed = false;
+      }
+    }
+
+    return false;
   }
 
   Future<void> _edit() async {
