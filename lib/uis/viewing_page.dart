@@ -74,7 +74,6 @@ class _ViewingPageState extends State<ViewingPage>
   @override
   void initState() {
     super.initState();
-
     const platform = LocalPlatform();
     if (platform.isDesktop) {
       HardwareKeyboard.instance.addHandler(_handleKeyboard);
