@@ -20,6 +20,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:platform/platform.dart';
 import 'package:provider/provider.dart';
@@ -68,10 +69,20 @@ class _ViewingPageState extends State<ViewingPage>
   late Memo _memo;
   final _previousMemos = <Memo>[];
   var _fullScreen = false;
+  var _controlKeyPressed = false;
 
   @override
   void initState() {
     super.initState();
+
+    const platform = LocalPlatform();
+    if (platform.isDesktop) {
+      // TODO: Add keyboard handler.
+
+      HardwareKeyboard.instance.addHandler(_handleKeyboard);
+
+    }
+
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     _memo = widget.memo;
@@ -83,6 +94,12 @@ class _ViewingPageState extends State<ViewingPage>
     _scrollController.dispose();
     _animationController.dispose();
     _textEditingController.dispose();
+
+    const platform = LocalPlatform();
+    if (platform.isDesktop) {
+      // TODO: Remove keyboard handler.
+    }
+
     super.dispose();
   }
 
@@ -300,6 +317,25 @@ class _ViewingPageState extends State<ViewingPage>
         ),
       ),
     );
+  }
+
+  bool _handleKeyboard(KeyEvent event) {
+
+    print('event: $event');
+
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+        _controlKeyPressed = true;
+      }
+    } else if (event is KeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+        _controlKeyPressed = false;
+      }
+    }
+
+    print('_controlKeyPressed: $_controlKeyPressed');
+
+    return false;
   }
 
   Future<void> _edit() async {
