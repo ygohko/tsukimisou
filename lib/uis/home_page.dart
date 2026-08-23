@@ -300,14 +300,13 @@ class _HomePageState extends State<HomePage> {
     } finally {
       messenger.hideCurrentMaterialBanner();
       appState.mergingWithGoogleDrive = false;
-      setState(() {
-        _savingToGoogleDrive = true;
-      });
     }
 
+    setState(() {
+        _savingToGoogleDrive = true;
+    });
     await _saveMergedMemoStoresGoogleDrive(
         toMemoStore, merger, localizations, messenger, appState);
-
     setState(() {
       _savingToGoogleDrive = false;
     });
