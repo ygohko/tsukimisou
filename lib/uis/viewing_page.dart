@@ -77,12 +77,8 @@ class _ViewingPageState extends State<ViewingPage>
 
     const platform = LocalPlatform();
     if (platform.isDesktop) {
-      // TODO: Add keyboard handler.
-
       HardwareKeyboard.instance.addHandler(_handleKeyboard);
-
     }
-
     _animationController = AnimationController(
         duration: const Duration(milliseconds: 300), vsync: this);
     _memo = widget.memo;
@@ -94,12 +90,10 @@ class _ViewingPageState extends State<ViewingPage>
     _scrollController.dispose();
     _animationController.dispose();
     _textEditingController.dispose();
-
     const platform = LocalPlatform();
     if (platform.isDesktop) {
-      // TODO: Remove keyboard handler.
+      HardwareKeyboard.instance.removeHandler(_handleKeyboard);
     }
-
     super.dispose();
   }
 
