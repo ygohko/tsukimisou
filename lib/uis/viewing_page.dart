@@ -105,6 +105,7 @@ class _ViewingPageState extends State<ViewingPage>
 
   @override
   Widget build(BuildContext context) {
+    const platform = LocalPlatform();
     final localizations = AppLocalizations.of(context)!;
     final dateTime = DateTime.fromMillisecondsSinceEpoch(_memo.lastModified);
     final lastModified =
@@ -272,10 +273,10 @@ class _ViewingPageState extends State<ViewingPage>
                     style: attributeStyle),
                 onTap: archiveName == null
                   ? () {
-                    _bindTags(true);
+                    _bindTags(!_controlKeyPressed);
                   }
                   : null,
-                onLongPress: archiveName == null
+                onLongPress: archiveName == null && !platform.isDesktop
                   ? () {
                     _bindTags(false);
                   }
@@ -320,9 +321,6 @@ class _ViewingPageState extends State<ViewingPage>
   }
 
   bool _handleKeyboard(KeyEvent event) {
-
-    print('event: $event');
-
     if (event is KeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
         _controlKeyPressed = true;
@@ -332,8 +330,6 @@ class _ViewingPageState extends State<ViewingPage>
         _controlKeyPressed = false;
       }
     }
-
-    print('_controlKeyPressed: $_controlKeyPressed');
 
     return false;
   }
