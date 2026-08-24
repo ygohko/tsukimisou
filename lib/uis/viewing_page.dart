@@ -47,6 +47,16 @@ enum _Direction {
   backward,
 }
 
+// ADHOC
+class DeferScope {
+  final defers = <VoidCallback>[]; 
+
+  static void enter(DeferScopeFunction function) {
+    final scope = DeferScope();
+  }
+
+}
+
 class ViewingPage extends StatefulWidget {
   final Memo memo;
   final bool fullScreen;
