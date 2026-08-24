@@ -47,6 +47,30 @@ import '../models/memo_store_local_saver.dart';
 import '../models/memo_store_merger.dart';
 import '../models/settings.dart';
 
+// ADHOC
+typedef DeferScopeDeferFunction = void Function(VoidCallback);
+typedef DeferScopeFunction = void Function(DeferScopeDeferFunction);
+
+class DeferScope {
+  final _defers = <VoidCallback>[]; 
+
+  void main(DeferScopeFunction function) {
+    void deferFunction(VoidCallback callback) {
+      _defers.add(callback);
+    }
+
+    function(deferFunction);
+    for (final defer in _defers.reversed) {
+      defer();
+    }
+  }
+  
+  static void enter(DeferScopeFunction function) {
+    final scope = DeferScope();
+    scope.main(function);
+  }
+}
+
 class HomePage extends StatefulWidget {
   /// Creates a home page.
   const HomePage({super.key});
@@ -239,12 +263,19 @@ class _HomePageState extends State<HomePage> {
     final appState = Provider.of<AppState>(context, listen: false);
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
     MemoStoreMerger? merger;
-    appState.mergingWithGoogleDrive = true;
-    _showSynchronizingBanner();
 
-    try {
+    DeferScope.enter((defer) {
+      appState.mergingWithGoogleDrive = true;
+      defer(() {
+        appState.mergingWithGoogleDrive = false;
+      });
+      _showSynchronizingBanner();
+      defer(() {
+        messenger.hideCurrentMaterialBanner();
+      });
+
       final fromMemoStore =
-          await _loadFromMemoStore(localizations, messenger, appState);
+        await _loadFromMemoStore(localizations, messenger, appState);
       if (fromMemoStore == null) {
         return;
       }
@@ -297,9 +328,6 @@ class _HomePageState extends State<HomePage> {
       if (!result) {
         return;
       }
-    } finally {
-      messenger.hideCurrentMaterialBanner();
-      appState.mergingWithGoogleDrive = false;
     }
 
     setState(() {
