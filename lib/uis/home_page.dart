@@ -50,6 +50,7 @@ import '../models/settings.dart';
 // ADHOC
 typedef DeferScopeDeferFunction = void Function(VoidCallback);
 typedef DeferScopeFunction = void Function(DeferScopeDeferFunction);
+typedef DeferScopeFunctionAsync = Future<void> Function(DeferScopeDeferFunction);
 
 class DeferScope {
   final _defers = <VoidCallback>[]; 
@@ -64,10 +65,26 @@ class DeferScope {
       defer();
     }
   }
+
+  Future<void> mainAsync(DeferScopeFunctionAsync function) async {
+    void deferFunction(VoidCallback callback) {
+      _defers.add(callback);
+    }
+
+    await function(deferFunction);
+    for (final defer in _defers.reversed) {
+      defer();
+    }
+  }
   
   static void enter(DeferScopeFunction function) {
     final scope = DeferScope();
     scope.main(function);
+  }
+
+  static Future<void> enterAsync(DeferScopeFunctionAsync function) async {
+    final scope = DeferScope();
+    scope.mainAsync(function);
   }
 }
 
@@ -262,9 +279,8 @@ class _HomePageState extends State<HomePage> {
     final messenger = ScaffoldMessenger.of(context);
     final appState = Provider.of<AppState>(context, listen: false);
     final toMemoStore = Provider.of<MemoStore>(context, listen: false);
-    MemoStoreMerger? merger;
 
-    DeferScope.enter((defer) {
+    await DeferScope.enterAsync((defer) async {
       appState.mergingWithGoogleDrive = true;
       defer(() {
         appState.mergingWithGoogleDrive = false;
@@ -274,6 +290,7 @@ class _HomePageState extends State<HomePage> {
         messenger.hideCurrentMaterialBanner();
       });
 
+      MemoStoreMerger? merger;
       final fromMemoStore =
         await _loadFromMemoStore(localizations, messenger, appState);
       if (fromMemoStore == null) {
