@@ -303,7 +303,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     setState(() {
-        _savingToGoogleDrive = true;
+      _savingToGoogleDrive = true;
     });
     await _saveMergedMemoStoresGoogleDrive(
         toMemoStore, merger, localizations, messenger, appState);
@@ -824,7 +824,9 @@ class _HomePageState extends State<HomePage> {
         common_uis.subtitle(context, localizations.archives),
       ]);
       final names = List.from(memoStore.archiveHashes.keys);
-      names.sort((a, b) { return b.compareTo(a); });
+      names.sort((a, b) {
+        return b.compareTo(a);
+      });
       for (final name in names) {
         final shown = _shownArchiveNames.contains(name);
         children.add(ListTile(
@@ -841,19 +843,17 @@ class _HomePageState extends State<HomePage> {
         ));
       }
       children.add(ListTile(
-          title: Text(localizations.includeMain),
-          onTap: () {
-            _setIncludesMain(!_includesMain);
-          },
-          trailing: Switch(
-            value: _includesMain,
-            onChanged: _shownArchiveNames.isNotEmpty
-            ? _setIncludesMain : null,
-          ),
-          enabled: _shownArchiveNames.isNotEmpty,
-          shape: border,
-        )
-      );
+        title: Text(localizations.includeMain),
+        onTap: () {
+          _setIncludesMain(!_includesMain);
+        },
+        trailing: Switch(
+          value: _includesMain,
+          onChanged: _shownArchiveNames.isNotEmpty ? _setIncludesMain : null,
+        ),
+        enabled: _shownArchiveNames.isNotEmpty,
+        shape: border,
+      ));
     }
     if (!hidden) {
       children.addAll([

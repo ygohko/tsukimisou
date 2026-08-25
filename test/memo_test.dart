@@ -36,14 +36,18 @@ void main() {
       expect(memo.tags, ['This is a test.']);
     });
 
-    test('Memo.setTags() should update lastModified if updatesLastModified is true or omitted.', () {
+    test(
+        'Memo.setTags() should update lastModified if updatesLastModified is true or omitted.',
+        () {
       final memo = Memo();
       expect(memo.lastModified, 0);
       memo.setTags(['a']);
       expect(memo.lastModified, isNot(0));
     });
 
-    test('Memo.setTags() should not update lastModified if updatesLastModified is false.', () {
+    test(
+        'Memo.setTags() should not update lastModified if updatesLastModified is false.',
+        () {
       final memo = Memo();
       expect(memo.lastModified, 0);
       memo.setTags(['a'], updatesLastModified: false);

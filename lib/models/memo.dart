@@ -111,7 +111,7 @@ class Memo {
   List<String> get tags => _tags;
 
   /// Sets tags added to this memo.
-  void setTags(List<String> tags, { bool updatesLastModified = true }) {
+  void setTags(List<String> tags, {bool updatesLastModified = true}) {
     _tags = tags;
     if (updatesLastModified) {
       lastModified = DateTime.now().millisecondsSinceEpoch;
