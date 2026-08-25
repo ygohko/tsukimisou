@@ -23,7 +23,8 @@
 import 'dart:io';
 
 import 'package:material_ui/material_ui.dart';
-import 'package:flutter_localizations/flutter_localizations.dart' hide GlobalMaterialLocalizations;
+import 'package:flutter_localizations/flutter_localizations.dart'
+    hide GlobalMaterialLocalizations;
 
 import 'common_uis.dart';
 import 'home_page.dart';

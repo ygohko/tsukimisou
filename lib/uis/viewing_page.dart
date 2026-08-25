@@ -265,15 +265,15 @@ class _ViewingPageState extends State<ViewingPage>
                 title: Text(localizations.boundTags(tagsString),
                     style: attributeStyle),
                 onTap: archiveName == null
-                  ? () {
-                    _bindTags(!_controlKeyPressed);
-                  }
-                  : null,
+                    ? () {
+                        _bindTags(!_controlKeyPressed);
+                      }
+                    : null,
                 onLongPress: archiveName == null && !platform.isDesktop
-                  ? () {
-                    _bindTags(false);
-                  }
-                  : null,
+                    ? () {
+                        _bindTags(false);
+                      }
+                    : null,
               ),
               const Divider(),
               ListTile(
@@ -315,11 +315,13 @@ class _ViewingPageState extends State<ViewingPage>
 
   bool _handleKeyboard(KeyEvent event) {
     if (event is KeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+      if (event.logicalKey == LogicalKeyboardKey.controlLeft ||
+          event.logicalKey == LogicalKeyboardKey.controlRight) {
         _controlKeyPressed = true;
       }
     } else if (event is KeyUpEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+      if (event.logicalKey == LogicalKeyboardKey.controlLeft ||
+          event.logicalKey == LogicalKeyboardKey.controlRight) {
         _controlKeyPressed = false;
       }
     }
