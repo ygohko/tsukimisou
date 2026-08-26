@@ -786,7 +786,7 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final appState = Provider.of<AppState>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
-    final tags = memoStore.tags;
+    final tags = _availableTags;
     final tagScores = settings.getTagScores();
     tags.sortByScores(tagScores);
     final hidden = settings.getSynchronizationHidden();
@@ -883,7 +883,7 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.centerLeft,
           child: Text(
             localizations.showingMemos(
-                _shownMemos.length, memoStore.memos.length, tags.length),
+                _shownMemos.length, _availableMemoCount, _availableTags.length),
             style:
                 common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
           ),
