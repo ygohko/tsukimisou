@@ -59,6 +59,8 @@ class _HomePageState extends State<HomePage> {
   var _shownMemos = <Memo>[];
   var _filteringTag = '';
   var _filteringEnabled = false;
+  var _availableMemoCount = 0;
+  var _availableTags = <String>[];
   final _shownArchiveNames = <String>[];
   var _includesMain = true;
   var _commonUiInitialized = false;
@@ -784,7 +786,7 @@ class _HomePageState extends State<HomePage> {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final appState = Provider.of<AppState>(context, listen: false);
     final settings = Provider.of<Settings>(context, listen: false);
-    final tags = memoStore.tags;
+    final tags = [..._availableTags];
     final tagScores = settings.getTagScores();
     tags.sortByScores(tagScores);
     final hidden = settings.getSynchronizationHidden();
@@ -881,7 +883,7 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.centerLeft,
           child: Text(
             localizations.showingMemos(
-                _shownMemos.length, memoStore.memos.length, tags.length),
+                _shownMemos.length, _availableMemoCount, _availableTags.length),
             style:
                 common_uis.TsukimisouTextStyles.homePageDrawerFooter(context),
           ),
@@ -984,15 +986,23 @@ class _HomePageState extends State<HomePage> {
   void _updateShownMemos() {
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     final sourceMemos = <Memo>[];
+    _availableTags = <String>[];
     if (_includesMain) {
       sourceMemos.addAll(memoStore.memos);
+      _availableTags.addAll(memoStore.tags);
     }
     for (final name in _shownArchiveNames) {
       final archiveMemoStore = memoStore.archiveMemoStoreIfLoaded(name);
       if (archiveMemoStore != null) {
         sourceMemos.addAll(archiveMemoStore.memos);
+        for (final tag in archiveMemoStore.tags) {
+          if (!_availableTags.contains(tag)) {
+            _availableTags.add(tag);
+          }
+        }
       }
     }
+    _availableMemoCount = sourceMemos.length;
 
     if (!_filteringEnabled) {
       _shownMemos = [...sourceMemos];
