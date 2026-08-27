@@ -544,6 +544,10 @@ class _HomePageState extends State<HomePage> {
   Future<void> _showSettings() async {
     if (!common_uis.hasLargeScreen()) {
       Navigator.of(context).pop();
+      await Future.delayed(const Duration(milliseconds: 100));
+      if (!mounted) {
+        return;
+      }
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
