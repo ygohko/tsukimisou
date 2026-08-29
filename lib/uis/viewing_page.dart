@@ -47,6 +47,35 @@ enum _Direction {
   backward,
 }
 
+class TestTransition extends AnimatedWidget {
+  final Alignment alignment;
+  final Widget child;
+
+  /// Creates a dialog to dialog transition.
+  const TestTransition(
+      {super.key,
+      required Animation<double> phase,
+      this.alignment = Alignment.center,
+      required this.child})
+      : super(listenable: phase);
+
+  Animation<double> get _phase => listenable as Animation<double>;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _phase.value;
+    // final transform = Matrix4.diagonal3Values(scale, scale, scale);
+    // final transform = Matrix4.diagonal3Values(1.0, 1.0, 1.0);
+    final transform = Matrix4.translationValues((1.0 - _phase.value) * 200.0, (1.0 - _phase.value) * 200.0, 0.0);
+    transform.scale(scale, scale, scale);
+    return Transform(
+      transform: transform,
+      alignment: alignment,
+      child: child,
+    );
+  }
+}
+
 class ViewingPage extends StatefulWidget {
   final Memo memo;
   final bool fullScreen;
@@ -584,6 +613,18 @@ class _ViewingPageState extends State<ViewingPage>
   }
 
   Future<void> _modifyName() async {
+    AnimatedWidget testTransitionBuilder(Animation<double> animation, Curve curve,
+      Alignment alignment, Widget child) {
+      return TestTransition(
+        phase: animation,
+        alignment: alignment,
+        child: FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      );
+    }
+
     final localizations = AppLocalizations.of(context)!;
 
     final query = MediaQuery.of(context);
@@ -601,7 +642,7 @@ class _ViewingPageState extends State<ViewingPage>
     _textEditingController.text = _memo.name;
     var error = false;
     
-    final name = await showDialog(
+    final name = await common_uis.showTransitioningDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
@@ -652,6 +693,10 @@ class _ViewingPageState extends State<ViewingPage>
             ]);
         });
       },
+      barrierDismissible: true,
+      transitionBuilder: testTransitionBuilder,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 150),
     );
     
     if (name != null) {
