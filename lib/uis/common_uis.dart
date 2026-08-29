@@ -590,7 +590,6 @@ Future<T?> showTransitioningDialog<T>({
 Future<T?> showScalingDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
-  required DialogTransitionBuilder transitionBuilder,
   Curve curve = Curves.linear,
   Duration? duration,
   Alignment alignment = Alignment.center,

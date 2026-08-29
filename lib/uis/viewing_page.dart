@@ -47,35 +47,6 @@ enum _Direction {
   backward,
 }
 
-class TestTransition extends AnimatedWidget {
-  final Alignment alignment;
-  final Widget child;
-
-  /// Creates a dialog to dialog transition.
-  const TestTransition(
-      {super.key,
-      required Animation<double> phase,
-      this.alignment = Alignment.center,
-      required this.child})
-      : super(listenable: phase);
-
-  Animation<double> get _phase => listenable as Animation<double>;
-
-  @override
-  Widget build(BuildContext context) {
-    final scale = _phase.value;
-    // final transform = Matrix4.diagonal3Values(scale, scale, scale);
-    // final transform = Matrix4.diagonal3Values(1.0, 1.0, 1.0);
-    final transform = Matrix4.translationValues((1.0 - _phase.value) * 200.0, (1.0 - _phase.value) * 200.0, 0.0);
-    transform.scale(scale, scale, scale);
-    return Transform(
-      transform: transform,
-      alignment: alignment,
-      child: child,
-    );
-  }
-}
-
 class ViewingPage extends StatefulWidget {
   final Memo memo;
   final bool fullScreen;
@@ -613,18 +584,6 @@ class _ViewingPageState extends State<ViewingPage>
   }
 
   Future<void> _modifyName() async {
-    AnimatedWidget testTransitionBuilder(Animation<double> animation, Curve curve,
-      Alignment alignment, Widget child) {
-      return TestTransition(
-        phase: animation,
-        alignment: alignment,
-        child: FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
-      );
-    }
-
     final localizations = AppLocalizations.of(context)!;
 
     final query = MediaQuery.of(context);
@@ -697,7 +656,6 @@ class _ViewingPageState extends State<ViewingPage>
         });
       },
       barrierDismissible: true,
-      transitionBuilder: testTransitionBuilder,
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 150),
       startingOffsetX: startingOffsetX,
@@ -716,14 +674,19 @@ class _ViewingPageState extends State<ViewingPage>
     // TODO: Add constants.dart?
     const viewingModeNames = ['Plain', 'TinyMarkdown'];
 
-    final dialogHeight = 200.0;
-    double? dialogCenterY;
+    final query = MediaQuery.of(context);
+    final viewSize = query.size;
+    var tappedPositionX = viewSize.width * 0.5;
+    var tappedPositionY = viewSize.height * 0.5;
     final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
-      final height = renderBox.size.height;
-      dialogCenterY = position.dy + height * 0.5;
+      final size = renderBox.size;
+      tappedPositionX = position.dx + size.width * 0.5;
+      tappedPositionY = position.dy + size.height * 0.5;
     }
+    final startingOffsetX = tappedPositionX - viewSize.width * 0.5;
+    final startingOffsetY = tappedPositionY - viewSize.height * 0.5;
 
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
@@ -743,55 +706,37 @@ class _ViewingPageState extends State<ViewingPage>
       );
     }
 
-    await showDialog(
+    await common_uis.showScalingDialog(
       context: context,
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            final viewHeight = MediaQuery.of(context).size.height;
-            var offsetY = 0.0;
-            if (dialogCenterY != null) {
-              var centerY = dialogCenterY;
-              var difference = (centerY + dialogHeight * 0.5) - viewHeight;
-              if (difference > 0.0) {
-                centerY -= difference;
-              }
-              difference = centerY - dialogHeight * 0.5;
-              if (difference < 0.0) {
-                centerY -= difference;
-              }
-
-              offsetY = centerY - (viewHeight * 0.5);
-            }
-
-            return Transform(
-              transform: Matrix4.translationValues(0.0, offsetY, 0.0),
-              child: AlertDialog(
-                content: SizedBox(
-                  width: 200.0,
-                  child: RadioGroup(
-                    groupValue: _memo.viewingMode,
-                    onChanged: (value) async {
-                      if (value != null) {
-                        _memo.beginModification();
-                        _memo.viewingMode = value;
-                        await _save();
-                      }
-                      if (context.mounted) {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: tiles,
-                    ),
-                  ),
-                ),
+        return AlertDialog(
+          content: SizedBox(
+            width: 200.0,
+            child: RadioGroup(
+              groupValue: _memo.viewingMode,
+              onChanged: (value) async {
+                if (value != null) {
+                  _memo.beginModification();
+                  _memo.viewingMode = value;
+                  await _save();
+                }
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: tiles,
               ),
-            );
-          }
+            ),
+          ),
         );
-      }
+      },
+      barrierDismissible: true,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 150),
+      startingOffsetX: startingOffsetX,
+      startingOffsetY: startingOffsetY,
     );
     setState(() {});
   }
