@@ -242,6 +242,37 @@ class DialogToDialogTransition extends AnimatedWidget {
   }
 }
 
+class ScalingTransition extends AnimatedWidget {
+  final Alignment alignment;
+  final Widget child;
+  final double startingOffsetX;
+  final double startingOffsetY;
+
+  /// Creates a scaling transition.
+  const ScalingTransition(
+      {super.key,
+      required Animation<double> phase,
+      this.alignment = Alignment.center,
+      required this.child,
+      required this.startingOffsetX,
+      required this.startingOffsetY})
+      : super(listenable: phase);
+
+  Animation<double> get _phase => listenable as Animation<double>;
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = _phase.value;
+    final transform = Matrix4.translationValues((1.0 - _phase.value) * startingOffsetX, (1.0 - _phase.value) * startingOffsetY, 0.0);
+    transform.scaleByDouble(scale, scale, scale, 1.0);
+    return Transform(
+      transform: transform,
+      alignment: alignment,
+      child: child,
+    );
+  }
+}
+
 /// Initializes this library.
 void init(BuildContext context) {
   _size = MediaQuery.of(context).size;
@@ -527,6 +558,7 @@ Future<T?> showTransitioningDialog<T>({
   Alignment alignment = Alignment.center,
   bool barrierDismissible = false,
   Color? barrierColor,
+  // TODO: Remove if not needed
   Axis? axis = Axis.horizontal,
 }) {
   assert(debugCheckHasMaterialLocalizations(context));
@@ -550,6 +582,50 @@ Future<T?> showTransitioningDialog<T>({
     transitionBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
       return transitionBuilder(animation, curve, alignment, child);
+    },
+  );
+}
+
+/// Shows dialogs with scaling.
+Future<T?> showScalingDialog<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  required DialogTransitionBuilder transitionBuilder,
+  Curve curve = Curves.linear,
+  Duration? duration,
+  Alignment alignment = Alignment.center,
+  bool barrierDismissible = false,
+  Color? barrierColor,
+  double startingOffsetX = 200.0,
+  double startingOffsetY = 200.0,
+}) {
+  assert(debugCheckHasMaterialLocalizations(context));
+  final ThemeData theme = Theme.of(context);
+  return showGeneralDialog(
+    context: context,
+    pageBuilder: (BuildContext buildContext, Animation<double> animation,
+        Animation<double> secondaryAnimation) {
+      final Widget pageChild = Builder(builder: builder);
+      return SafeArea(
+        top: false,
+        child: Builder(builder: (BuildContext context) {
+          return Theme(data: theme, child: pageChild);
+        }),
+      );
+    },
+    barrierDismissible: barrierDismissible,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    barrierColor: barrierColor ?? Colors.black54,
+    transitionDuration: duration ?? const Duration(milliseconds: 400),
+    transitionBuilder: (BuildContext context, Animation<double> animation,
+        Animation<double> secondaryAnimation, Widget child) {
+      return ScalingTransition(
+        phase: animation,
+        alignment: alignment,
+        startingOffsetX: startingOffsetX,
+        startingOffsetY: startingOffsetY,
+        child: child,
+      );
     },
   );
 }

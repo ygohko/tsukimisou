@@ -628,8 +628,9 @@ class _ViewingPageState extends State<ViewingPage>
     final localizations = AppLocalizations.of(context)!;
 
     final query = MediaQuery.of(context);
-    var tappedPositionX = query.size.width * 0.5;
-    var tappedPositionY = query.size.height * 0.5;
+    final viewSize = query.size;
+    var tappedPositionX = viewSize.width * 0.5;
+    var tappedPositionY = viewSize.height * 0.5;
     final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
@@ -637,12 +638,14 @@ class _ViewingPageState extends State<ViewingPage>
       tappedPositionX = position.dx + size.width * 0.5;
       tappedPositionY = position.dy + size.height * 0.5;
     }
+    final startingOffsetX = tappedPositionX - viewSize.width * 0.5;
+    final startingOffsetY = tappedPositionY - viewSize.height * 0.5;
 
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     _textEditingController.text = _memo.name;
     var error = false;
     
-    final name = await common_uis.showTransitioningDialog(
+    final name = await common_uis.showScalingDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
@@ -697,6 +700,8 @@ class _ViewingPageState extends State<ViewingPage>
       transitionBuilder: testTransitionBuilder,
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 150),
+      startingOffsetX: startingOffsetX,
+      startingOffsetY: startingOffsetY,
     );
     
     if (name != null) {
