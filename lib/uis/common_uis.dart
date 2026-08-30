@@ -261,7 +261,10 @@ class ScalingTransition extends AnimatedWidget {
   @override
   Widget build(BuildContext context) {
     final scale = _phase.value;
-    final transform = Matrix4.translationValues((1.0 - _phase.value) * startingOffset.dx, (1.0 - _phase.value) * startingOffset.dy, 0.0);
+    final transform = Matrix4.translationValues(
+        (1.0 - _phase.value) * startingOffset.dx,
+        (1.0 - _phase.value) * startingOffset.dy,
+        0.0);
     transform.scaleByDouble(scale, scale, scale, 1.0);
     return Transform(
       transform: transform,
