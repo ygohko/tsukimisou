@@ -619,7 +619,10 @@ Future<T?> showScalingDialog<T>({
     transitionBuilder: (BuildContext context, Animation<double> animation,
         Animation<double> secondaryAnimation, Widget child) {
       return ScalingTransition(
-        phase: animation,
+        phase: CurvedAnimation(
+          parent: animation,
+          curve: curve,
+        ),
         alignment: alignment,
         startingOffsetX: startingOffsetX,
         startingOffsetY: startingOffsetY,
