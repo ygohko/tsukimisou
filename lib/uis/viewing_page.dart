@@ -588,42 +588,44 @@ class _ViewingPageState extends State<ViewingPage>
     final viewSize = MediaQuery.of(context).size;
     var tappedPositionX = viewSize.width * 0.5;
     var tappedPositionY = viewSize.height * 0.5;
-    final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
+    final renderBox =
+        _modifyingNameListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final size = renderBox.size;
       tappedPositionX = position.dx + size.width * 0.5;
       tappedPositionY = position.dy + size.height * 0.5;
     }
-    final startingOffset = Offset(tappedPositionX - viewSize.width * 0.5, tappedPositionY - viewSize.height * 0.5);
+    final startingOffset = Offset(tappedPositionX - viewSize.width * 0.5,
+        tappedPositionY - viewSize.height * 0.5);
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     _textEditingController.text = _memo.name;
     var error = false;
-    
+
     final name = await common_uis.showScalingDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
+          return AlertDialog(
               title: Text(localizations.modifyTheName),
               content: TextField(
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                  hintText: localizations.enterTheMemoName,
-                  errorText: error ? localizations.nameAlreadyExists : null,
-                  border: const OutlineInputBorder(),
-                ),
-                autofocus: true,
-                onSubmitted: (name) {
-                  final memo = memoStore.memoFromName(name);
-                  if (memo != null) {
-                    setState(() {
+                  controller: _textEditingController,
+                  decoration: InputDecoration(
+                    hintText: localizations.enterTheMemoName,
+                    errorText: error ? localizations.nameAlreadyExists : null,
+                    border: const OutlineInputBorder(),
+                  ),
+                  autofocus: true,
+                  onSubmitted: (name) {
+                    final memo = memoStore.memoFromName(name);
+                    if (memo != null) {
+                      setState(() {
                         error = true;
-                    });
-                  } else {
-                    Navigator.of(context).pop(name);
-                  }
-              }),
+                      });
+                    } else {
+                      Navigator.of(context).pop(name);
+                    }
+                  }),
               actions: [
                 TextButton(
                   child: Text(localizations.cancel),
@@ -632,23 +634,23 @@ class _ViewingPageState extends State<ViewingPage>
                   },
                 ),
                 TextButton(
-                  child: Text(localizations.ok),
-                  onPressed: () {
-                    final name = _textEditingController.text;
-                    final memo = memoStore.memoFromName(name);
-                    if (memo != null) {
-                      if (memo != _memo) {
-                        setState(() {
+                    child: Text(localizations.ok),
+                    onPressed: () {
+                      final name = _textEditingController.text;
+                      final memo = memoStore.memoFromName(name);
+                      if (memo != null) {
+                        if (memo != _memo) {
+                          setState(() {
                             error = true;
-                        });
+                          });
+                        } else {
+                          Navigator.of(context).pop(null);
+                        }
                       } else {
-                        Navigator.of(context).pop(null);
+                        Navigator.of(context).pop(name);
                       }
-                    } else {
-                      Navigator.of(context).pop(name);
-                    }
-                }),
-            ]);
+                    }),
+              ]);
         });
       },
       barrierDismissible: true,
@@ -672,14 +674,16 @@ class _ViewingPageState extends State<ViewingPage>
     final viewSize = MediaQuery.of(context).size;
     var tappedPositionX = viewSize.width * 0.5;
     var tappedPositionY = viewSize.height * 0.5;
-    final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
+    final renderBox =
+        _viewingModeListTileKey.currentContext?.findRenderObject();
     if (renderBox is RenderBox) {
       final position = renderBox.localToGlobal(Offset.zero);
       final size = renderBox.size;
       tappedPositionX = position.dx + size.width * 0.5;
       tappedPositionY = position.dy + size.height * 0.5;
     }
-    final startingOffset = Offset(tappedPositionX - viewSize.width * 0.5, tappedPositionY - viewSize.height * 0.5);
+    final startingOffset = Offset(tappedPositionX - viewSize.width * 0.5,
+        tappedPositionY - viewSize.height * 0.5);
 
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
