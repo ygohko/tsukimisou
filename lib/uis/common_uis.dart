@@ -245,8 +245,7 @@ class DialogToDialogTransition extends AnimatedWidget {
 class ScalingTransition extends AnimatedWidget {
   final Alignment alignment;
   final Widget child;
-  final double startingOffsetX;
-  final double startingOffsetY;
+  final Offset startingOffset;
 
   /// Creates a scaling transition.
   const ScalingTransition(
@@ -254,8 +253,7 @@ class ScalingTransition extends AnimatedWidget {
       required Animation<double> phase,
       this.alignment = Alignment.center,
       required this.child,
-      required this.startingOffsetX,
-      required this.startingOffsetY})
+      this.startingOffset = Offset.zero})
       : super(listenable: phase);
 
   Animation<double> get _phase => listenable as Animation<double>;
@@ -263,7 +261,7 @@ class ScalingTransition extends AnimatedWidget {
   @override
   Widget build(BuildContext context) {
     final scale = _phase.value;
-    final transform = Matrix4.translationValues((1.0 - _phase.value) * startingOffsetX, (1.0 - _phase.value) * startingOffsetY, 0.0);
+    final transform = Matrix4.translationValues((1.0 - _phase.value) * startingOffset.dx, (1.0 - _phase.value) * startingOffset.dy, 0.0);
     transform.scaleByDouble(scale, scale, scale, 1.0);
     return Transform(
       transform: transform,
@@ -558,8 +556,6 @@ Future<T?> showTransitioningDialog<T>({
   Alignment alignment = Alignment.center,
   bool barrierDismissible = false,
   Color? barrierColor,
-  // TODO: Remove if not needed
-  Axis? axis = Axis.horizontal,
 }) {
   assert(debugCheckHasMaterialLocalizations(context));
   final ThemeData theme = Theme.of(context);
@@ -595,8 +591,7 @@ Future<T?> showScalingDialog<T>({
   Alignment alignment = Alignment.center,
   bool barrierDismissible = false,
   Color? barrierColor,
-  double startingOffsetX = 200.0,
-  double startingOffsetY = 200.0,
+  Offset startingOffset = Offset.zero,
 }) {
   assert(debugCheckHasMaterialLocalizations(context));
   final ThemeData theme = Theme.of(context);
@@ -624,8 +619,7 @@ Future<T?> showScalingDialog<T>({
           curve: curve,
         ),
         alignment: alignment,
-        startingOffsetX: startingOffsetX,
-        startingOffsetY: startingOffsetY,
+        startingOffset: startingOffset,
         child: child,
       );
     },

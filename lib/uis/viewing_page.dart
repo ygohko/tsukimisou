@@ -585,9 +585,7 @@ class _ViewingPageState extends State<ViewingPage>
 
   Future<void> _modifyName() async {
     final localizations = AppLocalizations.of(context)!;
-
-    final query = MediaQuery.of(context);
-    final viewSize = query.size;
+    final viewSize = MediaQuery.of(context).size;
     var tappedPositionX = viewSize.width * 0.5;
     var tappedPositionY = viewSize.height * 0.5;
     final renderBox = _modifyingNameListTileKey.currentContext?.findRenderObject();
@@ -597,9 +595,7 @@ class _ViewingPageState extends State<ViewingPage>
       tappedPositionX = position.dx + size.width * 0.5;
       tappedPositionY = position.dy + size.height * 0.5;
     }
-    final startingOffsetX = tappedPositionX - viewSize.width * 0.5;
-    final startingOffsetY = tappedPositionY - viewSize.height * 0.5;
-
+    final startingOffset = Offset(tappedPositionX - viewSize.width * 0.5, tappedPositionY - viewSize.height * 0.5);
     final memoStore = Provider.of<MemoStore>(context, listen: false);
     _textEditingController.text = _memo.name;
     var error = false;
@@ -658,10 +654,9 @@ class _ViewingPageState extends State<ViewingPage>
       barrierDismissible: true,
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 200),
-      startingOffsetX: startingOffsetX,
-      startingOffsetY: startingOffsetY,
+      startingOffset: startingOffset,
     );
-    
+
     if (name != null) {
       _memo.beginModification();
       _memo.name = name;
@@ -674,8 +669,7 @@ class _ViewingPageState extends State<ViewingPage>
     // TODO: Add constants.dart?
     const viewingModeNames = ['Plain', 'TinyMarkdown'];
 
-    final query = MediaQuery.of(context);
-    final viewSize = query.size;
+    final viewSize = MediaQuery.of(context).size;
     var tappedPositionX = viewSize.width * 0.5;
     var tappedPositionY = viewSize.height * 0.5;
     final renderBox = _viewingModeListTileKey.currentContext?.findRenderObject();
@@ -685,8 +679,7 @@ class _ViewingPageState extends State<ViewingPage>
       tappedPositionX = position.dx + size.width * 0.5;
       tappedPositionY = position.dy + size.height * 0.5;
     }
-    final startingOffsetX = tappedPositionX - viewSize.width * 0.5;
-    final startingOffsetY = tappedPositionY - viewSize.height * 0.5;
+    final startingOffset = Offset(tappedPositionX - viewSize.width * 0.5, tappedPositionY - viewSize.height * 0.5);
 
     final tiles = <Widget>[];
     for (final name in viewingModeNames) {
@@ -735,8 +728,7 @@ class _ViewingPageState extends State<ViewingPage>
       barrierDismissible: true,
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 200),
-      startingOffsetX: startingOffsetX,
-      startingOffsetY: startingOffsetY,
+      startingOffset: startingOffset,
     );
     setState(() {});
   }
