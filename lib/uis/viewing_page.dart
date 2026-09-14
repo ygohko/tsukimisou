@@ -655,7 +655,7 @@ class _ViewingPageState extends State<ViewingPage>
       },
       barrierDismissible: true,
       curve: Curves.fastOutSlowIn,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 250),
       startingOffset: startingOffset,
     );
 
@@ -731,7 +731,7 @@ class _ViewingPageState extends State<ViewingPage>
       },
       barrierDismissible: true,
       curve: Curves.fastOutSlowIn,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 250),
       startingOffset: startingOffset,
     );
     setState(() {});
